@@ -253,8 +253,18 @@ def main() -> int:
         logger.error("Rejected message from a sender outside the approved allowlist")
         return 2
 
-    # Parse auto_publish setting
+    # Resolve auto-publish from the CLI, then honor the native workflow_dispatch boolean.
     auto_publish = WHATSAPP_AUTO_PUBLISH if args.auto_publish is None else (args.auto_publish == "true")
+    if os.getenv("GITHUB_EVENT_NAME") == "workflow_dispatch":
+        event_path = os.getenv("GITHUB_EVENT_PATH", "")
+        if event_path and Path(event_path).is_file():
+            try:
+                event_data = json.loads(Path(event_path).read_text(encoding="utf-8"))
+                manual_value = (event_data.get("inputs") or {}).get("auto_publish")
+                if manual_value is not None:
+                    auto_publish = str(manual_value).strip().lower() == "true"
+            except (OSError, json.JSONDecodeError):
+                logger.warning("Could not read workflow_dispatch inputs; using the configured auto-publish setting")
 
     job_id = uuid.uuid4().hex[:12]
     job_output_dir = OUTPUT_DIR / job_id
