@@ -188,6 +188,7 @@ def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
     description_mode = False
 
     price_patterns = [
+        re.compile(r"\b(?:only|just)\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"\bprice\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"@\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"₹\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
@@ -231,6 +232,8 @@ def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
             cleaned = re.sub(r"(?i)\bprice\s*[:\-]?", "", line)
             for pattern in price_patterns:
                 cleaned = pattern.sub("", cleaned)
+            cleaned = re.sub(r"(?i)\b(?:only|just)\b", "", cleaned)
+            cleaned = re.sub(r"(?i)\bfree\s+shipping\b", "", cleaned)
             cleaned = cleaned.strip(" \t-:@₹")
             cleaned = re.sub(r"(?i)^\s*(?:rs\.?|inr)\s*", "", cleaned).strip()
             if cleaned:
