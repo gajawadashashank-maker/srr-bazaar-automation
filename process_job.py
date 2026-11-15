@@ -27,8 +27,9 @@ from reel_generator import THEMES, generate_all, generate_reel
 
 load_dotenv(override=True)
 
+_PUBLIC_REPO_MODE = os.getenv("PUBLIC_REPO_MODE", "true").strip().lower() in {"1", "true", "yes"}
 logging.basicConfig(
-    level=os.getenv("LOG_LEVEL", "INFO"),
+    level=os.getenv("LOG_LEVEL", "WARNING" if _PUBLIC_REPO_MODE else "INFO"),
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 logger = logging.getLogger("process_job")
@@ -347,7 +348,7 @@ def main() -> int:
     else:
         logger.info("WHATSAPP_AUTO_PUBLISH=false. Reels generated and stored in %s without publishing.", job_output_dir)
 
-    if os.getenv("PUBLIC_REPO_MODE", "false").strip().lower() in {"1", "true", "yes"}:
+    if os.getenv("PUBLIC_REPO_MODE", "true").strip().lower() in {"1", "true", "yes"}:
         # Public Actions logs must not reveal product captions or sender information.
         safe_result = {
             "status": "success",
