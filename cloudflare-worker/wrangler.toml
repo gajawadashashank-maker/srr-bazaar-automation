@@ -1,0 +1,15 @@
+name = "srr-bazaar-whatsapp-webhook"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+# Environment variables
+# To set secrets in Cloudflare (recommended for tokens):
+# npx wrangler secret put GITHUB_PAT
+# npx wrangler secret put WHATSAPP_VERIFY_TOKEN
+# npx wrangler secret put META_APP_SECRET
+
+[vars]
+GITHUB_OWNER = "gajawadashashank-maker"
+GITHUB_REPO = "srr-bazaar-automation"
+WHATSAPP_PHONE_NUMBER_ID = "872753362597934"
+ALLOWED_SENDERS = "919948633303,918185012453"

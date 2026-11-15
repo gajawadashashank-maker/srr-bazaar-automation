@@ -1,0 +1,94 @@
+name: Generate & Publish Instagram Reel
+
+on:
+  repository_dispatch:
+    types: [whatsapp_submission]
+  workflow_dispatch:
+    inputs:
+      caption:
+        description: 'Product Caption (e.g. Product: Gold Necklace \n Price: 1499)'
+        required: false
+        default: 'Product: Beautiful Designer Jewellery\nPrice: ₹1,499\nDetails: Premium handcrafted finish'
+      media_id:
+        description: 'WhatsApp Media ID (if testing WhatsApp media)'
+        required: false
+      image_url:
+        description: 'Direct Image URL (optional test image)'
+        required: false
+      theme:
+        description: 'Theme name (luxury_gold_black, elegant_white_gold, pink_modern, minimal_premium, or random)'
+        required: false
+        default: 'random'
+      auto_publish:
+        description: 'Auto publish to Instagram'
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+      CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+      CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+      META_APP_ID: ${{ secrets.META_APP_ID }}
+      META_CONFIG_ID: ${{ secrets.META_CONFIG_ID }}
+      META_SYSTEM_USER_ID: ${{ secrets.META_SYSTEM_USER_ID }}
+      META_INSTAGRAM_ACCOUNT_ID: ${{ secrets.META_INSTAGRAM_ACCOUNT_ID }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      META_API_VERSION: ${{ secrets.META_API_VERSION || 'v27.0' }}
+      META_APP_SECRET: ${{ secrets.META_APP_SECRET }}
+      WHATSAPP_API_VERSION: ${{ secrets.WHATSAPP_API_VERSION || 'v27.0' }}
+      WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+      WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+      WHATSAPP_AUTO_PUBLISH: ${{ secrets.WHATSAPP_AUTO_PUBLISH || 'true' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install System Dependencies (FFmpeg & Fonts)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-liberation fonts-dejavu-core
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Reel Generator & Instagram Publisher
+        env:
+          EVENT_MEDIA_ID: ${{ github.event.client_payload.media_id || inputs.media_id }}
+          EVENT_IMAGE_URL: ${{ github.event.client_payload.image_url || inputs.image_url }}
+          EVENT_CAPTION: ${{ github.event.client_payload.caption || inputs.caption }}
+          EVENT_SENDER: ${{ github.event.client_payload.sender }}
+          EVENT_MESSAGE_ID: ${{ github.event.client_payload.message_id }}
+          EVENT_THEME: ${{ github.event.client_payload.theme || inputs.theme || 'random' }}
+          EVENT_AUTO_PUBLISH: ${{ inputs.auto_publish != '' && inputs.auto_publish || 'true' }}
+        run: |
+          python process_job.py \
+            ${EVENT_MEDIA_ID:+--media-id "$EVENT_MEDIA_ID"} \
+            ${EVENT_IMAGE_URL:+--image-url "$EVENT_IMAGE_URL"} \
+            --caption "$EVENT_CAPTION" \
+            ${EVENT_SENDER:+--sender "$EVENT_SENDER"} \
+            ${EVENT_MESSAGE_ID:+--message-id "$EVENT_MESSAGE_ID"} \
+            --theme "$EVENT_THEME" \
+            --auto-publish "$EVENT_AUTO_PUBLISH"
+
+      - name: Upload Generated Reels Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-reels-${{ github.run_id }}
+          path: generated/
+          retention-days: 14

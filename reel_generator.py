@@ -10,7 +10,13 @@ FPS = 30
 MUSIC = Path("music/hitslab-luxury-jewellery-jewelry-music-489239.mp3")
 OUTPUT_DIR = Path("generated")
 OUTPUT_DIR.mkdir(exist_ok=True)
-FONT_DIR = Path("C:/Windows/Fonts")
+FONT_DIRS = [
+    Path(__file__).resolve().parent / "fonts",
+    Path("fonts"),
+    Path("C:/Windows/Fonts"),
+    Path("/usr/share/fonts"),
+    Path("/usr/share/fonts/truetype"),
+]
 
 # Existing four designs are intentionally preserved.
 THEMES = {
@@ -38,10 +44,18 @@ THEMES = {
 
 
 def load_font(name, size):
-    font_path = FONT_DIR / name
-    if not font_path.exists():
-        raise FileNotFoundError(f"Font missing: {font_path}")
-    return ImageFont.truetype(str(font_path), size)
+    for fdir in FONT_DIRS:
+        font_path = fdir / name
+        if font_path.exists():
+            return ImageFont.truetype(str(font_path), size)
+    try:
+        return ImageFont.truetype(name, size)
+    except Exception:
+        pass
+    try:
+        return ImageFont.truetype("DejaVuSans.ttf", size)
+    except Exception:
+        return ImageFont.load_default()
 
 
 def centered_text(draw, text, y, font, color):
