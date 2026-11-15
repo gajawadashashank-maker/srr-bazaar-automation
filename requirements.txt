@@ -1,0 +1,17 @@
+
+fastapi
+uvicorn[standard]
+python-multipart
+requests
+python-dotenv
+cloudinary
+Pillow
+
+ requests
+ python-dotenv
+
+ fastapi
+ uvicorn
+ python-dotenv
+ requests
+ python-multipart
