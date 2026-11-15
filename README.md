@@ -1,106 +1,119 @@
-# SRR Bazaar Automation (WhatsApp to Instagram Reel Publisher)
+# SRR Bazaar Automation — WhatsApp to Instagram Reels
 
-Zero-cost ($0/month) cloud automation that receives product images and captions via WhatsApp Cloud API, generates 4 high-quality 9:16 Instagram Reels using FFmpeg, uploads to Cloudinary CDN, and automatically publishes them to Instagram Reels via Meta Graph API.
+Send a product image and caption to the connected WhatsApp Business number. GitHub Actions generates all four 9:16 Reel themes, randomly selects one, uploads it to Cloudinary, and publishes it to Instagram.
 
-**Your PC can be turned completely OFF.** All processing runs on free cloud runners!
+**Your Windows PC does not need to stay online.** Standard GitHub-hosted runners are free for public repositories. Artifact storage and other account-level limits still apply.
 
----
+## Architecture
 
-## 🏗️ Architecture
+1. WhatsApp Cloud API sends a webhook to the Cloudflare Worker.
+2. The Worker verifies Meta's HMAC signature, checks the business phone number and sender allowlist, and deduplicates by WhatsApp message ID using Workers KV.
+3. The Worker triggers this repository's repository_dispatch event: whatsapp_submission.
+4. GitHub Actions downloads the image from Meta, runs FFmpeg/Pillow, creates four themes, randomly selects one, uploads it to Cloudinary, and publishes through the Instagram Graph API.
+5. The workflow uploads generated files as a short-lived Actions artifact.
 
-```
-[ WhatsApp User ] 
-       │ (Sends photo + caption)
-       ▼
-[ WhatsApp Cloud API ]
-       │ (Webhook POST)
-       ▼
-[ Cloudflare Worker ]  <-- FREE (100,000 requests/day)
-  • Immediate 200 OK to Meta
-  • Validates sender & extracts media ID
-  • Calls GitHub repository_dispatch API
-       │
-       ▼
-[ GitHub Actions Ubuntu Runner ] <-- FREE (2,000 min/mo private / unlimited public)
-  • Temporary Ubuntu VM spins up
-  • Downloads original photo from WhatsApp API
-  • Generates all 4 reel themes via FFmpeg
-  • Randomly picks 1 theme for publication
-  • Uploads selected reel to Cloudinary CDN
-  • Publishes Reel to Instagram via Meta Graph API
-  • (Optional) Sends WhatsApp confirmation to sender
-  • Stores all 4 reels as downloadable workflow artifacts
-```
+## Four Reel themes
 
----
+- luxury_gold_black
+- elegant_white_gold
+- pink_modern
+- minimal_premium
 
-## 🚀 Setup Guide
+Reels are rendered at 1080 × 1920, 30 fps, and 8 seconds. The price parser supports captions such as "Only 1999 free shipping", "Just ₹1,999", "Price: 1999", "₹1,999", and "@1999".
 
-### Step 1: Add GitHub Secrets to your Repository
-Go to your GitHub repo: **Settings → Secrets and variables → Actions → New repository secret** and add:
+## 1. Add GitHub Actions secrets
 
-| Secret Name | Value Description |
+Open Settings → Secrets and variables → Actions → New repository secret and add:
+
+| Secret | Value |
 |---|---|
-| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary Cloud Name |
-| `CLOUDINARY_API_KEY` | Your Cloudinary API Key |
-| `CLOUDINARY_API_SECRET` | Your Cloudinary API Secret |
-| `META_APP_ID` | Your Meta Developer App ID |
-| `META_CONFIG_ID` | Your Meta Config ID |
-| `META_SYSTEM_USER_ID` | Your System User ID |
-| `META_INSTAGRAM_ACCOUNT_ID` | Your Instagram Business Account ID |
-| `META_ACCESS_TOKEN` | Long-lived Meta System User Access Token |
-| `META_APP_SECRET` | Your Meta App Secret |
-| `WHATSAPP_PHONE_NUMBER_ID` | WhatsApp Business Phone Number ID |
-| `WHATSAPP_ACCESS_TOKEN` | WhatsApp Cloud API Access Token |
-| `WHATSAPP_AUTO_PUBLISH` | `true` (or `false` to generate without posting) |
+| CLOUDINARY_CLOUD_NAME | Cloudinary cloud name |
+| CLOUDINARY_API_KEY | Cloudinary API key |
+| CLOUDINARY_API_SECRET | Cloudinary API secret |
+| META_INSTAGRAM_ACCOUNT_ID | Instagram professional account ID |
+| META_ACCESS_TOKEN | Meta access token with Instagram publishing permissions |
+| META_API_VERSION | v27.0 |
+| WHATSAPP_PHONE_NUMBER_ID | Connected WhatsApp Business Phone Number ID |
+| WHATSAPP_ACCESS_TOKEN | WhatsApp Cloud API access token |
+| WHATSAPP_API_VERSION | v27.0 |
+| WHATSAPP_AUTO_PUBLISH | true |
 
----
+Never commit real tokens, .env files, or credentials. The .env.example file contains placeholders only.
 
-### Step 2: Create a GitHub Personal Access Token (PAT)
-The Cloudflare Worker needs permission to trigger GitHub Actions:
-1. In GitHub, click your profile photo → **Settings** → **Developer Settings** → **Personal access tokens** → **Tokens (classic)**.
-2. Click **Generate new token (classic)**.
-3. Note: `Cloudflare Worker Trigger`.
-4. Check the **`repo`** scope (or `workflow`).
-5. Click **Generate token** and copy the token value (`ghp_...`).
+## 2. Create the GitHub dispatch token
 
----
+Create a fine-grained personal access token restricted to this repository:
 
-### Step 3: Deploy the Cloudflare Worker
-1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/) (free account).
-2. Go to **Compute (Workers) → Workers & Pages** → click **Create application** → **Create Worker**.
-3. Name it `srr-bazaar-webhook` and click **Deploy**.
-4. Click **Edit code**, delete default template, and copy-paste the code from [`cloudflare-worker/worker.js`](cloudflare-worker/worker.js).
-5. Click **Deploy**.
-6. Under your Worker's **Settings → Variables and Secrets**:
-   - **Environment Variables**:
-     - `GITHUB_OWNER`: `gajawadashashank-maker`
-     - `GITHUB_REPO`: `srr-bazaar-automation`
-     - `WHATSAPP_PHONE_NUMBER_ID`: `872753362597934`
-     - `ALLOWED_SENDERS`: `919948633303,918185012453`
-   - **Secrets (Encrypted)**:
-     - `GITHUB_PAT`: `<Your Personal Access Token from Step 2>`
-     - `WHATSAPP_VERIFY_TOKEN`: `SRR_Bazaar_Webhook_2026`
-     - `META_APP_SECRET`: `<Your Meta App Secret>`
-7. Copy your Worker URL: `https://srr-bazaar-webhook.<subdomain>.workers.dev`.
+- Repository access: Only select repositories → srr-bazaar-automation
+- Repository permissions: Contents → Read and write
 
----
+Save it in Cloudflare as the encrypted secret GITHUB_PAT. Do not paste it into source files, GitHub issues, or chat. The GitHub repository dispatch endpoint requires Contents: write for fine-grained tokens.
 
-### Step 4: Configure Meta WhatsApp Webhook
-1. Go to [developers.facebook.com](https://developers.facebook.com) → Your App → **WhatsApp → Configuration**.
-2. In the **Webhook** section, click **Edit**:
-   - **Callback URL**: `https://srr-bazaar-webhook.<subdomain>.workers.dev`
-   - **Verify Token**: `SRR_Bazaar_Webhook_2026`
-3. Click **Verify and Save**.
-4. Under **Webhook Fields**, click **Manage** and subscribe to **`messages`**.
+## 3. Deploy the Cloudflare Worker
 
----
+Open Cloudflare Dashboard → Workers & Pages:
 
-## 🧪 Testing
+1. Create or open the Worker named srr-bazaar-whatsapp-webhook.
+2. Replace its code with cloudflare-worker/worker.js, then deploy.
+3. Open Storage & Databases → Workers KV and create a namespace, for example SRR_BAZAAR_SEEN_MESSAGES.
+4. Open the Worker Settings → Bindings and add a KV namespace binding:
+   - Variable name: SEEN_MESSAGES
+   - Namespace: SRR_BAZAAR_SEEN_MESSAGES
+5. Under Settings → Variables and Secrets, add these plain-text variables:
+   - GITHUB_OWNER = gajawadashashank-maker
+   - GITHUB_REPO = srr-bazaar-automation
+   - WHATSAPP_PHONE_NUMBER_ID = your connected WhatsApp Business Phone Number ID
+   - ALLOWED_SENDERS = approved numbers with country code, comma-separated, for example 919948633303,918185012453
+6. Add these as encrypted secrets:
+   - GITHUB_PAT = fine-grained PAT from Step 2
+   - WHATSAPP_VERIFY_TOKEN = your webhook verify token
+   - META_APP_SECRET = Meta App Secret (required for signature verification)
 
-### Manual Cloud Test (GitHub Actions)
-You can test the GitHub runner anytime without sending a WhatsApp message:
-1. Go to your repo on GitHub → **Actions** tab.
-2. Select **Generate & Publish Instagram Reel**.
-3. Click **Run workflow** and enter test caption and options.
-4. Watch the Ubuntu runner build the reels and publish to Instagram in ~60 seconds!
+The Wrangler config is cloudflare-worker/wrangler.toml. For CLI deployment, add the KV namespace ID there before running npx wrangler deploy. The dashboard binding is sufficient when using the online editor.
+
+After deployment, open https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/health. It should return a JSON status of ok.
+
+Cloudflare's current Workers Free limits include 100,000 requests/day. Workers KV Free includes 100,000 reads/day, 1,000 writes/day, and 1 GB storage. The Worker uses a small number of operations per message.
+
+## 4. Connect the Meta webhook
+
+In Meta for Developers → your app → WhatsApp → Configuration:
+
+- Callback URL: https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/
+- Verify token: the same value as Cloudflare's WHATSAPP_VERIFY_TOKEN
+- Verify and save.
+- Subscribe to the messages webhook field.
+
+The Worker validates X-Hub-Signature-256. Keep META_APP_SECRET configured; signature checking is mandatory.
+
+## 5. Send a product image
+
+Send or forward one product image directly to the connected WhatsApp Business number from an approved sender. Include a caption such as:
+
+    Premium Pure Jadau Necklace Set
+    Only 1999 free shipping
+
+Or:
+
+    Product: Premium Necklace Set
+    Description: Changeable lockets, premium finish
+    Price: ₹1,999
+
+The title and detected price are printed on the poster and included in the Instagram caption. One image message creates all four variants and publishes one random selection.
+
+## Manual test
+
+Open Actions → Generate & Publish Instagram Reel → Run workflow. Use an image URL or WhatsApp media ID and enter a caption. Set auto-publish to false to test generation without posting.
+
+## Public-repository visibility
+
+This repository is public as requested. Source code, workflow files, Actions logs, and uploaded workflow artifacts can be visible to people who can read the repository. Product photos and generated videos may therefore be downloadable from workflow runs. The workflow reduces log detail, but do not send confidential images or personal information through this public workflow.
+
+Only publish background audio that you have permission to use. The audio file currently in music/ is also part of this public repository.
+
+## Operational notes
+
+- No AWS VM, ngrok tunnel, always-on Python server, or R2 bucket is required.
+- WhatsApp group content is not received automatically; forward a product image directly to the connected business number.
+- If a dispatch fails, the Worker returns an error so Meta can retry. Successfully dispatched message IDs are kept in KV for seven days.
+- Standard GitHub-hosted runner compute is free for this public repository; artifact storage and other service limits are not unlimited.
