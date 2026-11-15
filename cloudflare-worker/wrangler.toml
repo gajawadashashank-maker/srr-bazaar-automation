@@ -13,3 +13,10 @@ GITHUB_OWNER = "gajawadashashank-maker"
 GITHUB_REPO = "srr-bazaar-automation"
 WHATSAPP_PHONE_NUMBER_ID = "872753362597934"
 ALLOWED_SENDERS = "919948633303,918185012453"
+
+# After creating a Workers KV namespace, either bind it in the Cloudflare
+# dashboard as SEEN_MESSAGES, or uncomment these lines and set the real ID:
+#
+# [[kv_namespaces]]
+# binding = "SEEN_MESSAGES"
+# id = "REPLACE_WITH_KV_NAMESPACE_ID"
