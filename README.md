@@ -19,7 +19,7 @@ Send a product image and caption to the connected WhatsApp Business number. GitH
 - pink_modern
 - minimal_premium
 
-Reels are rendered at 1080 × 1920, 30 fps, and 8 seconds. The price parser supports captions such as "Only 1999 free shipping", "Just ₹1,999", "Price: 1999", "₹1,999", and "@1999".
+Reels are rendered at 1080 × 1920, 30 fps, and 30 seconds. The selected MP3 soundtrack is looped as needed to fill the full 30-second Reel. The price parser supports captions such as "Only 1999 free shipping", "Just ₹1,999", "Price: 1999", "₹1,999", and "@1999".
 
 ## 1. Add GitHub Actions secrets
 
