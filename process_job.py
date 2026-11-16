@@ -240,6 +240,7 @@ def main() -> int:
     parser.add_argument("--sender", default="", help="Sender phone number")
     parser.add_argument("--message-id", default="", help="WhatsApp message ID")
     parser.add_argument("--theme", default="random", help="Theme to select or 'random' (generates all 4)")
+    parser.add_argument("--music", default=None, help="Specific music file or omit to pick randomly from music/")
     parser.add_argument("--auto-publish", choices=["true", "false"], default=None, help="Auto publish to Instagram")
 
     args = parser.parse_args()
@@ -314,6 +315,7 @@ def main() -> int:
         product_name=product_name,
         price=price,
         output_dir=job_output_dir,
+        music_path=args.music if args.music else None,
     )
 
     if not generated_videos:

@@ -1,4 +1,5 @@
 from pathlib import Path
+import random
 import subprocess
 
 from PIL import Image, ImageDraw, ImageFont
@@ -7,7 +8,7 @@ WIDTH = 1080
 HEIGHT = 1920
 DURATION = 8
 FPS = 30
-MUSIC = Path("music/hitslab-luxury-jewellery-jewelry-music-489239.mp3")
+MUSIC_DIR = Path(__file__).resolve().parent / "music"
 OUTPUT_DIR = Path("generated")
 OUTPUT_DIR.mkdir(exist_ok=True)
 FONT_DIRS = [
@@ -107,25 +108,46 @@ def create_poster(image_path, product_name, price, output_path, theme_name):
     canvas.save(output_path, quality=95)
 
 
-def generate_reel(image_path, product_name, price, theme_name, output_dir=None):
+def get_random_music(music_dir: Path | str = MUSIC_DIR) -> Path:
+    """Randomly select a valid, non-empty audio track from the music folder."""
+    m_dir = Path(music_dir)
+    if not m_dir.is_absolute():
+        for candidate in (m_dir, Path(__file__).resolve().parent / m_dir):
+            if candidate.exists():
+                m_dir = candidate
+                break
+
+    if not m_dir.exists():
+        raise FileNotFoundError(f"Music directory not found: {m_dir}")
+
+    audio_patterns = ("*.mp3", "*.m4a", "*.wav", "*.aac", "*.ogg")
+    tracks: list[Path] = []
+    for pattern in audio_patterns:
+        tracks.extend(m_dir.glob(pattern))
+
+    valid_tracks = [t for t in tracks if t.is_file() and t.stat().st_size > 1024]
+    if not valid_tracks:
+        raise FileNotFoundError(f"No valid audio files found in music directory: {m_dir}")
+
+    chosen = random.choice(valid_tracks)
+    return chosen
+
+
+def generate_reel(image_path, product_name, price, theme_name, output_dir=None, music_path=None):
     output_dir = Path(output_dir or OUTPUT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
     poster_path = output_dir / f"{theme_name}_poster.jpg"
     video_path = output_dir / f"{theme_name}.mp4"
     create_poster(image_path, product_name, price, poster_path, theme_name)
-    # command = [
-    #     "ffmpeg", "-y", "-loop", "1", "-i", str(poster_path),
-    #     "-stream_loop", "-1", "-i", str(MUSIC), "-t", str(DURATION),
-    #     "-vf", "zoompan=z='min(zoom+0.0003,1.025)':d=240:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=30,format=yuv420p",
-    #     "-c:v", "libx264", "-preset", "medium", "-crf", "20",
-    #     "-c:a", "aac", "-b:a", "128k", "-ar", "48000",
-    #     "-shortest", "-movflags", "+faststart", str(video_path),
-    # ]
+
+    music = Path(music_path) if music_path else get_random_music()
+    if not music.exists() or music.stat().st_size <= 1024:
+        music = get_random_music()
 
     command = [
         "ffmpeg", "-y",
         "-loop", "1", "-i", str(poster_path),
-        "-stream_loop", "-1", "-i", str(MUSIC),
+        "-stream_loop", "-1", "-i", str(music),
         "-t", str(DURATION),
 
         "-vf",
@@ -164,18 +186,29 @@ def generate_reel(image_path, product_name, price, theme_name, output_dir=None):
     return video_path
 
 
-def generate_all(image_path, product_name, price, output_dir=None):
+def generate_all(image_path, product_name, price, output_dir=None, music_path=None):
     image_path = Path(image_path)
     if not image_path.exists():
         raise FileNotFoundError(f"Product image not found: {image_path}")
-    if not MUSIC.exists():
-        raise FileNotFoundError(f"Music not found: {MUSIC}")
+
+    selected_music = Path(music_path) if music_path else get_random_music()
+    print(f"\nUsing background music: {selected_music.name}")
+
     output_dir = Path(output_dir or OUTPUT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
     generated = []
     for theme_name in THEMES:
         print(f"\nGenerating: {theme_name}")
-        generated.append(generate_reel(image_path, product_name, price, theme_name, output_dir))
+        generated.append(
+            generate_reel(
+                image_path=image_path,
+                product_name=product_name,
+                price=price,
+                theme_name=theme_name,
+                output_dir=output_dir,
+                music_path=selected_music,
+            )
+        )
     print("\nALL FOUR REELS GENERATED SUCCESSFULLY")
     return generated
 
