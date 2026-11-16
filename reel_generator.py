@@ -109,28 +109,25 @@ def create_poster(image_path, product_name, price, output_path, theme_name):
 
 
 def get_random_music(music_dir: Path | str = MUSIC_DIR) -> Path:
-    """Randomly select a valid, non-empty audio track from the music folder."""
+    """Randomly select one non-empty MP3 from the music folder."""
     m_dir = Path(music_dir)
     if not m_dir.is_absolute():
-        for candidate in (m_dir, Path(__file__).resolve().parent / m_dir):
-            if candidate.exists():
-                m_dir = candidate
-                break
+        m_dir = Path(__file__).resolve().parent / m_dir
 
     if not m_dir.exists():
         raise FileNotFoundError(f"Music directory not found: {m_dir}")
 
-    audio_patterns = ("*.mp3", "*.m4a", "*.wav", "*.aac", "*.ogg")
-    tracks: list[Path] = []
-    for pattern in audio_patterns:
-        tracks.extend(m_dir.glob(pattern))
-
-    valid_tracks = [t for t in tracks if t.is_file() and t.stat().st_size > 1024]
+    # Ignore empty placeholders such as a zero-byte background.mp3.
+    valid_tracks = [
+        track for track in m_dir.iterdir()
+        if track.is_file() and track.suffix.lower() == ".mp3" and track.stat().st_size > 0
+    ]
     if not valid_tracks:
-        raise FileNotFoundError(f"No valid audio files found in music directory: {m_dir}")
+        raise FileNotFoundError(
+            f"No non-empty MP3 files found in {m_dir}. Add one or more .mp3 files to the music folder."
+        )
 
-    chosen = random.choice(valid_tracks)
-    return chosen
+    return random.choice(valid_tracks)
 
 
 def generate_reel(image_path, product_name, price, theme_name, output_dir=None, music_path=None):
@@ -140,9 +137,11 @@ def generate_reel(image_path, product_name, price, theme_name, output_dir=None, 
     video_path = output_dir / f"{theme_name}.mp4"
     create_poster(image_path, product_name, price, poster_path, theme_name)
 
+    # Each generated Reel chooses its own random music track unless one was explicitly supplied.
     music = Path(music_path) if music_path else get_random_music()
-    if not music.exists() or music.stat().st_size <= 1024:
-        music = get_random_music()
+    if not music.is_file() or music.stat().st_size == 0:
+        raise FileNotFoundError(f"Selected MP3 is missing or empty: {music}")
+    print(f"Background music for {theme_name}: {music.name}")
 
     command = [
         "ffmpeg", "-y",
@@ -191,9 +190,6 @@ def generate_all(image_path, product_name, price, output_dir=None, music_path=No
     if not image_path.exists():
         raise FileNotFoundError(f"Product image not found: {image_path}")
 
-    selected_music = Path(music_path) if music_path else get_random_music()
-    print(f"\nUsing background music: {selected_music.name}")
-
     output_dir = Path(output_dir or OUTPUT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
     generated = []
@@ -206,7 +202,7 @@ def generate_all(image_path, product_name, price, output_dir=None, music_path=No
                 price=price,
                 theme_name=theme_name,
                 output_dir=output_dir,
-                music_path=selected_music,
+                music_path=music_path,
             )
         )
     print("\nALL FOUR REELS GENERATED SUCCESSFULLY")
