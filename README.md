@@ -121,3 +121,15 @@ Only publish background audio that you have permission to use. The audio file cu
 ## Credential placeholders
 
 Copy-ready names and placeholder values for GitHub Actions secrets, GitHub repository variables, Cloudflare Worker variables/secrets, and the required KV binding are listed in [`.github/GITHUB_SECRETS_TEMPLATE.md`](.github/GITHUB_SECRETS_TEMPLATE.md). Replace every `REPLACE_ME` value with the real value in the relevant settings page before testing.
+
+
+## Random background music for each Reel
+
+The generator now scans the `music/` folder for every non-empty `.mp3` file. Each of the four generated Reel themes independently chooses one MP3 at random, so the four variants can use different soundtracks. A track may be selected more than once by chance.
+
+To add tracks:
+1. Put your MP3 files inside the repository's `music/` folder.
+2. Commit and push them to GitHub. Files only on your PC are not available to GitHub Actions.
+3. Send the next product image through WhatsApp. The workflow picks randomly from the MP3 files present in that folder at run time.
+
+The zero-byte `background.mp3` placeholder is ignored. Use actual MP3 files with audio content. The existing designs, video duration, resolution, and Instagram publishing flow are unchanged.
