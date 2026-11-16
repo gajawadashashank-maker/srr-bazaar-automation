@@ -132,4 +132,9 @@ To add tracks:
 2. Commit and push them to GitHub. Files only on your PC are not available to GitHub Actions.
 3. Send the next product image through WhatsApp. The workflow picks randomly from the MP3 files present in that folder at run time.
 
-The zero-byte `background.mp3` placeholder is ignored. Use actual MP3 files with audio content. The existing designs, video duration, resolution, and Instagram publishing flow are unchanged.
+The zero-byte `background.mp3` placeholder is ignored. Use actual MP3 files with audio content. The existing designs, resolution, and Instagram publishing flow are unchanged; generated Reels are now 30 seconds long.
+
+
+## 30-second Reel duration
+
+Every generated Reel is now 30 seconds long at 1080 × 1920 and 30 fps. The selected MP3 is looped when it is shorter than 30 seconds, and trimmed at 30 seconds when it is longer. Each of the four themes independently chooses its own random MP3 unless a specific track is explicitly provided.
