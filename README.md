@@ -117,3 +117,7 @@ Only publish background audio that you have permission to use. The audio file cu
 - WhatsApp group content is not received automatically; forward a product image directly to the connected business number.
 - If a dispatch fails, the Worker returns an error so Meta can retry. Successfully dispatched message IDs are kept in KV for seven days.
 - Standard GitHub-hosted runner compute is free for this public repository; artifact storage and other service limits are not unlimited.
+
+## Credential placeholders
+
+Copy-ready names and placeholder values for GitHub Actions secrets, GitHub repository variables, Cloudflare Worker variables/secrets, and the required KV binding are listed in [`.github/GITHUB_SECRETS_TEMPLATE.md`](.github/GITHUB_SECRETS_TEMPLATE.md). Replace every `REPLACE_ME` value with the real value in the relevant settings page before testing.
