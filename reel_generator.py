@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 WIDTH = 1080
 HEIGHT = 1920
-DURATION = 8
+DURATION = 30
 FPS = 30
 MUSIC_DIR = Path(__file__).resolve().parent / "music"
 OUTPUT_DIR = Path("generated")
@@ -150,7 +150,7 @@ def generate_reel(image_path, product_name, price, theme_name, output_dir=None, 
         "-t", str(DURATION),
 
         "-vf",
-        "zoompan=z='min(zoom+0.0003,1.025)':d=240:"
+        "zoompan=z='min(zoom+0.000027,1.025)':d=900:"
         "x='iw/2-(iw/zoom/2)':"
         "y='ih/2-(ih/zoom/2)':"
         "s=1080x1920:fps=30,"
