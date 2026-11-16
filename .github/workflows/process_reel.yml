@@ -49,6 +49,7 @@ jobs:
       WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
       WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
       WHATSAPP_AUTO_PUBLISH: ${{ secrets.WHATSAPP_AUTO_PUBLISH || 'true' }}
+      ALLOWED_SENDERS: ${{ secrets.WHATSAPP_ALLOWED_SENDERS }}
 
     steps:
       - name: Checkout repository
