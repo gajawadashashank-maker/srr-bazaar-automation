@@ -77,3 +77,20 @@ The Worker intentionally rejects POST requests if this binding is missing. It re
 - [ ] Confirm one GitHub Actions run completes and the Reel is published as expected.
 
 Important: This is a configuration checklist. GitHub Actions secret values must be created or overwritten in repository Settings. The connected GitHub file-management access used for this repository does not expose GitHub's sensitive Secrets API.
+
+
+## Fast option: import your local .env file using GitHub CLI
+
+The GitHub CLI can import a dotenv file directly into repository Actions secrets. From PowerShell, inside your project folder:
+
+```powershell
+gh auth status
+gh secret set -f .env -R gajawadashashank-maker/srr-bazaar-automation
+gh secret list -R gajawadashashank-maker/srr-bazaar-automation
+```
+
+This creates or updates repository Actions secrets for the non-commented entries in .env. It does not print their values. It requires GitHub CLI to be installed and authenticated to an account with permission to administer repository secrets.
+
+Before running it, update your local .env with any newly rotated credentials. This imports extra environment entries too (such as business account IDs and the webhook verify token); unused entries do not hurt, but all imported values are stored as repository secrets.
+
+The Actions workflow now maps WHATSAPP_ALLOWED_SENDERS from .env into the ALLOWED_SENDERS variable consumed by process_job.py. Cloudflare Worker configuration is separate: its own encrypted secrets and plain-text variables still need to be configured in Cloudflare Dashboard.
