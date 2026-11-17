@@ -24,3 +24,5 @@ reel_
 # OS generated files
 .DS_Store
 Thumbs.db
+
+reel_generator_just_old.py

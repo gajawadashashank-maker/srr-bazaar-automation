@@ -372,10 +372,7 @@ def generate_reel(image_path, product_name, price, theme_name, output_dir=None, 
 
     command = [
         "ffmpeg", "-y",
-        "-loop", "1",
-        "-framerate", str(FPS),
-        "-t", str(DURATION),
-        "-i", str(poster_path),
+        "-loop", "1", "-i", str(poster_path),
         "-stream_loop", "-1", "-i", str(music),
         "-t", str(DURATION),
 
@@ -389,8 +386,7 @@ def generate_reel(image_path, product_name, price, theme_name, output_dir=None, 
         "format=yuv420p",
 
         "-c:v", "libx264",
-        "-preset", "medium",
-        "-threads", "4",
+        "-preset", "slow",
         "-crf", "18",
         "-profile:v", "high",
         "-level:v", "4.1",
