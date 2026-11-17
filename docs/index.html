@@ -1769,58 +1769,123 @@ Please confirm receipt and dispatch tracking details! ✨`
 
     function renderMerchantOrders() {
       const tbody = document.getElementById('merchantOrdersTableBody');
+      if (!tbody) return;
+
+      // Safe parse orders if needed
+      if (!Array.isArray(orders)) {
+        try {
+          orders = JSON.parse(localStorage.getItem('srr_orders')) || [];
+        } catch(e) {
+          orders = [];
+        }
+      }
+
       document.getElementById('merchantOrderCount').textContent = orders.length;
 
       const badge = document.getElementById('merchantBadgeCount');
-      if (orders.length > 0) {
-        badge.textContent = orders.length;
-        badge.classList.remove('hidden');
-      } else {
-        badge.classList.add('hidden');
+      if (badge) {
+        if (orders.length > 0) {
+          badge.textContent = orders.length;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
       }
 
       if (orders.length === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="8" class="p-8 text-center text-stone-400">
-              No orders placed yet. Orders will appear here as soon as customers checkout.
+              <div class="w-10 h-10 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-2 text-stone-400">
+                <i data-lucide="inbox" class="w-5 h-5"></i>
+              </div>
+              <p class="font-semibold text-stone-600">No customer orders placed yet</p>
+              <p class="text-xs text-stone-400">Orders placed by customers will appear here automatically.</p>
             </td>
           </tr>
         `;
+        lucide.createIcons();
         return;
       }
 
-      tbody.innerHTML = orders.map((o, idx) => `
-        <tr class="hover:bg-stone-50 transition">
-          <td class="p-3 font-mono font-bold text-stone-800">${o.orderId}</td>
-          <td class="p-3 text-stone-500 whitespace-nowrap">${o.date}</td>
-          <td class="p-3">
-            <span class="font-bold text-stone-900 block">${o.customer.name}</span>
-            <span class="text-stone-500 block text-[11px]">${o.customer.phone}</span>
-            <span class="text-stone-400 block text-[10px] truncate max-w-xs">${o.customer.city}, ${o.customer.state}</span>
-          </td>
-          <td class="p-3">
-            <span class="font-semibold text-stone-700">${o.items.map(i => `${i.title} (${i.qty})`).join(', ')}</span>
-          </td>
-          <td class="p-3 font-bold text-maroon-950">₹${o.total}</td>
-          <td class="p-3">
-            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800">${o.paymentMethod}</span>
-          </td>
-          <td class="p-3">
-            <select onchange="updateOrderStatus(${idx}, this.value)" class="text-[11px] font-semibold rounded border border-stone-300 px-2 py-1 bg-white">
-              <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>⏳ Processing</option>
-              <option value="Payment Verified" ${o.status === 'Payment Verified' ? 'selected' : ''}>✅ Paid</option>
-              <option value="Dispatched" ${o.status === 'Dispatched' ? 'selected' : ''}>🚚 Dispatched</option>
-              <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>🎉 Delivered</option>
-            </select>
-          </td>
-          <td class="p-3 text-center whitespace-nowrap">
-            <a href="https://wa.me/${o.customer.phone}?text=Hello%20${encodeURIComponent(o.customer.name)}%2C%20regarding%20your%20order%20${o.orderId}%20at%20SRR%20Bazaar" target="_blank" class="p-1.5 inline-block text-emerald-600 hover:bg-emerald-50 rounded" title="Chat on WhatsApp">
-              <i data-lucide="message-circle" class="w-4 h-4"></i>
-            </a>
-          </td>
-        </tr>
-      `).join('');
+      try {
+        tbody.innerHTML = orders.map((o, idx) => {
+          if (!o) return '';
+          
+          const cust = o.customer || {};
+          const custName = cust.name || o.name || "Customer";
+          const custPhone = cust.phone || o.phone || "No phone";
+          const custAddress = cust.address || o.address || "";
+          const custCity = cust.city || o.city || "";
+          const custState = cust.state || o.state || "";
+          const custPincode = cust.pincode || o.pincode || "";
+          const fullLocation = [custAddress, custCity, custState, custPincode].filter(Boolean).join(', ') || 'Address not specified';
+
+          let itemsHtml = 'Order Items';
+          if (Array.isArray(o.items) && o.items.length > 0) {
+            itemsHtml = o.items.map(i => `<span class="inline-block bg-stone-100 text-stone-800 rounded px-1.5 py-0.5 text-[11px] font-medium mr-1 mb-1">${i.title || 'Item'} (x${i.qty || 1})</span>`).join('');
+          } else if (typeof o.items === 'string') {
+            itemsHtml = `<span class="text-stone-700">${o.items}</span>`;
+          }
+
+          const orderId = o.orderId || `SRR-ORDER-${idx + 1}`;
+          const dateStr = o.date || 'Recent';
+          const totalAmt = (o.total !== undefined && o.total !== null) ? o.total : (o.amount || 0);
+          const paymentMethod = o.paymentMethod || 'UPI';
+          const refNumber = o.refNumber || '';
+          const status = o.status || 'Processing';
+          const cleanPhone = custPhone.replace(/[^0-9]/g, '');
+
+          return `
+            <tr class="hover:bg-stone-50 transition border-b border-stone-100">
+              <td class="p-3 font-mono font-bold text-stone-900 whitespace-nowrap">${orderId}</td>
+              <td class="p-3 text-stone-500 whitespace-nowrap text-[11px]">${dateStr}</td>
+              <td class="p-3">
+                <span class="font-bold text-stone-900 block text-xs">${custName}</span>
+                <span class="text-stone-600 block text-[11px] font-mono">${custPhone}</span>
+                <span class="text-stone-400 block text-[10px] truncate max-w-xs" title="${fullLocation}">
+                  ${fullLocation}
+                </span>
+              </td>
+              <td class="p-3">
+                <div class="max-w-xs flex flex-wrap">${itemsHtml}</div>
+              </td>
+              <td class="p-3 font-bold text-maroon-950 whitespace-nowrap text-xs sm:text-sm">₹${totalAmt}</td>
+              <td class="p-3">
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 block w-max">${paymentMethod}</span>
+                ${refNumber ? `<span class="text-[10px] text-stone-500 font-mono block mt-0.5">Ref: ${refNumber}</span>` : ''}
+              </td>
+              <td class="p-3">
+                <select onchange="updateOrderStatus(${idx}, this.value)" class="text-[11px] font-semibold rounded border border-stone-300 px-2 py-1 bg-white focus:outline-none focus:border-royal-500 shadow-2xs">
+                  <option value="Processing" ${status === 'Processing' ? 'selected' : ''}>⏳ Processing</option>
+                  <option value="Payment Verified" ${status === 'Payment Verified' ? 'selected' : ''}>✅ Paid</option>
+                  <option value="Dispatched" ${status === 'Dispatched' ? 'selected' : ''}>🚚 Dispatched</option>
+                  <option value="Delivered" ${status === 'Delivered' ? 'selected' : ''}>🎉 Delivered</option>
+                </select>
+              </td>
+              <td class="p-3 text-center whitespace-nowrap space-x-1">
+                ${cleanPhone ? `
+                  <a href="https://wa.me/${cleanPhone}?text=Hello%20${encodeURIComponent(custName)}%2C%20regarding%20your%20order%20${orderId}%20at%20SRR%20Bazaar" target="_blank" class="p-1.5 inline-block text-emerald-600 hover:bg-emerald-50 rounded" title="Chat on WhatsApp">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                  </a>
+                ` : ''}
+                <button onclick="deleteOrder(${idx})" class="p-1.5 inline-block text-stone-400 hover:text-red-600 rounded" title="Delete Order">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error("Error rendering merchant orders:", err);
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="p-4 text-center text-red-600 text-xs">
+              Error rendering orders. Click "Clear All Orders" to reset or check order logs.
+            </td>
+          </tr>
+        `;
+      }
 
       lucide.createIcons();
     }
@@ -1828,6 +1893,14 @@ Please confirm receipt and dispatch tracking details! ✨`
     function updateOrderStatus(index, newStatus) {
       if (orders[index]) {
         orders[index].status = newStatus;
+        localStorage.setItem('srr_orders', JSON.stringify(orders));
+        renderMerchantOrders();
+      }
+    }
+
+    function deleteOrder(index) {
+      if (confirm("Are you sure you want to delete this order record?")) {
+        orders.splice(index, 1);
         localStorage.setItem('srr_orders', JSON.stringify(orders));
         renderMerchantOrders();
       }
@@ -1842,13 +1915,28 @@ Please confirm receipt and dispatch tracking details! ✨`
     }
 
     function exportOrdersCSV() {
-      if (orders.length === 0) {
+      if (!orders || orders.length === 0) {
         alert("No orders to export!");
         return;
       }
-      let csv = "Order ID,Date,Customer Name,Phone,Address,City,State,Pincode,Total,Payment Method,Status\n";
-      orders.forEach(o => {
-        csv += `"${o.orderId}","${o.date}","${o.customer.name}","${o.customer.phone}","${o.customer.address}","${o.customer.city}","${o.customer.state}","${o.customer.pincode}","${o.total}","${o.paymentMethod}","${o.status}"\n`;
+      let csv = "Order ID,Date,Customer Name,Phone,Address,City,State,Pincode,Items,Total,Payment Method,Status\n";
+      orders.forEach((o, idx) => {
+        if (!o) return;
+        const cust = o.customer || {};
+        const name = (cust.name || o.name || "Customer").replace(/"/g, '""');
+        const phone = (cust.phone || o.phone || "").replace(/"/g, '""');
+        const address = (cust.address || o.address || "").replace(/"/g, '""');
+        const city = (cust.city || o.city || "").replace(/"/g, '""');
+        const state = (cust.state || o.state || "").replace(/"/g, '""');
+        const pincode = (cust.pincode || o.pincode || "").replace(/"/g, '""');
+        const itemsStr = Array.isArray(o.items) ? o.items.map(i => `${i.title || 'Item'} x${i.qty || 1}`).join('; ').replace(/"/g, '""') : 'Order Items';
+        const total = (o.total !== undefined && o.total !== null) ? o.total : (o.amount || 0);
+        const orderId = o.orderId || `SRR-${idx+1}`;
+        const date = o.date || '';
+        const payMethod = (o.paymentMethod || 'UPI').replace(/"/g, '""');
+        const status = (o.status || 'Processing').replace(/"/g, '""');
+
+        csv += `"${orderId}","${date}","${name}","${phone}","${address}","${city}","${state}","${pincode}","${itemsStr}","${total}","${payMethod}","${status}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
