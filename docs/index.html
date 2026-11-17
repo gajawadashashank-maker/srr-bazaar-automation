@@ -552,18 +552,68 @@
             <textarea id="custAddress" required rows="2" placeholder="House/Flat No, Apartment/Street name, Area" class="w-full px-3 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500"></textarea>
           </div>
 
-          <div class="grid grid-cols-3 gap-2">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-stone-700 mb-1">Pincode *</label>
-              <input type="text" id="custPincode" required placeholder="500072" class="w-full px-2.5 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500">
+              <label class="block text-xs font-semibold text-stone-700 mb-1 flex items-center justify-between">
+                <span>Pincode *</span>
+                <span id="pincodeStatusBadge" class="text-[10px] text-stone-400 font-normal">Autofills City & State</span>
+              </label>
+              <div class="relative">
+                <input type="text" id="custPincode" required maxlength="6" inputmode="numeric" placeholder="500072" 
+                       class="w-full px-3 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500 font-mono tracking-wider font-semibold"
+                       oninput="handlePincodeLookup(this.value)">
+                <div id="pincodeSpinner" class="hidden absolute right-2.5 top-2.5">
+                  <span class="w-3.5 h-3.5 border-2 border-royal-600 border-t-transparent rounded-full inline-block animate-spin"></span>
+                </div>
+              </div>
             </div>
+
             <div>
-              <label class="block text-xs font-semibold text-stone-700 mb-1">City *</label>
-              <input type="text" id="custCity" required placeholder="Hyderabad" class="w-full px-2.5 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500">
+              <label class="block text-xs font-semibold text-stone-700 mb-1">City / District *</label>
+              <input type="text" id="custCity" required placeholder="e.g. Hyderabad" 
+                     class="w-full px-3 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500">
             </div>
+
             <div>
               <label class="block text-xs font-semibold text-stone-700 mb-1">State *</label>
-              <input type="text" id="custState" required placeholder="Telangana" class="w-full px-2.5 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500">
+              <select id="custState" required 
+                      class="w-full px-2.5 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500 font-medium">
+                <option value="">Select State</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="West Bengal">West Bengal</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Assam">Assam</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Goa">Goa</option>
+                <option value="Jammu and Kashmir">Jammu & Kashmir</option>
+                <option value="Chandigarh">Chandigarh</option>
+                <option value="Puducherry">Puducherry</option>
+                <option value="Tripura">Tripura</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Ladakh">Ladakh</option>
+                <option value="Andaman and Nicobar Islands">Andaman & Nicobar</option>
+              </select>
             </div>
           </div>
         </div>
@@ -1624,6 +1674,98 @@
       }).catch(() => {
         prompt("Copy your UPI ID:", STORE_CONFIG.upiId);
       });
+    }
+
+    // =========================================================================
+    // PINCODE AUTOFILL & LOOKUP (India Post API + Prefix Fallback)
+    // =========================================================================
+    let pincodeLookupTimer = null;
+    async function handlePincodeLookup(pincode) {
+      const cleanPin = pincode.replace(/[^0-9]/g, '');
+      const badge = document.getElementById('pincodeStatusBadge');
+      const spinner = document.getElementById('pincodeSpinner');
+      const cityInput = document.getElementById('custCity');
+      const stateSelect = document.getElementById('custState');
+
+      if (cleanPin.length !== 6) {
+        if (badge) {
+          badge.textContent = cleanPin.length > 0 ? `${cleanPin.length}/6 digits` : "Autofills City & State";
+          badge.className = "text-[10px] text-stone-400 font-normal";
+        }
+        return;
+      }
+
+      // 6 digits entered!
+      if (spinner) spinner.classList.remove('hidden');
+      if (badge) {
+        badge.textContent = "Checking...";
+        badge.className = "text-[10px] text-royal-600 font-semibold";
+      }
+
+      clearTimeout(pincodeLookupTimer);
+      pincodeLookupTimer = setTimeout(async () => {
+        try {
+          const res = await fetch(`https://api.postalpincode.in/pincode/${cleanPin}`);
+          const data = await res.json();
+          if (Array.isArray(data) && data[0] && data[0].Status === 'Success' && data[0].PostOffice && data[0].PostOffice.length > 0) {
+            const po = data[0].PostOffice[0];
+            const district = po.District || po.Block || po.Circle || '';
+            const state = po.State || '';
+
+            if (district && cityInput) {
+              cityInput.value = district;
+            }
+
+            if (state && stateSelect) {
+              // Find matching state in dropdown
+              for (let opt of stateSelect.options) {
+                if (opt.value && (opt.value.toLowerCase() === state.toLowerCase() || state.toLowerCase().includes(opt.value.toLowerCase()))) {
+                  stateSelect.value = opt.value;
+                  break;
+                }
+              }
+            }
+
+            if (badge) {
+              badge.textContent = `✓ ${district}, ${state}`;
+              badge.className = "text-[10px] text-emerald-700 font-bold";
+            }
+          } else {
+            checkPrefixFallback(cleanPin, cityInput, stateSelect, badge);
+          }
+        } catch (e) {
+          checkPrefixFallback(cleanPin, cityInput, stateSelect, badge);
+        } finally {
+          if (spinner) spinner.classList.add('hidden');
+        }
+      }, 150);
+    }
+
+    function checkPrefixFallback(pin, cityInput, stateSelect, badge) {
+      const prefix = pin.substring(0, 2);
+      let guessedState = "";
+      if (prefix === "50") { guessedState = "Telangana"; if (cityInput && !cityInput.value) cityInput.value = "Hyderabad"; }
+      else if (prefix === "51" || prefix === "52" || prefix === "53") { guessedState = "Andhra Pradesh"; }
+      else if (prefix === "56" || prefix === "57" || prefix === "58" || prefix === "59") { guessedState = "Karnataka"; if (cityInput && !cityInput.value && prefix === "56") cityInput.value = "Bengaluru"; }
+      else if (prefix === "60" || prefix === "61" || prefix === "62" || prefix === "63" || prefix === "64") { guessedState = "Tamil Nadu"; if (cityInput && !cityInput.value && prefix === "60") cityInput.value = "Chennai"; }
+      else if (prefix === "40" || prefix === "41" || prefix === "42" || prefix === "43" || prefix === "44") { guessedState = "Maharashtra"; if (cityInput && !cityInput.value && prefix === "40") cityInput.value = "Mumbai"; }
+      else if (prefix === "11") { guessedState = "Delhi"; if (cityInput && !cityInput.value) cityInput.value = "New Delhi"; }
+      else if (prefix === "38" || prefix === "39") { guessedState = "Gujarat"; if (cityInput && !cityInput.value && prefix === "38") cityInput.value = "Ahmedabad"; }
+      else if (prefix === "67" || prefix === "68" || prefix === "69") { guessedState = "Kerala"; }
+      else if (prefix === "30" || prefix === "31" || prefix === "32" || prefix === "33" || prefix === "34") { guessedState = "Rajasthan"; }
+      else if (prefix === "20" || prefix === "21" || prefix === "22" || prefix === "23" || prefix === "24" || prefix === "25" || prefix === "26" || prefix === "27" || prefix === "28") { guessedState = "Uttar Pradesh"; }
+      else if (prefix === "70" || prefix === "71" || prefix === "72" || prefix === "73" || prefix === "74") { guessedState = "West Bengal"; if (cityInput && !cityInput.value && prefix === "70") cityInput.value = "Kolkata"; }
+
+      if (guessedState && stateSelect) {
+        stateSelect.value = guessedState;
+        if (badge) {
+          badge.textContent = `✓ ${guessedState}`;
+          badge.className = "text-[10px] text-emerald-700 font-bold";
+        }
+      } else if (badge) {
+        badge.textContent = "Pincode entered";
+        badge.className = "text-[10px] text-stone-500 font-normal";
+      }
     }
 
     function submitFinalOrder() {
