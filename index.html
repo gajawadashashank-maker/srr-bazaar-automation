@@ -1216,6 +1216,19 @@
 
     // Initialize Page
     document.addEventListener('DOMContentLoaded', () => {
+      // 1. Fetch live products.json dynamically so any new products added via WhatsApp or git are instantly loaded for all users!
+      fetch('products.json?t=' + Date.now())
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0) {
+            products = data;
+            renderProducts();
+          }
+        })
+        .catch(err => {
+          console.log("Using cached catalogue:", err);
+        });
+
       renderProducts();
       updateCartUI();
       renderMerchantOrders();
