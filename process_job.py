@@ -27,9 +27,8 @@ from reel_generator import THEMES, generate_all, generate_reel
 
 load_dotenv(override=True)
 
-_PUBLIC_REPO_MODE = os.getenv("PUBLIC_REPO_MODE", "true").strip().lower() in {"1", "true", "yes"}
 logging.basicConfig(
-    level=os.getenv("LOG_LEVEL", "WARNING" if _PUBLIC_REPO_MODE else "INFO"),
+    level=os.getenv("LOG_LEVEL", "INFO"),
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 logger = logging.getLogger("process_job")
@@ -74,7 +73,6 @@ def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
     description_mode = False
 
     price_patterns = [
-        re.compile(r"\b(?:only|just)\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"\bprice\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"@\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"₹\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
@@ -115,8 +113,6 @@ def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
             cleaned = re.sub(r"(?i)\bprice\s*[:\-]?", "", line)
             for pattern in price_patterns:
                 cleaned = pattern.sub("", cleaned)
-            cleaned = re.sub(r"(?i)\b(?:only|just)\b", "", cleaned)
-            cleaned = re.sub(r"(?i)\bfree\s+shipping\b", "", cleaned)
             cleaned = cleaned.strip(" \t-:@₹")
             cleaned = re.sub(r"(?i)^\s*(?:rs\.?|inr)\s*", "", cleaned).strip()
             if cleaned:
@@ -240,32 +236,12 @@ def main() -> int:
     parser.add_argument("--sender", default="", help="Sender phone number")
     parser.add_argument("--message-id", default="", help="WhatsApp message ID")
     parser.add_argument("--theme", default="random", help="Theme to select or 'random' (generates all 4)")
-    parser.add_argument("--music", default=None, help="Specific music file or omit to pick randomly from music/")
     parser.add_argument("--auto-publish", choices=["true", "false"], default=None, help="Auto publish to Instagram")
 
     args = parser.parse_args()
 
-    approved_senders = {
-        value.strip().lstrip("+")
-        for value in os.getenv("ALLOWED_SENDERS", "").split(",")
-        if value.strip()
-    }
-    if args.sender and approved_senders and args.sender.strip().lstrip("+") not in approved_senders:
-        logger.error("Rejected message from a sender outside the approved allowlist")
-        return 2
-
-    # Resolve auto-publish from the CLI, then honor the native workflow_dispatch boolean.
+    # Parse auto_publish setting
     auto_publish = WHATSAPP_AUTO_PUBLISH if args.auto_publish is None else (args.auto_publish == "true")
-    if os.getenv("GITHUB_EVENT_NAME") == "workflow_dispatch":
-        event_path = os.getenv("GITHUB_EVENT_PATH", "")
-        if event_path and Path(event_path).is_file():
-            try:
-                event_data = json.loads(Path(event_path).read_text(encoding="utf-8"))
-                manual_value = (event_data.get("inputs") or {}).get("auto_publish")
-                if manual_value is not None:
-                    auto_publish = str(manual_value).strip().lower() == "true"
-            except (OSError, json.JSONDecodeError):
-                logger.warning("Could not read workflow_dispatch inputs; using the configured auto-publish setting")
 
     job_id = uuid.uuid4().hex[:12]
     job_output_dir = OUTPUT_DIR / job_id
@@ -315,7 +291,6 @@ def main() -> int:
         product_name=product_name,
         price=price,
         output_dir=job_output_dir,
-        music_path=args.music if args.music else None,
     )
 
     if not generated_videos:
@@ -360,25 +335,15 @@ def main() -> int:
     else:
         logger.info("WHATSAPP_AUTO_PUBLISH=false. Reels generated and stored in %s without publishing.", job_output_dir)
 
-    if os.getenv("PUBLIC_REPO_MODE", "true").strip().lower() in {"1", "true", "yes"}:
-        # Public Actions logs must not reveal product captions or sender information.
-        safe_result = {
-            "status": "success",
-            "selected_theme": selected_video.stem,
-            "generated_reel_count": len(generated_videos),
-            "instagram_published": bool(auto_publish),
-        }
-        print(json.dumps(safe_result, indent=2))
-    else:
-        print(json.dumps({
-            "status": "success",
-            "job_id": job_id,
-            "product_name": product_name,
-            "price": price,
-            "selected_theme": selected_video.stem,
-            "selected_reel": str(selected_video),
-            "all_reels": [str(p) for p in generated_videos],
-        }, indent=2))
+    print(json.dumps({
+        "status": "success",
+        "job_id": job_id,
+        "product_name": product_name,
+        "price": price,
+        "selected_theme": selected_video.stem,
+        "selected_reel": str(selected_video),
+        "all_reels": [str(p) for p in generated_videos],
+    }, indent=2))
     return 0
 
 

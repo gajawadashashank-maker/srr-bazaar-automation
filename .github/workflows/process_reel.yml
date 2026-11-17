@@ -19,10 +19,6 @@ on:
         description: 'Theme name (luxury_gold_black, elegant_white_gold, pink_modern, minimal_premium, or random)'
         required: false
         default: 'random'
-      music:
-        description: 'Music file name (optional; leave blank to pick randomly from music/ folder)'
-        required: false
-        default: ''
       auto_publish:
         description: 'Auto publish to Instagram'
         type: boolean
@@ -79,7 +75,6 @@ jobs:
           EVENT_SENDER: ${{ github.event.client_payload.sender }}
           EVENT_MESSAGE_ID: ${{ github.event.client_payload.message_id }}
           EVENT_THEME: ${{ github.event.client_payload.theme || inputs.theme || 'random' }}
-          EVENT_MUSIC: ${{ github.event.client_payload.music || inputs.music }}
           EVENT_AUTO_PUBLISH: ${{ inputs.auto_publish != '' && inputs.auto_publish || 'true' }}
         run: |
           python process_job.py \
@@ -89,7 +84,6 @@ jobs:
             ${EVENT_SENDER:+--sender "$EVENT_SENDER"} \
             ${EVENT_MESSAGE_ID:+--message-id "$EVENT_MESSAGE_ID"} \
             --theme "$EVENT_THEME" \
-            ${EVENT_MUSIC:+--music "$EVENT_MUSIC"} \
             --auto-publish "$EVENT_AUTO_PUBLISH"
 
       - name: Upload Generated Reels Artifacts
