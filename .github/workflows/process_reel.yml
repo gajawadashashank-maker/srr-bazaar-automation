@@ -86,6 +86,20 @@ jobs:
             --theme "$EVENT_THEME" \
             --auto-publish "$EVENT_AUTO_PUBLISH"
 
+      - name: Deploy Catalogue Updates to Website
+        if: success()
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          if [ -n "$(git status --porcelain docs/)" ]; then
+            git add docs/
+            git commit -m "Auto-add new product from WhatsApp to website catalogue [skip ci]"
+            git push origin main
+            git subtree push --prefix docs origin gh-pages || true
+          else
+            echo "No catalogue changes detected."
+          fi
+
       - name: Upload Generated Reels Artifacts
         if: always()
         uses: actions/upload-artifact@v4

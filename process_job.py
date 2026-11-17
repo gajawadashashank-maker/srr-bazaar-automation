@@ -227,6 +227,73 @@ def send_whatsapp_reply(to: str, message: str) -> None:
         logger.warning("Could not send WhatsApp notification: %s", exc)
 
 
+def sync_product_to_website_catalogue(
+    image_path: Path,
+    product_name: str,
+    price_str: str,
+    description: str,
+    job_id: str,
+) -> None:
+    """Auto-add product to docs/products.json and docs/images/catalog/ for live website."""
+    try:
+        docs_dir = Path("docs")
+        if not docs_dir.exists():
+            return
+
+        catalog_img_dir = docs_dir / "images" / "catalog"
+        catalog_img_dir.mkdir(parents=True, exist_ok=True)
+
+        target_img_name = f"{job_id}.jpg"
+        target_img_path = catalog_img_dir / target_img_name
+
+        if image_path.exists():
+            target_img_path.write_bytes(image_path.read_bytes())
+
+        # Extract numeric price
+        numeric_match = re.search(r"([0-9][0-9,]*)", price_str.replace(",", ""))
+        numeric_price = int(numeric_match.group(1)) if numeric_match else 999
+        original_price = int(numeric_price * 1.5)
+
+        # Detect category based on product title/description
+        text_lower = f"{product_name} {description}".lower()
+        category = "necklace"
+        if any(w in text_lower for w in ["bead", "mangalsutra", "black", "chain"]):
+            category = "mangalsutra"
+        elif any(w in text_lower for w in ["earring", "stud", "jhumka", "bangle", "bracelet"]):
+            category = "earrings"
+        elif any(w in text_lower for w in ["tray", "swan", "decor", "pooja", "gift"]):
+            category = "decor"
+
+        products_json_path = docs_dir / "products.json"
+        products: list[dict[str, Any]] = []
+        if products_json_path.exists():
+            try:
+                products = json.loads(products_json_path.read_text(encoding="utf-8"))
+            except Exception:
+                products = []
+
+        new_entry = {
+            "id": int(uuid.uuid4().int % 1000000000),
+            "title": product_name,
+            "category": category,
+            "price": numeric_price,
+            "originalPrice": original_price,
+            "tag": "New Arrival",
+            "image": f"images/catalog/{target_img_name}",
+            "description": description or f"Exclusive {product_name} with premium finish. Free express shipping across India.",
+            "inStock": True,
+            "rating": 5.0,
+            "reviewsCount": 1,
+        }
+
+        # Prepend to catalogue so new arrivals appear first
+        products.insert(0, new_entry)
+        products_json_path.write_text(json.dumps(products, indent=2, ensure_ascii=False), encoding="utf-8")
+        logger.info("Auto-synced new product to website catalogue: '%s' (₹%d) -> %s", product_name, numeric_price, target_img_name)
+    except Exception as e:
+        logger.warning("Could not auto-sync product to website catalogue: %s", e)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Process WhatsApp submission and publish Instagram Reel")
     parser.add_argument("--media-id", help="WhatsApp media ID to download")
@@ -329,11 +396,28 @@ def main() -> int:
                 f"🎉 Your Reel for '{product_name}' has been created and published to Instagram!\n\n"
                 f"Theme: {selected_video.stem}\n"
                 f"Price: {price}\n"
-                f"Status: Live on Instagram"
+                f"Status: Live on Instagram & Website Catalogue"
             )
             send_whatsapp_reply(args.sender, notification_text)
+
+        # Auto-sync to website catalogue
+        sync_product_to_website_catalogue(
+            image_path=image_file,
+            product_name=product_name,
+            price_str=price,
+            description=description,
+            job_id=job_id,
+        )
     else:
         logger.info("WHATSAPP_AUTO_PUBLISH=false. Reels generated and stored in %s without publishing.", job_output_dir)
+        # Even if not auto-published, sync product to catalogue
+        sync_product_to_website_catalogue(
+            image_path=image_file,
+            product_name=product_name,
+            price_str=price,
+            description=description,
+            job_id=job_id,
+        )
 
     print(json.dumps({
         "status": "success",
