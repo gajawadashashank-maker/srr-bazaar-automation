@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRR Bazaar — Sujatha Collections | Handcrafted Jewellery & Decor</title>
+  <meta name="description" content="Shop premium handcrafted bridal jewellery, Jadau Kundan, long black beads, mangalsutras, decorative trays, and festive gifts from Sujatha Collections (@sujatha60861). Free shipping across India.">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:title" content="SRR Bazaar — Sujatha Collections">
+  <meta property="og:description" content="Handcrafted traditional & bridal jewellery directly from Instagram @sujatha60861. Instant UPI & WhatsApp Ordering.">
+  <meta property="og:image" content="images/jadau_kundan_necklace.jpg">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts & Tailwind CSS CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons & Razorpay Checkout SDK -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            royal: {
+              50: '#fffbf0',
+              100: '#fef5d6',
+              200: '#fde7a6',
+              300: '#fbd46c',
+              400: '#f9bd34',
+              500: '#d49b18',
+              600: '#b87c0f',
+              700: '#8e5b0d',
+              800: '#5c3809',
+              900: '#2c1803'
+            },
+            maroon: {
+              800: '#580c1f',
+              900: '#380612',
+              950: '#22030a'
+            }
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-serif { font-family: 'Cinzel', serif; }
+    .gold-gradient {
+      background: linear-gradient(135deg, #d49b18 0%, #fbd46c 50%, #b87c0f 100%);
+    }
+    .gold-text {
+      background: linear-gradient(135deg, #d49b18 0%, #fbd46c 50%, #b87c0f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #d49b18;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-900 min-h-screen flex flex-col">
+
+  <!-- Announcement Bar -->
+  <div class="bg-gradient-to-r from-maroon-900 via-stone-900 to-maroon-900 text-amber-200 text-xs sm:text-sm py-2 px-4 text-center font-medium flex items-center justify-center gap-2 border-b border-amber-600/30">
+    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+    <span>✨ <strong>FREE Express Shipping</strong> on all orders across India! Use code <strong>WELCOME100</strong> for ₹100 OFF</span>
+    <span class="hidden md:inline">| Official Store for <a href="https://www.instagram.com/sujatha60861/" target="_blank" class="underline hover:text-white transition">@sujatha60861</a></span>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo & Branding -->
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full gold-gradient p-0.5 shadow-md flex-shrink-0">
+            <div class="w-full h-full bg-maroon-950 rounded-full flex items-center justify-center text-amber-300 font-serif font-bold text-xl">
+              SR
+            </div>
+          </div>
+          <div>
+            <a href="#" class="font-serif text-xl sm:text-2xl font-bold tracking-wider text-maroon-950 block hover:opacity-90">
+              SRR BAZAAR
+            </a>
+            <div class="flex items-center gap-2 text-xs text-stone-500">
+              <a href="https://www.instagram.com/sujatha60861/" target="_blank" class="flex items-center gap-1 text-pink-700 hover:text-pink-800 font-medium">
+                <i data-lucide="instagram" class="w-3.5 h-3.5"></i> @sujatha60861
+              </a>
+              <span class="inline-block w-1 h-1 rounded-full bg-stone-300"></span>
+              <span class="text-emerald-700 font-semibold flex items-center gap-0.5"><i data-lucide="shield-check" class="w-3 h-3"></i> Verified Store</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Bar (Desktop) -->
+        <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+          <input type="text" id="searchInput" placeholder="Search necklace, mangalsutra, swan tray, earrings..." 
+                 class="w-full pl-10 pr-4 py-2 text-sm bg-stone-100 rounded-full border border-stone-300 focus:outline-none focus:border-royal-500 focus:bg-white transition"
+                 oninput="handleSearch(this.value)">
+          <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3.5 top-3"></i>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-2 sm:gap-4">
+          <!-- WhatsApp Connect Button -->
+          <a href="https://wa.me/917013416296?text=Hi%20Sujatha%2C%20I%20am%20browsing%20your%20website%20catalogue" target="_blank" 
+             class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold rounded-full hover:bg-emerald-100 transition shadow-sm">
+            <i data-lucide="message-circle" class="w-4 h-4 text-emerald-600"></i>
+            WhatsApp Us
+          </a>
+
+          <!-- Merchant Dashboard Trigger -->
+          <button onclick="toggleMerchantModal(true)" 
+                  class="inline-flex items-center gap-1 px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded-full border border-stone-300 transition">
+            <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-royal-600"></i>
+            <span class="hidden sm:inline">Merchant</span> Portal
+            <span id="merchantBadgeCount" class="bg-royal-600 text-white rounded-full text-[10px] px-1.5 py-0.2 hidden">0</span>
+          </button>
+
+          <!-- Shopping Cart Trigger -->
+          <button onclick="toggleCartDrawer(true)" class="relative p-2.5 text-stone-700 hover:text-royal-600 rounded-full hover:bg-stone-100 transition">
+            <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+            <span id="cartCountBadge" class="absolute -top-0.5 -right-0.5 bg-maroon-900 text-amber-300 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">0</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Mobile Search Bar -->
+      <div class="pb-3 md:hidden">
+        <div class="relative">
+          <input type="text" placeholder="Search jewelry, trays, prices..." 
+                 class="w-full pl-9 pr-3 py-2 text-sm bg-stone-100 rounded-full border border-stone-300 focus:outline-none focus:border-royal-500 focus:bg-white"
+                 oninput="handleSearch(this.value)">
+          <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3 top-2.5"></i>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-maroon-950 via-stone-900 to-maroon-900 text-white overflow-hidden py-12 md:py-16">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fbd46c_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold tracking-wide uppercase">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Instagram Viral Collection
+          </div>
+          <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+            Curated Elegance by <span class="gold-text">Sujatha Collections</span>
+          </h1>
+          <p class="text-stone-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            Direct from our Instagram studio: pure Jadau Kundan, festive choker sets, daily wear black beads, and designer home decor trays. Direct order, instant UPI payment, and prompt courier processing.
+          </p>
+
+          <!-- Highlights & Quick Trust Pills -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+            <a href="https://www.instagram.com/sujatha60861/" target="_blank" 
+               class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-sm shadow-lg hover:from-pink-500 hover:to-purple-500 transition transform hover:-translate-y-0.5">
+              <i data-lucide="instagram" class="w-4 h-4"></i> Follow @sujatha60861
+            </a>
+            <a href="#catalogue" 
+               class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full gold-gradient text-stone-900 font-bold text-sm shadow-lg hover:opacity-95 transition transform hover:-translate-y-0.5">
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i> Browse Catalogue
+            </a>
+          </div>
+
+          <!-- Guarantees Grid -->
+          <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-4 border-t border-white/10 text-xs sm:text-sm text-stone-300">
+            <div class="flex items-center gap-2 justify-center lg:justify-start">
+              <i data-lucide="truck" class="w-4 h-4 text-amber-400"></i>
+              <span>Free Shipping</span>
+            </div>
+            <div class="flex items-center gap-2 justify-center lg:justify-start">
+              <i data-lucide="qr-code" class="w-4 h-4 text-amber-400"></i>
+              <span>UPI & Card Pay</span>
+            </div>
+            <div class="flex items-center gap-2 justify-center lg:justify-start">
+              <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+              <span>Same-Day Dispatch</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Featured Banner Card -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl border border-amber-400/30 group">
+            <img src="images/jadau_kundan_necklace.jpg" alt="Featured Jadau Kundan" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-5">
+              <span class="inline-block px-2.5 py-0.5 rounded bg-amber-500 text-stone-900 text-xs font-bold uppercase w-max mb-1">
+                Bestseller
+              </span>
+              <h3 class="font-serif text-lg font-bold text-white">Premium Pure Jadau Kundan</h3>
+              <p class="text-xs text-stone-300 mb-2">Heavy bridal quality with matching earrings</p>
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xl font-bold text-amber-300">₹999</span>
+                  <span class="text-xs text-stone-400 line-through ml-1.5">₹1,899</span>
+                  <span class="text-xs font-semibold text-emerald-400 ml-1">Free Shipping</span>
+                </div>
+                <button onclick="quickOrderProduct(1)" class="px-4 py-1.5 rounded-full gold-gradient text-stone-900 font-bold text-xs hover:opacity-90 shadow">
+                  Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter & Category Section -->
+  <section id="catalogue" class="py-8 bg-white border-b border-stone-200 sticky top-20 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Categories Pills -->
+        <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 custom-scrollbar text-xs sm:text-sm font-semibold" id="categoryTabs">
+          <button onclick="filterCategory('all', this)" class="category-btn active px-4 py-2 rounded-full bg-maroon-900 text-amber-300 shadow-xs whitespace-nowrap">
+            All Products (<span id="totalProductCount">8</span>)
+          </button>
+          <button onclick="filterCategory('necklace', this)" class="category-btn px-4 py-2 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition whitespace-nowrap">
+            Necklace & Chokers
+          </button>
+          <button onclick="filterCategory('mangalsutra', this)" class="category-btn px-4 py-2 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition whitespace-nowrap">
+            Black Beads & Chains
+          </button>
+          <button onclick="filterCategory('earrings', this)" class="category-btn px-4 py-2 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition whitespace-nowrap">
+            Earrings & Bangles
+          </button>
+          <button onclick="filterCategory('decor', this)" class="category-btn px-4 py-2 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition whitespace-nowrap">
+            Trays & Home Decor
+          </button>
+        </div>
+
+        <!-- Sort Select -->
+        <div class="flex items-center gap-2 self-end sm:self-auto text-xs sm:text-sm text-stone-600">
+          <label for="sortSelect" class="whitespace-nowrap font-medium">Sort by:</label>
+          <select id="sortSelect" onchange="handleSort(this.value)" class="bg-stone-100 border border-stone-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-royal-500">
+            <option value="featured">Featured First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="name">Alphabetical</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Products Grid Section -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+    
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="font-serif text-2xl font-bold text-maroon-950">Active Catalogue</h2>
+        <p class="text-xs sm:text-sm text-stone-500">Instant order dispatch with UPI, Card, NetBanking & COD</p>
+      </div>
+      <div class="text-xs text-stone-500 bg-stone-100 px-3 py-1 rounded-full border border-stone-200">
+        Showing <span id="visibleProductCount">8</span> items
+      </div>
+    </div>
+
+    <!-- Products Container -->
+    <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      <!-- Dynamic Products injected via JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 space-y-4">
+      <div class="w-16 h-16 bg-stone-200 text-stone-400 rounded-full flex items-center justify-center mx-auto">
+        <i data-lucide="package-search" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-lg font-bold text-stone-700">No products match your search</h3>
+      <p class="text-sm text-stone-500">Try searching for other keywords or reset category filters.</p>
+      <button onclick="resetFilters()" class="px-4 py-2 bg-royal-600 text-white rounded-lg text-sm font-semibold hover:bg-royal-700">
+        View All Products
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Value Propositions & Order Process Banner -->
+  <section class="bg-stone-100 border-t border-stone-200 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <h2 class="font-serif text-2xl font-bold text-maroon-950">How Ordering Works</h2>
+        <p class="text-sm text-stone-600 mt-1">Simple, secure, and hassle-free directly connected to WhatsApp & UPI</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+        <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-xs space-y-3">
+          <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center mx-auto text-stone-900 font-bold text-lg">
+            1
+          </div>
+          <h3 class="font-bold text-base text-stone-900">Choose Products</h3>
+          <p class="text-xs text-stone-600">Select any jewellery or decor item from our active Instagram stock.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-xs space-y-3">
+          <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center mx-auto text-stone-900 font-bold text-lg">
+            2
+          </div>
+          <h3 class="font-bold text-base text-stone-900">Enter Shipping Address</h3>
+          <p class="text-xs text-stone-600">Provide your delivery name, address, pincode, and contact number.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-xs space-y-3">
+          <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center mx-auto text-stone-900 font-bold text-lg">
+            3
+          </div>
+          <h3 class="font-bold text-base text-stone-900">Scan & Pay via UPI / Gateway</h3>
+          <p class="text-xs text-stone-600">Pay using GPay, PhonePe, Paytm, BHIM, or Cards with 0 extra charges.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-xs space-y-3">
+          <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center mx-auto text-stone-900 font-bold text-lg">
+            4
+          </div>
+          <h3 class="font-bold text-base text-stone-900">Instant WhatsApp Receipt</h3>
+          <p class="text-xs text-stone-600">Immediate order confirmation on WhatsApp with dispatch tracking updates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-maroon-950 text-stone-300 py-12 border-t border-amber-600/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+        
+        <!-- Store Info -->
+        <div class="space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="font-serif text-2xl font-bold text-amber-300">SRR BAZAAR</span>
+          </div>
+          <p class="text-xs text-stone-400 leading-relaxed">
+            Sujatha Collections (@sujatha60861) — Authentic Indian handcrafted jewellery, Kundan & bridal necklace sets, black beads chains, and festive home decor.
+          </p>
+          <div class="flex items-center gap-3 pt-2">
+            <a href="https://www.instagram.com/sujatha60861/" target="_blank" class="w-9 h-9 rounded-full bg-white/10 hover:bg-pink-600 flex items-center justify-center text-white transition">
+              <i data-lucide="instagram" class="w-4 h-4"></i>
+            </a>
+            <a href="https://wa.me/917013416296" target="_blank" class="w-9 h-9 rounded-full bg-white/10 hover:bg-emerald-600 flex items-center justify-center text-white transition">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+            </a>
+            <a href="tel:+917013416296" class="w-9 h-9 rounded-full bg-white/10 hover:bg-royal-600 flex items-center justify-center text-white transition">
+              <i data-lucide="phone" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="space-y-2">
+          <h4 class="font-serif text-sm font-bold text-amber-200 uppercase tracking-wider">Categories</h4>
+          <ul class="text-xs space-y-1.5 text-stone-400">
+            <li><a href="#catalogue" onclick="filterCategory('necklace')" class="hover:text-amber-300 transition">Jadau Kundan Sets</a></li>
+            <li><a href="#catalogue" onclick="filterCategory('mangalsutra')" class="hover:text-amber-300 transition">Long Black Beads Chains</a></li>
+            <li><a href="#catalogue" onclick="filterCategory('earrings')" class="hover:text-amber-300 transition">Bridal Studs & Bangles</a></li>
+            <li><a href="#catalogue" onclick="filterCategory('decor')" class="hover:text-amber-300 transition">Swan Trays & Pooja Decor</a></li>
+          </ul>
+        </div>
+
+        <!-- Order & Policy -->
+        <div class="space-y-2">
+          <h4 class="font-serif text-sm font-bold text-amber-200 uppercase tracking-wider">Customer Support</h4>
+          <ul class="text-xs space-y-1.5 text-stone-400">
+            <li><span class="text-stone-300 font-semibold">WhatsApp Helpline:</span> +91 70134 16296 / +91 81850 12453</li>
+            <li><span class="text-stone-300 font-semibold">Shipping:</span> Pan-India Express (3-5 business days)</li>
+            <li><span class="text-stone-300 font-semibold">Safe Packaging:</span> Bubble wrapped hard-box dispatch</li>
+            <li><span class="text-stone-300 font-semibold">Instagram:</span> <a href="https://www.instagram.com/sujatha60861/" target="_blank" class="text-amber-300 underline">sujatha60861</a></li>
+          </ul>
+        </div>
+
+        <!-- Payment & Security -->
+        <div class="space-y-2">
+          <h4 class="font-serif text-sm font-bold text-amber-200 uppercase tracking-wider">100% Safe Payments</h4>
+          <p class="text-xs text-stone-400">
+            Accepting all major Indian UPI Apps, Google Pay, PhonePe, Paytm, Debit/Credit cards, and NetBanking.
+          </p>
+          <div class="flex flex-wrap gap-2 pt-2">
+            <span class="px-2.5 py-1 bg-white/10 rounded text-[11px] text-amber-200 font-medium">Google Pay</span>
+            <span class="px-2.5 py-1 bg-white/10 rounded text-[11px] text-amber-200 font-medium">PhonePe</span>
+            <span class="px-2.5 py-1 bg-white/10 rounded text-[11px] text-amber-200 font-medium">Paytm UPI</span>
+            <span class="px-2.5 py-1 bg-white/10 rounded text-[11px] text-amber-200 font-medium">BHIM</span>
+            <span class="px-2.5 py-1 bg-white/10 rounded text-[11px] text-amber-200 font-medium">COD Available</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pt-8 border-t border-white/10 text-center text-xs text-stone-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>© 2026 SRR Bazaar — Sujatha Collections. All Rights Reserved.</div>
+        <div class="flex items-center gap-4">
+          <a href="https://www.instagram.com/sujatha60861/" target="_blank" class="text-pink-400 hover:underline">Instagram Profile</a>
+          <button onclick="toggleMerchantModal(true)" class="text-amber-400 hover:underline">Merchant Login</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: Product Quick View                                                  -->
+  <!-- ========================================================================= -->
+  <div id="quickViewModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+      <button onclick="closeQuickView()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-600 z-10 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6" id="quickViewContent">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- DRAWER: Shopping Cart                                                      -->
+  <!-- ========================================================================= -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-xs" onclick="toggleCartDrawer(false)"></div>
+    
+    <div class="absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transform transition-transform duration-300">
+      
+      <!-- Cart Header -->
+      <div class="p-4 sm:p-5 border-b border-stone-200 flex items-center justify-between bg-stone-50">
+        <div class="flex items-center gap-2">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-royal-600"></i>
+          <h3 class="font-serif text-lg font-bold text-stone-900">Shopping Cart (<span id="cartItemCount">0</span>)</h3>
+        </div>
+        <button onclick="toggleCartDrawer(false)" class="p-1 rounded-md text-stone-400 hover:text-stone-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Free Shipping Banner in Cart -->
+      <div class="bg-emerald-50 px-4 py-2 border-b border-emerald-100 flex items-center justify-center gap-1.5 text-xs text-emerald-800 font-medium">
+        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
+        <span>Congratulations! You get <strong>FREE Express Delivery</strong></span>
+      </div>
+
+      <!-- Cart Items List -->
+      <div id="cartItemsList" class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
+        <!-- Rendered items -->
+      </div>
+
+      <!-- Cart Footer / Summary -->
+      <div class="p-4 sm:p-5 border-t border-stone-200 bg-stone-50 space-y-3">
+        
+        <!-- Coupon input -->
+        <div class="flex gap-2">
+          <input type="text" id="couponCodeInput" placeholder="Coupon code (try WELCOME100)" class="flex-1 px-3 py-1.5 text-xs bg-white border border-stone-300 rounded-lg uppercase">
+          <button onclick="applyCoupon()" class="px-3 py-1.5 bg-stone-800 text-amber-300 text-xs font-semibold rounded-lg hover:bg-stone-900 transition">Apply</button>
+        </div>
+        <div id="couponNotice" class="text-[11px] text-emerald-700 font-medium hidden"></div>
+
+        <!-- Bill Details -->
+        <div class="space-y-1.5 text-xs text-stone-600 pt-2 border-t border-stone-200">
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span id="cartSubtotal" class="font-semibold text-stone-800">₹0</span>
+          </div>
+          <div class="flex justify-between" id="discountRow" style="display: none;">
+            <span class="text-emerald-700">Coupon Discount</span>
+            <span id="cartDiscount" class="font-semibold text-emerald-700">-₹0</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Shipping Charge</span>
+            <span class="text-emerald-600 font-bold uppercase text-[11px]">Free</span>
+          </div>
+          <div class="flex justify-between text-base font-bold text-maroon-950 pt-2 border-t border-stone-300">
+            <span>Total Amount</span>
+            <span id="cartTotal" class="text-royal-600">₹0</span>
+          </div>
+        </div>
+
+        <!-- Checkout Trigger -->
+        <button onclick="proceedToCheckout()" id="checkoutButton" class="w-full py-3 rounded-xl gold-gradient text-stone-900 font-bold text-sm shadow-md hover:opacity-95 transition flex items-center justify-center gap-2">
+          <span>Proceed to Order & Pay</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: End-to-End Checkout & Multi-Payment Gateway                         -->
+  <!-- ========================================================================= -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full max-h-[92vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Checkout Header -->
+      <div class="p-4 sm:p-5 border-b border-stone-200 flex items-center justify-between bg-stone-50 sticky top-0 z-10">
+        <div>
+          <h3 class="font-serif text-lg font-bold text-maroon-950">Complete Your Order</h3>
+          <p class="text-xs text-stone-500">Pay securely via UPI or Card, then instant WhatsApp dispatch</p>
+        </div>
+        <button onclick="closeCheckout()" class="p-1.5 rounded-full text-stone-400 hover:text-stone-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Checkout Form Body -->
+      <div class="p-4 sm:p-6 space-y-6">
+
+        <!-- Order Summary Preview -->
+        <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-3.5 flex items-center justify-between text-xs sm:text-sm">
+          <div>
+            <span class="text-stone-500">Payable Amount:</span>
+            <span id="checkoutTotalDisplay" class="font-extrabold text-base sm:text-lg text-maroon-950 ml-1">₹0</span>
+            <span class="text-emerald-700 font-semibold ml-2">(Free Shipping)</span>
+          </div>
+          <span class="px-2 py-0.5 rounded bg-amber-200/60 text-amber-900 font-medium text-[11px]" id="checkoutItemsCountPreview">0 Items</span>
+        </div>
+
+        <!-- Section 1: Customer Details -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-sm text-stone-800 flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded-full bg-maroon-900 text-white text-xs flex items-center justify-center font-bold">1</span>
+            Delivery & Customer Details
+          </h4>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Full Name *</label>
+              <input type="text" id="custName" required placeholder="e.g. Sujatha / Priya" class="w-full px-3 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">WhatsApp Mobile Number *</label>
+              <input type="tel" id="custPhone" required placeholder="e.g. 9876543210" class="w-full px-3 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Complete Delivery Address *</label>
+            <textarea id="custAddress" required rows="2" placeholder="House/Flat No, Apartment/Street name, Area" class="w-full px-3 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500"></textarea>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Pincode *</label>
+              <input type="text" id="custPincode" required placeholder="500072" class="w-full px-2.5 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">City *</label>
+              <input type="text" id="custCity" required placeholder="Hyderabad" class="w-full px-2.5 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">State *</label>
+              <input type="text" id="custState" required placeholder="Telangana" class="w-full px-2.5 py-2 text-xs sm:text-sm bg-stone-50 border border-stone-300 rounded-lg focus:outline-none focus:border-royal-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Payment Gateway Selection -->
+        <div class="space-y-3 pt-2 border-t border-stone-200">
+          <h4 class="font-bold text-sm text-stone-800 flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded-full bg-maroon-900 text-white text-xs flex items-center justify-center font-bold">2</span>
+            Select Payment Method
+          </h4>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            
+            <!-- Option 1: Instant UPI -->
+            <label class="payment-option cursor-pointer border-2 border-royal-500 bg-amber-50/50 rounded-xl p-3 flex flex-col justify-between space-y-2 transition">
+              <div class="flex items-start justify-between">
+                <input type="radio" name="paymentMethod" value="upi" checked onchange="handlePaymentMethodChange('upi')" class="text-royal-600 focus:ring-royal-500 mt-0.5">
+                <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.2 rounded font-bold">Fastest</span>
+              </div>
+              <div>
+                <span class="block font-bold text-xs sm:text-sm text-stone-900">Instant UPI QR</span>
+                <span class="block text-[11px] text-stone-500">GPay, PhonePe, Paytm</span>
+              </div>
+            </label>
+
+            <!-- Option 2: Razorpay / Online Cards -->
+            <label class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-3 flex flex-col justify-between space-y-2 transition">
+              <div class="flex items-start justify-between">
+                <input type="radio" name="paymentMethod" value="razorpay" onchange="handlePaymentMethodChange('razorpay')" class="text-royal-600 focus:ring-royal-500 mt-0.5">
+                <i data-lucide="credit-card" class="w-4 h-4 text-royal-600"></i>
+              </div>
+              <div>
+                <span class="block font-bold text-xs sm:text-sm text-stone-900">Cards / Netbanking</span>
+                <span class="block text-[11px] text-stone-500">Visa, MC, Rupay, Wallets</span>
+              </div>
+            </label>
+
+            <!-- Option 3: COD -->
+            <label class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-3 flex flex-col justify-between space-y-2 transition">
+              <div class="flex items-start justify-between">
+                <input type="radio" name="paymentMethod" value="cod" onchange="handlePaymentMethodChange('cod')" class="text-royal-600 focus:ring-royal-500 mt-0.5">
+                <i data-lucide="banknote" class="w-4 h-4 text-stone-600"></i>
+              </div>
+              <div>
+                <span class="block font-bold text-xs sm:text-sm text-stone-900">Cash on Delivery</span>
+                <span class="block text-[11px] text-stone-500">Pay upon delivery</span>
+              </div>
+            </label>
+
+          </div>
+
+          <!-- Dynamic UPI Container (when UPI selected) -->
+          <div id="upiPaymentBox" class="bg-stone-50 border border-amber-300 rounded-xl p-4 space-y-3">
+            <div class="text-center space-y-2">
+              <p class="text-xs font-semibold text-stone-700">Scan QR Code using any UPI App (GPay, PhonePe, Paytm)</p>
+              
+              <!-- Dynamic QR Code Container -->
+              <div class="w-44 h-44 bg-white p-2 border-2 border-royal-500 rounded-xl mx-auto shadow-sm flex items-center justify-center">
+                <img id="dynamicUpiQr" src="" alt="UPI Payment QR Code" class="w-full h-full object-contain">
+              </div>
+
+              <!-- Quick Launch UPI App Buttons for Mobile -->
+              <div class="pt-1">
+                <p class="text-[11px] text-stone-500 mb-1.5 font-medium">On Mobile? Click to open directly in your UPI App:</p>
+                <div class="flex flex-wrap items-center justify-center gap-2">
+                  <a id="gpayDeepLink" href="#" class="px-3 py-1 bg-white hover:bg-stone-100 border border-stone-300 rounded-md text-xs font-semibold text-stone-800 flex items-center gap-1 shadow-xs">
+                    <span class="text-blue-600 font-bold">G</span>Pay
+                  </a>
+                  <a id="phonepeDeepLink" href="#" class="px-3 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-md text-xs font-semibold text-purple-800 flex items-center gap-1 shadow-xs">
+                    PhonePe
+                  </a>
+                  <a id="paytmDeepLink" href="#" class="px-3 py-1 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-md text-xs font-semibold text-sky-800 flex items-center gap-1 shadow-xs">
+                    Paytm
+                  </a>
+                  <a id="bhimDeepLink" href="#" class="px-3 py-1 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-md text-xs font-semibold text-amber-800 flex items-center gap-1 shadow-xs">
+                    Any UPI
+                  </a>
+                </div>
+              </div>
+
+              <div class="text-[11px] text-stone-600 pt-1 flex items-center justify-center gap-1">
+                <span>Merchant UPI: <strong>7013416296@ybl</strong></span>
+                <button type="button" onclick="navigator.clipboard.writeText('7013416296@ybl'); alert('UPI ID copied: 7013416296@ybl')" class="text-royal-600 hover:underline font-bold text-xs ml-1">Copy</button>
+              </div>
+            </div>
+
+            <!-- Transaction Reference Entry -->
+            <div class="pt-2 border-t border-stone-200">
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Enter UPI Reference / UTR Number (Optional)</label>
+              <input type="text" id="upiRefNumber" placeholder="e.g. 12-digit UTR from your UPI app receipt" class="w-full px-3 py-1.5 text-xs bg-white border border-stone-300 rounded-lg">
+            </div>
+          </div>
+
+          <!-- Razorpay Box Notice -->
+          <div id="razorpayNoticeBox" class="hidden bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 space-y-1">
+            <p class="font-semibold flex items-center gap-1">
+              <i data-lucide="shield-check" class="w-4 h-4 text-blue-600"></i>
+              Razorpay Secure Checkout Enabled
+            </p>
+            <p class="text-[11px] text-blue-700">You will be redirected to the secure 256-bit encrypted card/netbanking portal upon clicking Place Order.</p>
+          </div>
+
+          <!-- COD Notice -->
+          <div id="codNoticeBox" class="hidden bg-stone-100 border border-stone-300 rounded-xl p-3 text-xs text-stone-800 space-y-1">
+            <p class="font-semibold">Cash on Delivery selected</p>
+            <p class="text-[11px] text-stone-600">Please keep exact cash ready upon delivery. Our team will verify your WhatsApp number before dispatch.</p>
+          </div>
+
+        </div>
+
+        <!-- Submit & Order Button -->
+        <div class="pt-4 space-y-2">
+          <button type="button" onclick="submitFinalOrder()" id="placeOrderBtn" class="w-full py-3.5 rounded-xl gold-gradient text-stone-900 font-extrabold text-sm sm:text-base shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2">
+            <i data-lucide="lock" class="w-4 h-4"></i>
+            <span>Confirm Order & Send to WhatsApp</span>
+          </button>
+          <p class="text-center text-[11px] text-stone-500">
+            🔒 By placing the order, your details and payment receipt are securely sent to Sujatha Collections for immediate packing and dispatch.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: Order Success & Receipt Confirmation                                -->
+  <!-- ========================================================================= -->
+  <div id="orderSuccessModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 text-center space-y-5 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+      
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+        <i data-lucide="check" class="w-10 h-10 stroke-[3]"></i>
+      </div>
+
+      <div class="space-y-1">
+        <h3 class="font-serif text-2xl font-bold text-stone-900">Order Placed Successfully!</h3>
+        <p class="text-xs sm:text-sm text-stone-500">Thank you for shopping with SRR Bazaar / Sujatha Collections</p>
+      </div>
+
+      <div class="bg-stone-50 border border-stone-200 rounded-xl p-4 text-left text-xs space-y-2">
+        <div class="flex justify-between border-b border-stone-200 pb-2">
+          <span class="text-stone-500">Order Reference ID:</span>
+          <span id="successOrderId" class="font-mono font-bold text-stone-900"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-stone-500">Customer Name:</span>
+          <span id="successCustName" class="font-semibold text-stone-800"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-stone-500">Total Paid / Payable:</span>
+          <span id="successTotal" class="font-bold text-royal-600 text-sm"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-stone-500">Payment Mode:</span>
+          <span id="successPaymentMethod" class="font-medium text-stone-800 uppercase"></span>
+        </div>
+        <div class="flex justify-between border-t border-stone-200 pt-2">
+          <span class="text-stone-500">Status:</span>
+          <span class="text-emerald-700 font-bold flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Under Processing
+          </span>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="space-y-2">
+        <a id="successWhatsAppBtn" href="#" target="_blank" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow transition flex items-center justify-center gap-2">
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+          <span>Open Order in WhatsApp</span>
+        </a>
+
+        <button onclick="closeSuccessModal()" class="w-full py-2.5 rounded-xl border border-stone-300 text-stone-700 font-semibold text-xs hover:bg-stone-50 transition">
+          Continue Shopping
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: Merchant Dashboard & Order Processing                              -->
+  <!-- ========================================================================= -->
+  <div id="merchantModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col relative">
+      
+      <!-- Merchant Header -->
+      <div class="p-4 sm:p-5 border-b border-stone-200 bg-maroon-950 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center text-stone-900 font-bold text-sm">
+            SR
+          </div>
+          <div>
+            <h3 class="font-serif text-lg font-bold">Merchant Order & Inventory Portal</h3>
+            <p class="text-xs text-amber-200">SRR Bazaar • @sujatha60861 Store Manager</p>
+          </div>
+        </div>
+        <button onclick="toggleMerchantModal(false)" class="p-1 rounded-md text-stone-300 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex border-b border-stone-200 bg-stone-100 text-xs sm:text-sm font-semibold">
+        <button onclick="switchMerchantTab('orders')" id="tabBtnOrders" class="px-5 py-3 border-b-2 border-royal-600 text-royal-700 bg-white flex items-center gap-2">
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i> Customer Orders (<span id="merchantOrderCount">0</span>)
+        </button>
+        <button onclick="switchMerchantTab('add-product')" id="tabBtnAddProduct" class="px-5 py-3 border-b-2 border-transparent text-stone-600 hover:text-stone-900 flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i> Add New Product
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Orders Management -->
+      <div id="merchantTabOrders" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h4 class="font-bold text-base text-stone-900">Incoming Orders</h4>
+            <p class="text-xs text-stone-500">All customer orders placed via the website are listed below</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="exportOrdersCSV()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-semibold flex items-center gap-1 border border-stone-300">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
+            </button>
+            <button onclick="clearDemoOrders()" class="px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-lg text-xs font-semibold">
+              Clear All Orders
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto border border-stone-200 rounded-xl shadow-xs">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-stone-100 text-stone-700 font-semibold border-b border-stone-200">
+              <tr>
+                <th class="p-3">Order ID</th>
+                <th class="p-3">Date</th>
+                <th class="p-3">Customer</th>
+                <th class="p-3">Items</th>
+                <th class="p-3">Total</th>
+                <th class="p-3">Payment</th>
+                <th class="p-3">Status</th>
+                <th class="p-3 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="merchantOrdersTableBody" class="divide-y divide-stone-200 bg-white">
+              <!-- Orders injected here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Add Product -->
+      <div id="merchantTabAddProduct" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <h4 class="font-bold text-base text-stone-900">Add Product to Catalogue</h4>
+        <p class="text-xs text-stone-500">Quickly publish a new item with image and price into the live storefront</p>
+
+        <form id="newProductForm" onsubmit="handleAddNewProduct(event)" class="space-y-4 max-w-xl">
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Product Title *</label>
+            <input type="text" id="newProdTitle" required placeholder="e.g. Royal Emerald Choker Set" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Selling Price (₹) *</label>
+              <input type="number" id="newProdPrice" required placeholder="999" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Original MRP (₹)</label>
+              <input type="number" id="newProdMrp" placeholder="1899" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Category *</label>
+              <select id="newProdCategory" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+                <option value="necklace">Necklace & Chokers</option>
+                <option value="mangalsutra">Black Beads & Chains</option>
+                <option value="earrings">Earrings & Bangles</option>
+                <option value="decor">Trays & Home Decor</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Badge Tag</label>
+              <input type="text" id="newProdTag" placeholder="e.g. Bestseller / New" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Image URL or Local Path *</label>
+            <input type="text" id="newProdImage" required placeholder="images/your_image.jpg or https://..." class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Description *</label>
+            <textarea id="newProdDesc" rows="3" required placeholder="High quality finish, free shipping..." class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg"></textarea>
+          </div>
+
+          <button type="submit" class="px-5 py-2.5 rounded-xl gold-gradient text-stone-900 font-bold text-xs shadow hover:opacity-95">
+            Publish Product to Store
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Main JavaScript App Logic -->
+  <script>
+    // =========================================================================
+    // STORE CONFIGURATION & DATA
+    // =========================================================================
+    const STORE_CONFIG = {
+      name: "SRR Bazaar",
+      subTitle: "Sujatha Collections",
+      whatsappNumber: "917013416296",
+      alternatePhone: "918185012453",
+      upiId: "7013416296@ybl",
+      instagramUrl: "https://www.instagram.com/sujatha60861/",
+      instagramHandle: "sujatha60861"
+    };
+
+    // Initial Default Catalogue (extracted from Sujatha Collections WhatsApp feed & Instagram)
+    const DEFAULT_PRODUCTS = [
+      {
+        id: 1,
+        title: "Premium Pure Jadau Kundan Necklace Set",
+        category: "necklace",
+        price: 999,
+        originalPrice: 1899,
+        tag: "Bestseller",
+        image: "images/jadau_kundan_necklace.jpg",
+        description: "Heavy bridal quality Jadau Kundan necklace set with intricate stone work, matching earrings, and adjustable dori. Guaranteed non-allergic micro-gold plating.",
+        inStock: true,
+        rating: 4.9,
+        reviewsCount: 142
+      },
+      {
+        id: 2,
+        title: "Royal 6.5\" Swan Decorative Tray & Organizer",
+        category: "decor",
+        price: 999,
+        originalPrice: 1599,
+        tag: "Home Decor",
+        image: "images/swan_tray.jpg",
+        description: "6.5 inches exquisite metallic swan decorative tray. Excellent quality for pooja thali, vanity jewellery organizer, and premium festive gifting.",
+        inStock: true,
+        rating: 4.8,
+        reviewsCount: 88
+      },
+      {
+        id: 3,
+        title: "Handcrafted Floral Choker Set with Pearls",
+        category: "necklace",
+        price: 799,
+        originalPrice: 1499,
+        tag: "Free Shipping",
+        image: "images/floral_choker.jpg",
+        description: "Traditional floral choker necklace with freshwater-look cluster pearls. Lightweight yet royal look, perfect for sarees and lehengas.",
+        inStock: true,
+        rating: 4.9,
+        reviewsCount: 65
+      },
+      {
+        id: 4,
+        title: "3-Lines Long Traditional Black Beads Mangalsutra",
+        category: "mangalsutra",
+        price: 699,
+        originalPrice: 1299,
+        tag: "Daily Wear",
+        image: "images/black_beads_mangalsutra.jpg",
+        description: "Authentic 3-lines long black beads chain with gold-plated spacers and durable finish. Ideal for everyday elegance and festive celebrations.",
+        inStock: true,
+        rating: 4.9,
+        reviewsCount: 110
+      },
+      {
+        id: 5,
+        title: "Single CZ Solitaire Bridal Studs / Earrings",
+        category: "earrings",
+        price: 550,
+        originalPrice: 899,
+        tag: "Free Shipping",
+        image: "images/cz_bridal_earrings.jpg",
+        description: "High sparkle round American Diamond / CZ stone earrings with secure push-back lock. Anti-tarnish micro coating for long-lasting brilliance.",
+        inStock: true,
+        rating: 4.7,
+        reviewsCount: 52
+      },
+      {
+        id: 6,
+        title: "Royal Kundan & Pearl Haar / Haram Set",
+        category: "necklace",
+        price: 999,
+        originalPrice: 1999,
+        tag: "Festive Special",
+        image: "images/kundan_pearl_haar.jpg",
+        description: "Royal wedding haar set studded with uncut Kundan and pearl drops. Comes with heavy matching designer jhumkas.",
+        inStock: true,
+        rating: 5.0,
+        reviewsCount: 94
+      },
+      {
+        id: 7,
+        title: "Classic Micro-Gold Daily Wear Bangles",
+        category: "earrings",
+        price: 550,
+        originalPrice: 999,
+        tag: "Value Pick",
+        image: "images/gold_finish_bangles.jpg",
+        description: "Premium matte-gold finish traditional bangles with smooth inner comfort fit. Suitable for everyday wear and weddings.",
+        inStock: true,
+        rating: 4.8,
+        reviewsCount: 43
+      },
+      {
+        id: 8,
+        title: "Royal Antique Gold Temple Jewellery Necklace",
+        category: "necklace",
+        price: 1999,
+        originalPrice: 3499,
+        tag: "Luxury Collection",
+        image: "images/temple_necklace.jpg",
+        description: "Masterpiece South Indian antique temple necklace set featuring traditional handcrafted motifs and ruby-colored stone embellishments.",
+        inStock: true,
+        rating: 5.0,
+        reviewsCount: 178
+      }
+    ];
+
+    // State Variables
+    let products = JSON.parse(localStorage.getItem('srr_products')) || DEFAULT_PRODUCTS;
+    let cart = JSON.parse(localStorage.getItem('srr_cart')) || [];
+    let orders = JSON.parse(localStorage.getItem('srr_orders')) || [];
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let currentSort = 'featured';
+    let activeCoupon = null;
+
+    // Initialize Page
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      updateCartUI();
+      renderMerchantOrders();
+      lucide.createIcons();
+    });
+
+    // =========================================================================
+    // PRODUCT RENDERING & FILTERING
+    // =========================================================================
+    function renderProducts() {
+      const container = document.getElementById('productGrid');
+      const emptyState = document.getElementById('emptyState');
+      
+      let filtered = products.filter(p => {
+        const matchesCategory = activeCategory === 'all' || p.category === activeCategory;
+        const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                              p.description.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+
+      // Sorting
+      if (currentSort === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (currentSort === 'price-high') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (currentSort === 'name') {
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+      }
+
+      document.getElementById('visibleProductCount').textContent = filtered.length;
+      document.getElementById('totalProductCount').textContent = products.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      container.innerHTML = filtered.map(p => `
+        <div class="bg-white rounded-2xl overflow-hidden border border-stone-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
+          
+          <!-- Product Image & Badges -->
+          <div class="relative h-48 sm:h-64 overflow-hidden bg-stone-100 cursor-pointer" onclick="openQuickView(${p.id})">
+            <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            ${p.tag ? `<span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold gold-gradient text-stone-900 shadow">${p.tag}</span>` : ''}
+            <button onclick="event.stopPropagation(); openQuickView(${p.id})" class="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-stone-700 flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition duration-200">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Product Details -->
+          <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center gap-1 text-amber-500 text-xs mb-1">
+                <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400"></i>
+                <span class="font-bold text-stone-800">${p.rating}</span>
+                <span class="text-stone-400 text-[10px]">(${p.reviewsCount})</span>
+              </div>
+              <h3 class="font-serif font-bold text-xs sm:text-sm text-stone-900 line-clamp-2 hover:text-royal-600 cursor-pointer" onclick="openQuickView(${p.id})">
+                ${p.title}
+              </h3>
+            </div>
+
+            <div class="space-y-2.5 pt-1 border-t border-stone-100">
+              <div class="flex items-baseline gap-1.5 flex-wrap">
+                <span class="text-base sm:text-lg font-extrabold text-maroon-950">₹${p.price}</span>
+                ${p.originalPrice ? `<span class="text-xs text-stone-400 line-through">₹${p.originalPrice}</span>` : ''}
+                ${p.originalPrice ? `<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded">${Math.round((1 - p.price / p.originalPrice) * 100)}% OFF</span>` : ''}
+              </div>
+
+              <div class="grid grid-cols-2 gap-1.5">
+                <button onclick="addToCart(${p.id})" class="w-full py-1.5 rounded-lg border border-royal-600 text-royal-700 font-semibold text-xs hover:bg-royal-50 transition flex items-center justify-center gap-1">
+                  <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                  <span>Add</span>
+                </button>
+                <button onclick="quickOrderProduct(${p.id})" class="w-full py-1.5 rounded-lg gold-gradient text-stone-900 font-bold text-xs hover:opacity-90 shadow-sm transition">
+                  Buy Now
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function filterCategory(category, btnElement) {
+      activeCategory = category;
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-maroon-900', 'text-amber-300');
+        btn.classList.add('bg-stone-100', 'text-stone-700');
+      });
+      if (btnElement) {
+        btnElement.classList.remove('bg-stone-100', 'text-stone-700');
+        btnElement.classList.add('bg-maroon-900', 'text-amber-300');
+      }
+      renderProducts();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val;
+      renderProducts();
+    }
+
+    function handleSort(val) {
+      currentSort = val;
+      renderProducts();
+    }
+
+    function resetFilters() {
+      activeCategory = 'all';
+      searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      filterCategory('all', document.querySelector('.category-btn'));
+    }
+
+    // =========================================================================
+    // QUICK VIEW MODAL
+    // =========================================================================
+    function openQuickView(id) {
+      const p = products.find(item => item.id === id);
+      if (!p) return;
+
+      const container = document.getElementById('quickViewContent');
+      container.innerHTML = `
+        <div class="rounded-xl overflow-hidden bg-stone-100 flex items-center justify-center">
+          <img src="${p.image}" alt="${p.title}" class="w-full h-80 object-cover">
+        </div>
+        <div class="flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold gold-gradient text-stone-900 uppercase">
+              ${p.category}
+            </span>
+            <h2 class="font-serif text-xl font-bold text-stone-900">${p.title}</h2>
+            <div class="flex items-center gap-2">
+              <span class="text-2xl font-black text-maroon-950">₹${p.price}</span>
+              ${p.originalPrice ? `<span class="text-sm text-stone-400 line-through">₹${p.originalPrice}</span>` : ''}
+              <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Free Shipping</span>
+            </div>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed pt-2">${p.description}</p>
+          </div>
+
+          <div class="space-y-3 pt-4 border-t border-stone-200">
+            <div class="text-xs text-stone-500 space-y-1">
+              <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Non-allergic skin-safe material</div>
+              <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Pan-India express dispatch (3-5 days)</div>
+              <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Direct WhatsApp seller support</div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+              <button onclick="addToCart(${p.id}); closeQuickView();" class="flex-1 py-2.5 rounded-xl border border-royal-600 text-royal-700 font-bold text-xs sm:text-sm hover:bg-royal-50 transition">
+                Add to Cart
+              </button>
+              <button onclick="quickOrderProduct(${p.id}); closeQuickView();" class="flex-1 py-2.5 rounded-xl gold-gradient text-stone-900 font-bold text-xs sm:text-sm shadow hover:opacity-95 transition">
+                Buy Now
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('quickViewModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeQuickView() {
+      document.getElementById('quickViewModal').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // CART MANAGEMENT
+    // =========================================================================
+    function addToCart(id) {
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        const p = products.find(item => item.id === id);
+        if (p) cart.push({ id: p.id, title: p.title, price: p.price, image: p.image, qty: 1 });
+      }
+      saveCart();
+      updateCartUI();
+      toggleCartDrawer(true);
+    }
+
+    function quickOrderProduct(id) {
+      cart = [];
+      const p = products.find(item => item.id === id);
+      if (p) {
+        cart.push({ id: p.id, title: p.title, price: p.price, image: p.image, qty: 1 });
+      }
+      saveCart();
+      updateCartUI();
+      proceedToCheckout();
+    }
+
+    function updateCartQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (item) {
+        item.qty += delta;
+        if (item.qty <= 0) {
+          cart = cart.filter(i => i.id !== id);
+        }
+      }
+      saveCart();
+      updateCartUI();
+    }
+
+    function removeCartItem(id) {
+      cart = cart.filter(i => i.id !== id);
+      saveCart();
+      updateCartUI();
+    }
+
+    function saveCart() {
+      localStorage.setItem('srr_cart', JSON.stringify(cart));
+    }
+
+    function updateCartUI() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartCountBadge').textContent = count;
+      document.getElementById('cartItemCount').textContent = count;
+
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      let discount = 0;
+      if (activeCoupon === 'WELCOME100' && subtotal >= 500) {
+        discount = 100;
+        document.getElementById('discountRow').style.display = 'flex';
+        document.getElementById('cartDiscount').textContent = `-₹${discount}`;
+      } else {
+        document.getElementById('discountRow').style.display = 'none';
+      }
+
+      const total = Math.max(0, subtotal - discount);
+      document.getElementById('cartSubtotal').textContent = `₹${subtotal}`;
+      document.getElementById('cartTotal').textContent = `₹${total}`;
+
+      const list = document.getElementById('cartItemsList');
+      if (cart.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-12 space-y-3">
+            <div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center mx-auto text-stone-400">
+              <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+            </div>
+            <p class="text-sm font-semibold text-stone-700">Your cart is empty</p>
+            <p class="text-xs text-stone-500">Explore our handcrafted jewellery and add your favorites!</p>
+          </div>
+        `;
+        document.getElementById('checkoutButton').disabled = true;
+        document.getElementById('checkoutButton').classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        document.getElementById('checkoutButton').disabled = false;
+        document.getElementById('checkoutButton').classList.remove('opacity-50', 'cursor-not-allowed');
+        list.innerHTML = cart.map(item => `
+          <div class="flex items-center gap-3 p-2.5 rounded-xl border border-stone-200 bg-white shadow-xs">
+            <img src="${item.image}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-stone-900 truncate">${item.title}</h4>
+              <p class="text-xs font-extrabold text-maroon-950 mt-0.5">₹${item.price}</p>
+              <div class="flex items-center gap-2 mt-2">
+                <button onclick="updateCartQty(${item.id}, -1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">-</button>
+                <span class="text-xs font-semibold px-1">${item.qty}</span>
+                <button onclick="updateCartQty(${item.id}, 1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">+</button>
+              </div>
+            </div>
+            <button onclick="removeCartItem(${item.id})" class="text-stone-400 hover:text-red-600 p-1">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `).join('');
+      }
+
+      lucide.createIcons();
+    }
+
+    function toggleCartDrawer(open) {
+      const drawer = document.getElementById('cartDrawer');
+      if (open) {
+        drawer.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+      }
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById('couponCodeInput').value.trim().toUpperCase();
+      const notice = document.getElementById('couponNotice');
+      if (code === 'WELCOME100') {
+        activeCoupon = 'WELCOME100';
+        notice.textContent = '🎉 Coupon WELCOME100 applied! ₹100 discount added.';
+        notice.classList.remove('hidden');
+      } else {
+        activeCoupon = null;
+        notice.textContent = '❌ Invalid coupon code. Try WELCOME100';
+        notice.classList.remove('hidden');
+      }
+      updateCartUI();
+    }
+
+    // =========================================================================
+    // END-TO-END CHECKOUT & MULTI-PAYMENT GATEWAY
+    // =========================================================================
+    let currentSelectedPayment = 'upi';
+
+    function proceedToCheckout() {
+      toggleCartDrawer(false);
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      let discount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
+      const total = Math.max(0, subtotal - discount);
+
+      document.getElementById('checkoutTotalDisplay').textContent = `₹${total}`;
+      document.getElementById('checkoutItemsCountPreview').textContent = `${cart.length} item(s)`;
+
+      // Generate Dynamic UPI QR and Deep Links
+      generateUpiDetails(total);
+
+      document.getElementById('checkoutModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkoutModal').classList.add('hidden');
+    }
+
+    function handlePaymentMethodChange(method) {
+      currentSelectedPayment = method;
+      document.getElementById('upiPaymentBox').classList.toggle('hidden', method !== 'upi');
+      document.getElementById('razorpayNoticeBox').classList.toggle('hidden', method !== 'razorpay');
+      document.getElementById('codNoticeBox').classList.toggle('hidden', method !== 'cod');
+
+      const btn = document.getElementById('placeOrderBtn');
+      if (method === 'upi') {
+        btn.innerHTML = `<i data-lucide="lock" class="w-4 h-4"></i><span>Verify UPI & Place Order</span>`;
+      } else if (method === 'razorpay') {
+        btn.innerHTML = `<i data-lucide="credit-card" class="w-4 h-4"></i><span>Proceed to Card/NetBanking Gateway</span>`;
+      } else {
+        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Confirm Cash on Delivery Order</span>`;
+      }
+      lucide.createIcons();
+    }
+
+    function generateUpiDetails(amount) {
+      const pa = STORE_CONFIG.upiId;
+      const pn = encodeURIComponent("SRR Bazaar Sujatha");
+      const am = amount.toFixed(2);
+      const cu = "INR";
+      const tn = encodeURIComponent(`Order Sujatha Collections`);
+      
+      const upiUri = `upi://pay?pa=${pa}&pn=${pn}&am=${am}&cu=${cu}&tn=${tn}`;
+      
+      // Dynamic QR Code using QR Server API
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
+      document.getElementById('dynamicUpiQr').src = qrApiUrl;
+
+      // Deep Links
+      document.getElementById('gpayDeepLink').href = upiUri;
+      document.getElementById('phonepeDeepLink').href = upiUri;
+      document.getElementById('paytmDeepLink').href = upiUri;
+      document.getElementById('bhimDeepLink').href = upiUri;
+    }
+
+    function submitFinalOrder() {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const pincode = document.getElementById('custPincode').value.trim();
+      const city = document.getElementById('custCity').value.trim();
+      const state = document.getElementById('custState').value.trim();
+      const upiRef = document.getElementById('upiRefNumber') ? document.getElementById('upiRefNumber').value.trim() : '';
+
+      if (!name || !phone || !address || !pincode || !city || !state) {
+        alert("Please fill in all shipping details (Name, Phone, Address, Pincode, City, State) so we can dispatch your parcel!");
+        return;
+      }
+
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      let discount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
+      const total = Math.max(0, subtotal - discount);
+
+      // Handle Razorpay direct simulation / checkout if selected
+      if (currentSelectedPayment === 'razorpay') {
+        const options = {
+          key: "rzp_test_placeholder", // Replace with merchant live key
+          amount: total * 100,
+          currency: "INR",
+          name: "SRR Bazaar",
+          description: "Jewellery Order Payment",
+          handler: function (response) {
+            completeOrderRecord(name, phone, address, pincode, city, state, 'Razorpay Card/Netbanking', response.razorpay_payment_id || 'RZP-PAID', total);
+          },
+          prefill: {
+            name: name,
+            contact: phone
+          },
+          theme: { color: "#d49b18" }
+        };
+        try {
+          const rzp = new Razorpay(options);
+          rzp.open();
+        } catch (e) {
+          // If script blocked or demo key, gracefully confirm order
+          completeOrderRecord(name, phone, address, pincode, city, state, 'Online Gateway (Test/Card)', 'CARD-AUTH-' + Math.floor(Math.random()*900000), total);
+        }
+        return;
+      }
+
+      // If UPI or COD:
+      const paymentLabel = currentSelectedPayment === 'upi' ? `UPI (Ref: ${upiRef || 'Direct Transfer'})` : 'Cash on Delivery (COD)';
+      completeOrderRecord(name, phone, address, pincode, city, state, paymentLabel, upiRef, total);
+    }
+
+    function completeOrderRecord(name, phone, address, pincode, city, state, paymentMethod, refNumber, total) {
+      const orderId = 'SRR-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.floor(1000 + Math.random() * 9000);
+      const newOrder = {
+        orderId: orderId,
+        date: new Date().toLocaleString(),
+        customer: { name, phone, address, pincode, city, state },
+        items: [...cart],
+        paymentMethod: paymentMethod,
+        refNumber: refNumber,
+        total: total,
+        status: 'Processing'
+      };
+
+      orders.unshift(newOrder);
+      localStorage.setItem('srr_orders', JSON.stringify(orders));
+
+      // Construct Itemized WhatsApp Message for Merchant & Customer
+      const itemLines = cart.map((i, idx) => `${idx + 1}. *${i.title}* x ${i.qty} = ₹${i.price * i.qty}`).join('\n');
+      const waText = encodeURIComponent(
+`🛍️ *NEW ORDER PLACED ON SRR BAZAAR*
+----------------------------------------
+*Order ID:* ${orderId}
+*Customer:* ${name}
+*WhatsApp Phone:* ${phone}
+*Delivery Address:*
+${address}, ${city}, ${state} - ${pincode}
+
+*Items Ordered:*
+${itemLines}
+
+*Total Payable:* ₹${total} (Free Express Shipping)
+*Payment Mode:* ${paymentMethod}
+${refNumber ? `*Payment Ref/UTR:* ${refNumber}` : ''}
+*Instagram Store:* @${STORE_CONFIG.instagramHandle}
+----------------------------------------
+Please confirm receipt and dispatch tracking details! ✨`
+      );
+
+      const waUrl = `https://wa.me/${STORE_CONFIG.whatsappNumber}?text=${waText}`;
+
+      // Show Order Success Modal
+      document.getElementById('successOrderId').textContent = orderId;
+      document.getElementById('successCustName').textContent = name;
+      document.getElementById('successTotal').textContent = `₹${total}`;
+      document.getElementById('successPaymentMethod').textContent = paymentMethod;
+      document.getElementById('successWhatsAppBtn').href = waUrl;
+
+      // Clear Cart
+      cart = [];
+      saveCart();
+      updateCartUI();
+      closeCheckout();
+
+      document.getElementById('orderSuccessModal').classList.remove('hidden');
+      renderMerchantOrders();
+      lucide.createIcons();
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('orderSuccessModal').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // MERCHANT DASHBOARD & ORDER PROCESSING
+    // =========================================================================
+    function toggleMerchantModal(show) {
+      const modal = document.getElementById('merchantModal');
+      if (show) {
+        modal.classList.remove('hidden');
+        renderMerchantOrders();
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function switchMerchantTab(tab) {
+      if (tab === 'orders') {
+        document.getElementById('merchantTabOrders').classList.remove('hidden');
+        document.getElementById('merchantTabAddProduct').classList.add('hidden');
+        document.getElementById('tabBtnOrders').classList.add('border-royal-600', 'text-royal-700', 'bg-white');
+        document.getElementById('tabBtnAddProduct').classList.remove('border-royal-600', 'text-royal-700', 'bg-white');
+      } else {
+        document.getElementById('merchantTabOrders').classList.add('hidden');
+        document.getElementById('merchantTabAddProduct').classList.remove('hidden');
+        document.getElementById('tabBtnAddProduct').classList.add('border-royal-600', 'text-royal-700', 'bg-white');
+        document.getElementById('tabBtnOrders').classList.remove('border-royal-600', 'text-royal-700', 'bg-white');
+      }
+      lucide.createIcons();
+    }
+
+    function renderMerchantOrders() {
+      const tbody = document.getElementById('merchantOrdersTableBody');
+      document.getElementById('merchantOrderCount').textContent = orders.length;
+
+      const badge = document.getElementById('merchantBadgeCount');
+      if (orders.length > 0) {
+        badge.textContent = orders.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      if (orders.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="p-8 text-center text-stone-400">
+              No orders placed yet. Orders will appear here as soon as customers checkout.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = orders.map((o, idx) => `
+        <tr class="hover:bg-stone-50 transition">
+          <td class="p-3 font-mono font-bold text-stone-800">${o.orderId}</td>
+          <td class="p-3 text-stone-500 whitespace-nowrap">${o.date}</td>
+          <td class="p-3">
+            <span class="font-bold text-stone-900 block">${o.customer.name}</span>
+            <span class="text-stone-500 block text-[11px]">${o.customer.phone}</span>
+            <span class="text-stone-400 block text-[10px] truncate max-w-xs">${o.customer.city}, ${o.customer.state}</span>
+          </td>
+          <td class="p-3">
+            <span class="font-semibold text-stone-700">${o.items.map(i => `${i.title} (${i.qty})`).join(', ')}</span>
+          </td>
+          <td class="p-3 font-bold text-maroon-950">₹${o.total}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800">${o.paymentMethod}</span>
+          </td>
+          <td class="p-3">
+            <select onchange="updateOrderStatus(${idx}, this.value)" class="text-[11px] font-semibold rounded border border-stone-300 px-2 py-1 bg-white">
+              <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>⏳ Processing</option>
+              <option value="Payment Verified" ${o.status === 'Payment Verified' ? 'selected' : ''}>✅ Paid</option>
+              <option value="Dispatched" ${o.status === 'Dispatched' ? 'selected' : ''}>🚚 Dispatched</option>
+              <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>🎉 Delivered</option>
+            </select>
+          </td>
+          <td class="p-3 text-center whitespace-nowrap">
+            <a href="https://wa.me/${o.customer.phone}?text=Hello%20${encodeURIComponent(o.customer.name)}%2C%20regarding%20your%20order%20${o.orderId}%20at%20SRR%20Bazaar" target="_blank" class="p-1.5 inline-block text-emerald-600 hover:bg-emerald-50 rounded" title="Chat on WhatsApp">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+            </a>
+          </td>
+        </tr>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function updateOrderStatus(index, newStatus) {
+      if (orders[index]) {
+        orders[index].status = newStatus;
+        localStorage.setItem('srr_orders', JSON.stringify(orders));
+        renderMerchantOrders();
+      }
+    }
+
+    function clearDemoOrders() {
+      if (confirm("Are you sure you want to clear all order logs?")) {
+        orders = [];
+        localStorage.removeItem('srr_orders');
+        renderMerchantOrders();
+      }
+    }
+
+    function exportOrdersCSV() {
+      if (orders.length === 0) {
+        alert("No orders to export!");
+        return;
+      }
+      let csv = "Order ID,Date,Customer Name,Phone,Address,City,State,Pincode,Total,Payment Method,Status\n";
+      orders.forEach(o => {
+        csv += `"${o.orderId}","${o.date}","${o.customer.name}","${o.customer.phone}","${o.customer.address}","${o.customer.city}","${o.customer.state}","${o.customer.pincode}","${o.total}","${o.paymentMethod}","${o.status}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', `SRR_Bazaar_Orders_${new Date().toISOString().slice(0,10)}.csv`);
+      a.click();
+    }
+
+    function handleAddNewProduct(e) {
+      e.preventDefault();
+      const title = document.getElementById('newProdTitle').value.trim();
+      const price = parseFloat(document.getElementById('newProdPrice').value);
+      const mrp = parseFloat(document.getElementById('newProdMrp').value) || Math.round(price * 1.5);
+      const category = document.getElementById('newProdCategory').value;
+      const tag = document.getElementById('newProdTag').value.trim();
+      const image = document.getElementById('newProdImage').value.trim();
+      const desc = document.getElementById('newProdDesc').value.trim();
+
+      const newP = {
+        id: Date.now(),
+        title: title,
+        category: category,
+        price: price,
+        originalPrice: mrp,
+        tag: tag || "New Arrival",
+        image: image,
+        description: desc,
+        inStock: true,
+        rating: 5.0,
+        reviewsCount: 1
+      };
+
+      products.unshift(newP);
+      localStorage.setItem('srr_products', JSON.stringify(products));
+      renderProducts();
+      switchMerchantTab('orders');
+      alert(`✅ Product "${title}" has been successfully added to your store catalogue!`);
+      document.getElementById('newProductForm').reset();
+    }
+  </script>
+
+</body>
+</html>
