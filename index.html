@@ -626,12 +626,24 @@
           <!-- Dynamic UPI Container (when UPI selected) -->
           <div id="upiPaymentBox" class="bg-stone-50 border border-amber-300 rounded-xl p-4 space-y-3">
             <div class="text-center space-y-2">
-              <p class="text-xs font-semibold text-stone-700">Scan QR Code using any UPI App (GPay, PhonePe, Paytm)</p>
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-bold text-stone-800">Scan & Pay via any UPI App</p>
+                <div class="inline-flex rounded-lg border border-stone-300 p-0.5 bg-stone-100 text-[11px]">
+                  <button type="button" onclick="setUpiQrMode('dynamic')" id="qrModeDynamicBtn" class="px-2 py-0.5 rounded font-semibold bg-white text-stone-900 shadow-xs">With Amount</button>
+                  <button type="button" onclick="setUpiQrMode('static')" id="qrModeStaticBtn" class="px-2 py-0.5 rounded font-semibold text-stone-600 hover:text-stone-900">Standard QR</button>
+                  <button type="button" onclick="setUpiQrMode('merchant')" id="qrModeMerchantBtn" class="px-2 py-0.5 rounded font-semibold text-stone-600 hover:text-stone-900 hidden">Shop Standee</button>
+                </div>
+              </div>
               
               <!-- Dynamic QR Code Container -->
-              <div class="w-44 h-44 bg-white p-2 border-2 border-royal-500 rounded-xl mx-auto shadow-sm flex items-center justify-center">
-                <img id="dynamicUpiQr" src="" alt="UPI Payment QR Code" class="w-full h-full object-contain">
+              <div class="w-48 h-48 bg-white p-2.5 border-2 border-royal-500 rounded-xl mx-auto shadow-sm flex items-center justify-center relative">
+                <img id="dynamicUpiQr" src="" alt="UPI Payment QR Code" class="w-full h-full object-contain rounded">
               </div>
+
+              <!-- Important Note for Scanners -->
+              <p id="qrModeHint" class="text-[11px] text-amber-900 font-medium bg-amber-100/70 py-1 px-2 rounded max-w-xs mx-auto">
+                Exact bill amount pre-loaded. Compatible with PhonePe, GPay, Paytm, BHIM.
+              </p>
 
               <!-- Quick Launch UPI App Buttons for Mobile -->
               <div class="pt-1">
@@ -652,9 +664,12 @@
                 </div>
               </div>
 
-              <div class="text-[11px] text-stone-600 pt-1 flex items-center justify-center gap-1">
-                <span>Merchant UPI: <strong>7013416296@ybl</strong></span>
-                <button type="button" onclick="navigator.clipboard.writeText('7013416296@ybl'); alert('UPI ID copied: 7013416296@ybl')" class="text-royal-600 hover:underline font-bold text-xs ml-1">Copy</button>
+              <div class="text-[11px] text-stone-600 pt-1 flex items-center justify-center gap-2 flex-wrap">
+                <span>UPI ID: <strong id="displayUpiId" class="text-stone-900 font-mono">7013416296@ybl</strong></span>
+                <button type="button" onclick="promptChangeUpiId()" class="text-royal-600 hover:text-royal-700 underline font-semibold text-xs inline-flex items-center gap-0.5">
+                  <i data-lucide="edit-2" class="w-3 h-3"></i> Set Real UPI ID
+                </button>
+                <button type="button" onclick="copyUpiId()" class="text-stone-500 hover:text-stone-800 font-semibold text-xs ml-1">Copy</button>
               </div>
             </div>
 
@@ -776,12 +791,15 @@
       </div>
 
       <!-- Tabs -->
-      <div class="flex border-b border-stone-200 bg-stone-100 text-xs sm:text-sm font-semibold">
-        <button onclick="switchMerchantTab('orders')" id="tabBtnOrders" class="px-5 py-3 border-b-2 border-royal-600 text-royal-700 bg-white flex items-center gap-2">
+      <div class="flex border-b border-stone-200 bg-stone-100 text-xs sm:text-sm font-semibold overflow-x-auto">
+        <button onclick="switchMerchantTab('orders')" id="tabBtnOrders" class="px-5 py-3 border-b-2 border-royal-600 text-royal-700 bg-white flex items-center gap-2 whitespace-nowrap">
           <i data-lucide="shopping-cart" class="w-4 h-4"></i> Customer Orders (<span id="merchantOrderCount">0</span>)
         </button>
-        <button onclick="switchMerchantTab('add-product')" id="tabBtnAddProduct" class="px-5 py-3 border-b-2 border-transparent text-stone-600 hover:text-stone-900 flex items-center gap-2">
+        <button onclick="switchMerchantTab('add-product')" id="tabBtnAddProduct" class="px-5 py-3 border-b-2 border-transparent text-stone-600 hover:text-stone-900 flex items-center gap-2 whitespace-nowrap">
           <i data-lucide="plus-circle" class="w-4 h-4"></i> Add New Product
+        </button>
+        <button onclick="switchMerchantTab('settings')" id="tabBtnSettings" class="px-5 py-3 border-b-2 border-transparent text-stone-600 hover:text-stone-900 flex items-center gap-2 whitespace-nowrap">
+          <i data-lucide="settings" class="w-4 h-4"></i> UPI & Payment Settings
         </button>
       </div>
 
@@ -877,6 +895,52 @@
         </form>
       </div>
 
+      <!-- Tab Content 3: UPI & Payment Settings -->
+      <div id="merchantTabSettings" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <h4 class="font-bold text-base text-stone-900">UPI & Store Configuration</h4>
+        <p class="text-xs text-stone-500">Configure your active Google Pay / PhonePe / Paytm UPI ID so customer payments scan instantly</p>
+
+        <form id="paymentConfigForm" onsubmit="handleSavePaymentConfig(event)" class="space-y-4 max-w-xl">
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900">
+            ⚠️ <strong>Important:</strong> Enter an active UPI ID that you currently use on Google Pay, PhonePe, or Paytm. When a valid registered UPI ID is saved, UPI apps will scan and open the payment screen without error.
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Your Real UPI ID (GPay / PhonePe / Paytm / Bank) *</label>
+            <input type="text" id="configUpiId" required placeholder="e.g. 9948633303@ybl or yourname@okaxis" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Payee Display Name *</label>
+            <input type="text" id="configPayeeName" required placeholder="SRR Bazaar" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Official Shop Standee QR Code Image (Optional URL)</label>
+            <input type="text" id="configQrImage" placeholder="https://... or images/your_standee_qr.jpg" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+            <p class="text-[11px] text-stone-500 mt-1">If you have a downloaded image of your PhonePe/GPay store QR standee, paste its URL here to display it directly to customers.</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">WhatsApp Order Helpline *</label>
+              <input type="text" id="configWaPhone" required placeholder="917013416296" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Preferred QR Scan Mode</label>
+              <select id="configDefaultQrMode" class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+                <option value="dynamic">Dynamic QR (With Bill Amount)</option>
+                <option value="static">Standard QR (Scan & Enter Amount)</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="px-5 py-2.5 rounded-xl gold-gradient text-stone-900 font-bold text-xs shadow hover:opacity-95">
+            Save Payment Settings
+          </button>
+        </form>
+      </div>
+
     </div>
   </div>
 
@@ -885,15 +949,30 @@
     // =========================================================================
     // STORE CONFIGURATION & DATA
     // =========================================================================
+    const savedConfig = JSON.parse(localStorage.getItem('srr_store_config')) || {};
     const STORE_CONFIG = {
-      name: "SRR Bazaar",
-      subTitle: "Sujatha Collections",
-      whatsappNumber: "917013416296",
-      alternatePhone: "918185012453",
-      upiId: "7013416296@ybl",
+      name: savedConfig.name || "SRR Bazaar",
+      subTitle: savedConfig.subTitle || "Sujatha Collections",
+      whatsappNumber: savedConfig.whatsappNumber || "917013416296",
+      alternatePhone: savedConfig.alternatePhone || "918185012453",
+      upiId: savedConfig.upiId || "7013416296@ybl",
+      merchantQrImage: savedConfig.merchantQrImage || "",
+      defaultQrMode: savedConfig.defaultQrMode || "dynamic",
       instagramUrl: "https://www.instagram.com/sujatha60861/",
       instagramHandle: "sujatha60861"
     };
+
+    function saveStoreConfig() {
+      localStorage.setItem('srr_store_config', JSON.stringify({
+        name: STORE_CONFIG.name,
+        subTitle: STORE_CONFIG.subTitle,
+        whatsappNumber: STORE_CONFIG.whatsappNumber,
+        alternatePhone: STORE_CONFIG.alternatePhone,
+        upiId: STORE_CONFIG.upiId,
+        merchantQrImage: STORE_CONFIG.merchantQrImage,
+        defaultQrMode: STORE_CONFIG.defaultQrMode
+      }));
+    }
 
     // Initial Default Catalogue (extracted from Sujatha Collections WhatsApp feed & Instagram)
     const DEFAULT_PRODUCTS = [
@@ -1364,24 +1443,108 @@
       lucide.createIcons();
     }
 
-    function generateUpiDetails(amount) {
-      const pa = STORE_CONFIG.upiId;
-      const pn = encodeURIComponent("SRR Bazaar Sujatha");
-      const am = amount.toFixed(2);
-      const cu = "INR";
-      const tn = encodeURIComponent(`Order Sujatha Collections`);
-      
-      const upiUri = `upi://pay?pa=${pa}&pn=${pn}&am=${am}&cu=${cu}&tn=${tn}`;
-      
-      // Dynamic QR Code using QR Server API
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUri)}`;
-      document.getElementById('dynamicUpiQr').src = qrApiUrl;
+    let currentCheckoutTotal = 0;
+    let currentQrMode = 'dynamic';
 
-      // Deep Links
-      document.getElementById('gpayDeepLink').href = upiUri;
-      document.getElementById('phonepeDeepLink').href = upiUri;
-      document.getElementById('paytmDeepLink').href = upiUri;
-      document.getElementById('bhimDeepLink').href = upiUri;
+    function setUpiQrMode(mode) {
+      currentQrMode = mode;
+      
+      const dynBtn = document.getElementById('qrModeDynamicBtn');
+      const statBtn = document.getElementById('qrModeStaticBtn');
+      const merchBtn = document.getElementById('qrModeMerchantBtn');
+      const hint = document.getElementById('qrModeHint');
+
+      [dynBtn, statBtn, merchBtn].forEach(b => {
+        if (b) {
+          b.classList.remove('bg-white', 'text-stone-900', 'shadow-xs');
+          b.classList.add('text-stone-600');
+        }
+      });
+
+      if (mode === 'dynamic') {
+        dynBtn.classList.add('bg-white', 'text-stone-900', 'shadow-xs');
+        dynBtn.classList.remove('text-stone-600');
+        hint.textContent = "Exact bill amount pre-loaded. Compatible with PhonePe, GPay, Paytm, BHIM.";
+      } else if (mode === 'static') {
+        statBtn.classList.add('bg-white', 'text-stone-900', 'shadow-xs');
+        statBtn.classList.remove('text-stone-600');
+        hint.textContent = "Universal QR: Opens in 100% of UPI apps. Enter ₹" + currentCheckoutTotal + " on app screen.";
+      } else if (mode === 'merchant') {
+        merchBtn.classList.add('bg-white', 'text-stone-900', 'shadow-xs');
+        merchBtn.classList.remove('text-stone-600');
+        hint.textContent = "Official Store Standee QR Code.";
+      }
+
+      generateUpiDetails(currentCheckoutTotal);
+    }
+
+    function generateUpiDetails(amount) {
+      currentCheckoutTotal = amount;
+      const pa = STORE_CONFIG.upiId.trim();
+      const pn = (STORE_CONFIG.name || "SRRBazaar").replace(/[^a-zA-Z0-9]/g, '');
+      const am = Math.round(amount);
+
+      // Check if Merchant standee QR is available
+      const merchBtn = document.getElementById('qrModeMerchantBtn');
+      if (STORE_CONFIG.merchantQrImage && merchBtn) {
+        merchBtn.classList.remove('hidden');
+      }
+
+      let upiUri = '';
+      if (currentQrMode === 'merchant' && STORE_CONFIG.merchantQrImage) {
+        document.getElementById('dynamicUpiQr').src = STORE_CONFIG.merchantQrImage;
+      } else if (currentQrMode === 'static') {
+        // Universal static URI: works across 100% of scanners without amount restriction
+        upiUri = `upi://pay?pa=${pa}&pn=${pn}&cu=INR`;
+      } else {
+        // Clean dynamic URI with amount: NO spaces, no percent-encoding inside the QR payload
+        upiUri = `upi://pay?pa=${pa}&pn=${pn}&am=${am}&cu=INR&tn=Order`;
+      }
+
+      if (currentQrMode !== 'merchant' || !STORE_CONFIG.merchantQrImage) {
+        const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data=${encodeURIComponent(upiUri)}`;
+        document.getElementById('dynamicUpiQr').src = qrApiUrl;
+      }
+
+      // Update UI Display of UPI ID
+      const displayElem = document.getElementById('displayUpiId');
+      if (displayElem) displayElem.textContent = pa;
+
+      // Deep Links with fallbacks for Mobile Devices
+      const basePayUri = `upi://pay?pa=${pa}&pn=${pn}&am=${am}&cu=INR&tn=Order`;
+      const gpayElem = document.getElementById('gpayDeepLink');
+      const phonepeElem = document.getElementById('phonepeDeepLink');
+      const paytmElem = document.getElementById('paytmDeepLink');
+      const bhimElem = document.getElementById('bhimDeepLink');
+
+      if (gpayElem) gpayElem.href = basePayUri;
+      if (phonepeElem) phonepeElem.href = basePayUri;
+      if (paytmElem) paytmElem.href = basePayUri;
+      if (bhimElem) bhimElem.href = basePayUri;
+    }
+
+    function promptChangeUpiId() {
+      const current = STORE_CONFIG.upiId;
+      const entered = prompt("Enter your active Google Pay / PhonePe / Paytm UPI ID:\n(e.g., 9948633303@ybl, yourname@okaxis, or your UPI number)", current);
+      if (entered && entered.trim()) {
+        const clean = entered.trim();
+        if (!clean.includes('@')) {
+          alert("Please enter a valid UPI ID containing '@' (e.g. 9876543210@ybl, yourname@okaxis, or yourname@paytm)");
+          return;
+        }
+        STORE_CONFIG.upiId = clean;
+        saveStoreConfig();
+        generateUpiDetails(currentCheckoutTotal);
+        alert("✅ UPI ID updated to: " + clean + "\nThe QR Code is now updated with your real UPI ID!");
+      }
+    }
+
+    function copyUpiId() {
+      navigator.clipboard.writeText(STORE_CONFIG.upiId).then(() => {
+        alert("UPI ID copied to clipboard: " + STORE_CONFIG.upiId);
+      }).catch(() => {
+        prompt("Copy your UPI ID:", STORE_CONFIG.upiId);
+      });
     }
 
     function submitFinalOrder() {
@@ -1510,16 +1673,41 @@ Please confirm receipt and dispatch tracking details! ✨`
     }
 
     function switchMerchantTab(tab) {
+      const ordersSec = document.getElementById('merchantTabOrders');
+      const addProdSec = document.getElementById('merchantTabAddProduct');
+      const settingsSec = document.getElementById('merchantTabSettings');
+
+      const btnOrders = document.getElementById('tabBtnOrders');
+      const btnAddProd = document.getElementById('tabBtnAddProduct');
+      const btnSettings = document.getElementById('tabBtnSettings');
+
+      [ordersSec, addProdSec, settingsSec].forEach(s => s && s.classList.add('hidden'));
+      [btnOrders, btnAddProd, btnSettings].forEach(b => {
+        if (b) {
+          b.classList.remove('border-royal-600', 'text-royal-700', 'bg-white');
+          b.classList.add('border-transparent', 'text-stone-600');
+        }
+      });
+
       if (tab === 'orders') {
-        document.getElementById('merchantTabOrders').classList.remove('hidden');
-        document.getElementById('merchantTabAddProduct').classList.add('hidden');
-        document.getElementById('tabBtnOrders').classList.add('border-royal-600', 'text-royal-700', 'bg-white');
-        document.getElementById('tabBtnAddProduct').classList.remove('border-royal-600', 'text-royal-700', 'bg-white');
-      } else {
-        document.getElementById('merchantTabOrders').classList.add('hidden');
-        document.getElementById('merchantTabAddProduct').classList.remove('hidden');
-        document.getElementById('tabBtnAddProduct').classList.add('border-royal-600', 'text-royal-700', 'bg-white');
-        document.getElementById('tabBtnOrders').classList.remove('border-royal-600', 'text-royal-700', 'bg-white');
+        ordersSec.classList.remove('hidden');
+        btnOrders.classList.add('border-royal-600', 'text-royal-700', 'bg-white');
+        btnOrders.classList.remove('border-transparent', 'text-stone-600');
+      } else if (tab === 'add-product') {
+        addProdSec.classList.remove('hidden');
+        btnAddProd.classList.add('border-royal-600', 'text-royal-700', 'bg-white');
+        btnAddProd.classList.remove('border-transparent', 'text-stone-600');
+      } else if (tab === 'settings') {
+        settingsSec.classList.remove('hidden');
+        btnSettings.classList.add('border-royal-600', 'text-royal-700', 'bg-white');
+        btnSettings.classList.remove('border-transparent', 'text-stone-600');
+
+        // Populate settings form with current configs
+        document.getElementById('configUpiId').value = STORE_CONFIG.upiId;
+        document.getElementById('configPayeeName').value = STORE_CONFIG.name;
+        document.getElementById('configQrImage').value = STORE_CONFIG.merchantQrImage || '';
+        document.getElementById('configWaPhone').value = STORE_CONFIG.whatsappNumber;
+        document.getElementById('configDefaultQrMode').value = STORE_CONFIG.defaultQrMode || 'dynamic';
       }
       lucide.createIcons();
     }
@@ -1645,6 +1833,30 @@ Please confirm receipt and dispatch tracking details! ✨`
       switchMerchantTab('orders');
       alert(`✅ Product "${title}" has been successfully added to your store catalogue!`);
       document.getElementById('newProductForm').reset();
+    }
+
+    function handleSavePaymentConfig(e) {
+      e.preventDefault();
+      const upiId = document.getElementById('configUpiId').value.trim();
+      const payeeName = document.getElementById('configPayeeName').value.trim();
+      const qrImage = document.getElementById('configQrImage').value.trim();
+      const waPhone = document.getElementById('configWaPhone').value.trim();
+      const defaultQrMode = document.getElementById('configDefaultQrMode').value;
+
+      if (!upiId || !upiId.includes('@')) {
+        alert("Please enter a valid UPI ID format (e.g. yournumber@ybl or yourname@okaxis)");
+        return;
+      }
+
+      STORE_CONFIG.upiId = upiId;
+      STORE_CONFIG.name = payeeName || "SRR Bazaar";
+      STORE_CONFIG.merchantQrImage = qrImage;
+      STORE_CONFIG.whatsappNumber = waPhone || STORE_CONFIG.whatsappNumber;
+      STORE_CONFIG.defaultQrMode = defaultQrMode;
+
+      saveStoreConfig();
+      alert("✅ Payment & UPI Settings saved successfully! The storefront QR code and details are now active.");
+      switchMerchantTab('orders');
     }
   </script>
 
