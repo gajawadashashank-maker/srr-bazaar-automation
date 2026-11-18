@@ -1,0 +1,25 @@
+[
+  {
+    "orderId": "SRR-20261118-5828",
+    "date": "18/11/2026, 10:30:00 pm",
+    "customer": {
+      "name": "Shashank",
+      "phone": "8341215551",
+      "address": "Bada bazar",
+      "city": "Nizamabad",
+      "state": "Telangana",
+      "pincode": "503001"
+    },
+    "items": [
+      {
+        "title": "Pure Cz Stone Ear rings with Screw Backs",
+        "qty": 1,
+        "price": 499
+      }
+    ],
+    "paymentMethod": "Cash on Delivery (COD)",
+    "refNumber": "",
+    "total": 499,
+    "status": "Processing"
+  }
+]

@@ -910,6 +910,9 @@
             <p class="text-xs text-stone-500">All customer orders placed via the website are listed below</p>
           </div>
           <div class="flex items-center gap-2">
+            <button onclick="promptImportWhatsAppOrder()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-xs">
+              <i data-lucide="clipboard-paste" class="w-3.5 h-3.5"></i> + Paste WhatsApp Order
+            </button>
             <button onclick="exportOrdersCSV()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-semibold flex items-center gap-1 border border-stone-300">
               <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
             </button>
@@ -1231,6 +1234,27 @@
         .catch(err => {
           console.log("Using cached catalogue:", err);
         });
+
+      // 2. Fetch live orders.json so orders are synced across all devices
+      fetch('orders.json?t=' + Date.now())
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0) {
+            const localOrders = JSON.parse(localStorage.getItem('srr_orders')) || [];
+            const merged = [...data];
+            const seenIds = new Set(data.map(o => o.orderId));
+            localOrders.forEach(o => {
+              if (o && o.orderId && !seenIds.has(o.orderId)) {
+                merged.push(o);
+                seenIds.add(o.orderId);
+              }
+            });
+            orders = merged;
+            localStorage.setItem('srr_orders', JSON.stringify(orders));
+            renderMerchantOrders();
+          }
+        })
+        .catch(() => {});
 
       renderProducts();
       updateCartUI();
@@ -2116,6 +2140,87 @@ Please confirm receipt and dispatch tracking details! ✨`
         orders.splice(index, 1);
         localStorage.setItem('srr_orders', JSON.stringify(orders));
         renderMerchantOrders();
+      }
+    }
+
+    function promptImportWhatsAppOrder() {
+      const text = prompt("Paste the full order message received on WhatsApp here:\n(e.g., Order ID, Customer, Address, Items, Total)");
+      if (!text || !text.trim()) return;
+      parseAndAddWhatsAppOrder(text);
+    }
+
+    function parseAndAddWhatsAppOrder(text) {
+      try {
+        const orderIdMatch = text.match(/Order ID:\s*([^\n\r]+)/i);
+        const custMatch = text.match(/Customer:\s*([^\n\r]+)/i);
+        const phoneMatch = text.match(/(?:WhatsApp Phone|Phone|Mobile):\s*([^\n\r]+)/i);
+        const addressMatch = text.match(/Delivery Address:\s*[\n\r]+([\s\S]*?)(?=\n\s*(?:Items Ordered|\*Items|Total))/i);
+        const totalMatch = text.match(/Total Payable:\s*₹?\s*([0-9,]+)/i);
+        const payMatch = text.match(/Payment Mode:\s*([^\n\r]+)/i);
+        const refMatch = text.match(/Payment Ref\/UTR:\s*([^\n\r]+)/i);
+
+        let address = "";
+        let city = "";
+        let state = "";
+        let pincode = "";
+        if (addressMatch) {
+          const rawAddr = addressMatch[1].trim();
+          address = rawAddr;
+          const pinMatch = rawAddr.match(/(\d{6})/);
+          if (pinMatch) pincode = pinMatch[1];
+        }
+
+        const orderId = orderIdMatch ? orderIdMatch[1].trim().replace(/\*/g, '') : 'SRR-' + Date.now();
+        const custName = custMatch ? custMatch[1].trim().replace(/\*/g, '') : 'Customer';
+        const phone = phoneMatch ? phoneMatch[1].trim().replace(/\*/g, '') : '';
+        const total = totalMatch ? parseInt(totalMatch[1].replace(/,/g, '')) : 0;
+        const paymentMethod = payMatch ? payMatch[1].trim().replace(/\*/g, '') : 'Cash on Delivery (COD)';
+        const refNumber = refMatch ? refMatch[1].trim().replace(/\*/g, '') : '';
+
+        // Extract items
+        const items = [];
+        const itemsSection = text.match(/Items Ordered:\s*[\n\r]+([\s\S]*?)(?=\n\s*(?:Total Payable|\*Total))/i);
+        if (itemsSection) {
+          const itemLines = itemsSection[1].split('\n').filter(l => l.trim().length > 0);
+          itemLines.forEach(line => {
+            const cleanLine = line.replace(/^[0-9.]+\s*/, '').replace(/\*/g, '').trim();
+            const qtyMatch = cleanLine.match(/x\s*(\d+)/i);
+            const qty = qtyMatch ? parseInt(qtyMatch[1]) : 1;
+            const priceMatch = cleanLine.match(/=\s*₹?([0-9,]+)/i);
+            const price = priceMatch ? parseInt(priceMatch[1].replace(/,/g, '')) : total;
+            const title = cleanLine.split(/\s+x\s+/)[0].trim() || cleanLine;
+            items.push({ title, qty, price });
+          });
+        }
+        if (items.length === 0) {
+          items.push({ title: "Product Order", qty: 1, price: total });
+        }
+
+        const newOrder = {
+          orderId,
+          date: new Date().toLocaleString(),
+          customer: { name: custName, phone, address, pincode, city, state },
+          items,
+          paymentMethod,
+          refNumber,
+          total,
+          status: 'Processing'
+        };
+
+        if (!Array.isArray(orders)) orders = [];
+        // Check duplicate
+        const exists = orders.some(o => o && o.orderId === orderId);
+        if (exists) {
+          alert(`Order ${orderId} is already in your dashboard!`);
+          return;
+        }
+
+        orders.unshift(newOrder);
+        localStorage.setItem('srr_orders', JSON.stringify(orders));
+        renderMerchantOrders();
+        alert(`✅ Order ${orderId} for ${custName} (₹${total}) added successfully to your Merchant Dashboard!`);
+      } catch (err) {
+        alert("Could not parse order: " + err.message);
       }
     }
 
