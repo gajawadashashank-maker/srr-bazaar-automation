@@ -157,17 +157,46 @@ def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
 
 
 def build_instagram_caption(product_name: str, price: str, description: str) -> str:
-    caption_parts = [product_name]
+    caption_parts = []
+    clean_name = product_name.strip() if product_name else "Exclusive Collection"
+    caption_parts.append(f"✨ {clean_name} ✨")
+
     if description.strip():
         caption_parts.append(description.strip())
-    if price.strip():
-        caption_parts.append(f"Price: {price.strip()}")
-    caption_parts.extend(
-        [
-            "DM us to order 💌",
-            "#SRRBazaar #Shopping #IndianFashion #OnlineShopping",
-        ]
+
+    price_str = price.strip() if price else ""
+    if price_str:
+        if not price_str.startswith("₹"):
+            price_str = f"₹{price_str}"
+        caption_parts.append(
+            f"🏷️ Launch Price: {price_str} ONLY\n"
+            "🚚 FREE Express Shipping Pan-India\n"
+            "📦 Cash on Delivery (COD) Available\n"
+            "💯 Premium Quality Guaranteed"
+        )
+    else:
+        caption_parts.append(
+            "🚚 FREE Express Shipping Pan-India\n"
+            "📦 Cash on Delivery (COD) Available\n"
+            "💯 Premium Quality Guaranteed"
+        )
+
+    caption_parts.append(
+        "👉 HOW TO ORDER:\n"
+        "1️⃣ Tap the link in bio (@sujatha60861) or visit https://srrbazaar.com\n"
+        "2️⃣ WhatsApp / Call to order directly:\n"
+        "   📲 +91 9948633303\n"
+        "   📲 +91 8185012453\n"
+        "3️⃣ Or comment \"PRICE\" / \"BUY\" below and we'll DM you the direct link!"
     )
+
+    caption_parts.append(
+        "#SRRBazaar #SujathaCollections #Sarees #SareeLove #KhadiCotton #SilkSarees "
+        "#FashionJewellery #KundanJewellery #BridalJewellery #Kurtis #HomeDecor "
+        "#IndianFashion #OnlineShoppingIndia #PanIndiaShipping #COD #HyderabadShopping "
+        "#BestDeals #DesiFashion #FestiveWear"
+    )
+
     return "\n\n".join(caption_parts)[:2200]
 
 
