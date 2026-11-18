@@ -493,7 +493,7 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
 
         # Auto-sync product to website catalogue & deploy live
         sync_product_to_website_catalogue(
-            image_path=image_file,
+            image_path=image_path,
             product_name=product_name,
             price_str=price,
             description=description,
