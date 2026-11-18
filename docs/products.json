@@ -1,5 +1,18 @@
 [
   {
+    "id": 773703568,
+    "title": "Bridal Kundan Designer Jewellery Set",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/designer_set_999.jpg",
+    "description": "Handcrafted Bridal Kundan Designer Jewellery Set. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 255146495,
     "title": "Premium Black Diamonds Tulips Multi Layered Mala",
     "category": "mangalsutra",
