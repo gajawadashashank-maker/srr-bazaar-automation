@@ -2,10 +2,17 @@ import os
 import logging
 from pathlib import Path
 from typing import Optional
-import requests
-from dotenv import load_dotenv
 
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+try:
+    import requests
+except ImportError:
+    requests = None
 
 logger = logging.getLogger("youtube_publisher")
 
