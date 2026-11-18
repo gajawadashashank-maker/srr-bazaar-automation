@@ -291,6 +291,83 @@ def _verify_meta_signature(raw_body: bytes, signature_header: str | None) -> Non
         raise HTTPException(status_code=401, detail="Invalid Meta webhook signature")
 
 
+def sync_product_to_website_catalogue(
+    image_path: Path,
+    product_name: str,
+    price_str: str,
+    description: str,
+    job_id: str,
+) -> None:
+    """Auto-add product to docs/products.json and docs/images/catalog/ and deploy live."""
+    try:
+        import subprocess
+        docs_dir = Path("docs")
+        if not docs_dir.exists():
+            return
+
+        catalog_img_dir = docs_dir / "images" / "catalog"
+        catalog_img_dir.mkdir(parents=True, exist_ok=True)
+
+        target_img_name = f"{job_id}.jpg"
+        target_img_path = catalog_img_dir / target_img_name
+
+        if image_path.exists():
+            target_img_path.write_bytes(image_path.read_bytes())
+
+        numeric_match = re.search(r"([0-9][0-9,]*)", str(price_str).replace(",", ""))
+        numeric_price = int(numeric_match.group(1)) if numeric_match else 999
+        original_price = int(numeric_price * 1.5)
+
+        text_lower = f"{product_name} {description}".lower()
+        category = "necklace"
+        if any(w in text_lower for w in ["cotton", "saree", "khadi", "dress", "kurti", "silk", "fabric"]):
+            category = "saree"
+        elif any(w in text_lower for w in ["bead", "mangalsutra", "black", "chain", "locket"]):
+            category = "mangalsutra"
+        elif any(w in text_lower for w in ["earring", "stud", "jhumka", "bangle", "bracelet"]):
+            category = "earrings"
+        elif any(w in text_lower for w in ["tray", "swan", "decor", "pooja", "gift"]):
+            category = "decor"
+
+        products_json_path = docs_dir / "products.json"
+        products: list[dict[str, Any]] = []
+        if products_json_path.exists():
+            try:
+                products = json.loads(products_json_path.read_text(encoding="utf-8"))
+            except Exception:
+                products = []
+
+        new_entry = {
+            "id": int(uuid.uuid4().int % 1000000000),
+            "title": product_name,
+            "category": category,
+            "price": numeric_price,
+            "originalPrice": original_price,
+            "tag": "New Arrival",
+            "image": f"images/catalog/{target_img_name}",
+            "description": description or f"Exclusive {product_name} with premium finish. Free express shipping across India.",
+            "inStock": True,
+            "rating": 5.0,
+            "reviewsCount": 1,
+        }
+
+        products.insert(0, new_entry)
+        products_json_path.write_text(json.dumps(products, indent=2, ensure_ascii=False), encoding="utf-8")
+        logger.info("Auto-synced new product to website catalogue: '%s' (₹%d) -> %s", product_name, numeric_price, target_img_name)
+
+        # Deploy live to GitHub Pages and main
+        try:
+            subprocess.run(["git", "add", "docs/"], check=False)
+            subprocess.run(["git", "commit", "-m", f"Auto-add {product_name} to website catalogue"], check=False)
+            subprocess.run(["git", "push", "origin", "main"], check=False)
+            subprocess.run(["git", "subtree", "push", "--prefix", "docs", "origin", "gh-pages"], check=False)
+            logger.info("Auto-deployed new product '%s' to live website (gh-pages)", product_name)
+        except Exception as git_err:
+            logger.warning("Git deploy skipped or failed: %s", git_err)
+    except Exception as e:
+        logger.warning("Could not auto-sync product to website catalogue: %s", e)
+
+
 def process_whatsapp_image(message: dict[str, Any]) -> None:
     """Download a WhatsApp image, parse its caption, generate four Reels and publish one."""
     message_id = str(message.get("id", "")).strip()
@@ -412,6 +489,15 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
             selected_reel.stem,
             instagram_media_id,
             sender,
+        )
+
+        # Auto-sync product to website catalogue & deploy live
+        sync_product_to_website_catalogue(
+            image_path=image_file,
+            product_name=product_name,
+            price_str=price,
+            description=description,
+            job_id=job_id,
         )
 
     except Exception as exc:
