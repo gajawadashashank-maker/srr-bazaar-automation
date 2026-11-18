@@ -48,6 +48,9 @@ jobs:
       WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
       WHATSAPP_AUTO_PUBLISH: ${{ secrets.WHATSAPP_AUTO_PUBLISH || 'true' }}
       ALLOWED_SENDERS: ${{ secrets.WHATSAPP_ALLOWED_SENDERS }}
+      YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+      YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+      YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
 
     steps:
       - name: Checkout repository

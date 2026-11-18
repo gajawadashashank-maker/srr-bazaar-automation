@@ -23,6 +23,7 @@ import requests
 from dotenv import load_dotenv
 
 from instagram_publisher import publish_reel
+from youtube_publisher import publish_youtube_short
 from reel_generator import THEMES, generate_all, generate_reel
 
 load_dotenv(override=True)
@@ -439,6 +440,19 @@ def main() -> int:
         publish_res = publish_reel(video_url, ig_caption)
         media_id = publish_res.get("media_id", "")
         logger.info("SUCCESS: Instagram Reel published! Media ID: %s", media_id)
+
+        # Publish to YouTube Shorts (if configured)
+        yt_title = f"{product_name} {price} | SRR Bazaar #Shorts"
+        try:
+            yt_res = publish_youtube_short(
+                video_source=str(selected_video),
+                title=yt_title,
+                description=ig_caption,
+            )
+            if yt_res.get("status") == "published":
+                logger.info("SUCCESS: YouTube Short published! URL: %s", yt_res.get("url"))
+        except Exception as yt_err:
+            logger.warning("YouTube Shorts publishing skipped/failed: %s", yt_err)
 
         # Notify sender on WhatsApp
         if args.sender:

@@ -20,6 +20,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, Request
 from fastapi.responses import PlainTextResponse
 
 from instagram_publisher import publish_reel
+from youtube_publisher import publish_youtube_short
 from reel_generator import generate_all
 
 # Load the project .env once, before reading configuration.
@@ -506,6 +507,17 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
         update_whatsapp_job(message_id, status="publishing")
         publish_result = publish_reel(video_url, instagram_caption)
         instagram_media_id = str(publish_result.get("media_id", ""))
+
+        # Auto-publish to YouTube Shorts (if configured)
+        try:
+            yt_title = f"{product_name} {price} | SRR Bazaar #Shorts"
+            publish_youtube_short(
+                video_source=str(selected_reel),
+                title=yt_title,
+                description=instagram_caption,
+            )
+        except Exception as yt_err:
+            logger.warning("YouTube Shorts publishing skipped/failed: %s", yt_err)
         update_whatsapp_job(
             message_id,
             status="published",
