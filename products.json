@@ -1,5 +1,18 @@
 [
   {
+    "id": 103076108,
+    "title": "fs",
+    "category": "necklace",
+    "price": 620,
+    "originalPrice": 930,
+    "tag": "New Arrival",
+    "image": "images/catalog/dd6011ad4f4c4c64aa9c72b9aa5ff668.jpg",
+    "description": "Exclusive fs with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 773703568,
     "title": "Bridal Kundan Designer Jewellery Set",
     "category": "necklace",
