@@ -8,12 +8,18 @@
   <meta name="description"
     content="Shop premium handcrafted bridal jewellery, Jadau Kundan, long black beads, mangalsutras, decorative trays, and festive gifts from Sujatha Collections (@sujatha60861). Free shipping across India.">
 
-  <!-- Open Graph / Meta -->
-  <meta property="og:title" content="SRR Bazaar — Sujatha Collections">
+  <!-- Open Graph / Social Sharing Meta -->
+  <meta property="og:title" content="SRR Bazaar — Sujatha Collections | Sarees & Handcrafted Jewellery">
   <meta property="og:description"
-    content="Handcrafted traditional & bridal jewellery directly from Instagram @sujatha60861. Instant UPI & WhatsApp Ordering.">
-  <meta property="og:image" content="images/jadau_kundan_necklace.jpg">
+    content="Shop exquisite sarees, fabrics, handcrafted bridal jewellery & Jadau Kundan directly from Sujatha Collections (@sujatha60861). Free express shipping across India & instant WhatsApp checkout.">
+  <meta property="og:image" content="https://srrbazaar.com/images/jadau_kundan_necklace.jpg">
+  <meta property="og:url" content="https://srrbazaar.com/">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SRR Bazaar">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SRR Bazaar — Sujatha Collections">
+  <meta name="twitter:description" content="Shop premium handcrafted sarees and jewellery. Free Shipping across India.">
+  <meta name="twitter:image" content="https://srrbazaar.com/images/jadau_kundan_necklace.jpg">
 
   <!-- Google Fonts & Tailwind CSS CDN -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1036,7 +1042,8 @@
             <p class="text-xs text-stone-500">All customer orders placed via the website are listed below</p>
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="promptImportWhatsAppOrder()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-xs">
+            <button onclick="promptImportWhatsAppOrder()"
+              class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-xs">
               <i data-lucide="clipboard-paste" class="w-3.5 h-3.5"></i> + Paste WhatsApp Order
             </button>
             <button onclick="exportOrdersCSV()"
@@ -1403,7 +1410,7 @@
             renderMerchantOrders();
           }
         })
-        .catch(() => {});
+        .catch(() => { });
 
       renderProducts();
       updateCartUI();
@@ -1452,6 +1459,9 @@
           <div class="relative h-48 sm:h-64 overflow-hidden bg-stone-100 cursor-pointer" onclick="openQuickView(${p.id})">
             <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
             ${p.tag ? `<span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold gold-gradient text-stone-900 shadow">${p.tag}</span>` : ''}
+            <button onclick="event.stopPropagation(); shareProductWhatsApp(${p.id})" class="absolute bottom-2.5 right-12 w-8 h-8 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition duration-200" title="Share on WhatsApp">
+              <i data-lucide="share-2" class="w-4 h-4"></i>
+            </button>
             <button onclick="event.stopPropagation(); openQuickView(${p.id})" class="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-stone-700 flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition duration-200">
               <i data-lucide="eye" class="w-4 h-4"></i>
             </button>
@@ -1566,6 +1576,10 @@
               <button onclick="quickOrderProduct(${p.id}); closeQuickView();" class="flex-1 py-2.5 rounded-xl gold-gradient text-stone-900 font-bold text-xs sm:text-sm shadow hover:opacity-95 transition">
                 Buy Now
               </button>
+              <button onclick="shareProductWhatsApp(${p.id})" class="px-3 py-2.5 rounded-xl border border-emerald-500 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 flex items-center justify-center gap-1.5 font-bold text-xs transition" title="Share with friends on WhatsApp">
+                <i data-lucide="share-2" class="w-4 h-4 text-emerald-600"></i>
+                <span class="hidden sm:inline">Share</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1577,6 +1591,14 @@
 
     function closeQuickView() {
       document.getElementById('quickViewModal').classList.add('hidden');
+    }
+
+    function shareProductWhatsApp(id) {
+      const p = products.find(item => item.id === id);
+      if (!p) return;
+      const text = `✨ Check out this gorgeous *${p.title}* on SRR Bazaar!\n\n🏷️ Price: ₹${p.price} (FREE Shipping across India)\n📦 Direct Order Link: https://srrbazaar.com\n\nOrder online or reply here to buy!`;
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(waUrl, '_blank');
     }
 
     // =========================================================================
