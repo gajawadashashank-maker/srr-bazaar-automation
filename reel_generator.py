@@ -227,6 +227,7 @@
 
 from pathlib import Path
 import random
+import re
 import subprocess
 
 from PIL import Image, ImageDraw, ImageFont
@@ -308,6 +309,20 @@ def wrap_text(draw, text, font, max_width):
     return lines
 
 
+def _clean_typography(text: str) -> str:
+    """Strip WhatsApp markdown and unsupported emojis that render as missing glyph boxes."""
+    cleaned = re.sub(r"[*_~`]", "", text)
+    emoji_pattern = re.compile(
+        "[\U00010000-\U0010ffff]"
+        "|[\u2600-\u27bf]"
+        "|[\u2300-\u23ff]"
+        "|[\ufe00-\ufe0f]",
+        flags=re.UNICODE,
+    )
+    cleaned = emoji_pattern.sub("", cleaned)
+    return " ".join(cleaned.split()).strip()
+
+
 def create_poster(image_path, product_name, price, output_path, theme_name):
     theme = THEMES[theme_name]
     canvas = Image.new("RGB", (WIDTH, HEIGHT), theme["background"])
@@ -317,7 +332,8 @@ def create_poster(image_path, product_name, price, output_path, theme_name):
     draw.line((220, 185, 860, 185), fill=theme["border"], width=2)
     title_font = load_font("georgia.ttf", 62)
     title_y = 225
-    for line in wrap_text(draw, product_name, title_font, 900)[:2]:
+    clean_name = _clean_typography(str(product_name or "Exclusive Collection"))
+    for line in wrap_text(draw, clean_name, title_font, 900)[:2]:
         centered_text(draw, line, title_y, title_font, theme["accent"])
         title_y += 78
     product = Image.open(image_path).convert("RGB")
@@ -328,7 +344,8 @@ def create_poster(image_path, product_name, price, output_path, theme_name):
     draw = ImageDraw.Draw(canvas)
     badge_top = 1560
     draw.rounded_rectangle((220, badge_top, 860, badge_top + 105), radius=24, fill=theme["photo_background"], outline=theme["border"], width=3)
-    centered_text(draw, f"ONLY {price}", badge_top + 20, load_font("arialbd.ttf", 48), theme["accent"])
+    badge_text = f"ONLY {price}" if re.search(r"\d", str(price)) else (str(price).upper() if price else "CONTACT FOR PRICE")
+    centered_text(draw, badge_text, badge_top + 20, load_font("arialbd.ttf", 48), theme["accent"])
     centered_text(draw, "FREE SHIPPING", 1695, load_font("arialbd.ttf", 40), theme["gold"])
     centered_text(draw, "DM TO ORDER", 1770, load_font("arialbd.ttf", 50), theme["text"])
     centered_text(draw, "LIMITED STOCK | ORDER NOW", 1840, load_font("arial.ttf", 24), theme["gold"])

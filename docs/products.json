@@ -1,5 +1,18 @@
 [
   {
+    "id": 987154951,
+    "title": "Pure Khadhi Cotton",
+    "category": "necklace",
+    "price": 650,
+    "originalPrice": 975,
+    "tag": "New Arrival",
+    "image": "images/catalog/681087e46564.jpg",
+    "description": "Exclusive Pure Khadhi Cotton with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 1,
     "title": "Premium Pure Jadau Kundan Necklace Set",
     "category": "necklace",

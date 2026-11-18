@@ -29,6 +29,8 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
 
     env:
       CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
@@ -50,6 +52,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -92,10 +96,10 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           if [ -n "$(git status --porcelain docs/)" ]; then
+            git pull origin main --rebase || true
             git add docs/
-            git commit -m "Auto-add new product from WhatsApp to website catalogue [skip ci]"
+            git commit -m "Auto-add new product from WhatsApp to website catalogue"
             git push origin main
-            git subtree push --prefix docs origin gh-pages || true
           else
             echo "No catalogue changes detected."
           fi
@@ -107,3 +111,31 @@ jobs:
           name: generated-reels-${{ github.run_id }}
           path: generated/
           retention-days: 14
+
+  deploy-storefront:
+    needs: build-and-publish
+    if: success()
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

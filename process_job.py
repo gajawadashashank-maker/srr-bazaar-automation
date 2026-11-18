@@ -64,6 +64,20 @@ def _normalise_price(amount: str) -> str:
         return f"₹{amount}"
 
 
+def _clean_typography(text: str) -> str:
+    """Strip WhatsApp markdown and unsupported emojis that render as missing glyph boxes."""
+    cleaned = re.sub(r"[*_~`]", "", text)
+    emoji_pattern = re.compile(
+        "[\U00010000-\U0010ffff]"
+        "|[\u2600-\u27bf]"
+        "|[\u2300-\u23ff]"
+        "|[\ufe00-\ufe0f]",
+        flags=re.UNICODE,
+    )
+    cleaned = emoji_pattern.sub("", cleaned)
+    return " ".join(cleaned.split()).strip()
+
+
 def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
     """Parse product name, description and price from WhatsApp message caption."""
     lines = [line.strip() for line in caption.replace("\r", "").split("\n") if line.strip()]
@@ -73,64 +87,68 @@ def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
     description_mode = False
 
     price_patterns = [
+        re.compile(r"\b(?:only|just)\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"\bprice\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"@\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"₹\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
         re.compile(r"\b([0-9][0-9,]*(?:\.[0-9]{1,2})?)\s*(?:rs\.?|inr|/-)", re.I),
+        re.compile(r"\b([0-9][0-9,]*(?:\.[0-9]{1,2})?)\s*(?:/-)?\s*(?:free\s+shipping|ship\s*free|free\s*delivery)", re.I),
+        re.compile(r"(?<!\d)([1-9][0-9]{1,4})(?!\d)"),
     ]
 
     for line in lines:
-        product_match = re.match(r"^(?:product(?:\s*name)?|item|name)\s*:\s*(.+)$", line, re.I)
+        cleaned_line = _clean_typography(line)
+        if not cleaned_line:
+            continue
+
+        product_match = re.match(r"^(?:product(?:\s*name)?|item|name)\s*:\s*(.+)$", cleaned_line, re.I)
         if product_match:
-            product_name = product_match.group(1).strip()
+            product_name = _clean_typography(product_match.group(1))
             description_mode = False
             continue
 
-        description_match = re.match(r"^(?:description|details)\s*:\s*(.*)$", line, re.I)
+        description_match = re.match(r"^(?:description|details)\s*:\s*(.*)$", cleaned_line, re.I)
         if description_match:
             description_mode = True
-            value = description_match.group(1).strip()
+            value = _clean_typography(description_match.group(1))
             if value:
                 description_lines.append(value)
             continue
 
         found_price = None
-        bare_price_only = False
         for pattern in price_patterns:
-            match = pattern.search(line)
+            match = pattern.search(cleaned_line)
             if match:
                 found_price = match.group(1)
                 break
-        if found_price is None and product_name:
-            bare_amount = re.fullmatch(r"\s*(?:₹\s*)?([0-9][0-9,]*(?:\.[0-9]{1,2})?)\s*", line)
-            if bare_amount:
-                found_price = bare_amount.group(1)
-                bare_price_only = True
-        if found_price is not None:
+
+        if found_price is not None and not price:
             price = _normalise_price(found_price)
-            if bare_price_only or re.match(r"(?i)^\s*price\s*[:\-]?", line):
-                continue
-            cleaned = re.sub(r"(?i)\bprice\s*[:\-]?", "", line)
-            for pattern in price_patterns:
-                cleaned = pattern.sub("", cleaned)
-            cleaned = cleaned.strip(" \t-:@₹")
-            cleaned = re.sub(r"(?i)^\s*(?:rs\.?|inr)\s*", "", cleaned).strip()
-            if cleaned:
+            remainder = cleaned_line
+            remainder = re.sub(r"(?i)\bprice\s*[:\-]?", "", remainder)
+            for pattern in price_patterns[:6]:
+                remainder = pattern.sub("", remainder)
+            remainder = remainder.replace(found_price, "")
+            remainder = re.sub(r"(?i)\b(?:only|just|free\s+shipping|free\s+delivery|ship\s*free|/-)\b", "", remainder)
+            remainder = remainder.strip(" \t-:@₹,")
+            remainder = re.sub(r"(?i)^\s*(?:rs\.?|inr)\s*", "", remainder).strip()
+
+            if remainder:
                 if product_name is None and not description_mode:
-                    product_name = cleaned
+                    product_name = remainder
                 else:
-                    description_lines.append(cleaned)
+                    description_lines.append(remainder)
             continue
 
         if description_mode:
-            description_lines.append(line)
+            description_lines.append(cleaned_line)
         elif product_name is None:
-            product_name = line
+            product_name = cleaned_line
         else:
-            description_lines.append(line)
+            description_lines.append(cleaned_line)
 
     if product_name:
-        product_name = product_name.strip()
+        product_name = _clean_typography(product_name)
         if re.fullmatch(r"[₹\s]*[0-9][0-9,.]*", product_name):
             product_name = None
 
@@ -222,7 +240,10 @@ def send_whatsapp_reply(to: str, message: str) -> None:
     }
     try:
         resp = requests.post(url, headers=headers, json=payload, timeout=20)
-        logger.info("WhatsApp notification sent (status %d)", resp.status_code)
+        if resp.status_code == 200:
+            logger.info("WhatsApp notification sent successfully to %s", to)
+        else:
+            logger.warning("WhatsApp notification failed (%d): %s", resp.status_code, resp.text)
     except Exception as exc:
         logger.warning("Could not send WhatsApp notification: %s", exc)
 
