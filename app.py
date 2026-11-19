@@ -95,7 +95,7 @@ def init_job_db() -> None:
 def claim_whatsapp_message(message: dict[str, Any]) -> bool:
     """Return True only for the first delivery of a WhatsApp message ID."""
     message_id = str(message.get("id", "")).strip()
-    image_data = message.get("image") or {}
+    media_data = message.get("image") or message.get("video") or {}
     if not message_id:
         return False
 
@@ -108,9 +108,9 @@ def claim_whatsapp_message(message: dict[str, Any]) -> bool:
             """,
             (
                 message_id,
-                str(image_data.get("id", "")),
+                str(media_data.get("id", "")),
                 str(message.get("from", "")),
-                str(image_data.get("caption", "")),
+                str(media_data.get("caption", "")),
             ),
         )
         connection.commit()
@@ -436,12 +436,12 @@ def sync_product_to_website_catalogue(
 
 
 def process_whatsapp_image(message: dict[str, Any]) -> None:
-    """Download a WhatsApp image, parse its caption, generate four Reels and publish one."""
+    """Download a WhatsApp image or video, parse its caption, generate/extract Reel and publish."""
     message_id = str(message.get("id", "")).strip()
-    image_data = message.get("image") or {}
-    media_id = str(image_data.get("id", "")).strip()
+    media_data = message.get("image") or message.get("video") or {}
+    media_id = str(media_data.get("id", "")).strip()
     sender = str(message.get("from", "")).strip().lstrip("+")
-    caption = str(image_data.get("caption", "")).strip()
+    caption = str(media_data.get("caption", "")).strip()
     image_path: Path | None = None
 
     try:
@@ -450,17 +450,17 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
         if not WHATSAPP_PHONE_NUMBER_ID:
             raise RuntimeError("WHATSAPP_PHONE_NUMBER_ID is missing from .env")
         if not media_id or not message_id:
-            raise RuntimeError("WhatsApp image event is missing its message ID or media ID")
+            raise RuntimeError("WhatsApp media event is missing its message ID or media ID")
 
         product_name, description, price = parse_product_caption(caption)
         if not product_name:
             update_whatsapp_job(
                 message_id,
                 status="needs_caption",
-                error="No product name found. Forward one image with a caption containing the product name.",
+                error="No product name found. Forward one photo/video with a caption containing the product name.",
             )
             logger.warning(
-                "WhatsApp image %s saved for review but not published: caption has no product name",
+                "WhatsApp media %s saved for review but not published: caption has no product name",
                 message_id,
             )
 
@@ -495,16 +495,26 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
             "image/jpg": ".jpg",
             "image/png": ".png",
             "image/webp": ".webp",
+            "video/mp4": ".mp4",
+            "video/quicktime": ".mov",
+            "video/3gpp": ".3gp",
+            "video/webm": ".webm",
+            "video/x-msvideo": ".avi",
         }
         extension = extensions.get(content_type)
         if not extension:
-            raise RuntimeError(f"Unsupported WhatsApp image type: {content_type or 'unknown'}")
+            if content_type.startswith("video/"):
+                extension = ".mp4"
+            elif content_type.startswith("image/"):
+                extension = ".jpg"
+            else:
+                raise RuntimeError(f"Unsupported WhatsApp media type: {content_type or 'unknown'}")
 
         safe_message_key = hashlib.sha256(message_id.encode("utf-8")).hexdigest()[:24]
         image_path = WHATSAPP_UPLOAD_DIR / f"{safe_message_key}{extension}"
         image_path.write_bytes(download_response.content)
         update_whatsapp_job(message_id, image_path=str(image_path))
-        logger.info("WhatsApp image downloaded: %s", image_path)
+        logger.info("WhatsApp media downloaded: %s (%s)", image_path, content_type)
 
         if not product_name:
             return
@@ -513,25 +523,43 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
         job_output_dir = WHATSAPP_OUTPUT_DIR / job_id
         instagram_caption = build_instagram_caption(product_name, price, description)
 
-        update_whatsapp_job(message_id, status="generating")
-        logger.info("Generating four Reel themes for product: %s", product_name)
-        generated_reels = generate_all(
-            image_path=image_path,
-            product_name=product_name,
-            price=price or "Contact for price",
-            output_dir=job_output_dir,
-        )
-        if len(generated_reels) != 4:
-            raise RuntimeError(f"Expected four generated Reels, got {len(generated_reels)}")
+        is_video = extension in {".mp4", ".mov", ".3gp", ".webm", ".avi"}
+        cover_image_path = image_path
 
-        generated_reels = [Path(path) for path in generated_reels]
-        selected_reel = random.choice(generated_reels)
-        update_whatsapp_job(message_id, status="generated", selected_reel=str(selected_reel))
-        logger.info(
-            "Generated %d Reels; randomly selected %s",
-            len(generated_reels),
-            selected_reel.name,
-        )
+        if is_video:
+            update_whatsapp_job(message_id, status="extracting_frame")
+            cover_image_path = WHATSAPP_UPLOAD_DIR / f"{safe_message_key}_thumb.jpg"
+            try:
+                subprocess.run([
+                    "ffmpeg", "-y", "-ss", "00:00:01", "-i", str(image_path),
+                    "-vframes", "1", "-q:v", "2", str(cover_image_path)
+                ], check=True, capture_output=True)
+                logger.info("Extracted video thumbnail: %s", cover_image_path)
+            except Exception as e:
+                logger.warning("Could not extract frame via ffmpeg: %s", e)
+                cover_image_path = image_path
+            selected_reel = image_path
+            update_whatsapp_job(message_id, status="video_ready", selected_reel=str(selected_reel))
+        else:
+            update_whatsapp_job(message_id, status="generating")
+            logger.info("Generating four Reel themes for product: %s", product_name)
+            generated_reels = generate_all(
+                image_path=image_path,
+                product_name=product_name,
+                price=price or "Contact for price",
+                output_dir=job_output_dir,
+            )
+            if len(generated_reels) != 4:
+                raise RuntimeError(f"Expected four generated Reels, got {len(generated_reels)}")
+
+            generated_reels = [Path(path) for path in generated_reels]
+            selected_reel = random.choice(generated_reels)
+            update_whatsapp_job(message_id, status="generated", selected_reel=str(selected_reel))
+            logger.info(
+                "Generated %d Reels; randomly selected %s",
+                len(generated_reels),
+                selected_reel.name,
+            )
 
         if not WHATSAPP_AUTO_PUBLISH:
             update_whatsapp_job(message_id, status="preview_ready")
@@ -571,7 +599,7 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
 
         # Auto-sync product to website catalogue & deploy live
         sync_product_to_website_catalogue(
-            image_path=image_path,
+            image_path=cover_image_path,
             product_name=product_name,
             price_str=price,
             description=description,
@@ -691,13 +719,14 @@ async def receive_whatsapp_webhook(
                 continue
 
             for message in value.get("messages", []):
-                if message.get("type") != "image":
+                msg_type = message.get("type")
+                if msg_type not in ("image", "video"):
                     ignored += 1
                     continue
 
                 sender = str(message.get("from", "")).strip().lstrip("+")
                 if WHATSAPP_ALLOWED_SENDERS and sender not in WHATSAPP_ALLOWED_SENDERS:
-                    logger.warning("Ignoring image from sender not in WHATSAPP_ALLOWED_SENDERS")
+                    logger.warning("Ignoring media from sender not in WHATSAPP_ALLOWED_SENDERS: %s", sender)
                     ignored += 1
                     continue
 

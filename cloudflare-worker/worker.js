@@ -56,6 +56,7 @@ async function triggerGitHubAction(env, message, phoneNumberId) {
   const repo = env.GITHUB_REPO || DEFAULT_REPO;
   const url = "https://api.github.com/repos/" + owner + "/" + repo + "/dispatches";
 
+  const media = message.image || message.video || {};
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -68,8 +69,9 @@ async function triggerGitHubAction(env, message, phoneNumberId) {
     body: JSON.stringify({
       event_type: "whatsapp_submission",
       client_payload: {
-        media_id: String(message.image.id),
-        caption: String(message.image.caption || ""),
+        media_id: String(media.id || ""),
+        caption: String(media.caption || ""),
+        media_type: String(message.type || "image"),
         sender: String(message.from || "").replace(/^\+/, ""),
         message_id: String(message.id || ""),
         phone_number_id: String(phoneNumberId || ""),
@@ -138,15 +140,15 @@ export default {
           }
 
           for (const message of value.messages || []) {
-            if (message.type !== "image") {
+            if (message.type !== "image" && message.type !== "video") {
               skipped++;
               continue;
             }
 
             const sender = String(message.from || "").replace(/^\+/, "");
-            const image = message.image || {};
+            const media = message.image || message.video || {};
             const messageId = String(message.id || "");
-            if (!messageId || !image.id || !allowedSenders.has(sender)) {
+            if (!messageId || !media.id || !allowedSenders.has(sender)) {
               skipped++;
               continue;
             }

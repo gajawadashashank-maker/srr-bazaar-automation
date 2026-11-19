@@ -12,6 +12,7 @@ import logging
 import os
 import random
 import re
+import subprocess
 import sys
 import uuid
 from pathlib import Path
@@ -263,17 +264,24 @@ def download_whatsapp_media(media_id: str, destination_dir: Path) -> Path:
         "image/jpg": ".jpg",
         "image/png": ".png",
         "image/webp": ".webp",
+        "video/mp4": ".mp4",
+        "video/quicktime": ".mov",
+        "video/3gpp": ".3gp",
+        "video/webm": ".webm",
+        "video/x-msvideo": ".avi",
     }
-    ext = extensions.get(content_type, ".jpg")
+    ext = extensions.get(content_type)
+    if not ext:
+        ext = ".mp4" if content_type.startswith("video/") else ".jpg"
 
-    logger.info("Downloading image file from: %s", media_url)
+    logger.info("Downloading media file (%s) from: %s", content_type, media_url)
     dl = requests.get(media_url, headers=headers, timeout=60)
     if not dl.ok:
         raise RuntimeError(f"Media download failed ({dl.status_code}): {dl.text}")
 
     out_path = destination_dir / f"wa_{media_id}{ext}"
     out_path.write_bytes(dl.content)
-    logger.info("Saved WhatsApp image to %s (%d bytes)", out_path, len(dl.content))
+    logger.info("Saved WhatsApp media to %s (%d bytes)", out_path, len(dl.content))
     return out_path
 
 
@@ -440,28 +448,49 @@ def main() -> int:
 
     logger.info("Parsed Product: '%s' | Price: '%s'", product_name, price)
 
-    # 3. Generate all 4 Reel themes
-    logger.info("Generating all 4 Reel themes in %s...", job_output_dir)
-    generated_videos = generate_all(
-        image_path=image_file,
-        product_name=product_name,
-        price=price,
-        output_dir=job_output_dir,
-    )
+    # 3. Process Video or Generate all 4 Reel themes from Image
+    is_video = image_file.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}
+    catalog_cover_image = image_file
 
-    if not generated_videos:
-        logger.error("Failed to generate any Reels")
-        return 1
+    if is_video:
+        logger.info("Input media is a video (%s). Extracting cover thumbnail...", image_file.name)
+        thumbnail_file = job_output_dir / f"{image_file.stem}_thumb.jpg"
+        cmd = [
+            "ffmpeg", "-y", "-ss", "00:00:01", "-i", str(image_file),
+            "-vframes", "1", "-q:v", "2", str(thumbnail_file)
+        ]
+        try:
+            subprocess.run(cmd, check=True, capture_output=True)
+            catalog_cover_image = thumbnail_file
+            logger.info("Extracted cover thumbnail: %s", thumbnail_file)
+        except Exception as e:
+            logger.warning("Could not extract thumbnail frame via ffmpeg: %s", e)
+            catalog_cover_image = image_file
 
-    # 4. Choose one video
-    if args.theme in THEMES:
-        selected_video = job_output_dir / f"{args.theme}.mp4"
-        if not selected_video.exists():
-            selected_video = Path(random.choice(generated_videos))
+        selected_video = image_file
+        generated_videos = [selected_video]
     else:
-        selected_video = Path(random.choice(generated_videos))
+        logger.info("Generating all 4 Reel themes in %s...", job_output_dir)
+        generated_videos = generate_all(
+            image_path=image_file,
+            product_name=product_name,
+            price=price,
+            output_dir=job_output_dir,
+        )
 
-    logger.info("Selected theme for publishing: %s (%s)", selected_video.stem, selected_video)
+        if not generated_videos:
+            logger.error("Failed to generate any Reels")
+            return 1
+
+        # 4. Choose one video
+        if args.theme in THEMES:
+            selected_video = job_output_dir / f"{args.theme}.mp4"
+            if not selected_video.exists():
+                selected_video = Path(random.choice(generated_videos))
+        else:
+            selected_video = Path(random.choice(generated_videos))
+
+        logger.info("Selected theme for publishing: %s (%s)", selected_video.stem, selected_video)
 
     # Copy / save a pointer or symlink for GitHub Actions output
     latest_reel = OUTPUT_DIR / "latest_reel.mp4"
@@ -504,7 +533,7 @@ def main() -> int:
 
         # Auto-sync to website catalogue
         sync_product_to_website_catalogue(
-            image_path=image_file,
+            image_path=catalog_cover_image,
             product_name=product_name,
             price_str=price,
             description=description,
@@ -514,7 +543,7 @@ def main() -> int:
         logger.info("WHATSAPP_AUTO_PUBLISH=false. Reels generated and stored in %s without publishing.", job_output_dir)
         # Even if not auto-published, sync product to catalogue
         sync_product_to_website_catalogue(
-            image_path=image_file,
+            image_path=catalog_cover_image,
             product_name=product_name,
             price_str=price,
             description=description,
