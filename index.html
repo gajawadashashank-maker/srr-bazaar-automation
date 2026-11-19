@@ -108,8 +108,8 @@
         target="_blank" class="underline hover:text-white transition">@sujatha60861</a></span>
   </div>
 
-  <!-- Header Navigation with Smart Scroll Hide/Show -->
-  <header id="mainHeader" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-xs transition-transform duration-300 ease-in-out">
+  <!-- Header Navigation (Fixed Sticky at Top) -->
+  <header id="mainHeader" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-xs">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-14 sm:h-18">
 
@@ -1613,20 +1613,7 @@
       renderProducts();
     }
 
-    // Smart Header Auto-Hide on Scroll Down / Reveal on Scroll Up
-    let lastScrollY = window.scrollY;
-    const mainHeader = document.getElementById('mainHeader');
-    window.addEventListener('scroll', () => {
-      const currentScrollY = window.scrollY;
-      if (mainHeader) {
-        if (currentScrollY > 100 && currentScrollY > lastScrollY) {
-          mainHeader.classList.add('-translate-y-full');
-        } else {
-          mainHeader.classList.remove('-translate-y-full');
-        }
-      }
-      lastScrollY = currentScrollY;
-    }, { passive: true });
+
 
     function handleSort(val) {
       currentSort = val;
