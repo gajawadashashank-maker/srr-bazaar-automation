@@ -849,10 +849,19 @@
 
             <!-- Transaction Reference Entry -->
             <div class="pt-2 border-t border-stone-200">
-              <label class="block text-xs font-semibold text-stone-700 mb-1">Enter UPI Reference / UTR Number
-                (Optional)</label>
-              <input type="text" id="upiRefNumber" placeholder="e.g. 12-digit UTR from your UPI app receipt"
-                class="w-full px-3 py-1.5 text-xs bg-white border border-stone-300 rounded-lg">
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-xs font-bold text-stone-800">
+                  Enter 12-Digit UPI Ref / UTR Number <span class="text-rose-600 font-black">*</span>
+                </label>
+                <span class="text-[10px] text-amber-800 bg-amber-100 font-semibold px-2 py-0.5 rounded">Mandatory</span>
+              </div>
+              <input type="text" id="upiRefNumber" maxlength="12" placeholder="e.g. 432109876543 (from payment receipt)"
+                class="w-full px-3 py-2 text-xs font-mono font-bold tracking-wider bg-white border-2 border-amber-400 rounded-lg focus:border-emerald-600 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+                oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.classList.remove('border-red-500', 'bg-red-50');">
+              <p class="text-[11px] text-stone-500 mt-1 flex items-start gap-1">
+                <i data-lucide="info" class="w-3.5 h-3.5 text-royal-600 flex-shrink-0 mt-0.5"></i>
+                <span>Open GPay / PhonePe / Paytm ➔ Check transaction receipt ➔ Copy the <strong>12-digit UPI Transaction ID / UTR</strong>.</span>
+              </p>
             </div>
           </div>
 
@@ -1171,6 +1180,13 @@
               standee, paste its URL here to display it directly to customers.</p>
           </div>
 
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Razorpay Key ID (Optional — For 100% Real-Time Automatic Payment Verification)</label>
+            <input type="text" id="configRazorpayKey" placeholder="e.g. rzp_live_xxxxxxxx (from dashboard.razorpay.com)"
+              class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg">
+            <p class="text-[11px] text-stone-500 mt-1">If set, customers pay with instant real-time bank verification (Card, Netbanking, GPay, Paytm) with zero manual UTR required.</p>
+          </div>
+
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-stone-700 mb-1">WhatsApp Order Helpline *</label>
@@ -1209,6 +1225,7 @@
       merchantQrImage: savedConfig.merchantQrImage || "",
       defaultQrMode: savedConfig.defaultQrMode || "dynamic",
       merchantPin: savedConfig.merchantPin || "6086",
+      razorpayKey: savedConfig.razorpayKey || "",
       instagramUrl: "https://www.instagram.com/sujatha60861/",
       instagramHandle: "sujatha60861"
     };
@@ -1224,7 +1241,8 @@
         upiId: STORE_CONFIG.upiId,
         merchantQrImage: STORE_CONFIG.merchantQrImage,
         defaultQrMode: STORE_CONFIG.defaultQrMode,
-        merchantPin: STORE_CONFIG.merchantPin
+        merchantPin: STORE_CONFIG.merchantPin,
+        razorpayKey: STORE_CONFIG.razorpayKey || ""
       }));
     }
 
@@ -1991,20 +2009,42 @@
         return;
       }
 
+      // STRICT VALIDATION: If paying via UPI QR, UTR/Ref number is mandatory!
+      if (currentSelectedPayment === 'upi') {
+        const cleanUpiRef = upiRef.replace(/[^0-9]/g, '');
+        if (!cleanUpiRef || cleanUpiRef.length < 10) {
+          const upiInput = document.getElementById('upiRefNumber');
+          if (upiInput) {
+            upiInput.focus();
+            upiInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            upiInput.classList.remove('border-amber-400');
+            upiInput.classList.add('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-200');
+          }
+          alert("⚠️ 12-Digit UPI Transaction ID / UTR is Required!\n\nPlease complete your payment in your UPI app (GPay / PhonePe / Paytm) and enter the 12-digit UTR/Ref number from your payment receipt before submitting your order.");
+          return;
+        }
+      }
+
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       let discount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
       const total = Math.max(0, subtotal - discount);
 
-      // Handle Razorpay direct simulation / checkout if selected
+      // Handle Razorpay real-time verified checkout if selected
       if (currentSelectedPayment === 'razorpay') {
+        const rzpKey = STORE_CONFIG.razorpayKey || "";
+        if (!rzpKey || rzpKey.includes("placeholder")) {
+          alert("Real-time Online Card/Netbanking gateway is currently being configured by the merchant.\n\nPlease choose 'Instant UPI QR' or 'Cash on Delivery' to place your order right now!");
+          handlePaymentMethodChange('upi');
+          return;
+        }
         const options = {
-          key: "rzp_test_placeholder", // Replace with merchant live key
-          amount: total * 100,
+          key: rzpKey,
+          amount: Math.round(total * 100),
           currency: "INR",
           name: "SRR Bazaar",
-          description: "Jewellery Order Payment",
+          description: "Order Payment",
           handler: function (response) {
-            completeOrderRecord(name, phone, address, pincode, city, state, 'Razorpay Card/Netbanking', response.razorpay_payment_id || 'RZP-PAID', total);
+            completeOrderRecord(name, phone, address, pincode, city, state, 'Razorpay Verified Payment', response.razorpay_payment_id || 'RZP-PAID', total);
           },
           prefill: {
             name: name,
@@ -2016,14 +2056,13 @@
           const rzp = new Razorpay(options);
           rzp.open();
         } catch (e) {
-          // If script blocked or demo key, gracefully confirm order
-          completeOrderRecord(name, phone, address, pincode, city, state, 'Online Gateway (Test/Card)', 'CARD-AUTH-' + Math.floor(Math.random() * 900000), total);
+          alert("Error opening Razorpay payment gateway: " + e.message);
         }
         return;
       }
 
       // If UPI or COD:
-      const paymentLabel = currentSelectedPayment === 'upi' ? `UPI (Ref: ${upiRef || 'Direct Transfer'})` : 'Cash on Delivery (COD)';
+      const paymentLabel = currentSelectedPayment === 'upi' ? `UPI (UTR: ${upiRef})` : 'Cash on Delivery (COD)';
       completeOrderRecord(name, phone, address, pincode, city, state, paymentLabel, upiRef, total);
     }
 
@@ -2203,6 +2242,9 @@ Please confirm receipt and dispatch tracking details! ✨`
         document.getElementById('configQrImage').value = STORE_CONFIG.merchantQrImage || '';
         document.getElementById('configWaPhone').value = STORE_CONFIG.whatsappNumber;
         document.getElementById('configMerchantPin').value = STORE_CONFIG.merchantPin || '6086';
+        if (document.getElementById('configRazorpayKey')) {
+          document.getElementById('configRazorpayKey').value = STORE_CONFIG.razorpayKey || '';
+        }
         document.getElementById('configDefaultQrMode').value = STORE_CONFIG.defaultQrMode || 'dynamic';
       }
       lucide.createIcons();
@@ -2520,6 +2562,8 @@ Please confirm receipt and dispatch tracking details! ✨`
       STORE_CONFIG.whatsappNumber = waPhone || STORE_CONFIG.whatsappNumber;
       if (pin) STORE_CONFIG.merchantPin = pin;
       STORE_CONFIG.defaultQrMode = defaultQrMode;
+      const rzpInput = document.getElementById('configRazorpayKey');
+      if (rzpInput) STORE_CONFIG.razorpayKey = rzpInput.value.trim();
 
       saveStoreConfig();
       alert("✅ Payment & UPI Settings saved successfully! The storefront QR code and details are now active.");
