@@ -1,7 +1,75 @@
 [
   {
+    "orderId": "SRR-20261119-7450",
+    "date": "2026-11-19T10:10:22.000Z",
+    "customer": {
+      "name": "Vaishnavi Gajawada",
+      "phone": "8185012453",
+      "address": "Xyz",
+      "city": "NizamabadNizamabad",
+      "state": "Telangana",
+      "pincode": "503001"
+    },
+    "items": "Pure Semi Jadau Kundhan earrings x 1 (\u20b9699)",
+    "total": 699,
+    "paymentMethod": "UPI (Ref: Direct Transfer)",
+    "refNumber": "",
+    "status": "Processing"
+  },
+  {
+    "orderId": "SRR-20261119-8520",
+    "date": "2026-11-19T10:09:41.000Z",
+    "customer": {
+      "name": "Shashank Gajawada",
+      "phone": "8341215551",
+      "address": "10-1-37/3\nBada Bazar, Water Tank Road",
+      "city": "Nizamabad",
+      "state": "Telangana",
+      "pincode": "503001"
+    },
+    "items": "Pure Semi Jadau Kundhan earrings x 1 (\u20b9699)",
+    "total": 699,
+    "paymentMethod": "UPI (Ref: Direct Transfer)",
+    "refNumber": "",
+    "status": "Processing"
+  },
+  {
+    "orderId": "SRR-20261119-8636",
+    "date": "2026-11-19T10:07:27.000Z",
+    "customer": {
+      "name": "Vaishnavi Gajawada",
+      "phone": "8185012453",
+      "address": "Xyz",
+      "city": "NizamabadNizamabad",
+      "state": "Telangana",
+      "pincode": "503001"
+    },
+    "items": "Premium Pure Jadau Kundan Necklace Set x 1 (\u20b9999)",
+    "total": 999,
+    "paymentMethod": "UPI (Ref: Direct Transfer)",
+    "refNumber": "",
+    "status": "Processing"
+  },
+  {
+    "orderId": "SRR-20261118-4340",
+    "date": "11/19/2026, 1:24:27 AM",
+    "customer": {
+      "name": "Shashank Gajawada",
+      "phone": "8341215551",
+      "address": "10-1-37/3\nBada Bazar, Water Tank Road",
+      "city": "Nizamabad",
+      "state": "Telangana",
+      "pincode": "503224"
+    },
+    "items": "Premium Pure Jadau Kundan Necklace Set x 1 (\u20b9999)",
+    "total": 899,
+    "paymentMethod": "Cash on Delivery (COD)",
+    "refNumber": "",
+    "status": "Processing"
+  },
+  {
     "orderId": "SRR-20261118-5828",
-    "date": "18/11/2026, 10:30:00 pm",
+    "date": "2026-11-18T17:00:00.000Z",
     "customer": {
       "name": "Shashank",
       "phone": "8341215551",
@@ -10,16 +78,27 @@
       "state": "Telangana",
       "pincode": "503001"
     },
-    "items": [
-      {
-        "title": "Pure Cz Stone Ear rings with Screw Backs",
-        "qty": 1,
-        "price": 499
-      }
-    ],
+    "items": "Pure Cz Stone Ear rings with Screw Backs x 1 (\u20b9499)",
+    "total": 499,
     "paymentMethod": "Cash on Delivery (COD)",
     "refNumber": "",
+    "status": "Processing"
+  },
+  {
+    "orderId": "TEST-SRR-001",
+    "date": "2026-11-18T18:35:00.000Z",
+    "customer": {
+      "name": "Shashank Test",
+      "phone": "8341215551",
+      "address": "Bada bazar",
+      "city": "Nizamabad",
+      "state": "Telangana",
+      "pincode": "503001"
+    },
+    "items": "Pure Cz Stone Ear rings x 1 (\u20b9499)",
     "total": 499,
+    "paymentMethod": "COD",
+    "refNumber": "",
     "status": "Processing"
   }
 ]
