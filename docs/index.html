@@ -1813,10 +1813,40 @@
       if (method === 'upi') {
         btn.innerHTML = `<i data-lucide="lock" class="w-4 h-4"></i><span>Verify UPI & Place Order</span>`;
       } else if (method === 'razorpay') {
-        const handle = STORE_CONFIG.razorpayHandle || "shashankgajawada";
-        const handleDisplay = document.getElementById('displayRazorpayHandle');
-        if (handleDisplay) handleDisplay.textContent = `razorpay.me/@${handle}`;
-        btn.innerHTML = `<i data-lucide="shield-check" class="w-4 h-4 text-emerald-300"></i><span>Pay via Razorpay (Cards / UPI)</span>`;
+        const rzpKey = (STORE_CONFIG.razorpayKey || "").trim();
+        const noticeBox = document.getElementById('razorpayNoticeBox');
+        if (noticeBox) {
+          if (rzpKey && !rzpKey.includes('placeholder')) {
+            noticeBox.innerHTML = `
+              <div class="flex items-center justify-between">
+                <p class="font-semibold flex items-center gap-1.5 text-blue-950">
+                  <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                  Razorpay Real-Time Gateway Active
+                </p>
+                <span class="text-[10px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">Auto-Verified</span>
+              </div>
+              <p class="text-[11px] text-blue-800 leading-relaxed">
+                Pay securely with <strong>Cards (Visa, MC, RuPay), NetBanking (42+ banks), or UPI</strong>.
+              </p>
+              <p class="text-[10px] text-emerald-800 font-medium">✅ Order will be placed automatically ONLY after payment is completed.</p>
+            `;
+          } else {
+            noticeBox.innerHTML = `
+              <div class="flex items-center justify-between">
+                <p class="font-semibold flex items-center gap-1.5 text-amber-900">
+                  <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600"></i>
+                  Razorpay Key ID Required
+                </p>
+                <span class="text-[10px] bg-amber-600 text-white font-bold px-1.5 py-0.5 rounded">Setup Needed</span>
+              </div>
+              <p class="text-[11px] text-amber-800 leading-relaxed">
+                To accept automated in-page payments, enter your <strong>Razorpay Key ID</strong> in Merchant Settings (PIN 6086).
+              </p>
+              <p class="text-[10px] text-stone-600 italic">Until configured, please use <strong>Instant UPI QR</strong> to place orders directly.</p>
+            `;
+          }
+        }
+        btn.innerHTML = `<i data-lucide="shield-check" class="w-4 h-4 text-emerald-300"></i><span>Pay via Razorpay Secure Gateway</span>`;
       } else {
         btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Confirm Cash on Delivery Order</span>`;
       }
@@ -2061,38 +2091,46 @@
 
       // Handle Razorpay checkout if selected
       if (currentSelectedPayment === 'razorpay') {
-        const rzpKey = STORE_CONFIG.razorpayKey || "";
-        const rzpHandle = (STORE_CONFIG.razorpayHandle || "shashankgajawada").trim().replace(/^@/, '');
+        const rzpKey = (STORE_CONFIG.razorpayKey || "").trim();
 
-        if (rzpKey && !rzpKey.includes("placeholder")) {
-          const options = {
-            key: rzpKey,
-            amount: Math.round(total * 100),
-            currency: "INR",
-            name: "SRR Bazaar",
-            description: "Order Payment",
-            handler: function (response) {
-              completeOrderRecord(name, phone, address, pincode, city, state, 'Razorpay Verified Payment', response.razorpay_payment_id || 'RZP-PAID', total);
-            },
-            prefill: {
-              name: name,
-              contact: phone
-            },
-            theme: { color: "#d49b18" }
-          };
-          try {
-            const rzp = new Razorpay(options);
-            rzp.open();
-            return;
-          } catch (e) {
-            console.warn("Razorpay SDK open error, falling back to handle:", e);
-          }
+        if (!rzpKey || rzpKey.includes("placeholder")) {
+          alert("⚠️ Razorpay API Key Needed!\n\nTo accept real-time payments where orders are placed ONLY after real bank payment succeeds, please generate your Razorpay Key ID from dashboard.razorpay.com (Settings > API Keys) and paste it in Merchant Settings (PIN 6086).\n\nFor now, please choose 'Instant UPI QR' or 'Cash on Delivery' to place your order!");
+          handlePaymentMethodChange('upi');
+          return;
         }
 
-        // Official Razorpay.me handle link (Zero API key needed!)
-        const rzpUrl = `https://razorpay.me/@${rzpHandle}?amount=${Math.round(total)}`;
-        const orderId = completeOrderRecord(name, phone, address, pincode, city, state, `Razorpay Online (@${rzpHandle})`, 'RZP-ONLINE-SUBMITTED', total);
-        window.open(rzpUrl, '_blank');
+        const options = {
+          key: rzpKey,
+          amount: Math.round(total * 100),
+          currency: "INR",
+          name: "SRR Bazaar",
+          description: "Order for " + name,
+          image: "https://srrbazaar.com/images/jadau_kundan_necklace.jpg",
+          handler: function (response) {
+            // STRICT: This callback runs ONLY when bank payment is 100% verified!
+            completeOrderRecord(name, phone, address, pincode, city, state, 'Razorpay Verified Payment', response.razorpay_payment_id || 'RZP-PAID', total);
+          },
+          modal: {
+            ondismiss: function () {
+              // Customer closed or cancelled payment: NO ORDER IS PLACED!
+              alert("Payment was not completed. Your order has not been placed.");
+            }
+          },
+          prefill: {
+            name: name,
+            contact: phone
+          },
+          theme: { color: "#d49b18" }
+        };
+        try {
+          const rzp = new Razorpay(options);
+          rzp.on('payment.failed', function (resp) {
+            alert("Payment failed: " + (resp.error?.description || "Transaction declined") + ".\nNo order was placed.");
+          });
+          rzp.open();
+        } catch (e) {
+          alert("Error opening Razorpay checkout: " + e.message);
+        }
         return;
       }
 
