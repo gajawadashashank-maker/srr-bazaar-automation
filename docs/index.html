@@ -748,6 +748,7 @@
 
             <!-- Option 1: Instant UPI -->
             <label
+              onclick="handlePaymentMethodChange('upi')"
               class="payment-option cursor-pointer border-2 border-royal-500 bg-amber-50/50 rounded-xl p-3 flex flex-col justify-between space-y-2 transition">
               <div class="flex items-start justify-between">
                 <input type="radio" name="paymentMethod" value="upi" checked onchange="handlePaymentMethodChange('upi')"
@@ -762,6 +763,7 @@
 
             <!-- Option 2: Razorpay / Online Cards -->
             <label
+              onclick="handlePaymentMethodChange('razorpay')"
               class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-3 flex flex-col justify-between space-y-2 transition">
               <div class="flex items-start justify-between">
                 <input type="radio" name="paymentMethod" value="razorpay"
@@ -776,6 +778,7 @@
 
             <!-- Option 3: COD -->
             <label
+              onclick="handlePaymentMethodChange('cod')"
               class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-3 flex flex-col justify-between space-y-2 transition">
               <div class="flex items-start justify-between">
                 <input type="radio" name="paymentMethod" value="cod" onchange="handlePaymentMethodChange('cod')"
@@ -1843,6 +1846,7 @@
 
       // Generate Dynamic UPI QR and Deep Links
       generateUpiDetails(total);
+      handlePaymentMethodChange(currentSelectedPayment || 'upi');
 
       document.getElementById('checkoutModal').classList.remove('hidden');
       lucide.createIcons();
@@ -1854,6 +1858,23 @@
 
     function handlePaymentMethodChange(method) {
       currentSelectedPayment = method;
+
+      // Dynamically highlight active payment card and un-highlight others
+      document.querySelectorAll('.payment-option').forEach(el => {
+        el.classList.remove('border-2', 'border-royal-500', 'bg-amber-50/50');
+        el.classList.add('border', 'border-stone-300', 'bg-white');
+      });
+
+      const selectedRadio = document.querySelector(`input[name="paymentMethod"][value="${method}"]`);
+      if (selectedRadio) {
+        selectedRadio.checked = true;
+        const activeCard = selectedRadio.closest('.payment-option');
+        if (activeCard) {
+          activeCard.classList.remove('border', 'border-stone-300', 'bg-white');
+          activeCard.classList.add('border-2', 'border-royal-500', 'bg-amber-50/50');
+        }
+      }
+
       document.getElementById('upiPaymentBox').classList.toggle('hidden', method !== 'upi');
       document.getElementById('razorpayNoticeBox').classList.toggle('hidden', method !== 'razorpay');
       document.getElementById('codNoticeBox').classList.toggle('hidden', method !== 'cod');
@@ -1883,15 +1904,14 @@
             noticeBox.innerHTML = `
               <div class="flex items-center justify-between">
                 <p class="font-semibold flex items-center gap-1.5 text-amber-900">
-                  <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600"></i>
-                  Razorpay Key ID Required
+                  <i data-lucide="clock" class="w-4 h-4 text-amber-600"></i>
+                  Card & Netbanking Gateway Setup in Progress
                 </p>
-                <span class="text-[10px] bg-amber-600 text-white font-bold px-1.5 py-0.5 rounded">Setup Needed</span>
+                <span class="text-[10px] bg-amber-600 text-white font-bold px-1.5 py-0.5 rounded">Activating</span>
               </div>
               <p class="text-[11px] text-amber-800 leading-relaxed">
-                To accept automated in-page payments, enter your <strong>Razorpay Key ID</strong> in Merchant Settings (PIN 6086).
+                Card & Netbanking gateway is undergoing bank verification. Please choose <strong>Instant UPI QR</strong> (GPay / PhonePe / Paytm) or <strong>Cash on Delivery</strong> to complete your order now!
               </p>
-              <p class="text-[10px] text-stone-600 italic">Until configured, please use <strong>Instant UPI QR</strong> to place orders directly.</p>
             `;
           }
         }
@@ -2143,7 +2163,7 @@
         const rzpKey = (STORE_CONFIG.razorpayKey || "").trim();
 
         if (!rzpKey || rzpKey.includes("placeholder")) {
-          alert("⚠️ Razorpay API Key Needed!\n\nTo accept real-time payments where orders are placed ONLY after real bank payment succeeds, please generate your Razorpay Key ID from dashboard.razorpay.com (Settings > API Keys) and paste it in Merchant Settings (PIN 6086).\n\nFor now, please choose 'Instant UPI QR' or 'Cash on Delivery' to place your order!");
+          alert("Card & Netbanking gateway is currently being verified.\n\nPlease choose 'Instant UPI QR' or 'Cash on Delivery' to place your order directly!");
           handlePaymentMethodChange('upi');
           return;
         }
