@@ -1,5 +1,18 @@
 [
   {
+    "id": 229307292,
+    "title": "Pooja set",
+    "category": "decor",
+    "price": 2399,
+    "originalPrice": 3598,
+    "tag": "New Arrival",
+    "image": "images/catalog/25a44f15b17c4fd3a0d679f1c117afc8.jpg",
+    "description": "8 inches tray with\nProducts\n.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 972028016,
     "title": "Pure Semi Jadau Kundhan earrings",
     "category": "earrings",
