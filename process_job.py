@@ -79,82 +79,120 @@ def _clean_typography(text: str) -> str:
     return " ".join(cleaned.split()).strip()
 
 
+EXPLICIT_PRICE_PATTERNS = [
+    # 'offer price only 499', 'price : 1300', 'price 799'
+    re.compile(r"\b(?:offer\s*price|price|mrp)\s*[:\-]?\s*(?:only|just)?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*)", re.I),
+    # '1 set 499', 'single 550'
+    re.compile(r"\b(?:1\s*set|single)\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*)", re.I),
+    # '1300 rs', '1300rs', '1555/-rs', '799/-'
+    re.compile(r"\b([0-9][0-9,]*)\s*(?:/-\s*rs\.?|rs\.?|inr|/-)\b", re.I),
+    # '₹ 1300', 'rs. 1300', 'rs 1300'
+    re.compile(r"(?:₹|rs\.?|inr)\s*[:\-]?\s*([0-9][0-9,]*)", re.I),
+    # 'only 1999', 'just 499'
+    re.compile(r"\b(?:only|just)\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*)", re.I),
+    # '450 fs', '550 free shipping', '999/+ freeshipping'
+    re.compile(r"\b([0-9][0-9,]*)\s*(?:/-\s*)?(?:\+\s*)?(?:free\s*shipping|freeshipping|free\s*delivery|ship\s*free|fs)\b", re.I),
+    # '@ 1199'
+    re.compile(r"@\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*)", re.I),
+]
+
+
 def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
-    """Parse product name, description and price from WhatsApp message caption."""
-    lines = [line.strip() for line in caption.replace("\r", "").split("\n") if line.strip()]
-    product_name: str | None = None
-    description_lines: list[str] = []
-    price = ""
-    description_mode = False
+    """Parse product name, description and price accurately from WhatsApp message caption."""
+    raw_lines = [line.strip() for line in caption.replace("\r", "").split("\n") if line.strip()]
+    if not raw_lines:
+        return None, "", ""
 
-    price_patterns = [
-        re.compile(r"\b(?:only|just)\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
-        re.compile(r"\bprice\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
-        re.compile(r"@\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
-        re.compile(r"₹\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)", re.I),
-        re.compile(r"\b([0-9][0-9,]*(?:\.[0-9]{1,2})?)\s*(?:rs\.?|inr|/-)", re.I),
-        re.compile(r"\b([0-9][0-9,]*(?:\.[0-9]{1,2})?)\s*(?:/-)?\s*(?:free\s+shipping|ship\s*free|free\s*delivery)", re.I),
-        re.compile(r"(?<!\d)([1-9][0-9]{1,4})(?!\d)"),
-    ]
+    lines = [_clean_typography(line) for line in raw_lines if _clean_typography(line)]
+    if not lines:
+        return None, "", ""
 
-    for line in lines:
-        cleaned_line = _clean_typography(line)
-        if not cleaned_line:
-            continue
+    full_text = " \n ".join(lines)
 
-        product_match = re.match(r"^(?:product(?:\s*name)?|item|name)\s*:\s*(.+)$", cleaned_line, re.I)
-        if product_match:
-            product_name = _clean_typography(product_match.group(1))
-            description_mode = False
-            continue
+    # 1. EXTRACT PRICE WITH STRICT EXPLICIT PRIORITY
+    chosen_price = None
 
-        description_match = re.match(r"^(?:description|details)\s*:\s*(.*)$", cleaned_line, re.I)
-        if description_match:
-            description_mode = True
-            value = _clean_typography(description_match.group(1))
-            if value:
-                description_lines.append(value)
-            continue
+    # Priority A: Check for explicit multi-tier or single item price (e.g. '1 set 499')
+    single_match = re.search(r"\b(?:1\s*set|single)\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*)", full_text, re.I)
+    if single_match:
+        val = int(single_match.group(1).replace(",", ""))
+        if 50 <= val <= 200000:
+            chosen_price = val
 
-        found_price = None
-        for pattern in price_patterns:
-            match = pattern.search(cleaned_line)
-            if match:
-                found_price = match.group(1)
+    # Priority B: Check explicit price indicators
+    if not chosen_price:
+        for pattern in EXPLICIT_PRICE_PATTERNS:
+            matches = list(pattern.finditer(full_text))
+            if matches:
+                for m in matches:
+                    val = int(m.group(1).replace(",", ""))
+                    if 50 <= val <= 200000:
+                        chosen_price = val
+                        break
+            if chosen_price:
                 break
 
-        if found_price is not None and not price:
-            price = _normalise_price(found_price)
-            remainder = cleaned_line
-            remainder = re.sub(r"(?i)\bprice\s*[:\-]?", "", remainder)
-            for pattern in price_patterns[:6]:
-                remainder = pattern.sub("", remainder)
-            remainder = remainder.replace(found_price, "")
-            remainder = re.sub(r"(?i)\b(?:only|just|free\s+shipping|free\s+delivery|ship\s*free|/-)\b", "", remainder)
-            remainder = remainder.strip(" \t-:@₹,")
-            remainder = re.sub(r"(?i)^\s*(?:rs\.?|inr)\s*", "", remainder).strip()
+    # Priority C: Standalone number lines (e.g. line is purely '850' or '2888')
+    if not chosen_price:
+        for l in lines:
+            if re.fullmatch(r"[₹\s]*[0-9]{3,5}[/\-\s]*\.?", l):
+                num_match = re.search(r"\d+", l)
+                if num_match:
+                    val = int(num_match.group(0))
+                    if 50 <= val <= 200000:
+                        chosen_price = val
+                        break
 
-            if remainder:
-                if product_name is None and not description_mode:
-                    product_name = remainder
-                else:
-                    description_lines.append(remainder)
+    # 2. EXTRACT PRODUCT NAME & DESCRIPTION
+    product_name: str | None = None
+    description_lines: list[str] = []
+
+    for l in lines:
+        name_match = re.match(r"^(?:product(?:\s*name)?|item|name)\s*[:\-]\s*(.+)$", l, re.I)
+        if name_match:
+            product_name = name_match.group(1).strip()
             continue
 
-        if description_mode:
-            description_lines.append(cleaned_line)
-        elif product_name is None:
-            product_name = cleaned_line
+        desc_match = re.match(r"^(?:description|details)\s*[:\-]\s*(.*)$", l, re.I)
+        if desc_match:
+            if desc_match.group(1).strip():
+                description_lines.append(desc_match.group(1).strip())
+            continue
+
+        # Skip lines that are purely the price (e.g. '1300 rs', '₹1300', '2888')
+        if chosen_price and re.fullmatch(
+            rf"[₹\s]*(?:only|just|price|offer\s*price|mrp)?\s*[:\-]?(?:rs\.?|inr|₹)?\s*{chosen_price}\s*(?:/-\s*rs\.?|rs\.?|inr|/-|free\s*shipping|freeshipping|fs)?\.?",
+            l,
+            re.I,
+        ):
+            continue
+
+        if re.fullmatch(r"[₹\s]*[0-9]{3,5}[/\-\s]*\.?", l):
+            continue
+
+        # First meaningful descriptive line becomes product name
+        if product_name is None:
+            product_name = l
         else:
-            description_lines.append(cleaned_line)
+            description_lines.append(l)
 
+    # Polish Product Name
     if product_name:
-        product_name = _clean_typography(product_name)
-        if re.fullmatch(r"[₹\s]*[0-9][0-9,.]*", product_name):
-            product_name = None
+        if re.match(r"^\d+\s*(?:pieces?|pcs?|bowls?|diyas?)\s*(?:each)?$", product_name, re.I) and description_lines:
+            product_name = f"{product_name} - {description_lines[0]}"
+        elif product_name.strip().lower().endswith((" with", " for", " and", " of", " in", "&")) and description_lines:
+            product_name = f"{product_name} {description_lines[0]}"
 
+        if chosen_price:
+            product_name = re.sub(
+                rf"(?i)\s*[:\-]?\s*(?:only|just)?\s*(?:₹|rs\.?|inr)?\s*{chosen_price}\s*(?:/-\s*rs\.?|rs\.?|inr|/-|free\s*shipping|freeshipping|fs)?\.?",
+                "",
+                product_name,
+            ).strip()
+
+    price_str = f"₹{chosen_price:,}" if chosen_price else ""
     description = "\n".join(description_lines).strip()
-    return product_name, description, price
+    return product_name, description, price_str
 
 
 def build_instagram_caption(product_name: str, price: str, description: str) -> str:
