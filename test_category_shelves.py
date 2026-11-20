@@ -1,3 +1,5 @@
+import os
+import sys
 import time
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options as EdgeOptions
@@ -5,15 +7,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+target_url = sys.argv[1] if len(sys.argv) > 1 else 'file:///C:/Users/shash/AUTOMATION_WHATSAPP_INSTA/docs/index.html'
+
 opts = EdgeOptions()
 opts.add_argument('--headless=new')
 opts.add_argument('--window-size=1280,1000')
 driver = webdriver.Edge(options=opts)
-wait = WebDriverWait(driver, 10)
+wait = WebDriverWait(driver, 15)
 
 try:
-    url = 'file:///C:/Users/shash/AUTOMATION_WHATSAPP_INSTA/docs/index.html'
-    driver.get(url)
+    print(f"Testing categories & shelves on {target_url}...")
+    driver.get(target_url)
     wait.until(EC.presence_of_element_located((By.ID, 'productGrid')))
     time.sleep(1)
 
