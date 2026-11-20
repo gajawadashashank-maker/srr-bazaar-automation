@@ -2275,7 +2275,7 @@
           subHeadingEl.textContent = `Found ${filtered.length} products matching your query`;
         } else if (activeCategory !== 'all') {
           const catMeta = {
-            'decor': { title: '🌿 Wholesale Disposables & Dining', sub: "Direct from Babai's Wholesale Shop: eco-friendly leaf plates, buffet rolls & packaging" },
+            'decor': { title: '🌿 Wholesale Disposables & Dining', sub: "Eco-friendly leaf plates, buffet rolls, paper cups & packaging supplies" },
             'necklace': { title: '👑 Royal Kundan & Choker Collections', sub: 'Handcrafted wedding harams, antique gold polish & statement neckwear' },
             'mangalsutra': { title: '🖤 Daily Wear Black Beads & Malas', sub: 'Lightweight micro-polish tulip malas and daily wear chains' },
             'earrings': { title: '✨ Statement Earrings, Jhumkas & Bangles', sub: 'Bridal CZ solitaires, semi-jadau tops & festive earrings' },
@@ -2302,15 +2302,8 @@
       if (activeCategory === 'all' && !searchQuery && currentSort === 'featured') {
         const shelves = [
           {
-            title: "🔥 Trending Steal Deals & Bestsellers",
-            subtitle: "Top rated customer favorites with verified fast dispatch",
-            catKey: "all",
-            count: filtered.length,
-            items: [...filtered].sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 4)
-          },
-          {
-            title: "🌿 Wholesale Disposables & Dining (Babai's Depot)",
-            subtitle: "Biodegradable leaf plates, buffet dining, parcel boxes & paper cups",
+            title: "🌿 Wholesale Disposables & Dining",
+            subtitle: "Eco-friendly leaf plates, buffet dining, parcel boxes & paper cups",
             catKey: "decor",
             count: filtered.filter(p => p.category === 'decor').length,
             items: filtered.filter(p => p.category === 'decor').slice(0, 4)
