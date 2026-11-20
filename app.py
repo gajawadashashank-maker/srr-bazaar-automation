@@ -391,7 +391,7 @@ def sync_product_to_website_catalogue(
         category = "necklace"
         if any(w in text_lower for w in ["cotton", "saree", "khadi", "dress", "kurti", "silk", "fabric"]):
             category = "saree"
-        elif any(w in text_lower for w in ["tray", "swan", "decor", "pooja", "puja", "gift", "nomu", "nomulu", "diya", "diyas", "deepam", "deepalu", "sankranti", "kartheeka", "vratam", "vratham", "kalash", "plate", "bowl", "lotus", "stand", "ashtothara", "shatanamavali", "kondala", "kondalu", "brass", "idol"]):
+        elif any(w in text_lower for w in ["tray", "swan", "decor", "pooja", "puja", "gift", "nomu", "nomulu", "diya", "diyas", "deepam", "deepalu", "sankranti", "kartheeka", "vratam", "vratham", "kalash", "plate", "plates", "bowl", "lotus", "stand", "ashtothara", "shatanamavali", "kondala", "kondalu", "brass", "idol", "leaf", "buffet", "disposable", "organic", "paper"]):
             category = "decor"
         elif any(w in text_lower for w in ["bead", "mangalsutra", "black", "chain", "locket"]):
             category = "mangalsutra"
