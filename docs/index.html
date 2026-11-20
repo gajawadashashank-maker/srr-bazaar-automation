@@ -1463,6 +1463,7 @@
           if (Array.isArray(data) && data.length > 0) {
             products = data;
             renderProducts();
+            checkUrlForProduct();
           }
         })
         .catch(err => {
@@ -1495,7 +1496,22 @@
       renderMerchantOrders();
       syncGoogleSheetOrders();
       lucide.createIcons();
+      checkUrlForProduct();
     });
+
+    function checkUrlForProduct() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const prodId = urlParams.get('product') || (window.location.hash.startsWith('#prod-') ? window.location.hash.replace('#prod-', '') : null);
+      if (prodId) {
+        const numericId = parseInt(prodId, 10);
+        const product = products.find(p => p.id === numericId);
+        if (product) {
+          setTimeout(() => {
+            openQuickView(numericId);
+          }, 350);
+        }
+      }
+    }
 
     // =========================================================================
     // PRODUCT RENDERING & FILTERING
@@ -1687,11 +1703,30 @@
       document.getElementById('quickViewModal').classList.add('hidden');
     }
 
-    function shareProductWhatsApp(id) {
+    async function shareProductWhatsApp(id) {
       const p = products.find(item => item.id === id);
       if (!p) return;
-      const text = `✨ Check out this gorgeous *${p.title}* on SRR Bazaar!\n\n🏷️ Price: ₹${p.price} (FREE Shipping across India)\n📦 Direct Order Link: https://srrbazaar.com\n\nOrder online or reply here to buy!`;
-      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      const shareUrl = `https://srrbazaar.com/p/${p.id}.html`;
+      const shareTitle = `${p.title} — ₹${p.price} | SRR Bazaar`;
+      const shareText = `✨ Check out *${p.title}* on SRR Bazaar!\n\n🏷️ Price: ₹${p.price} (FREE Express Shipping across India & COD)\n🛍️ View Photo & Order: ${shareUrl}`;
+
+      // Use native Web Share API on mobile devices (opens native WhatsApp/Instagram/share sheet)
+      if (navigator.share && /mobile|android|iphone|ipad/i.test(navigator.userAgent)) {
+        try {
+          await navigator.share({
+            title: shareTitle,
+            text: shareText,
+            url: shareUrl,
+          });
+          return;
+        } catch (err) {
+          if (err.name !== 'AbortError') console.log('Share error:', err);
+          else return;
+        }
+      }
+
+      // Fallback: Direct WhatsApp Web / App share dialog
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
       window.open(waUrl, '_blank');
     }
 

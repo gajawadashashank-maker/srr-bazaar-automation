@@ -387,6 +387,13 @@ def sync_product_to_website_catalogue(
         products.insert(0, new_entry)
         products_json_path.write_text(json.dumps(products, indent=2, ensure_ascii=False), encoding="utf-8")
         logger.info("Auto-synced new product to website catalogue: '%s' (₹%d) -> %s", product_name, numeric_price, target_img_name)
+
+        # Generate individual product share/SEO page
+        try:
+            from generate_product_pages import generate_all_product_pages
+            generate_all_product_pages()
+        except Exception as gen_err:
+            logger.warning("Could not generate individual product page: %s", gen_err)
     except Exception as e:
         logger.warning("Could not auto-sync product to website catalogue: %s", e)
 
