@@ -13,19 +13,6 @@
     "reviewsCount": 1
   },
   {
-    "id": 928103031,
-    "title": "Biodegradable Leaf Buffet Plates (Pack of 20)",
-    "category": "decor",
-    "price": 200,
-    "originalPrice": 300,
-    "tag": "New Arrival",
-    "image": "images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg",
-    "description": "100% natural and eco-friendly biodegradable leaf buffet plates (Pack of 20). Chemical-free, sturdy, and hygienic disposable dining plates perfect for pooja, weddings, catering, and festive gatherings. Free express shipping across India.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
     "id": 338044272,
     "title": "Edu Kondala Nomu (Sankranti Special)",
     "category": "decor",
@@ -392,7 +379,7 @@
   {
     "id": 749296149,
     "title": "Sanku chara diyas",
-    "category": "necklace",
+    "category": "decor",
     "price": 3200,
     "originalPrice": 4800,
     "tag": "New Arrival",
@@ -405,7 +392,7 @@
   {
     "id": 64841853,
     "title": "Pure Cz Stone Ear rings with Screw Backs",
-    "category": "necklace",
+    "category": "earrings",
     "price": 499,
     "originalPrice": 748,
     "tag": "New Arrival",
@@ -470,7 +457,7 @@
   {
     "id": 115033516,
     "title": "Sanku chara diyas",
-    "category": "necklace",
+    "category": "decor",
     "price": 3200,
     "originalPrice": 4800,
     "tag": "New Arrival",
@@ -496,7 +483,7 @@
   {
     "id": 987154951,
     "title": "Pure Khadhi Cotton",
-    "category": "necklace",
+    "category": "saree",
     "price": 650,
     "originalPrice": 975,
     "tag": "New Arrival",

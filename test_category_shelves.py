@@ -27,17 +27,17 @@ try:
     total_count = driver.find_element(By.ID, 'totalProductCount').text
     print(f'Initial state -> Heading: "{init_heading}", Visible: {init_count}, Total: {total_count}')
 
-    # Check 1: Decor category click (Blinkit Circle)
+    # Check 1: Decor category click (Pooja & Festive Decor)
     decor_btn = driver.find_element(By.CSS_SELECTOR, '.category-circle-btn[data-category="decor"]')
     decor_btn.click()
     time.sleep(0.5)
     heading = driver.find_element(By.ID, 'catalogueHeading').text
     count = driver.find_element(By.ID, 'visibleProductCount').text
     print(f'Decor Category Click -> Heading: "{heading}", Count: {count}')
-    assert 'Disposables' in heading, f'Heading does not contain Disposables: {heading}'
-    assert count == '11', f'Expected 11 items, got {count}'
+    assert 'Decor' in heading or 'Pooja' in heading, f'Heading does not contain Decor/Pooja: {heading}'
+    assert count == '12', f'Expected 12 items, got {count}'
 
-    # Check 2: Necklaces category click (27 items)
+    # Check 2: Necklaces category click (23 items)
     neck_btn = driver.find_element(By.CSS_SELECTOR, '.category-circle-btn[data-category="necklace"]')
     neck_btn.click()
     time.sleep(0.5)
@@ -45,7 +45,7 @@ try:
     count = driver.find_element(By.ID, 'visibleProductCount').text
     print(f'Necklaces Category Click -> Heading: "{heading}", Count: {count}')
     assert 'Kundan' in heading or 'Choker' in heading, f'Heading mismatch: {heading}'
-    assert count == '27', f'Expected 27 items, got {count}'
+    assert count == '23', f'Expected 23 items, got {count}'
 
     # Check 3: All Bazaar category click
     all_btn = driver.find_element(By.CSS_SELECTOR, '.category-circle-btn[data-category="all"]')
@@ -55,7 +55,7 @@ try:
     count = driver.find_element(By.ID, 'visibleProductCount').text
     print(f'All Category Click -> Heading: "{heading}", Count: {count}')
     assert heading == 'Curated Bazaar Aisles'
-    assert count == '47'
+    assert count == '46'
 
     # Check 4: Curated Shelves present in All view
     shelf_headings = [h.text for h in driver.find_elements(By.CSS_SELECTOR, '#productGrid h3')]
