@@ -365,11 +365,20 @@
           <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Dry Fruits</span>
         </button>
 
-        <!-- Snacks & Supermarket Groceries -->
+        <!-- Daily Groceries & Kitchen Staples -->
+        <button onclick="filterCategory('groceries', this)" data-category="groceries"
+          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
+          <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-emerald-600">
+            <img src="images/categories/cat_groceries.jpg" alt="Daily Groceries & Staples" class="w-full h-full object-cover">
+          </div>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Groceries</span>
+        </button>
+
+        <!-- Snacks, Biscuits & Tiffins -->
         <button onclick="filterCategory('snacks', this)" data-category="snacks"
           class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
           <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-orange-500">
-            <img src="images/categories/cat_snacks.jpg" alt="Snacks & Supermarket Groceries" class="w-full h-full object-cover">
+            <img src="images/categories/cat_snacks.jpg" alt="Snacks, Biscuits & Tiffins" class="w-full h-full object-cover">
           </div>
           <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Snacks & Biscuits</span>
         </button>
@@ -2327,8 +2336,9 @@
             'necklace': { title: '👑 Royal Kundan & Choker Collections', sub: 'Handcrafted wedding harams, antique gold polish & statement neckwear' },
             'mangalsutra': { title: '🖤 Daily Wear Black Beads & Malas', sub: 'Lightweight micro-polish tulip malas and daily wear chains' },
             'disposables': { title: '🌿 Wholesale Disposables, Buffet Plates & Paper Cups', sub: 'Biodegradable leaf plates, buffet rolls, meal containers & paper cups' },
+                        'groceries': { title: '🌾 Supermarket Groceries & Daily Cooking Staples', sub: 'Premium basmati rice, farm dals, pure cow ghee, cold-pressed oils & whole spices' },
             'dryfruits': { title: '🥜 Premium Dry Fruits, Nuts & Dates', sub: 'Fresh California almonds, whole cashews, raisins, pistachios & dates' },
-            'snacks': { title: '🍪 Snacks, Biscuits & Supermarket Groceries', sub: 'Crispy chips, tea biscuits, namkeen, festive snacks & daily cooking essentials' },
+            'snacks': { title: '🍪 Crispy Snacks, Biscuits & Ready Tiffins', sub: 'Crispy potato chips, tea biscuits, traditional namkeen, mixture & instant tiffin mixes' },
             'samagri': { title: '🪔 Pooja Samagri, Camphor & Diya Wicks', sub: 'Pure cow ghee wicks, Bhimseni camphor, dhoop sticks, kumkum & pooja oils' },
             'decor': { title: '✨ Festive Decor & Pooja Essentials', sub: 'Handcrafted brass diya stands, lotus pooja plates, swan trays & festive sets' },
             'earrings': { title: '💎 Statement Earrings, Jhumkas & Bangles', sub: 'Bridal CZ solitaires, semi-jadau tops & festive earrings' },
@@ -2369,13 +2379,18 @@
             subtitle: "100% biodegradable leaf plates, paper cups & catering supplies",
             catKey: "disposables"
           },
+                    {
+            title: "🌾 Supermarket Groceries & Daily Staples",
+            subtitle: "Basmati rice, farm dals, cooking oils, pure ghee & pantry essentials",
+            catKey: "groceries"
+          },
           {
             title: "🥜 Premium Dry Fruits & Nuts",
             subtitle: "Fresh almonds, whole cashews, raisins & nutrient-rich dry fruits",
             catKey: "dryfruits"
           },
           {
-            title: "🍪 Snacks, Chips & Supermarket Essentials",
+            title: "🍪 Snacks, Chips & Ready Tiffins",
             subtitle: "Crispy tea snacks, biscuits, namkeen & everyday pantry favourites",
             catKey: "snacks"
           },
