@@ -575,6 +575,38 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- FLOATING TOAST: Amazon Style Add-to-Cart Notification                     -->
+  <!-- ========================================================================= -->
+  <div id="amazonCartToast"
+    class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden bg-white/95 backdrop-blur-md border border-stone-200 shadow-2xl rounded-2xl px-3.5 py-2.5 items-center gap-3 transition-all duration-300 transform max-w-sm sm:max-w-md w-[92%] sm:w-auto">
+    <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 flex-shrink-0">
+      <i data-lucide="check" class="w-4 h-4"></i>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+        <span class="text-emerald-800">Added to Cart</span>
+        <span class="text-stone-300">•</span>
+        <span class="text-stone-600 font-semibold text-[11px]">Subtotal: <strong class="text-stone-900 font-extrabold" id="toastSubtotal">₹0</strong></span>
+      </div>
+      <div class="text-[11px] text-stone-500 truncate" id="toastItemTitle">Product Title</div>
+    </div>
+    <div class="flex items-center gap-1.5 flex-shrink-0">
+      <button onclick="proceedToCheckout(); hideAmazonToast();"
+        class="px-3 py-1.5 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] text-stone-950 font-bold text-[11px] border border-[#fcd200] shadow-2xs whitespace-nowrap">
+        Checkout
+      </button>
+      <button onclick="toggleCartDrawer(true); hideAmazonToast();"
+        class="px-2.5 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold text-[11px] whitespace-nowrap">
+        Cart
+      </button>
+      <button onclick="hideAmazonToast()"
+        class="p-1 text-stone-400 hover:text-stone-600 rounded-full" title="Close">
+        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- DRAWER: Shopping Cart                                                      -->
   <!-- ========================================================================= -->
   <div id="cartDrawer" class="fixed inset-0 z-50 hidden">
@@ -1322,19 +1354,6 @@
     </div>
   </div>
 
-  <!-- High-Visibility Toast Notification (Blinkit/Amazon style) -->
-  <div id="toastNotification" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] hidden transition-all duration-300">
-    <div class="bg-stone-900/95 text-white border border-amber-400/40 px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-3 backdrop-blur-md">
-      <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs flex-shrink-0">
-        <i data-lucide="check" class="w-3.5 h-3.5"></i>
-      </span>
-      <span id="toastMessage" class="text-xs sm:text-sm font-medium text-stone-100">Item added to bag!</span>
-      <button onclick="toggleCartDrawer(true)" class="text-xs font-bold text-amber-300 hover:text-white underline ml-1 whitespace-nowrap">
-        View Bag →
-      </button>
-    </div>
-  </div>
-
   <!-- Main JavaScript App Logic -->
   <script>
     // =========================================================================
@@ -1691,7 +1710,7 @@
 
               <!-- Amazon Dual Actions: Add to Cart & Buy Now -->
               <div class="flex items-center gap-1.5 pt-0.5">
-                <button onclick="addToCart(${p.id})" class="flex-1 py-1.5 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] active:bg-[#f0b800] text-stone-950 font-bold text-[10px] sm:text-[11px] transition shadow-2xs border border-[#fcd200] text-center" title="Add to Cart">
+                <button onclick="handleCardAddToCart(${p.id}, this)" class="flex-1 py-1.5 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] active:bg-[#f0b800] text-stone-950 font-bold text-[10px] sm:text-[11px] transition shadow-2xs border border-[#fcd200] text-center" title="Add to Cart">
                   Add to Cart
                 </button>
                 <button onclick="quickOrderProduct(${p.id})" class="flex-1 py-1.5 rounded-full bg-[#ffa41c] hover:bg-[#fa8900] active:bg-[#e87c00] text-stone-950 font-bold text-[10px] sm:text-[11px] transition shadow-2xs border border-[#ff8f00] text-center whitespace-nowrap">
@@ -1791,17 +1810,47 @@
               <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Direct WhatsApp seller support</div>
             </div>
 
+            <!-- Amazon Dual Action Row: Add to Cart & Buy Now -->
             <div class="flex gap-2 pt-2">
-              <button onclick="addToCart(${p.id})" class="flex-1 py-2.5 rounded-xl bg-[#ffd814] hover:bg-[#f7ca00] text-stone-950 font-bold text-xs sm:text-sm border border-[#fcd200] shadow transition">
-                Add to Cart
+              <button id="modalAddToCartBtn" onclick="handleModalAddToCart(${p.id})" class="flex-1 py-2.5 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] active:bg-[#f0b800] text-stone-950 font-bold text-xs sm:text-sm border border-[#fcd200] shadow-2xs transition flex items-center justify-center gap-1.5" title="Add to Cart">
+                <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                <span id="modalAddToCartText">Add to Cart</span>
               </button>
-              <button onclick="quickOrderProduct(${p.id})" class="flex-1 py-2.5 rounded-xl bg-[#ffa41c] hover:bg-[#fa8900] text-stone-950 font-bold text-xs sm:text-sm border border-[#ff8f00] shadow transition">
+              <button onclick="quickOrderProduct(${p.id}); closeQuickView(false);" class="flex-1 py-2.5 rounded-full bg-[#ffa41c] hover:bg-[#fa8900] active:bg-[#e87c00] text-stone-950 font-bold text-xs sm:text-sm border border-[#ff8f00] shadow-2xs transition flex items-center justify-center gap-1.5" title="Buy Now">
                 Buy Now
               </button>
-              <button onclick="shareProductWhatsApp(${p.id})" class="px-3 py-2.5 rounded-xl border border-emerald-500 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 flex items-center justify-center gap-1.5 font-bold text-xs transition" title="Share with friends on WhatsApp">
+              <button onclick="shareProductWhatsApp(${p.id})" class="px-3.5 py-2.5 rounded-full border border-emerald-500 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 flex items-center justify-center gap-1.5 font-bold text-xs transition" title="Share with friends on WhatsApp">
                 <i data-lucide="share-2" class="w-4 h-4 text-emerald-600"></i>
                 <span class="hidden sm:inline">Share</span>
               </button>
+            </div>
+
+            <!-- Amazon Inline Confirmation Box (Shown when Added to Cart) -->
+            <div id="modalAddedConfirmation" class="hidden mt-2 p-3.5 bg-stone-50 border border-emerald-300 rounded-2xl space-y-2.5 animate-in fade-in duration-200">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5 text-emerald-800 font-bold text-xs sm:text-sm">
+                  <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                  <span>Added to Cart</span>
+                </div>
+                <div class="text-xs text-stone-600">
+                  Cart subtotal (<span id="modalCartCountText">1 item</span>): <strong class="text-stone-950 font-black" id="modalSubtotalText">₹${p.price}</strong>
+                </div>
+              </div>
+
+              <div class="space-y-2 pt-1">
+                <button onclick="proceedToCheckout(); closeQuickView(false);" class="w-full py-2.5 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] active:bg-[#f0b800] text-stone-950 font-bold text-xs sm:text-sm border border-[#fcd200] shadow-xs flex items-center justify-center gap-2">
+                  <span>Proceed to checkout (<span id="modalCheckoutCountText">1 item</span>)</span>
+                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+                <div class="flex gap-2">
+                  <button onclick="toggleCartDrawer(true); closeQuickView(false);" class="flex-1 py-1.5 rounded-full bg-white hover:bg-stone-50 text-stone-800 font-bold text-xs border border-stone-300 shadow-2xs text-center transition">
+                    Go to Cart
+                  </button>
+                  <button onclick="closeQuickView();" class="flex-1 py-1.5 rounded-full bg-stone-200 hover:bg-stone-300 text-stone-700 font-semibold text-xs text-center transition">
+                    Continue Shopping
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1809,15 +1858,17 @@
 
       document.getElementById('quickViewModal').classList.remove('hidden');
       lucide.createIcons();
-      // Push history state so physical Back button closes modal
+      // Push history state so physical/browser Back button closes modal without page exit
       if (!window.history.state || window.history.state.modal !== 'quickViewModal') {
         window.history.pushState({ modal: 'quickViewModal' }, '');
       }
     }
 
-    function closeQuickView() {
-      const qModal = document.getElementById('quickViewModal');
-      if (qModal) qModal.classList.add('hidden');
+    function closeQuickView(triggerHistory = true) {
+      document.getElementById('quickViewModal').classList.add('hidden');
+      if (triggerHistory && window.history.state && window.history.state.modal === 'quickViewModal') {
+        window.history.back();
+      }
     }
 
     // Handle physical/browser Back button on mobile & desktop
@@ -1830,6 +1881,11 @@
       const cModal = document.getElementById('checkoutModal');
       if (cModal && !cModal.classList.contains('hidden')) {
         cModal.classList.add('hidden');
+        return;
+      }
+      const drawer = document.getElementById('cartDrawer');
+      if (drawer && !drawer.classList.contains('hidden')) {
+        drawer.classList.add('hidden');
         return;
       }
     });
@@ -1862,28 +1918,54 @@
     }
 
     // =========================================================================
-    // CART MANAGEMENT & HIGH-VISIBILITY TOAST
+    // AMAZON CART UX & NOTIFICATIONS
     // =========================================================================
     let toastTimeout = null;
-    function showToast(message) {
-      const toast = document.getElementById('toastNotification');
-      const msgElem = document.getElementById('toastMessage');
-      if (!toast || !msgElem) return;
-      msgElem.textContent = message;
+
+    function showAmazonToast(product) {
+      const toast = document.getElementById('amazonCartToast');
+      if (!toast) return;
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const subtotalEl = document.getElementById('toastSubtotal');
+      const titleEl = document.getElementById('toastItemTitle');
+      if (subtotalEl) subtotalEl.textContent = `₹${subtotal}`;
+      if (titleEl) titleEl.textContent = product ? product.title : 'Item added';
+
       toast.classList.remove('hidden');
-      toast.classList.remove('opacity-0', 'translate-y-4');
-      toast.classList.add('opacity-100', 'translate-y-0');
+      toast.classList.add('flex');
       lucide.createIcons();
+
       if (toastTimeout) clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => {
-        toast.classList.add('opacity-0', 'translate-y-4');
-        setTimeout(() => toast.classList.add('hidden'), 300);
-      }, 3500);
+        hideAmazonToast();
+      }, 4000);
     }
 
-    function addToCart(id) {
-      const p = products.find(item => item.id === id);
+    function hideAmazonToast() {
+      const toast = document.getElementById('amazonCartToast');
+      if (toast) {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }
+    }
+
+    function pulseCartBadge() {
+      const badge = document.getElementById('cartCountBadge');
+      if (!badge) return;
+      badge.classList.remove('animate-bounce');
+      void badge.offsetWidth;
+      badge.classList.add('animate-bounce');
+      setTimeout(() => {
+        badge.classList.remove('animate-bounce');
+      }, 1000);
+    }
+
+    // =========================================================================
+    // CART MANAGEMENT
+    // =========================================================================
+    function addToCart(id, { openDrawer = false, showToast = true } = {}) {
       const existing = cart.find(item => item.id === id);
+      const p = products.find(item => item.id === id);
       if (existing) {
         existing.qty += 1;
       } else if (p) {
@@ -1891,26 +1973,56 @@
       }
       saveCart();
       updateCartUI();
+      pulseCartBadge();
 
-      // Close quickView modal if it was open
-      const qModal = document.getElementById('quickViewModal');
-      if (qModal && !qModal.classList.contains('hidden')) {
-        qModal.classList.add('hidden');
+      if (showToast && p) {
+        showAmazonToast(p);
+      }
+      if (openDrawer) {
+        toggleCartDrawer(true);
+      }
+    }
+
+    function handleCardAddToCart(id, btn) {
+      addToCart(id, { openDrawer: false, showToast: true });
+      if (!btn) return;
+      const origHtml = btn.innerHTML;
+      btn.innerHTML = `<span class="flex items-center justify-center gap-1 text-emerald-800 font-bold">✓ Added</span>`;
+      btn.classList.add('bg-emerald-100', 'border-emerald-300');
+      btn.classList.remove('bg-[#ffd814]', 'border-[#fcd200]');
+      setTimeout(() => {
+        btn.innerHTML = origHtml;
+        btn.classList.remove('bg-emerald-100', 'border-emerald-300');
+        btn.classList.add('bg-[#ffd814]', 'border-[#fcd200]');
+      }, 2000);
+    }
+
+    function handleModalAddToCart(id) {
+      addToCart(id, { openDrawer: false, showToast: false });
+
+      const btn = document.getElementById('modalAddToCartBtn');
+      if (btn) {
+        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-700"></i> <span class="text-emerald-900 font-bold">Added to Cart</span>`;
+        btn.classList.add('bg-emerald-100', 'border-emerald-300');
+        btn.classList.remove('bg-[#ffd814]', 'border-[#fcd200]');
       }
 
-      // Open the Cart Drawer so the customer SEES their product inside the bag!
-      toggleCartDrawer(true);
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-      // Show floating notification toast
-      const title = p ? p.title : 'Item';
-      showToast(`🛒 "${title}" added to your bag!`);
-
-      // Pulse the Bag count badge in the header
-      const badge = document.getElementById('cartCountBadge');
-      if (badge) {
-        badge.classList.add('animate-bounce');
-        setTimeout(() => badge.classList.remove('animate-bounce'), 1200);
+      const confirmBox = document.getElementById('modalAddedConfirmation');
+      if (confirmBox) {
+        const countStr = `${totalItems} item${totalItems > 1 ? 's' : ''}`;
+        const countEl = document.getElementById('modalCartCountText');
+        const subtotalEl = document.getElementById('modalSubtotalText');
+        const checkoutCountEl = document.getElementById('modalCheckoutCountText');
+        if (countEl) countEl.textContent = countStr;
+        if (subtotalEl) subtotalEl.textContent = `₹${subtotal}`;
+        if (checkoutCountEl) checkoutCountEl.textContent = countStr;
+        confirmBox.classList.remove('hidden');
       }
+
+      lucide.createIcons();
     }
 
     function quickOrderProduct(id) {
@@ -1921,13 +2033,6 @@
       }
       saveCart();
       updateCartUI();
-
-      // Close quickView modal if open
-      const qModal = document.getElementById('quickViewModal');
-      if (qModal && !qModal.classList.contains('hidden')) {
-        qModal.classList.add('hidden');
-      }
-
       proceedToCheckout();
     }
 
@@ -2041,6 +2146,8 @@
 
     function proceedToCheckout() {
       toggleCartDrawer(false);
+      closeQuickView(false);
+      hideAmazonToast();
       if (cart.length === 0) {
         alert("Your cart is empty!");
         return;
