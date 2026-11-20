@@ -191,6 +191,8 @@ def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
                 product_name,
             ).strip()
 
+        product_name = product_name.strip(" ,.-–—\t\r\n")
+
     price_str = f"₹{chosen_price:,}" if chosen_price else ""
     description = "\n".join(description_lines).strip()
     return product_name, description, price_str
@@ -354,12 +356,14 @@ def sync_product_to_website_catalogue(
         # Detect category based on product title/description
         text_lower = f"{product_name} {description}".lower()
         category = "necklace"
-        if any(w in text_lower for w in ["bead", "mangalsutra", "black", "chain"]):
-            category = "mangalsutra"
-        elif any(w in text_lower for w in ["earring", "stud", "jhumka", "bangle", "bracelet"]):
-            category = "earrings"
-        elif any(w in text_lower for w in ["tray", "swan", "decor", "pooja", "gift"]):
+        if any(w in text_lower for w in ["cotton", "saree", "khadi", "dress", "kurti", "silk", "fabric"]):
+            category = "saree"
+        elif any(w in text_lower for w in ["tray", "swan", "decor", "pooja", "puja", "gift", "nomu", "nomulu", "diya", "diyas", "deepam", "deepalu", "sankranti", "kartheeka", "vratam", "vratham", "kalash", "plate", "bowl", "lotus", "stand", "ashtothara", "shatanamavali", "kondala", "kondalu", "brass", "idol"]):
             category = "decor"
+        elif any(w in text_lower for w in ["bead", "mangalsutra", "black", "chain", "locket"]):
+            category = "mangalsutra"
+        elif any(w in text_lower for w in ["earring", "stud", "jhumka", "bangle", "bracelet", "kada"]):
+            category = "earrings"
 
         products_json_path = docs_dir / "products.json"
         products: list[dict[str, Any]] = []
