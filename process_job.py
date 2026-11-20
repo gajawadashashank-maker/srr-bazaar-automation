@@ -374,10 +374,14 @@ def sync_product_to_website_catalogue(
         # Detect category based on product title/description
         text_lower = f"{product_name} {description}".lower()
         category = "necklace"
-        # 1. Groceries, Snacks & Dry Fruits
-        if any(w in text_lower for w in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dry fruit", "dryfruit", "dates", "khajoor", "anjeer"]):
+        # 1. Groceries & Staples
+        if any(w in text_lower for w in ["grocery", "groceries", "rice", "dal", "flour", "atta", "wheat", "oil", "cooking oil", "sunflower", "groundnut", "mustard", "ghee", "masala", "spices", "chilli", "mirchi", "turmeric", "salt", "sugar", "jaggery", "bellam", "rava", "suji", "maida", "besan", "pulses", "lentils", "tamarind", "chintapandu"]):
+            category = "groceries"
+        # 2. Dry Fruits & Nuts
+        elif any(w in text_lower for w in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dry fruit", "dryfruit", "dates", "khajoor", "anjeer"]):
             category = "dryfruits"
-        elif any(w in text_lower for w in ["chip", "chips", "biscuit", "biscuits", "snack", "snacks", "namkeen", "mixture", "cookie", "cookies", "tiffin", "upma", "poha", "rava", "dal", "flour", "atta", "rice", "oil", "ghee", "masala", "spices", "chilli", "turmeric"]):
+        # 3. Snacks, Biscuits & Tiffins
+        elif any(w in text_lower for w in ["chip", "chips", "biscuit", "biscuits", "snack", "snacks", "namkeen", "mixture", "cookie", "cookies", "tiffin", "upma", "poha", "murukku", "sev", "bhujia", "chivda"]):
             category = "snacks"
         # 2. Wholesale Disposables, Packaging & Buffet
         elif any(w in text_lower for w in ["leaf", "buffet", "disposable", "disposables", "paper cup", "cup", "cups", "paper glass", "glass", "tiffin box", "meal box", "container", "roll", "rolls", "silver foil", "foil", "cling", "bag", "carry bag", "packaging", "parcel", "biodegradable"]):
