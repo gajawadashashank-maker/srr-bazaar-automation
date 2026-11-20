@@ -1552,13 +1552,27 @@
 
     function checkUrlForProduct() {
       const urlParams = new URLSearchParams(window.location.search);
+      const buyId = urlParams.get('buy');
       const prodId = urlParams.get('product') || (window.location.hash.startsWith('#prod-') ? window.location.hash.replace('#prod-', '') : null);
+
+      if (buyId) {
+        const numericId = parseInt(buyId, 10);
+        setTimeout(() => {
+          quickOrderProduct(numericId);
+          // Clean URL so clicking back on mobile returns to clean store directly without loop
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }, 350);
+        return;
+      }
+
       if (prodId) {
         const numericId = parseInt(prodId, 10);
         const product = products.find(p => p.id === numericId);
         if (product) {
           setTimeout(() => {
             openQuickView(numericId);
+            // Clean URL so clicking back on mobile returns to clean store directly without loop
+            window.history.replaceState({}, document.title, window.location.pathname);
           }, 350);
         }
       }
@@ -1782,11 +1796,37 @@
 
       document.getElementById('quickViewModal').classList.remove('hidden');
       lucide.createIcons();
+      // Push history state so physical/browser Back button closes modal without page exit
+      if (!window.history.state || window.history.state.modal !== 'quickViewModal') {
+        window.history.pushState({ modal: 'quickViewModal' }, '');
+      }
     }
 
-    function closeQuickView() {
+    function closeQuickView(triggerHistory = true) {
       document.getElementById('quickViewModal').classList.add('hidden');
+      if (triggerHistory && window.history.state && window.history.state.modal === 'quickViewModal') {
+        window.history.back();
+      }
     }
+
+    // Handle physical/browser Back button on mobile & desktop
+    window.addEventListener('popstate', (e) => {
+      const qModal = document.getElementById('quickViewModal');
+      if (qModal && !qModal.classList.contains('hidden')) {
+        qModal.classList.add('hidden');
+        return;
+      }
+      const cModal = document.getElementById('checkoutModal');
+      if (cModal && !cModal.classList.contains('hidden')) {
+        cModal.classList.add('hidden');
+        return;
+      }
+      const drawer = document.getElementById('cartDrawer');
+      if (drawer && !drawer.classList.contains('hidden')) {
+        drawer.classList.add('hidden');
+        return;
+      }
+    });
 
     async function shareProductWhatsApp(id) {
       const p = products.find(item => item.id === id);
