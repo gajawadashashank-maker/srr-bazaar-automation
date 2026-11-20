@@ -218,33 +218,17 @@
   </header>
 
   <!-- ========================================================================= -->
-  <!-- QUICK-COMMERCE BAZAAR PROMO STRIP (Blinkit / Instamart Hybrid)             -->
+  <!-- QUICK-COMMERCE BAZAAR PROMO STRIP (Blinkit / Instamart Style)              -->
   <!-- ========================================================================= -->
   <section class="bg-stone-100/80 py-3 sm:py-4 border-b border-stone-200/90">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-4">
         
-        <!-- Promo 1: Wholesale Disposables & Dining -->
-        <div onclick="filterCategory('decor')" class="bg-emerald-50/90 hover:bg-emerald-50 border border-emerald-200/90 p-3 sm:p-3.5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-emerald-400 hover:shadow-sm transition group shadow-2xs">
-          <div class="space-y-0.5">
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800">
-              <i data-lucide="leaf" class="w-3 h-3 text-emerald-700"></i> Wholesale Hub Direct
-            </span>
-            <h3 class="text-xs sm:text-sm font-extrabold text-stone-900 group-hover:text-emerald-800 transition">
-              Biodegradable Leaf Buffet Plates
-            </h3>
-            <p class="text-[11px] text-stone-600">Pack of 20 • <span class="text-emerald-700 font-bold">₹200 only</span> (Free Shipping)</p>
-          </div>
-          <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:bg-emerald-700 group-hover:scale-105 transition shadow-2xs">
-            →
-          </span>
-        </div>
-
-        <!-- Promo 2: Bridal & Daily Jewellery -->
+        <!-- Promo 1: Pure Jadau Kundan & Bridal Sets -->
         <div onclick="filterCategory('necklace')" class="bg-amber-50/90 hover:bg-amber-50 border border-amber-200/90 p-3 sm:p-3.5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-amber-400 hover:shadow-sm transition group shadow-2xs">
           <div class="space-y-0.5">
             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-100 text-amber-900">
-              <i data-lucide="sparkles" class="w-3 h-3 text-amber-600"></i> Sujatha Curated
+              <i data-lucide="sparkles" class="w-3 h-3 text-amber-600"></i> Royal Bridal
             </span>
             <h3 class="text-xs sm:text-sm font-extrabold text-stone-900 group-hover:text-amber-800 transition">
               Pure Jadau Kundan & Chokers
@@ -256,39 +240,55 @@
           </span>
         </div>
 
-        <!-- Promo 3: In-House Express Courier Hub -->
-        <div class="bg-sky-50/90 hover:bg-sky-50 border border-blue-200/90 p-3 sm:p-3.5 rounded-2xl flex items-center justify-between shadow-2xs">
+        <!-- Promo 2: Sarees & Fabrics -->
+        <div onclick="filterCategory('saree')" class="bg-rose-50/90 hover:bg-rose-50 border border-rose-200/90 p-3 sm:p-3.5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-rose-400 hover:shadow-sm transition group shadow-2xs">
           <div class="space-y-0.5">
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-blue-100 text-blue-900">
-              <i data-lucide="truck" class="w-3 h-3 text-blue-600"></i> Professional Courier Hub
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-rose-100 text-rose-900">
+              <i data-lucide="heart" class="w-3 h-3 text-rose-600"></i> Handloom Special
             </span>
-            <h3 class="text-xs sm:text-sm font-extrabold text-stone-900">
-              Pan-India Express Dispatch
+            <h3 class="text-xs sm:text-sm font-extrabold text-stone-900 group-hover:text-rose-800 transition">
+              Pure Khadhi Cotton Sarees
             </h3>
-            <p class="text-[11px] text-stone-600">Fast live tracking • <span class="text-blue-700 font-semibold">COD & Safe Parcel</span></p>
+            <p class="text-[11px] text-stone-600">Traditional Handlooms • <span class="text-rose-700 font-bold">From ₹650 only</span></p>
           </div>
-          <a href="https://wa.me/918185012453" target="_blank" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 hover:bg-emerald-700 hover:scale-105 transition shadow-2xs" title="WhatsApp Order Help">
-            <i data-lucide="message-circle" class="w-4 h-4"></i>
-          </a>
+          <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:bg-rose-700 group-hover:scale-105 transition shadow-2xs">
+            →
+          </span>
+        </div>
+
+        <!-- Promo 3: Festive & Pooja Decor -->
+        <div onclick="filterCategory('decor')" class="bg-emerald-50/90 hover:bg-emerald-50 border border-emerald-200/90 p-3 sm:p-3.5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-emerald-400 hover:shadow-sm transition group shadow-2xs">
+          <div class="space-y-0.5">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800">
+              <i data-lucide="flame" class="w-3 h-3 text-emerald-700"></i> Festive & Pooja
+            </span>
+            <h3 class="text-xs sm:text-sm font-extrabold text-stone-900 group-hover:text-emerald-800 transition">
+              Diya Stands & Swan Trays
+            </h3>
+            <p class="text-[11px] text-stone-600">Kartheeka Masam Special • <span class="text-emerald-700 font-bold">Fast Dispatch</span></p>
+          </div>
+          <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:bg-emerald-700 group-hover:scale-105 transition shadow-2xs">
+            →
+          </span>
         </div>
 
       </div>
 
       <!-- Trust Badges Bar (Blinkit style on light background) -->
       <div class="flex items-center justify-between gap-2 overflow-x-auto pt-2.5 mt-2.5 border-t border-stone-200/90 text-[10px] sm:text-[11px] text-stone-600 whitespace-nowrap scrollbar-none no-scrollbar">
-        <span class="flex items-center gap-1.5 font-medium"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i> Wholesale & Supermarket Direct</span>
+        <span class="flex items-center gap-1.5 font-medium"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i> 100% Handcrafted Artisanal Quality</span>
         <span class="text-stone-300">•</span>
-        <span class="flex items-center gap-1.5 font-medium"><i data-lucide="truck" class="w-3.5 h-3.5 text-blue-600"></i> Managed Courier Dispatch (3-5 Days)</span>
+        <span class="flex items-center gap-1.5 font-medium"><i data-lucide="truck" class="w-3.5 h-3.5 text-blue-600"></i> Pan-India Free Express Shipping (3-5 Days)</span>
         <span class="text-stone-300">•</span>
         <span class="flex items-center gap-1.5 font-medium"><i data-lucide="banknote" class="w-3.5 h-3.5 text-amber-600"></i> Cash on Delivery Available</span>
         <span class="text-stone-300">•</span>
-        <span class="flex items-center gap-1.5 font-medium"><i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-600"></i> Direct WhatsApp Seller Support</span>
+        <span class="flex items-center gap-1.5 font-medium"><i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-600"></i> Direct WhatsApp Seller Support (+91 8185012453)</span>
       </div>
     </div>
   </section>
 
   <!-- ========================================================================= -->
-  <!-- VISUAL "SHOP BY CATEGORY" STORY CIRCLES (Blinkit / Instamart style)        -->
+  <!-- VISUAL "SHOP BY CATEGORY" STORY CIRCLES (Blinkit / Instamart style)        --> STORY CIRCLES (Blinkit / Instamart style)        -->
   <!-- ========================================================================= -->
   <section id="catalogue" class="py-4 sm:py-5 bg-white border-b border-stone-200/90 shadow-2xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -303,7 +303,7 @@
         </div>
         <div class="flex items-center gap-3">
           <span class="text-[11px] text-amber-800 hover:text-amber-950 font-bold cursor-pointer" onclick="filterCategory('all')">
-            All Bazaar (<span id="totalProductCount">47</span>) →
+            All Bazaar (<span id="totalProductCount">46</span>) →
           </span>
           <!-- Sort Dropdown -->
           <select id="sortSelect" onchange="handleSort(this.value)"
@@ -316,7 +316,7 @@
         </div>
       </div>
 
-      <!-- Category Circles Row (Centered & Balanced like Blinkit) -->
+            <!-- Category Circles Row (Centered & Balanced like Blinkit) -->
       <div class="flex items-center gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-2 scrollbar-none no-scrollbar" id="categoryTabs">
         
         <!-- All -->
@@ -331,23 +331,13 @@
           <span class="circle-label text-[11px] sm:text-xs font-bold text-amber-950 whitespace-nowrap">All Bazaar</span>
         </button>
 
-        <!-- Wholesale Disposables & Leaf Plates -->
-        <button onclick="filterCategory('decor', this)" data-category="decor"
-          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
-          <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-emerald-500 relative">
-            <img src="images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg" alt="Disposables & Leaf Plates" class="w-full h-full object-cover">
-            <span class="absolute bottom-0 inset-x-0 bg-emerald-700/95 text-white text-[8px] font-bold text-center py-0.5">Wholesale</span>
-          </div>
-          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Disposables & Leaf</span>
-        </button>
-
         <!-- Necklaces & Chokers -->
         <button onclick="filterCategory('necklace', this)" data-category="necklace"
           class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
           <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-amber-500">
             <img src="images/jadau_kundan_necklace.jpg" alt="Necklaces & Chokers" class="w-full h-full object-cover">
           </div>
-          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Necklaces (27)</span>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Necklaces (23)</span>
         </button>
 
         <!-- Black Beads & Chains -->
@@ -365,7 +355,16 @@
           <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-amber-500">
             <img src="images/cz_bridal_earrings.jpg" alt="Earrings & Bangles" class="w-full h-full object-cover">
           </div>
-          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Earrings (3)</span>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Earrings (4)</span>
+        </button>
+
+        <!-- Festive Decor & Pooja Sets -->
+        <button onclick="filterCategory('decor', this)" data-category="decor"
+          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
+          <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-emerald-500">
+            <img src="images/swan_tray.jpg" alt="Festive Decor & Pooja Sets" class="w-full h-full object-cover">
+          </div>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Pooja & Decor (12)</span>
         </button>
 
         <!-- Sarees & Fabrics -->
@@ -374,7 +373,7 @@
           <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-rose-500">
             <img src="images/catalog/b0e4371730ae.jpg" alt="Sarees & Fabrics" class="w-full h-full object-cover">
           </div>
-          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Sarees (2)</span>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Sarees (3)</span>
         </button>
 
       </div>
@@ -1474,19 +1473,6 @@
     "reviewsCount": 1
   },
   {
-    "id": 928103031,
-    "title": "Biodegradable Leaf Buffet Plates (Pack of 20)",
-    "category": "decor",
-    "price": 200,
-    "originalPrice": 300,
-    "tag": "New Arrival",
-    "image": "images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg",
-    "description": "100% natural and eco-friendly biodegradable leaf buffet plates (Pack of 20). Chemical-free, sturdy, and hygienic disposable dining plates perfect for pooja, weddings, catering, and festive gatherings. Free express shipping across India.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
     "id": 338044272,
     "title": "Edu Kondala Nomu (Sankranti Special)",
     "category": "decor",
@@ -1853,7 +1839,7 @@
   {
     "id": 749296149,
     "title": "Sanku chara diyas",
-    "category": "necklace",
+    "category": "decor",
     "price": 3200,
     "originalPrice": 4800,
     "tag": "New Arrival",
@@ -1866,7 +1852,7 @@
   {
     "id": 64841853,
     "title": "Pure Cz Stone Ear rings with Screw Backs",
-    "category": "necklace",
+    "category": "earrings",
     "price": 499,
     "originalPrice": 748,
     "tag": "New Arrival",
@@ -1931,7 +1917,7 @@
   {
     "id": 115033516,
     "title": "Sanku chara diyas",
-    "category": "necklace",
+    "category": "decor",
     "price": 3200,
     "originalPrice": 4800,
     "tag": "New Arrival",
@@ -1957,7 +1943,7 @@
   {
     "id": 987154951,
     "title": "Pure Khadhi Cotton",
-    "category": "necklace",
+    "category": "saree",
     "price": 650,
     "originalPrice": 975,
     "tag": "New Arrival",
@@ -2072,10 +2058,7 @@
     "reviewsCount": 178
   }
 ];
-
-    // State Variables
-    const _cachedProducts = JSON.parse(localStorage.getItem('srr_products'));
-    let products = (_cachedProducts && Array.isArray(_cachedProducts) && _cachedProducts.length >= DEFAULT_PRODUCTS.length) ? _cachedProducts : DEFAULT_PRODUCTS;
+    let products = [...DEFAULT_PRODUCTS];
     let cart = JSON.parse(localStorage.getItem('srr_cart')) || [];
     let orders = JSON.parse(localStorage.getItem('srr_orders')) || [];
     let activeCategory = 'all';
@@ -2275,9 +2258,9 @@
           subHeadingEl.textContent = `Found ${filtered.length} products matching your query`;
         } else if (activeCategory !== 'all') {
           const catMeta = {
-            'decor': { title: '🌿 Wholesale Disposables & Dining', sub: "Eco-friendly leaf plates, buffet rolls, paper cups & packaging supplies" },
             'necklace': { title: '👑 Royal Kundan & Choker Collections', sub: 'Handcrafted wedding harams, antique gold polish & statement neckwear' },
             'mangalsutra': { title: '🖤 Daily Wear Black Beads & Malas', sub: 'Lightweight micro-polish tulip malas and daily wear chains' },
+            'decor': { title: '🪔 Festive Decor & Pooja Essentials', sub: 'Handcrafted brass diya stands, lotus pooja plates, swan trays & festive sets' },
             'earrings': { title: '✨ Statement Earrings, Jhumkas & Bangles', sub: 'Bridal CZ solitaires, semi-jadau tops & festive earrings' },
             'saree': { title: '🥻 Sarees & Handloom Heritage', sub: 'Pure Khadi cotton, traditional weave sarees with blouse pieces' }
           };
@@ -2286,7 +2269,7 @@
           subHeadingEl.textContent = meta.sub;
         } else {
           headingEl.textContent = "Curated Bazaar Aisles";
-          subHeadingEl.textContent = "Browse wholesale disposable supplies, luxury jewellery & daily essentials";
+          subHeadingEl.textContent = "Explore handcrafted bridal jewellery, authentic sarees & festive pooja decor";
         }
       }
 
@@ -2302,13 +2285,6 @@
       if (activeCategory === 'all' && !searchQuery && currentSort === 'featured') {
         const shelves = [
           {
-            title: "🌿 Wholesale Disposables & Dining",
-            subtitle: "Eco-friendly leaf plates, buffet dining, parcel boxes & paper cups",
-            catKey: "decor",
-            count: filtered.filter(p => p.category === 'decor').length,
-            items: filtered.filter(p => p.category === 'decor').slice(0, 4)
-          },
-          {
             title: "👑 Pure Jadau Kundan & Bridal Sets",
             subtitle: "Handcrafted chokers, antique gold finish & royal wedding collections",
             catKey: "necklace",
@@ -2323,15 +2299,22 @@
             items: filtered.filter(p => p.category === 'mangalsutra').slice(0, 4)
           },
           {
-            title: "✨ Statement Earrings, Jhumkas & Studs",
-            subtitle: "Bridal CZ solitaires, semi-jadau tops & festive earrings",
+            title: "🪔 Festive Decor, Trays & Pooja Sets",
+            subtitle: "Handcrafted brass diya stands, lotus pooja plates & swan organizer trays",
+            catKey: "decor",
+            count: filtered.filter(p => p.category === 'decor').length,
+            items: filtered.filter(p => p.category === 'decor').slice(0, 4)
+          },
+          {
+            title: "✨ Statement Earrings & Bangles",
+            subtitle: "Sparkling American Diamond / CZ studs, classic jhumkas & traditional bangles",
             catKey: "earrings",
             count: filtered.filter(p => p.category === 'earrings').length,
             items: filtered.filter(p => p.category === 'earrings').slice(0, 4)
           },
           {
             title: "🥻 Sarees & Handloom Heritage",
-            subtitle: "Pure Khadi cotton, traditional weave sarees with blouse pieces",
+            subtitle: "Pure Khadi cotton & festive handlooms directly from weavers",
             catKey: "saree",
             count: filtered.filter(p => p.category === 'saree').length,
             items: filtered.filter(p => p.category === 'saree').slice(0, 4)
