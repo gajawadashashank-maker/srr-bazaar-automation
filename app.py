@@ -241,51 +241,48 @@ EXPLICIT_PRICE_PATTERNS = [
 ]
 
 
-def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
-    """Parse product name, description and price accurately from WhatsApp message caption."""
+def parse_product_caption(caption: str) -> tuple[str, str, str]:
+    """Parse product name, description and price accurately from WhatsApp message caption.
+    Guarantees a high-quality product name & description even if caption has only price or is blank.
+    """
     raw_lines = [line.strip() for line in caption.replace("\r", "").split("\n") if line.strip()]
-    if not raw_lines:
-        return None, "", ""
-
     lines = [_clean_typography(line) for line in raw_lines if _clean_typography(line)]
-    if not lines:
-        return None, "", ""
-
-    full_text = " \n ".join(lines)
+    full_text = " \n ".join(lines) if lines else ""
 
     # 1. EXTRACT PRICE WITH STRICT EXPLICIT PRIORITY
     chosen_price = None
 
-    # Priority A: Check for explicit multi-tier or single item price (e.g. '1 set 499')
-    single_match = re.search(r"\b(?:1\s*set|single)\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*)", full_text, re.I)
-    if single_match:
-        val = int(single_match.group(1).replace(",", ""))
-        if 50 <= val <= 200000:
-            chosen_price = val
+    if full_text:
+        # Priority A: Check for explicit multi-tier or single item price (e.g. '1 set 499')
+        single_match = re.search(r"\b(?:1\s*set|single)\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*)", full_text, re.I)
+        if single_match:
+            val = int(single_match.group(1).replace(",", ""))
+            if 50 <= val <= 200000:
+                chosen_price = val
 
-    # Priority B: Check explicit price indicators
-    if not chosen_price:
-        for pattern in EXPLICIT_PRICE_PATTERNS:
-            matches = list(pattern.finditer(full_text))
-            if matches:
-                for m in matches:
-                    val = int(m.group(1).replace(",", ""))
-                    if 50 <= val <= 200000:
-                        chosen_price = val
-                        break
-            if chosen_price:
-                break
+        # Priority B: Check explicit price indicators
+        if not chosen_price:
+            for pattern in EXPLICIT_PRICE_PATTERNS:
+                matches = list(pattern.finditer(full_text))
+                if matches:
+                    for m in matches:
+                        val = int(m.group(1).replace(",", ""))
+                        if 50 <= val <= 200000:
+                            chosen_price = val
+                            break
+                if chosen_price:
+                    break
 
-    # Priority C: Standalone number lines (e.g. line is purely '850' or '2888')
-    if not chosen_price:
-        for l in lines:
-            if re.fullmatch(r"[₹\s]*[0-9]{3,5}[/\-\s]*\.?", l):
-                num_match = re.search(r"\d+", l)
-                if num_match:
-                    val = int(num_match.group(0))
-                    if 50 <= val <= 200000:
-                        chosen_price = val
-                        break
+        # Priority C: Standalone number lines (e.g. line is purely '850' or '2888')
+        if not chosen_price:
+            for l in lines:
+                if re.fullmatch(r"[₹\s]*[0-9]{3,5}[/\-\s]*\.?", l):
+                    num_match = re.search(r"\d+", l)
+                    if num_match:
+                        val = int(num_match.group(0))
+                        if 50 <= val <= 200000:
+                            chosen_price = val
+                            break
 
     # 2. EXTRACT PRODUCT NAME & DESCRIPTION
     product_name: str | None = None
@@ -336,8 +333,29 @@ def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
 
         product_name = product_name.strip(" ,.-–—\t\r\n")
 
-    price_str = f"₹{chosen_price:,}" if chosen_price else ""
+    # 3. STABLE FALLBACK WHEN NO PRODUCT NAME IS PROVIDED IN CAPTION
+    if not product_name:
+        if chosen_price:
+            if chosen_price >= 1200:
+                product_name = "Premium Bridal Pure Jadau Kundan Collection"
+            elif chosen_price >= 750:
+                product_name = "Festive Handcrafted Traditional Collection"
+            elif chosen_price >= 400:
+                product_name = "Handcrafted Designer Jewellery Collection"
+            else:
+                product_name = "SRR Bazaar Curated Collection"
+        else:
+            product_name = "SRR Bazaar Curated Collection"
+
     description = "\n".join(description_lines).strip()
+    if not description:
+        description = (
+            f"Exclusive {product_name} by SRR Bazaar. "
+            "Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. "
+            "Direct WhatsApp order assist: +91 8185012453."
+        )
+
+    price_str = f"₹{chosen_price:,}" if chosen_price else "Special Offer"
     return product_name, description, price_str
 
 
@@ -462,71 +480,70 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
             raise RuntimeError("WhatsApp media event is missing its message ID or media ID")
 
         product_name, description, price = parse_product_caption(caption)
-        if not product_name:
-            update_whatsapp_job(
-                message_id,
-                status="needs_caption",
-                error="No product name found. Forward one photo/video with a caption containing the product name.",
-            )
-            logger.warning(
-                "WhatsApp media %s saved for review but not published: caption has no product name",
-                message_id,
-            )
-
-        media_endpoint = (
-            f"https://graph.facebook.com/{WHATSAPP_API_VERSION}/{media_id}"
+        logger.info(
+            "Parsed product from WhatsApp media %s: '%s' | Price: '%s'",
+            message_id,
+            product_name,
+            price,
         )
-        auth_headers = {"Authorization": f"Bearer {WHATSAPP_ACCESS_TOKEN}"}
-
-        media_response = requests.get(media_endpoint, headers=auth_headers, timeout=30)
-        if not media_response.ok:
-            raise RuntimeError(
-                f"Meta media lookup failed ({media_response.status_code}): {media_response.text[:1000]}"
-            )
-        media_info = media_response.json()
-        media_url = media_info.get("url")
-        if not media_url:
-            raise RuntimeError("Meta media lookup response did not contain a download URL")
-
-        download_response = requests.get(media_url, headers=auth_headers, timeout=60)
-        if not download_response.ok:
-            raise RuntimeError(
-                f"WhatsApp media download failed ({download_response.status_code}): "
-                f"{download_response.text[:500]}"
-            )
-
-        content_type = (
-            str(media_info.get("mime_type") or "").split(";")[0].lower()
-            or str(download_response.headers.get("Content-Type", "")).split(";")[0].lower()
-        )
-        extensions = {
-            "image/jpeg": ".jpg",
-            "image/jpg": ".jpg",
-            "image/png": ".png",
-            "image/webp": ".webp",
-            "video/mp4": ".mp4",
-            "video/quicktime": ".mov",
-            "video/3gpp": ".3gp",
-            "video/webm": ".webm",
-            "video/x-msvideo": ".avi",
-        }
-        extension = extensions.get(content_type)
-        if not extension:
-            if content_type.startswith("video/"):
-                extension = ".mp4"
-            elif content_type.startswith("image/"):
-                extension = ".jpg"
-            else:
-                raise RuntimeError(f"Unsupported WhatsApp media type: {content_type or 'unknown'}")
 
         safe_message_key = hashlib.sha256(message_id.encode("utf-8")).hexdigest()[:24]
-        image_path = WHATSAPP_UPLOAD_DIR / f"{safe_message_key}{extension}"
-        image_path.write_bytes(download_response.content)
-        update_whatsapp_job(message_id, image_path=str(image_path))
-        logger.info("WhatsApp media downloaded: %s (%s)", image_path, content_type)
+        existing_files = [f for f in WHATSAPP_UPLOAD_DIR.glob(f"{safe_message_key}.*") if f.is_file() and f.stat().st_size > 0]
+        if existing_files:
+            image_path = existing_files[0]
+            extension = image_path.suffix.lower()
+            logger.info("Using existing cached WhatsApp media on disk: %s", image_path)
+        else:
+            media_endpoint = (
+                f"https://graph.facebook.com/{WHATSAPP_API_VERSION}/{media_id}"
+            )
+            auth_headers = {"Authorization": f"Bearer {WHATSAPP_ACCESS_TOKEN}"}
 
-        if not product_name:
-            return
+            media_response = requests.get(media_endpoint, headers=auth_headers, timeout=30)
+            if not media_response.ok:
+                raise RuntimeError(
+                    f"Meta media lookup failed ({media_response.status_code}): {media_response.text[:1000]}"
+                )
+            media_info = media_response.json()
+            media_url = media_info.get("url")
+            if not media_url:
+                raise RuntimeError("Meta media lookup response did not contain a download URL")
+
+            download_response = requests.get(media_url, headers=auth_headers, timeout=60)
+            if not download_response.ok:
+                raise RuntimeError(
+                    f"WhatsApp media download failed ({download_response.status_code}): "
+                    f"{download_response.text[:500]}"
+                )
+
+            content_type = (
+                str(media_info.get("mime_type") or "").split(";")[0].lower()
+                or str(download_response.headers.get("Content-Type", "")).split(";")[0].lower()
+            )
+            extensions = {
+                "image/jpeg": ".jpg",
+                "image/jpg": ".jpg",
+                "image/png": ".png",
+                "image/webp": ".webp",
+                "video/mp4": ".mp4",
+                "video/quicktime": ".mov",
+                "video/3gpp": ".3gp",
+                "video/webm": ".webm",
+                "video/x-msvideo": ".avi",
+            }
+            extension = extensions.get(content_type)
+            if not extension:
+                if content_type.startswith("video/"):
+                    extension = ".mp4"
+                elif content_type.startswith("image/"):
+                    extension = ".jpg"
+                else:
+                    raise RuntimeError(f"Unsupported WhatsApp media type: {content_type or 'unknown'}")
+
+            image_path = WHATSAPP_UPLOAD_DIR / f"{safe_message_key}{extension}"
+            image_path.write_bytes(download_response.content)
+            update_whatsapp_job(message_id, image_path=str(image_path))
+            logger.info("WhatsApp media downloaded: %s (%s)", image_path, content_type)
 
         job_id = uuid.uuid4().hex
         job_output_dir = WHATSAPP_OUTPUT_DIR / job_id

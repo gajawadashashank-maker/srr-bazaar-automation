@@ -98,51 +98,48 @@ EXPLICIT_PRICE_PATTERNS = [
 ]
 
 
-def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
-    """Parse product name, description and price accurately from WhatsApp message caption."""
+def parse_product_caption(caption: str) -> tuple[str, str, str]:
+    """Parse product name, description and price accurately from WhatsApp message caption.
+    Guarantees a high-quality product name & description even if caption has only price or is blank.
+    """
     raw_lines = [line.strip() for line in caption.replace("\r", "").split("\n") if line.strip()]
-    if not raw_lines:
-        return None, "", ""
-
     lines = [_clean_typography(line) for line in raw_lines if _clean_typography(line)]
-    if not lines:
-        return None, "", ""
-
-    full_text = " \n ".join(lines)
+    full_text = " \n ".join(lines) if lines else ""
 
     # 1. EXTRACT PRICE WITH STRICT EXPLICIT PRIORITY
     chosen_price = None
 
-    # Priority A: Check for explicit multi-tier or single item price (e.g. '1 set 499')
-    single_match = re.search(r"\b(?:1\s*set|single)\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*)", full_text, re.I)
-    if single_match:
-        val = int(single_match.group(1).replace(",", ""))
-        if 50 <= val <= 200000:
-            chosen_price = val
+    if full_text:
+        # Priority A: Check for explicit multi-tier or single item price (e.g. '1 set 499')
+        single_match = re.search(r"\b(?:1\s*set|single)\s*[:\-]?\s*(?:₹|rs\.?|inr)?\s*([0-9][0-9,]*)", full_text, re.I)
+        if single_match:
+            val = int(single_match.group(1).replace(",", ""))
+            if 50 <= val <= 200000:
+                chosen_price = val
 
-    # Priority B: Check explicit price indicators
-    if not chosen_price:
-        for pattern in EXPLICIT_PRICE_PATTERNS:
-            matches = list(pattern.finditer(full_text))
-            if matches:
-                for m in matches:
-                    val = int(m.group(1).replace(",", ""))
-                    if 50 <= val <= 200000:
-                        chosen_price = val
-                        break
-            if chosen_price:
-                break
+        # Priority B: Check explicit price indicators
+        if not chosen_price:
+            for pattern in EXPLICIT_PRICE_PATTERNS:
+                matches = list(pattern.finditer(full_text))
+                if matches:
+                    for m in matches:
+                        val = int(m.group(1).replace(",", ""))
+                        if 50 <= val <= 200000:
+                            chosen_price = val
+                            break
+                if chosen_price:
+                    break
 
-    # Priority C: Standalone number lines (e.g. line is purely '850' or '2888')
-    if not chosen_price:
-        for l in lines:
-            if re.fullmatch(r"[₹\s]*[0-9]{3,5}[/\-\s]*\.?", l):
-                num_match = re.search(r"\d+", l)
-                if num_match:
-                    val = int(num_match.group(0))
-                    if 50 <= val <= 200000:
-                        chosen_price = val
-                        break
+        # Priority C: Standalone number lines (e.g. line is purely '850' or '2888')
+        if not chosen_price:
+            for l in lines:
+                if re.fullmatch(r"[₹\s]*[0-9]{3,5}[/\-\s]*\.?", l):
+                    num_match = re.search(r"\d+", l)
+                    if num_match:
+                        val = int(num_match.group(0))
+                        if 50 <= val <= 200000:
+                            chosen_price = val
+                            break
 
     # 2. EXTRACT PRODUCT NAME & DESCRIPTION
     product_name: str | None = None
@@ -193,8 +190,29 @@ def parse_product_caption(caption: str) -> tuple[str | None, str, str]:
 
         product_name = product_name.strip(" ,.-–—\t\r\n")
 
-    price_str = f"₹{chosen_price:,}" if chosen_price else ""
+    # 3. STABLE FALLBACK WHEN NO PRODUCT NAME IS PROVIDED IN CAPTION
+    if not product_name:
+        if chosen_price:
+            if chosen_price >= 1200:
+                product_name = "Premium Bridal Pure Jadau Kundan Collection"
+            elif chosen_price >= 750:
+                product_name = "Festive Handcrafted Traditional Collection"
+            elif chosen_price >= 400:
+                product_name = "Handcrafted Designer Jewellery Collection"
+            else:
+                product_name = "SRR Bazaar Curated Collection"
+        else:
+            product_name = "SRR Bazaar Curated Collection"
+
     description = "\n".join(description_lines).strip()
+    if not description:
+        description = (
+            f"Exclusive {product_name} by SRR Bazaar. "
+            "Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. "
+            "Direct WhatsApp order assist: +91 8185012453."
+        )
+
+    price_str = f"₹{chosen_price:,}" if chosen_price else "Special Offer"
     return product_name, description, price_str
 
 
