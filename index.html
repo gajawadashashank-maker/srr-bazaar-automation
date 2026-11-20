@@ -93,6 +93,26 @@
       background-color: #d49b18;
       border-radius: 4px;
     }
+
+    /* Category Filter Buttons - High Contrast & Instant Clarity */
+    .category-btn {
+      background-color: #f5f5f4 !important;
+      color: #292524 !important;
+      border: 1px solid #d6d3d1 !important;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .category-btn:hover {
+      background-color: #e7e5e4 !important;
+      color: #1c1917 !important;
+    }
+    .category-btn.active {
+      background-color: #380612 !important;
+      color: #ffffff !important;
+      border-color: #380612 !important;
+      box-shadow: 0 2px 8px rgba(56, 6, 18, 0.35) !important;
+    }
   </style>
 </head>
 
@@ -276,28 +296,28 @@
         <div
           class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 custom-scrollbar text-xs sm:text-sm font-semibold"
           id="categoryTabs">
-          <button onclick="filterCategory('all', this)"
-            class="category-btn active px-4 py-2 rounded-full bg-maroon-900 text-amber-300 shadow-xs whitespace-nowrap">
+          <button onclick="filterCategory('all', this)" data-category="all"
+            class="category-btn active px-4 py-2 rounded-full whitespace-nowrap">
             All Products (<span id="totalProductCount">8</span>)
           </button>
-          <button onclick="filterCategory('necklace', this)"
-            class="category-btn px-4 py-2 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition whitespace-nowrap">
+          <button onclick="filterCategory('necklace', this)" data-category="necklace"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
             Necklace & Chokers
           </button>
-          <button onclick="filterCategory('mangalsutra', this)"
-            class="category-btn px-4 py-2 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition whitespace-nowrap">
+          <button onclick="filterCategory('mangalsutra', this)" data-category="mangalsutra"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
             Black Beads & Chains
           </button>
-          <button onclick="filterCategory('earrings', this)"
-            class="category-btn px-4 py-2 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition whitespace-nowrap">
+          <button onclick="filterCategory('earrings', this)" data-category="earrings"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
             Earrings & Bangles
           </button>
-          <button onclick="filterCategory('decor', this)"
-            class="category-btn px-4 py-2 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition whitespace-nowrap">
+          <button onclick="filterCategory('decor', this)" data-category="decor"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
             Trays & Home Decor
           </button>
-          <button onclick="filterCategory('saree', this)"
-            class="category-btn px-4 py-2 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition whitespace-nowrap">
+          <button onclick="filterCategory('saree', this)" data-category="saree"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
             Sarees & Fabrics
           </button>
         </div>
@@ -1603,12 +1623,11 @@
     function filterCategory(category, btnElement) {
       activeCategory = category;
       document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.classList.remove('bg-maroon-900', 'text-amber-300');
-        btn.classList.add('bg-stone-100', 'text-stone-700');
+        btn.classList.remove('active');
       });
-      if (btnElement) {
-        btnElement.classList.remove('bg-stone-100', 'text-stone-700');
-        btnElement.classList.add('bg-maroon-900', 'text-amber-300');
+      const targetBtn = btnElement || document.querySelector(`.category-btn[data-category="${category}"]`);
+      if (targetBtn) {
+        targetBtn.classList.add('active');
       }
       renderProducts();
     }
@@ -1642,8 +1661,11 @@
     function resetFilters() {
       activeCategory = 'all';
       searchQuery = '';
-      document.getElementById('searchInput').value = '';
-      filterCategory('all', document.querySelector('.category-btn'));
+      const dInput = document.getElementById('searchInput');
+      if (dInput) dInput.value = '';
+      const mInput = document.getElementById('mobileSearchInput');
+      if (mInput) mInput.value = '';
+      filterCategory('all');
     }
 
     // =========================================================================
