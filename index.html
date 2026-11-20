@@ -208,162 +208,136 @@
     </div>
   </header>
 
-  <!-- ========================================================================= -->
-  <!-- QUICK-COMMERCE BAZAAR PROMO STRIP (Blinkit / Instamart Hybrid)             -->
-  <!-- ========================================================================= -->
-  <section class="bg-gradient-to-r from-stone-900 via-maroon-950 to-stone-900 text-white py-3 sm:py-4 border-b border-amber-600/30">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-4">
-        
-        <!-- Promo 1: Wholesale Disposables & Dining -->
-        <div onclick="filterCategory('decor')" class="bg-gradient-to-r from-emerald-950/80 to-stone-900 p-3 rounded-2xl border border-emerald-500/30 flex items-center justify-between cursor-pointer hover:border-emerald-400 transition group shadow-xs">
-          <div class="space-y-0.5">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
-              <i data-lucide="leaf" class="w-3 h-3"></i> Wholesale Hub Direct
-            </span>
-            <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-300 transition">
-              Biodegradable Leaf Buffet Plates
-            </h3>
-            <p class="text-[11px] text-stone-300">Pack of 20 • ₹200 only <span class="text-emerald-400 font-semibold">(Free Shipping)</span></p>
+  <!-- Hero Section -->
+  <section
+    class="relative bg-gradient-to-b from-maroon-950 via-stone-900 to-maroon-900 text-white overflow-hidden py-8 sm:py-12 md:py-16">
+    <div
+      class="absolute inset-0 opacity-10 bg-[radial-gradient(#fbd46c_1px,transparent_1px)] [background-size:16px_16px]">
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+        <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold tracking-wide uppercase">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Instagram Viral Collection
           </div>
-          <span class="w-8 h-8 rounded-full bg-emerald-600/30 text-emerald-300 flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition">
-            →
-          </span>
+          <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+            Curated Elegance by <span class="gold-text">SRR Bazaar</span>
+          </h1>
+          <p class="text-stone-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            Your one-stop destination for authentic sarees, fabrics, pure Jadau Kundan, festive choker sets, daily wear
+            black beads, and designer home collections. Free Shipping Pan-India & Cash on Delivery!
+          </p>
+
+          <!-- Highlights & Quick Trust Pills -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+            <a href="https://www.instagram.com/sujatha60861/" target="_blank"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-sm shadow-lg hover:from-pink-500 hover:to-purple-500 transition transform hover:-translate-y-0.5">
+              <i data-lucide="instagram" class="w-4 h-4"></i> Follow @sujatha60861
+            </a>
+            <a href="#catalogue"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full gold-gradient text-stone-900 font-bold text-sm shadow-lg hover:opacity-95 transition transform hover:-translate-y-0.5">
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i> Browse Catalogue
+            </a>
+          </div>
+
+          <!-- Guarantees Grid -->
+          <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-4 border-t border-white/10 text-xs sm:text-sm text-stone-300">
+            <div class="flex items-center gap-2 justify-center lg:justify-start">
+              <i data-lucide="truck" class="w-4 h-4 text-amber-400"></i>
+              <span>Free Shipping</span>
+            </div>
+            <div class="flex items-center gap-2 justify-center lg:justify-start">
+              <i data-lucide="qr-code" class="w-4 h-4 text-amber-400"></i>
+              <span>UPI & Card Pay</span>
+            </div>
+            <div class="flex items-center gap-2 justify-center lg:justify-start">
+              <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+              <span>Same-Day Dispatch</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Promo 2: Bridal & Daily Jewellery -->
-        <div onclick="filterCategory('necklace')" class="bg-gradient-to-r from-amber-950/80 to-stone-900 p-3 rounded-2xl border border-amber-500/30 flex items-center justify-between cursor-pointer hover:border-amber-400 transition group shadow-xs">
-          <div class="space-y-0.5">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-1">
-              <i data-lucide="sparkles" class="w-3 h-3"></i> Sujatha Curated
-            </span>
-            <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-amber-300 transition">
-              Pure Jadau Kundan & Chokers
-            </h3>
-            <p class="text-[11px] text-stone-300">With Matching Earrings • <span class="text-amber-300 font-bold">Up to 50% OFF</span></p>
+        <!-- Hero Featured Banner Card -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl border border-amber-400/30 group">
+            <img src="images/jadau_kundan_necklace.jpg" alt="Featured Jadau Kundan"
+              class="w-full h-80 object-cover group-hover:scale-105 transition duration-500">
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-5">
+              <span
+                class="inline-block px-2.5 py-0.5 rounded bg-amber-500 text-stone-900 text-xs font-bold uppercase w-max mb-1">
+                Bestseller
+              </span>
+              <h3 class="font-serif text-lg font-bold text-white">Premium Pure Jadau Kundan</h3>
+              <p class="text-xs text-stone-300 mb-2">Heavy bridal quality with matching earrings</p>
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xl font-bold text-amber-300">₹999</span>
+                  <span class="text-xs text-stone-400 line-through ml-1.5">₹1,899</span>
+                  <span class="text-xs font-semibold text-emerald-400 ml-1">Free Shipping</span>
+                </div>
+                <button onclick="quickOrderProduct(1)"
+                  class="px-4 py-1.5 rounded-full gold-gradient text-stone-900 font-bold text-xs hover:opacity-90 shadow">
+                  Buy Now
+                </button>
+              </div>
+            </div>
           </div>
-          <span class="w-8 h-8 rounded-full bg-amber-600/30 text-amber-300 flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:bg-amber-600 group-hover:text-white transition">
-            →
-          </span>
         </div>
 
-        <!-- Promo 3: In-House Express Courier Hub -->
-        <div class="bg-gradient-to-r from-blue-950/80 to-stone-900 p-3 rounded-2xl border border-blue-500/30 flex items-center justify-between shadow-xs">
-          <div class="space-y-0.5">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-blue-400 flex items-center gap-1">
-              <i data-lucide="truck" class="w-3 h-3"></i> Professional Courier Hub
-            </span>
-            <h3 class="text-xs sm:text-sm font-bold text-white">
-              Pan-India Express Dispatch
-            </h3>
-            <p class="text-[11px] text-stone-300">Fast live tracking • COD & Zero extra packing charge</p>
-          </div>
-          <a href="https://wa.me/918185012453" target="_blank" class="w-8 h-8 rounded-full bg-emerald-600/40 text-emerald-300 flex items-center justify-center text-xs font-bold flex-shrink-0 hover:bg-emerald-600 hover:text-white transition" title="WhatsApp Order Help">
-            <i data-lucide="message-circle" class="w-4 h-4"></i>
-          </a>
-        </div>
-
-      </div>
-
-      <!-- Trust Badges Bar (Blinkit style) -->
-      <div class="flex items-center justify-between gap-2 overflow-x-auto pt-3 text-[10px] sm:text-[11px] text-stone-300 whitespace-nowrap scrollbar-none no-scrollbar">
-        <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Wholesale & Supermarket Direct</span>
-        <span class="text-stone-600">•</span>
-        <span class="flex items-center gap-1.5"><i data-lucide="truck" class="w-3.5 h-3.5 text-blue-400"></i> Managed Courier Dispatch (3-5 Days)</span>
-        <span class="text-stone-600">•</span>
-        <span class="flex items-center gap-1.5"><i data-lucide="banknote" class="w-3.5 h-3.5 text-amber-400"></i> Cash on Delivery Available</span>
-        <span class="text-stone-600">•</span>
-        <span class="flex items-center gap-1.5"><i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-400"></i> Direct WhatsApp Seller Support</span>
       </div>
     </div>
   </section>
 
-  <!-- ========================================================================= -->
-  <!-- VISUAL "SHOP BY CATEGORY" STORY CIRCLES (Blinkit / Instamart style)        -->
-  <!-- ========================================================================= -->
-  <section id="catalogue" class="py-3 sm:py-4 bg-white border-b border-stone-200 shadow-2xs">
+  <!-- Filter & Category Section -->
+  <section id="catalogue" class="py-4 sm:py-6 bg-white border-b border-stone-200 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="flex items-center justify-between mb-2.5">
-        <h2 class="text-xs sm:text-sm font-bold text-stone-900 tracking-tight uppercase flex items-center gap-1.5">
-          <i data-lucide="layout-grid" class="w-4 h-4 text-amber-700"></i>
-          <span>Shop by Category</span>
-        </h2>
-        <div class="flex items-center gap-3">
-          <span class="text-[11px] text-amber-800 hover:text-amber-950 font-bold cursor-pointer" onclick="filterCategory('all')">
-            All Bazaar (<span id="totalProductCount">46</span>) →
-          </span>
-          <!-- Sort Dropdown -->
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Categories Pills -->
+        <div
+          class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 custom-scrollbar text-xs sm:text-sm font-semibold"
+          id="categoryTabs">
+          <button onclick="filterCategory('all', this)" data-category="all"
+            class="category-btn active px-4 py-2 rounded-full whitespace-nowrap">
+            All Products (<span id="totalProductCount">8</span>)
+          </button>
+          <button onclick="filterCategory('necklace', this)" data-category="necklace"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
+            Necklace & Chokers
+          </button>
+          <button onclick="filterCategory('mangalsutra', this)" data-category="mangalsutra"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
+            Black Beads & Chains
+          </button>
+          <button onclick="filterCategory('earrings', this)" data-category="earrings"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
+            Earrings & Bangles
+          </button>
+          <button onclick="filterCategory('decor', this)" data-category="decor"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
+            Trays & Home Decor
+          </button>
+          <button onclick="filterCategory('saree', this)" data-category="saree"
+            class="category-btn px-4 py-2 rounded-full whitespace-nowrap">
+            Sarees & Fabrics
+          </button>
+        </div>
+
+        <!-- Sort Select -->
+        <div class="flex items-center gap-2 self-end sm:self-auto text-xs sm:text-sm text-stone-600">
+          <label for="sortSelect" class="whitespace-nowrap font-medium">Sort by:</label>
           <select id="sortSelect" onchange="handleSort(this.value)"
-            class="bg-stone-100 border border-stone-300 rounded-lg px-2 py-1 text-[11px] font-medium text-stone-700 focus:outline-none focus:border-amber-500">
+            class="bg-stone-100 border border-stone-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-royal-500">
             <option value="featured">Featured First</option>
             <option value="price-low">Price: Low to High</option>
             <option value="price-high">Price: High to Low</option>
             <option value="name">Alphabetical</option>
           </select>
         </div>
-      </div>
-
-      <!-- Category Circles Row -->
-      <div class="flex items-center gap-3 sm:gap-5 overflow-x-auto pb-2 scrollbar-none no-scrollbar" id="categoryTabs">
-        
-        <!-- All -->
-        <button onclick="filterCategory('all', this)" data-category="all"
-          class="category-circle-btn category-btn active flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-amber-500 p-0.5 shadow-xs ring-2 ring-amber-500 ring-offset-2 flex items-center justify-center transition group-hover:scale-105">
-            <div class="w-full h-full bg-white rounded-2xl flex flex-col items-center justify-center p-1">
-              <span class="text-xl sm:text-2xl">🌟</span>
-              <span class="text-[9px] font-black text-amber-950 uppercase mt-0.5">All</span>
-            </div>
-          </div>
-          <span class="text-[11px] sm:text-xs font-bold text-stone-900 group-hover:text-amber-800 transition whitespace-nowrap">All Bazaar</span>
-        </button>
-
-        <!-- Wholesale Disposables & Leaf Plates -->
-        <button onclick="filterCategory('decor', this)" data-category="decor"
-          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 border-2 border-stone-200 overflow-hidden shadow-xs transition group-hover:scale-105 group-hover:border-emerald-500 relative">
-            <img src="images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg" alt="Disposables & Leaf Plates" class="w-full h-full object-cover">
-            <span class="absolute bottom-0 inset-x-0 bg-emerald-700/90 text-white text-[8px] font-bold text-center py-0.5">Wholesale</span>
-          </div>
-          <span class="text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Disposables & Leaf</span>
-        </button>
-
-        <!-- Necklaces & Chokers -->
-        <button onclick="filterCategory('necklace', this)" data-category="necklace"
-          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 border-2 border-stone-200 overflow-hidden shadow-xs transition group-hover:scale-105 group-hover:border-amber-500">
-            <img src="images/jadau_kundan_necklace.jpg" alt="Necklaces & Chokers" class="w-full h-full object-cover">
-          </div>
-          <span class="text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Necklaces (26)</span>
-        </button>
-
-        <!-- Black Beads & Chains -->
-        <button onclick="filterCategory('mangalsutra', this)" data-category="mangalsutra"
-          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 border-2 border-stone-200 overflow-hidden shadow-xs transition group-hover:scale-105 group-hover:border-stone-800">
-            <img src="images/black_beads_mangalsutra.jpg" alt="Black Beads & Chains" class="w-full h-full object-cover">
-          </div>
-          <span class="text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Black Beads (4)</span>
-        </button>
-
-        <!-- Earrings & Bangles -->
-        <button onclick="filterCategory('earrings', this)" data-category="earrings"
-          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 border-2 border-stone-200 overflow-hidden shadow-xs transition group-hover:scale-105 group-hover:border-amber-500">
-            <img src="images/cz_bridal_earrings.jpg" alt="Earrings & Bangles" class="w-full h-full object-cover">
-          </div>
-          <span class="text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Earrings (3)</span>
-        </button>
-
-        <!-- Sarees & Fabrics -->
-        <button onclick="filterCategory('saree', this)" data-category="saree"
-          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 border-2 border-stone-200 overflow-hidden shadow-xs transition group-hover:scale-105 group-hover:border-rose-500">
-            <img src="images/catalog/b0e4371730ae.jpg" alt="Sarees & Fabrics" class="w-full h-full object-cover">
-          </div>
-          <span class="text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Sarees (2)</span>
-        </button>
 
       </div>
 
@@ -1639,89 +1613,6 @@
     // =========================================================================
     // PRODUCT RENDERING & FILTERING
     // =========================================================================
-    function renderProductCard(p) {
-      const discountPercent = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
-      return `
-      <div class="bg-white rounded-xl overflow-hidden border border-stone-200/90 hover:border-amber-500/70 hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
-        
-        <!-- Product Image & Deal Badges -->
-        <div class="relative aspect-square overflow-hidden bg-stone-50 cursor-pointer p-2" onclick="openQuickView(${p.id})">
-          <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-300" loading="lazy">
-          
-          <!-- Amazon Style Deal / Bestseller Badge -->
-          <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
-            ${discountPercent >= 15 ? `
-              <span class="px-1.5 py-0.5 rounded-xs bg-[#cc0c39] text-white text-[9px] sm:text-[10px] font-extrabold tracking-tight uppercase shadow-2xs">
-                Limited time deal
-              </span>
-            ` : (p.tag ? `
-              <span class="px-1.5 py-0.5 rounded-xs bg-[#e47911] text-white text-[9px] sm:text-[10px] font-bold shadow-2xs">
-                ${p.tag}
-              </span>
-            ` : '')}
-          </div>
-
-          <!-- WhatsApp Share Action -->
-          <button onclick="event.stopPropagation(); shareProductWhatsApp(${p.id})" class="absolute top-2 right-2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/95 text-emerald-700 hover:bg-emerald-50 flex items-center justify-center shadow-xs border border-emerald-200 transition" title="Share on WhatsApp">
-            <i data-lucide="share-2" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
-          </button>
-        </div>
-
-        <!-- Product Details (Amazon Layout) -->
-        <div class="p-2 sm:p-2.5 flex-1 flex flex-col justify-between space-y-1.5">
-          <div>
-            <!-- Star Rating & Category -->
-            <div class="flex items-center gap-1 text-[10px] sm:text-[11px] mb-1">
-              <div class="flex items-center text-amber-500">
-                <i data-lucide="star" class="w-3 h-3 fill-amber-400"></i>
-                <span class="font-bold text-stone-800 ml-0.5">${p.rating}</span>
-              </div>
-              <span class="text-stone-400 text-[10px]">(${p.reviewsCount})</span>
-              <span class="text-stone-300">•</span>
-              <span class="text-[10px] text-stone-500 capitalize">${p.category || 'Bazaar'}</span>
-            </div>
-
-            <!-- Title -->
-            <h3 class="font-sans font-medium text-xs sm:text-sm text-stone-900 line-clamp-2 hover:text-amber-800 cursor-pointer leading-snug" onclick="openQuickView(${p.id})">
-              ${p.title}
-            </h3>
-          </div>
-
-          <!-- Amazon Pricing Format -->
-          <div class="pt-1.5 border-t border-stone-100 space-y-1.5">
-            <div>
-              <div class="flex items-baseline gap-1.5 flex-wrap">
-                ${discountPercent > 0 ? `<span class="text-[#cc0c39] font-bold text-xs sm:text-sm">-${discountPercent}%</span>` : ''}
-                <span class="text-sm sm:text-lg font-extrabold text-stone-950">₹${p.price}</span>
-              </div>
-              ${p.originalPrice ? `<div class="text-[10px] text-stone-500 leading-tight">M.R.P.: <span class="line-through">₹${p.originalPrice}</span></div>` : ''}
-            </div>
-
-            <!-- Amazon Delivery Callout -->
-            <div class="text-[10px] text-stone-600 flex items-center gap-1">
-              <span class="text-emerald-700 font-semibold">FREE Delivery</span>
-              <span>•</span>
-              <span>COD</span>
-            </div>
-
-            <!-- Amazon Dual Actions: Add to Cart & Buy Now -->
-            <div class="flex items-center gap-1.5 pt-0.5">
-              <button onclick="handleCardAddToCart(${p.id}, this)" class="flex-1 py-1.5 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] active:bg-[#f0b800] text-stone-950 font-bold text-[10px] sm:text-[11px] transition shadow-2xs border border-[#fcd200] text-center" title="Add to Cart">
-                Add to Cart
-              </button>
-              <button onclick="quickOrderProduct(${p.id})" class="flex-1 py-1.5 rounded-full bg-[#ffa41c] hover:bg-[#fa8900] active:bg-[#e87c00] text-stone-950 font-bold text-[10px] sm:text-[11px] transition shadow-2xs border border-[#ff8f00] text-center whitespace-nowrap">
-                Buy Now
-              </button>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-      `;
-    }
-
     function renderProducts() {
       const container = document.getElementById('productGrid');
       const emptyState = document.getElementById('emptyState');
@@ -1747,105 +1638,94 @@
 
       if (filtered.length === 0) {
         container.innerHTML = '';
-        container.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6";
         emptyState.classList.remove('hidden');
         return;
       }
 
       emptyState.classList.add('hidden');
-
-      // BLINKIT / INSTAMART CURATED SHELVES VIEW (When viewing All without active search)
-      if (activeCategory === 'all' && !searchQuery) {
-        const decorItems = filtered.filter(p => p.category === 'decor');
-        const necklaceItems = filtered.filter(p => p.category === 'necklace');
-        const mangalsutraItems = filtered.filter(p => p.category === 'mangalsutra');
-        const earringItems = filtered.filter(p => p.category === 'earrings');
-        const sareeItems = filtered.filter(p => p.category === 'saree');
-
-        // Bestsellers: top deals across all categories
-        const bestsellers = [...filtered].sort((a, b) => (b.reviewsCount || 0) - (a.reviewsCount || 0)).slice(0, 4);
-
-        const sections = [
-          {
-            id: 'bestsellers-shelf',
-            title: '🔥 Trending Bestsellers & Top Deals',
-            subtitle: 'Most ordered across Jewellery, Dining & Bazaar essentials',
-            badge: 'Fast Dispatch',
-            category: 'all',
-            items: bestsellers,
-          },
-          {
-            id: 'decor-shelf',
-            title: '🌿 Wholesale Disposables & Dining',
-            subtitle: 'Biodegradable leaf buffet plates, dining packs & pooja essentials (Direct Wholesale Hub)',
-            badge: 'Wholesale Hub',
-            category: 'decor',
-            items: decorItems,
-          },
-          {
-            id: 'necklace-shelf',
-            title: '👑 Royal Kundan & Choker Collections',
-            subtitle: 'Handcrafted pure Jadau Kundan, festive chokers with matching earrings',
-            badge: '50% Off',
-            category: 'necklace',
-            items: necklaceItems,
-          },
-          {
-            id: 'mangalsutra-shelf',
-            title: '🖤 Daily Wear Black Beads & Malas',
-            subtitle: 'Lightweight & premium 1-gram gold finish black beads malas & CZ chains',
-            badge: 'Daily Essentials',
-            category: 'mangalsutra',
-            items: mangalsutraItems,
-          },
-          {
-            id: 'earrings-shelf',
-            title: '✨ Earrings, Jhumkas & Bangles',
-            subtitle: 'Semi-Jadau Kundan earrings, temple jhumkas & traditional party wear',
-            badge: 'Party Wear',
-            category: 'earrings',
-            items: earringItems,
-          },
-          {
-            id: 'saree-shelf',
-            title: '🥻 Sarees & Handloom Fabrics',
-            subtitle: 'Pure Khadi cotton & authentic traditional ethnic sarees',
-            badge: 'Authentic Weaves',
-            category: 'saree',
-            items: sareeItems,
-          }
-        ];
-
-        container.className = "space-y-6 sm:space-y-8";
-        container.innerHTML = sections.filter(sec => sec.items.length > 0).map(sec => `
-          <div class="bg-stone-50/70 p-3 sm:p-5 rounded-2xl border border-stone-200">
-            <div class="flex items-center justify-between pb-2 mb-3 border-b border-stone-200/80">
-              <div>
-                <div class="flex items-center gap-2">
-                  <h3 class="font-bold text-sm sm:text-base text-stone-900">${sec.title}</h3>
-                  <span class="text-[9px] bg-amber-100 text-amber-900 font-bold px-1.5 py-0.5 rounded">${sec.badge}</span>
-                </div>
-                <p class="text-[11px] text-stone-500 mt-0.5">${sec.subtitle}</p>
-              </div>
-              ${sec.category !== 'all' ? `
-                <button onclick="filterCategory('${sec.category}')" class="text-xs font-bold text-amber-800 hover:text-amber-950 whitespace-nowrap pl-2">
-                  See All (${sec.items.length}) →
-                </button>
-              ` : ''}
+      container.innerHTML = filtered.map(p => {
+        const discountPercent = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
+        return `
+        <div class="bg-white rounded-xl overflow-hidden border border-stone-200/90 hover:border-amber-500/70 hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+          
+          <!-- Product Image & Deal Badges -->
+          <div class="relative aspect-square overflow-hidden bg-stone-50 cursor-pointer p-2" onclick="openQuickView(${p.id})">
+            <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-300" loading="lazy">
+            
+            <!-- Amazon Style Deal / Bestseller Badge -->
+            <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
+              ${discountPercent >= 15 ? `
+                <span class="px-1.5 py-0.5 rounded-xs bg-[#cc0c39] text-white text-[9px] sm:text-[10px] font-extrabold tracking-tight uppercase shadow-2xs">
+                  Limited time deal
+                </span>
+              ` : (p.tag ? `
+                <span class="px-1.5 py-0.5 rounded-xs bg-[#e47911] text-white text-[9px] sm:text-[10px] font-bold shadow-2xs">
+                  ${p.tag}
+                </span>
+              ` : '')}
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              ${sec.items.slice(0, 4).map(renderProductCard).join('')}
-            </div>
+
+            <!-- WhatsApp Share Action -->
+            <button onclick="event.stopPropagation(); shareProductWhatsApp(${p.id})" class="absolute top-2 right-2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/95 text-emerald-700 hover:bg-emerald-50 flex items-center justify-center shadow-xs border border-emerald-200 transition" title="Share on WhatsApp">
+              <i data-lucide="share-2" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
+            </button>
           </div>
-        `).join('');
 
-        lucide.createIcons();
-        return;
-      }
+          <!-- Product Details (Amazon Layout) -->
+          <div class="p-2 sm:p-2.5 flex-1 flex flex-col justify-between space-y-1.5">
+            <div>
+              <!-- Star Rating & Category -->
+              <div class="flex items-center gap-1 text-[10px] sm:text-[11px] mb-1">
+                <div class="flex items-center text-amber-500">
+                  <i data-lucide="star" class="w-3 h-3 fill-amber-400"></i>
+                  <span class="font-bold text-stone-800 ml-0.5">${p.rating}</span>
+                </div>
+                <span class="text-stone-400 text-[10px]">(${p.reviewsCount})</span>
+                <span class="text-stone-300">•</span>
+                <span class="text-[10px] text-stone-500 capitalize">${p.category || 'Bazaar'}</span>
+              </div>
 
-      // FOCUSED CATEGORY OR SEARCH VIEW
-      container.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6";
-      container.innerHTML = filtered.map(renderProductCard).join('');
+              <!-- Title -->
+              <h3 class="font-sans font-medium text-xs sm:text-sm text-stone-900 line-clamp-2 hover:text-amber-800 cursor-pointer leading-snug" onclick="openQuickView(${p.id})">
+                ${p.title}
+              </h3>
+            </div>
+
+            <!-- Amazon Pricing Format -->
+            <div class="pt-1.5 border-t border-stone-100 space-y-1.5">
+              <div>
+                <div class="flex items-baseline gap-1.5 flex-wrap">
+                  ${discountPercent > 0 ? `<span class="text-[#cc0c39] font-bold text-xs sm:text-sm">-${discountPercent}%</span>` : ''}
+                  <span class="text-sm sm:text-lg font-extrabold text-stone-950">₹${p.price}</span>
+                </div>
+                ${p.originalPrice ? `<div class="text-[10px] text-stone-500 leading-tight">M.R.P.: <span class="line-through">₹${p.originalPrice}</span></div>` : ''}
+              </div>
+
+              <!-- Amazon Delivery Callout -->
+              <div class="text-[10px] text-stone-600 flex items-center gap-1">
+                <span class="text-emerald-700 font-semibold">FREE Delivery</span>
+                <span>•</span>
+                <span>COD</span>
+              </div>
+
+              <!-- Amazon Dual Actions: Add to Cart & Buy Now -->
+              <div class="flex items-center gap-1.5 pt-0.5">
+                <button onclick="handleCardAddToCart(${p.id}, this)" class="flex-1 py-1.5 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] active:bg-[#f0b800] text-stone-950 font-bold text-[10px] sm:text-[11px] transition shadow-2xs border border-[#fcd200] text-center" title="Add to Cart">
+                  Add to Cart
+                </button>
+                <button onclick="quickOrderProduct(${p.id})" class="flex-1 py-1.5 rounded-full bg-[#ffa41c] hover:bg-[#fa8900] active:bg-[#e87c00] text-stone-950 font-bold text-[10px] sm:text-[11px] transition shadow-2xs border border-[#ff8f00] text-center whitespace-nowrap">
+                  Buy Now
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+        `;
+      }).join('');
+
       lucide.createIcons();
     }
 
@@ -1853,25 +1733,12 @@
       activeCategory = category;
       document.querySelectorAll('.category-btn').forEach(btn => {
         btn.classList.remove('active');
-        const circleRing = btn.querySelector('.rounded-2xl');
-        if (circleRing) {
-          circleRing.classList.remove('ring-2', 'ring-amber-500', 'ring-offset-2');
-        }
       });
-      const targetBtns = document.querySelectorAll(`.category-btn[data-category="${category}"]`);
-      targetBtns.forEach(btn => {
-        btn.classList.add('active');
-        const circleRing = btn.querySelector('.rounded-2xl');
-        if (circleRing) {
-          circleRing.classList.add('ring-2', 'ring-amber-500', 'ring-offset-2');
-        }
-      });
-      renderProducts();
-
-      const catSec = document.getElementById('catalogue');
-      if (catSec && window.scrollY > catSec.offsetTop) {
-        catSec.scrollIntoView({ behavior: 'smooth' });
+      const targetBtn = btnElement || document.querySelector(`.category-btn[data-category="${category}"]`);
+      if (targetBtn) {
+        targetBtn.classList.add('active');
       }
+      renderProducts();
     }
 
     function toggleMobileSearch() {
