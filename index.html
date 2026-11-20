@@ -314,7 +314,7 @@
         </div>
       </div>
 
-                  <!-- Category Circles Row -->
+                        <!-- Category Circles Row -->
       <div class="flex items-center gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-2 scrollbar-none no-scrollbar" id="categoryTabs">
         
         <!-- All -->
@@ -347,13 +347,31 @@
           <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Black Beads (4)</span>
         </button>
 
-        <!-- Eco Buffet Leaf Plates -->
+        <!-- Eco Disposables, Buffet & Cups -->
         <button onclick="filterCategory('disposables', this)" data-category="disposables"
           class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
           <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-emerald-500">
-            <img src="images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg" alt="Eco Buffet Leaf Plates" class="w-full h-full object-cover">
+            <img src="images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg" alt="Eco Disposables & Dining" class="w-full h-full object-cover">
           </div>
-          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Buffet Plates (1)</span>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Disposables & Cups</span>
+        </button>
+
+        <!-- Dry Fruits & Premium Nuts -->
+        <button onclick="filterCategory('dryfruits', this)" data-category="dryfruits"
+          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
+          <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-amber-600 flex items-center justify-center bg-amber-50/50">
+            <span class="text-2xl sm:text-3xl">🥜</span>
+          </div>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Dry Fruits</span>
+        </button>
+
+        <!-- Snacks & Supermarket Groceries -->
+        <button onclick="filterCategory('snacks', this)" data-category="snacks"
+          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
+          <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-orange-500 flex items-center justify-center bg-orange-50/50">
+            <span class="text-2xl sm:text-3xl">🍪</span>
+          </div>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Snacks & Biscuits</span>
         </button>
 
         <!-- Festive Decor & Pooja Sets -->
@@ -363,6 +381,15 @@
             <img src="images/swan_tray.jpg" alt="Festive Decor & Pooja Sets" class="w-full h-full object-cover">
           </div>
           <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Pooja & Decor (12)</span>
+        </button>
+
+        <!-- Pooja Samagri & Wicks -->
+        <button onclick="filterCategory('samagri', this)" data-category="samagri"
+          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
+          <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-yellow-600 flex items-center justify-center bg-yellow-50/50">
+            <span class="text-2xl sm:text-3xl">🪔</span>
+          </div>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Pooja Samagri</span>
         </button>
 
         <!-- Earrings & Bangles -->
@@ -2246,7 +2273,26 @@
       `;
     }
 
+        function updateCategoryCounts() {
+      const counts = {};
+      products.forEach(p => {
+        counts[p.category] = (counts[p.category] || 0) + 1;
+      });
+      document.querySelectorAll('.category-circle-btn').forEach(btn => {
+        const cat = btn.getAttribute('data-category');
+        if (cat && cat !== 'all') {
+          const label = btn.querySelector('.circle-label');
+          if (label) {
+            const count = counts[cat] || 0;
+            const baseText = label.textContent.replace(/\s*\(\d+\)/, '');
+            label.textContent = count > 0 ? `${baseText} (${count})` : baseText;
+          }
+        }
+      });
+    }
+
     function renderProducts() {
+      updateCategoryCounts();
       const container = document.getElementById('productGrid');
       const emptyState = document.getElementById('emptyState');
       const headingEl = document.getElementById('catalogueHeading');
@@ -2280,9 +2326,12 @@
           const catMeta = {
             'necklace': { title: '👑 Royal Kundan & Choker Collections', sub: 'Handcrafted wedding harams, antique gold polish & statement neckwear' },
             'mangalsutra': { title: '🖤 Daily Wear Black Beads & Malas', sub: 'Lightweight micro-polish tulip malas and daily wear chains' },
-            'disposables': { title: '🌿 Eco-Friendly Buffet Plates & Dining', sub: '100% natural biodegradable leaf plates for pooja, catering, weddings & gatherings' },
-            'decor': { title: '🪔 Festive Decor & Pooja Essentials', sub: 'Handcrafted brass diya stands, lotus pooja plates, swan trays & festive sets' },
-            'earrings': { title: '✨ Statement Earrings, Jhumkas & Bangles', sub: 'Bridal CZ solitaires, semi-jadau tops & festive earrings' },
+            'disposables': { title: '🌿 Wholesale Disposables, Buffet Plates & Paper Cups', sub: 'Biodegradable leaf plates, buffet rolls, meal containers & paper cups' },
+            'dryfruits': { title: '🥜 Premium Dry Fruits, Nuts & Dates', sub: 'Fresh California almonds, whole cashews, raisins, pistachios & dates' },
+            'snacks': { title: '🍪 Snacks, Biscuits & Supermarket Groceries', sub: 'Crispy chips, tea biscuits, namkeen, festive snacks & daily cooking essentials' },
+            'samagri': { title: '🪔 Pooja Samagri, Camphor & Diya Wicks', sub: 'Pure cow ghee wicks, Bhimseni camphor, dhoop sticks, kumkum & pooja oils' },
+            'decor': { title: '✨ Festive Decor & Pooja Essentials', sub: 'Handcrafted brass diya stands, lotus pooja plates, swan trays & festive sets' },
+            'earrings': { title: '💎 Statement Earrings, Jhumkas & Bangles', sub: 'Bridal CZ solitaires, semi-jadau tops & festive earrings' },
             'saree': { title: '🥻 Sarees & Handloom Heritage', sub: 'Pure Khadi cotton, traditional weave sarees with blouse pieces' }
           };
           const meta = catMeta[activeCategory] || { title: activeCategory.toUpperCase(), sub: 'Curated products' };
@@ -2304,50 +2353,63 @@
 
       // Curated Aisle Shelves
       if (activeCategory === 'all' && !searchQuery && currentSort === 'featured') {
-        const shelves = [
+        const allAisles = [
           {
             title: "👑 Pure Jadau Kundan & Bridal Sets",
             subtitle: "Handcrafted chokers, antique gold finish & royal wedding collections",
-            catKey: "necklace",
-            count: filtered.filter(p => p.category === 'necklace').length,
-            items: filtered.filter(p => p.category === 'necklace').slice(0, 4)
+            catKey: "necklace"
           },
           {
             title: "🖤 Daily Wear Black Beads & Mangalsutras",
             subtitle: "Lightweight tulip malas, micro gold polish chains & lockets",
-            catKey: "mangalsutra",
-            count: filtered.filter(p => p.category === 'mangalsutra').length,
-            items: filtered.filter(p => p.category === 'mangalsutra').slice(0, 4)
+            catKey: "mangalsutra"
           },
           {
-            title: "🌿 Eco-Friendly Buffet Plates & Dining",
-            subtitle: "100% biodegradable leaf plates for pooja, weddings, catering & family gatherings",
-            catKey: "disposables",
-            count: filtered.filter(p => p.category === 'disposables').length,
-            items: filtered.filter(p => p.category === 'disposables').slice(0, 4)
+            title: "🌿 Eco-Friendly Buffet Plates, Cups & Disposables",
+            subtitle: "100% biodegradable leaf plates, paper cups & catering supplies",
+            catKey: "disposables"
           },
           {
-            title: "🪔 Festive Decor, Trays & Pooja Sets",
+            title: "🥜 Premium Dry Fruits & Nuts",
+            subtitle: "Fresh almonds, whole cashews, raisins & nutrient-rich dry fruits",
+            catKey: "dryfruits"
+          },
+          {
+            title: "🍪 Snacks, Chips & Supermarket Essentials",
+            subtitle: "Crispy tea snacks, biscuits, namkeen & everyday pantry favourites",
+            catKey: "snacks"
+          },
+          {
+            title: "🪔 Pooja Samagri, Camphor & Wicks",
+            subtitle: "Pure ghee diya wicks, natural camphor, dhoop cones & pooja oils",
+            catKey: "samagri"
+          },
+          {
+            title: "✨ Festive Decor, Trays & Pooja Sets",
             subtitle: "Handcrafted brass diya stands, lotus pooja plates & swan organizer trays",
-            catKey: "decor",
-            count: filtered.filter(p => p.category === 'decor').length,
-            items: filtered.filter(p => p.category === 'decor').slice(0, 4)
+            catKey: "decor"
           },
           {
-            title: "✨ Statement Earrings & Bangles",
+            title: "💎 Statement Earrings & Bangles",
             subtitle: "Sparkling American Diamond / CZ studs, classic jhumkas & traditional bangles",
-            catKey: "earrings",
-            count: filtered.filter(p => p.category === 'earrings').length,
-            items: filtered.filter(p => p.category === 'earrings').slice(0, 4)
+            catKey: "earrings"
           },
           {
             title: "🥻 Sarees & Handloom Heritage",
             subtitle: "Pure Khadi cotton & festive handlooms directly from weavers",
-            catKey: "saree",
-            count: filtered.filter(p => p.category === 'saree').length,
-            items: filtered.filter(p => p.category === 'saree').slice(0, 4)
+            catKey: "saree"
           }
         ];
+
+        const shelves = allAisles
+          .map(a => ({
+            title: a.title,
+            subtitle: a.subtitle,
+            catKey: a.catKey,
+            count: filtered.filter(p => p.category === a.catKey).length,
+            items: filtered.filter(p => p.category === a.catKey).slice(0, 4)
+          }))
+          .filter(shelf => shelf.count > 0);
 
         container.className = "space-y-8 sm:space-y-10";
         container.innerHTML = shelves.filter(s => s.items.length > 0).map(shelf => `
