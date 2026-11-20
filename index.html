@@ -116,7 +116,7 @@
       box-shadow: 0 2px 8px rgba(120, 53, 15, 0.35) !important;
     }
 
-    /* Blinkit & Instamart Style Category Circle Buttons: completely borderless container */
+    /* Category Circle Buttons */
     .category-circle-btn {
       background: transparent !important;
       border: none !important;
@@ -205,7 +205,7 @@
 
       </div>
 
-      <!-- Mobile Search Bar (Always Visible Amazon Style) -->
+      <!-- Mobile Search Bar -->
       <div id="mobileSearchContainer" class="pb-2 md:hidden">
         <div class="relative">
           <input type="text" id="mobileSearchInput" placeholder="Search SRR Bazaar (e.g. leaf plates, nomu, kundan, saree)..."
@@ -218,8 +218,7 @@
   </header>
 
   <!-- ========================================================================= -->
-  <!-- QUICK-COMMERCE BAZAAR PROMO STRIP (Blinkit / Instamart Style)              -->
-  <!-- ========================================================================= -->
+  <!-- Featured Promotions -->
   <section class="bg-stone-100/80 py-3 sm:py-4 border-b border-stone-200/90">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-4">
@@ -240,41 +239,41 @@
           </span>
         </div>
 
-        <!-- Promo 2: Sarees & Fabrics -->
-        <div onclick="filterCategory('saree')" class="bg-rose-50/90 hover:bg-rose-50 border border-rose-200/90 p-3 sm:p-3.5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-rose-400 hover:shadow-sm transition group shadow-2xs">
-          <div class="space-y-0.5">
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-rose-100 text-rose-900">
-              <i data-lucide="heart" class="w-3 h-3 text-rose-600"></i> Handloom Special
-            </span>
-            <h3 class="text-xs sm:text-sm font-extrabold text-stone-900 group-hover:text-rose-800 transition">
-              Pure Khadhi Cotton Sarees
-            </h3>
-            <p class="text-[11px] text-stone-600">Traditional Handlooms • <span class="text-rose-700 font-bold">From ₹650 only</span></p>
-          </div>
-          <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:bg-rose-700 group-hover:scale-105 transition shadow-2xs">
-            →
-          </span>
-        </div>
-
-        <!-- Promo 3: Festive & Pooja Decor -->
-        <div onclick="filterCategory('decor')" class="bg-emerald-50/90 hover:bg-emerald-50 border border-emerald-200/90 p-3 sm:p-3.5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-emerald-400 hover:shadow-sm transition group shadow-2xs">
+        <!-- Promo 2: Eco Buffet Leaf Plates -->
+        <div onclick="filterCategory('disposables')" class="bg-emerald-50/90 hover:bg-emerald-50 border border-emerald-200/90 p-3 sm:p-3.5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-emerald-400 hover:shadow-sm transition group shadow-2xs">
           <div class="space-y-0.5">
             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800">
-              <i data-lucide="flame" class="w-3 h-3 text-emerald-700"></i> Festive & Pooja
+              <i data-lucide="leaf" class="w-3 h-3 text-emerald-700"></i> Eco Dining
             </span>
             <h3 class="text-xs sm:text-sm font-extrabold text-stone-900 group-hover:text-emerald-800 transition">
-              Diya Stands & Swan Trays
+              Biodegradable Leaf Buffet Plates
             </h3>
-            <p class="text-[11px] text-stone-600">Kartheeka Masam Special • <span class="text-emerald-700 font-bold">Fast Dispatch</span></p>
+            <p class="text-[11px] text-stone-600">Pack of 20 • <span class="text-emerald-700 font-bold">₹200 only</span> (Free Shipping)</p>
           </div>
           <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:bg-emerald-700 group-hover:scale-105 transition shadow-2xs">
             →
           </span>
         </div>
 
+        <!-- Promo 3: Festive & Pooja Decor -->
+        <div onclick="filterCategory('decor')" class="bg-amber-50/90 hover:bg-amber-50 border border-amber-200/90 p-3 sm:p-3.5 rounded-2xl flex items-center justify-between cursor-pointer hover:border-amber-400 hover:shadow-sm transition group shadow-2xs">
+          <div class="space-y-0.5">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-100 text-amber-900">
+              <i data-lucide="flame" class="w-3 h-3 text-amber-700"></i> Festive & Pooja
+            </span>
+            <h3 class="text-xs sm:text-sm font-extrabold text-stone-900 group-hover:text-amber-800 transition">
+              Diya Stands & Swan Trays
+            </h3>
+            <p class="text-[11px] text-stone-600">Kartheeka Masam Special • <span class="text-amber-700 font-bold">Fast Dispatch</span></p>
+          </div>
+          <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:bg-amber-700 group-hover:scale-105 transition shadow-2xs">
+            →
+          </span>
+        </div>
+
       </div>
 
-      <!-- Trust Badges Bar (Blinkit style on light background) -->
+      <!-- Trust Badges Bar -->
       <div class="flex items-center justify-between gap-2 overflow-x-auto pt-2.5 mt-2.5 border-t border-stone-200/90 text-[10px] sm:text-[11px] text-stone-600 whitespace-nowrap scrollbar-none no-scrollbar">
         <span class="flex items-center gap-1.5 font-medium"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i> 100% Handcrafted Artisanal Quality</span>
         <span class="text-stone-300">•</span>
@@ -287,8 +286,7 @@
     </div>
   </section>
 
-  <!-- ========================================================================= -->
-  <!-- VISUAL "SHOP BY CATEGORY" STORY CIRCLES (Blinkit / Instamart style)        --> STORY CIRCLES (Blinkit / Instamart style)        -->
+  <!-- Category Navigation -->
   <!-- ========================================================================= -->
   <section id="catalogue" class="py-4 sm:py-5 bg-white border-b border-stone-200/90 shadow-2xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -303,7 +301,7 @@
         </div>
         <div class="flex items-center gap-3">
           <span class="text-[11px] text-amber-800 hover:text-amber-950 font-bold cursor-pointer" onclick="filterCategory('all')">
-            All Bazaar (<span id="totalProductCount">46</span>) →
+            All Bazaar (<span id="totalProductCount">47</span>) →
           </span>
           <!-- Sort Dropdown -->
           <select id="sortSelect" onchange="handleSort(this.value)"
@@ -316,7 +314,7 @@
         </div>
       </div>
 
-            <!-- Category Circles Row (Centered & Balanced like Blinkit) -->
+                  <!-- Category Circles Row -->
       <div class="flex items-center gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-2 scrollbar-none no-scrollbar" id="categoryTabs">
         
         <!-- All -->
@@ -349,6 +347,24 @@
           <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Black Beads (4)</span>
         </button>
 
+        <!-- Eco Buffet Leaf Plates -->
+        <button onclick="filterCategory('disposables', this)" data-category="disposables"
+          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
+          <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-emerald-500">
+            <img src="images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg" alt="Eco Buffet Leaf Plates" class="w-full h-full object-cover">
+          </div>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Buffet Plates (1)</span>
+        </button>
+
+        <!-- Festive Decor & Pooja Sets -->
+        <button onclick="filterCategory('decor', this)" data-category="decor"
+          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
+          <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-amber-500">
+            <img src="images/swan_tray.jpg" alt="Festive Decor & Pooja Sets" class="w-full h-full object-cover">
+          </div>
+          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Pooja & Decor (12)</span>
+        </button>
+
         <!-- Earrings & Bangles -->
         <button onclick="filterCategory('earrings', this)" data-category="earrings"
           class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
@@ -356,15 +372,6 @@
             <img src="images/cz_bridal_earrings.jpg" alt="Earrings & Bangles" class="w-full h-full object-cover">
           </div>
           <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Earrings (4)</span>
-        </button>
-
-        <!-- Festive Decor & Pooja Sets -->
-        <button onclick="filterCategory('decor', this)" data-category="decor"
-          class="category-circle-btn category-btn flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer focus:outline-none">
-          <div class="circle-box w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-emerald-500">
-            <img src="images/swan_tray.jpg" alt="Festive Decor & Pooja Sets" class="w-full h-full object-cover">
-          </div>
-          <span class="circle-label text-[11px] sm:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition whitespace-nowrap">Pooja & Decor (12)</span>
         </button>
 
         <!-- Sarees & Fabrics -->
@@ -612,7 +619,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- FLOATING TOAST: Amazon Style Add-to-Cart Notification                     -->
+  <!-- Floating Cart Toast Notification -->
   <!-- ========================================================================= -->
   <div id="amazonCartToast"
     class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden bg-white/95 backdrop-blur-md border border-stone-200 shadow-2xl rounded-2xl px-3.5 py-2.5 items-center gap-3 transition-all duration-300 transform max-w-sm sm:max-w-md w-[92%] sm:w-auto">
@@ -1473,6 +1480,19 @@
     "reviewsCount": 1
   },
   {
+    "id": 928103031,
+    "title": "Biodegradable Leaf Buffet Plates (Pack of 20)",
+    "category": "disposables",
+    "price": 200,
+    "originalPrice": 300,
+    "tag": "Eco-Friendly",
+    "image": "images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg",
+    "description": "100% natural and eco-friendly biodegradable leaf buffet plates (Pack of 20). Chemical-free, sturdy, and hygienic disposable dining plates perfect for pooja, weddings, catering, and festive gatherings. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 338044272,
     "title": "Edu Kondala Nomu (Sankranti Special)",
     "category": "decor",
@@ -2152,7 +2172,7 @@
         <div class="relative aspect-square overflow-hidden bg-stone-50 cursor-pointer p-2" onclick="openQuickView(${p.id})">
           <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-300" loading="lazy">
           
-          <!-- Amazon Style Deal / Bestseller Badge -->
+          <!-- Product Tag Badge -->
           <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
             ${discountPercent >= 15 ? `
               <span class="px-1.5 py-0.5 rounded-xs bg-[#cc0c39] text-white text-[9px] sm:text-[10px] font-extrabold tracking-tight uppercase shadow-2xs">
@@ -2171,7 +2191,7 @@
           </button>
         </div>
 
-        <!-- Product Details (Amazon Layout) -->
+        <!-- Product Details -->
         <div class="p-2 sm:p-2.5 flex-1 flex flex-col justify-between space-y-1.5">
           <div>
             <!-- Star Rating & Category -->
@@ -2191,7 +2211,7 @@
             </h3>
           </div>
 
-          <!-- Amazon Pricing Format -->
+          <!-- Product Pricing -->
           <div class="pt-1.5 border-t border-stone-100 space-y-1.5">
             <div>
               <div class="flex items-baseline gap-1.5 flex-wrap">
@@ -2201,14 +2221,14 @@
               ${p.originalPrice ? `<div class="text-[10px] text-stone-500 leading-tight">M.R.P.: <span class="line-through">₹${p.originalPrice}</span></div>` : ''}
             </div>
 
-            <!-- Amazon Delivery Callout -->
+            <!-- Delivery Callout -->
             <div class="text-[10px] text-stone-600 flex items-center gap-1">
               <span class="text-emerald-700 font-semibold">FREE Delivery</span>
               <span>•</span>
               <span>COD</span>
             </div>
 
-            <!-- Amazon Dual Actions: Add to Cart & Buy Now -->
+            <!-- Product Actions -->
             <div class="flex items-center gap-1.5 pt-0.5">
               <button onclick="handleCardAddToCart(${p.id}, this)" class="flex-1 py-1.5 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] active:bg-[#f0b800] text-stone-950 font-bold text-[10px] sm:text-[11px] transition shadow-2xs border border-[#fcd200] text-center cursor-pointer" title="Add to Cart">
                 Add to Cart
@@ -2260,6 +2280,7 @@
           const catMeta = {
             'necklace': { title: '👑 Royal Kundan & Choker Collections', sub: 'Handcrafted wedding harams, antique gold polish & statement neckwear' },
             'mangalsutra': { title: '🖤 Daily Wear Black Beads & Malas', sub: 'Lightweight micro-polish tulip malas and daily wear chains' },
+            'disposables': { title: '🌿 Eco-Friendly Buffet Plates & Dining', sub: '100% natural biodegradable leaf plates for pooja, catering, weddings & gatherings' },
             'decor': { title: '🪔 Festive Decor & Pooja Essentials', sub: 'Handcrafted brass diya stands, lotus pooja plates, swan trays & festive sets' },
             'earrings': { title: '✨ Statement Earrings, Jhumkas & Bangles', sub: 'Bridal CZ solitaires, semi-jadau tops & festive earrings' },
             'saree': { title: '🥻 Sarees & Handloom Heritage', sub: 'Pure Khadi cotton, traditional weave sarees with blouse pieces' }
@@ -2281,7 +2302,7 @@
 
       emptyState.classList.add('hidden');
 
-      // Curated Aisle Shelves (Blinkit / Amazon pattern for "All" view)
+      // Curated Aisle Shelves
       if (activeCategory === 'all' && !searchQuery && currentSort === 'featured') {
         const shelves = [
           {
@@ -2297,6 +2318,13 @@
             catKey: "mangalsutra",
             count: filtered.filter(p => p.category === 'mangalsutra').length,
             items: filtered.filter(p => p.category === 'mangalsutra').slice(0, 4)
+          },
+          {
+            title: "🌿 Eco-Friendly Buffet Plates & Dining",
+            subtitle: "100% biodegradable leaf plates for pooja, weddings, catering & family gatherings",
+            catKey: "disposables",
+            count: filtered.filter(p => p.category === 'disposables').length,
+            items: filtered.filter(p => p.category === 'disposables').slice(0, 4)
           },
           {
             title: "🪔 Festive Decor, Trays & Pooja Sets",
@@ -2360,7 +2388,7 @@
         btn.classList.remove('active');
       });
 
-      // Update category circle buttons (Blinkit style)
+      // Update category circle buttons
       document.querySelectorAll('.category-circle-btn').forEach(circle => {
         const isCat = circle.getAttribute('data-category') === category;
         const innerBox = circle.querySelector('.circle-box');
@@ -2462,7 +2490,7 @@
               <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Direct WhatsApp seller support</div>
             </div>
 
-            <!-- Amazon Dual Action Row: Add to Cart & Buy Now -->
+            <!-- Action Buttons -->
             <div class="flex gap-2 pt-2">
               <button id="modalAddToCartBtn" onclick="handleModalAddToCart(${p.id})" class="flex-1 py-2.5 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] active:bg-[#f0b800] text-stone-950 font-bold text-xs sm:text-sm border border-[#fcd200] shadow-2xs transition flex items-center justify-center gap-1.5" title="Add to Cart">
                 <i data-lucide="shopping-cart" class="w-4 h-4"></i>
@@ -2477,7 +2505,7 @@
               </button>
             </div>
 
-            <!-- Amazon Inline Confirmation Box (Shown when Added to Cart) -->
+            <!-- Added to Cart Confirmation -->
             <div id="modalAddedConfirmation" class="hidden mt-2 p-3.5 bg-stone-50 border border-emerald-300 rounded-2xl space-y-2.5 animate-in fade-in duration-200">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-1.5 text-emerald-800 font-bold text-xs sm:text-sm">
@@ -2570,7 +2598,7 @@
     }
 
     // =========================================================================
-    // AMAZON CART UX & NOTIFICATIONS
+    // CART NOTIFICATIONS & UX
     // =========================================================================
     let toastTimeout = null;
 
