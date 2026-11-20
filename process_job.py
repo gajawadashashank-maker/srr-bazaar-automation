@@ -374,13 +374,28 @@ def sync_product_to_website_catalogue(
         # Detect category based on product title/description
         text_lower = f"{product_name} {description}".lower()
         category = "necklace"
-        if any(w in text_lower for w in ["cotton", "saree", "khadi", "dress", "kurti", "silk", "fabric"]):
+        # 1. Groceries, Snacks & Dry Fruits
+        if any(w in text_lower for w in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dry fruit", "dryfruit", "dates", "khajoor", "anjeer"]):
+            category = "dryfruits"
+        elif any(w in text_lower for w in ["chip", "chips", "biscuit", "biscuits", "snack", "snacks", "namkeen", "mixture", "cookie", "cookies", "tiffin", "upma", "poha", "rava", "dal", "flour", "atta", "rice", "oil", "ghee", "masala", "spices", "chilli", "turmeric"]):
+            category = "snacks"
+        # 2. Wholesale Disposables, Packaging & Buffet
+        elif any(w in text_lower for w in ["leaf", "buffet", "disposable", "disposables", "paper cup", "cup", "cups", "paper glass", "glass", "tiffin box", "meal box", "container", "roll", "rolls", "silver foil", "foil", "cling", "bag", "carry bag", "packaging", "parcel", "biodegradable"]):
+            category = "disposables"
+        # 3. Pooja & Temple Essentials
+        elif any(w in text_lower for w in ["wick", "wicks", "batti", "camphor", "karpooram", "kapoor", "dhoop", "agarbatti", "incense", "sambrani", "kumkum", "pasupu", "haldi", "chandan", "gandham", "pooja oil", "deepam oil"]):
+            category = "samagri"
+        # 4. Sarees & Fabrics
+        elif any(w in text_lower for w in ["cotton", "saree", "sarees", "khadi", "dress", "kurti", "silk", "fabric", "dupatta"]):
             category = "saree"
-        elif any(w in text_lower for w in ["tray", "swan", "decor", "pooja", "puja", "gift", "nomu", "nomulu", "diya", "diyas", "deepam", "deepalu", "sankranti", "kartheeka", "vratam", "vratham", "kalash", "plate", "plates", "bowl", "lotus", "stand", "ashtothara", "shatanamavali", "kondala", "kondalu", "brass", "idol", "leaf", "buffet", "disposable", "organic", "paper"]):
+        # 5. Pooja Brass & Home Decor Trays
+        elif any(w in text_lower for w in ["tray", "swan", "decor", "pooja", "puja", "gift", "nomu", "nomulu", "diya", "diyas", "deepam", "deepalu", "sankranti", "kartheeka", "vratam", "vratham", "kalash", "lotus plate", "bowl", "lotus", "stand", "ashtothara", "shatanamavali", "kondala", "kondalu", "brass", "idol"]):
             category = "decor"
-        elif any(w in text_lower for w in ["bead", "mangalsutra", "black", "chain", "locket"]):
+        # 6. Black Beads & Mangalsutras
+        elif any(w in text_lower for w in ["bead", "mangalsutra", "black", "chain", "locket", "nallapusalu"]):
             category = "mangalsutra"
-        elif any(w in text_lower for w in ["earring", "stud", "jhumka", "bangle", "bracelet", "kada"]):
+        # 7. Earrings & Bangles
+        elif any(w in text_lower for w in ["earring", "earrings", "stud", "studs", "jhumka", "jhumkas", "bangle", "bangles", "bracelet", "kada"]):
             category = "earrings"
 
         products_json_path = docs_dir / "products.json"
