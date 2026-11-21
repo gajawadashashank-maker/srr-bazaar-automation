@@ -309,7 +309,42 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 | **Groq LLM Calls** | Using reasoning models (`gpt-oss`) with low token limits | Use conversational fast model (`qwen/qwen3.8-27b`) with custom `User-Agent` |
 | **Static Hosting AI** | Fetching `/api/ai-stylist` and throwing uncaught error | Wrap in try/catch and fallback immediately to client-side catalog search |
 | **Google Search SEO** | Missing 48px square favicons causing globe 🌐 icon | Provide `favicon-48x48.png` + Schema.org `OnlineStore` + `sitemap.xml` with images |
+| **Mobile Viewport Overflow** | Swiping horizontally drags document left, revealing a full-height white/blank empty margin | Lock `html, body` with `overflow-x: hidden !important; overscroll-behavior-x: none;`, budget mobile header width $\le 350$px, and wrap flex scrolls in `overflow-hidden` |
 ```
+
+---
+
+### 19. MOBILE HORIZONTAL VIEWPORT CONTAINMENT & TOUCH GESTURE LOCK
+- **The Core Problem**:
+  - On mobile touchscreens, users frequently make diagonal or accidental horizontal thumb swipes while scrolling vertically.
+  - If any container, badge, or header row exceeds viewport width by even $1$ pixel, or if standard `overflow-x: hidden` is only on `<body>`, mobile browsers (WebKit on iOS Safari / Blink on Chrome Android) will rubber-band pan the entire document left, exposing an ugly full-height blank white strip along the right side.
+- **The Mandatory Solution**:
+  1. **Root-Level Viewport Hard Lock**:
+     ```css
+     html, body {
+       width: 100%;
+       max-width: 100vw;
+       overflow-x: hidden !important;
+       position: relative;
+       overscroll-behavior-x: none;
+       -webkit-overflow-scrolling: touch;
+     }
+     * {
+       box-sizing: border-box;
+     }
+     ```
+  2. **Mobile Header Pixel Budget ($360$px Screen Target)**:
+     - Always test against a minimum screen width of $360$px (Samsung Galaxy A-series, older iPhones).
+     - Never cram redundant action buttons in the top header. If an inline search bar exists right under the header on mobile, HIDE the header magnifying glass icon on mobile (`hidden sm:flex`).
+     - Reduce horizontal padding on mobile (`px-2 sm:px-6`).
+     - Constrain brand name with `min-w-0 flex-shrink-1` and responsive font size (`text-base sm:text-2xl`).
+     - Avoid negative pixel offsets for notification badges that stick out past screen bounds (use `top-0 right-0` instead of `-top-1 -right-1`).
+  3. **Horizontal Carousel Scroll Containment**:
+     - Any container with `whitespace-nowrap overflow-x-auto` (e.g. Trust Badges, Category Chips) MUST be wrapped in a parent with `w-full max-w-full overflow-hidden`.
+     - Add `overscroll-x-contain` to the scrollable flex row so scrolling to the end of the badge list stops cleanly without bubbling up to document-level panning.
+  4. **Full-Width Section Bounding**:
+     - Apply `w-full max-w-full overflow-hidden` to all major structural sections (`<nav>`, `#catalogue`, `#comboBundlesSection`, `#reviewsProofSection`, `<footer>`).
+
 
 ---
 
@@ -352,4 +387,26 @@ This log documents every architectural pitfall discovered and resolved during re
 - **What Happened**: Google search results displayed a generic globe `🌐` favicon.
 - **Why It Happened**: Google Search Console mandates a square favicon that is a multiple of 48px (e.g. 48x48, 96x96, 192x192) declared in a `<link rel="icon" type="image/png" sizes="48x48" ...>` tag. A simple 16x16 or 32x32 favicon is ignored by Google's crawler.
 - **How to Avoid**: Generate explicit `favicon-48x48.png` and `icon-192.png`, reference them with explicit sizes in `<head>`, and submit `sitemap.xml` containing image metadata `<image:image>`.
-<!-- add sitemap.xml google search console sitemaps for indesxing log showing in google instead of globe 🌐 logo -->
+
+### 7. The Mobile "Swipe Left Blank Column" Viewport Overflow Bug
+- **What Happened**: When testing on mobile touch devices (Chrome Android / iOS Safari), swiping or dragging slightly left caused the whole page to pan sideways, exposing a full-height blank white empty column on the right edge.
+- **Why It Happened**:
+  1. Setting `overflow-x: hidden` on `<body>` alone is insufficient on mobile touch devices; mobile browser gesture engines (WebKit/Blink) allow horizontal drag bouncing on `<html>`.
+  2. The mobile header row exceeded the $360$px pixel budget: container padding (`px-3` = $24$px) + logo ($185$px) + 4 action buttons ($214$px) = $423$px > $360$px.
+  3. The shopping cart notification badge had `-right-0.5` which peeked $2$px outside the screen boundary.
+  4. Horizontally scrolling flex containers (`whitespace-nowrap overflow-x-auto` like Trust Badges) chain gesture events up to the parent document without scroll chaining containment.
+- **How to Avoid**:
+  1. Add root CSS lock:
+     ```css
+     html, body {
+       width: 100%;
+       max-width: 100vw;
+       overflow-x: hidden !important;
+       position: relative;
+       overscroll-behavior-x: none;
+       -webkit-overflow-scrolling: touch;
+     }
+     ```
+  2. Keep mobile header within $360$px: reduce padding to `px-2 sm:px-6`, hide the duplicate mobile search button (`hidden sm:flex`) because mobile already has an inline search bar below the header, and clamp badges to `top-0 right-0`.
+  3. Wrap horizontal carousels in `w-full max-w-full overflow-hidden` and add `overscroll-x-contain` so swipe momentum never drags the document.
+  4. Put `w-full max-w-full overflow-hidden` on all major sections (`#catalogue`, `#comboBundlesSection`, `#reviewsProofSection`, `footer`).
