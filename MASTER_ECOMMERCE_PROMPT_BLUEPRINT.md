@@ -318,6 +318,8 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 | **Mobile Viewport Overflow** | Swiping horizontally drags document left, revealing a full-height white/blank empty margin | Lock `html, body` with `overflow-x: hidden !important; overscroll-behavior-x: none;`, budget mobile header width $\le 350$px, and wrap flex scrolls in `overflow-hidden` |
 | **Cloud LLM Quota / Outage** | Cloud LLM (Groq) rate-limits, expires key, or goes down | Multi-tier failover: Groq Cloud LPU $\rightarrow$ Local Ollama (`llama3.2`) $\rightarrow$ Static Catalog RAG |
 | **Budget & Price Filters** | Shopper asks "under 500" but search/AI returns ₹999 items because "500" was treated as a text keyword | Extract `parsePriceIntent` regex (`under X`, `below X`, `between X and Y`) and filter `price <= maxPrice` BEFORE text scoring or LLM prompt generation |
+| **Voice Search Typing Barrier** | Non-English / mobile shoppers struggle typing complex traditional terms | Integrate HTML5 Web Speech API (`en-IN`) on desktop & mobile search bars with live animated mic toggle |
+| **Occasion-Based Kit Building** | Customers must manually find pooja brassware and buffet disposables individually | Smart Occasion Combo Engine generating complete 1-tap kits (e.g. Satyanarayana Pooja / Maroon Bridal) with bundled savings |
 ```
 
 ---
@@ -449,5 +451,18 @@ This log documents every architectural pitfall discovered and resolved during re
   2. Clean noise words (`"give me anything under"`, `"items"`, `"show me"`) to obtain the remaining subject query.
   3. Filter the candidate pool strictly with `price <= maxPrice` BEFORE running text scoring, and sort budget queries by price ascending.
   4. In backend LLM prompts (`_filter_relevant_catalog`), enforce the exact same price ceiling so the LLM is physically never shown items that exceed the customer's specified budget.
+
+### 10. Voice Search & Smart Dynamic Occasion Bundling
+- **What Happened**: Many mobile customers, especially elders and regional Telugu/Hindi speakers, find typing long product names or complex pooja terminology difficult on small touchscreens. Furthermore, shoppers organizing weddings or ceremonies had to manually hunt down and add 5 different individual items (diya stand, thali plate, disposables, nomu kit).
+- **Why It Happened**: Traditional storefronts only provide a text input box and flat single-item catalog grids.
+- **How to Avoid**:
+  1. **HTML5 Native Voice Search**:
+     - Integrate `window.SpeechRecognition` / `window.webkitSpeechRecognition` into search bars and the AI Stylist modal.
+     - Use `lang = 'en-IN'` which natively handles Indian English accents and Telugu/Hindi transliteration (e.g. *"Kundan choker"*, *"Nomu set"*, *"Diya stand"*).
+     - Provide visual listening feedback (pulsing mic icon and listening toast) and trigger instant client-side catalog filtering upon speech completion.
+  2. **Smart Occasion Combo Builder**:
+     - Detect occasion and attire intents in the AI engine (e.g. *"Satyanarayana Pooja for 30 people"*, *"Maroon Kanjeevaram Bridal look"*).
+     - Dynamically package complete kits (Pooja ritual brassware + guest buffet dining leaf plates; bridal choker + matching studs + black beads) with 1-tap combo discounts and direct WhatsApp purchase routing.
+
 
 

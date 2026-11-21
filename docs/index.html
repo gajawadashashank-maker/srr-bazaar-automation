@@ -453,15 +453,22 @@
         <!-- Search Bar (Desktop) -->
         <div id="desktopSearchWrapper" class="hidden md:flex flex-1 max-w-md mx-6 relative">
           <input type="text" id="searchInput" placeholder="Search sarees, necklace, mangalsutra, swan tray..."
-            class="w-full pl-9 pr-9 py-1.5 text-xs sm:text-sm bg-stone-100 rounded-full border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
+            class="w-full pl-9 pr-16 py-1.5 text-xs sm:text-sm bg-stone-100 rounded-full border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
             oninput="handleSearch(this.value)" onfocus="showSearchDropdown(this.value, 'desktop')"
             onclick="showSearchDropdown(this.value, 'desktop')" autocomplete="off">
           <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-3 top-2.5"></i>
-          <button id="searchClearBtnDesktop" onclick="clearSearch()"
-            class="hidden absolute right-3 top-2 text-stone-400 hover:text-stone-700 transition cursor-pointer"
-            title="Clear search">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
+          <div class="absolute right-3 top-1.5 flex items-center gap-1.5">
+            <button id="searchClearBtnDesktop" onclick="clearSearch()"
+              class="hidden text-stone-400 hover:text-stone-700 transition cursor-pointer"
+              title="Clear search">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <button id="voiceSearchBtnDesktop" onclick="startVoiceSearch('desktop')"
+              class="p-1 rounded-full text-stone-500 hover:text-amber-700 hover:bg-amber-100/80 transition cursor-pointer"
+              title="Speak to Search (Telugu, English, Hindi)">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
+          </div>
           <!-- Desktop Search Recommendations Dropdown -->
           <div id="desktopSearchDropdown"
             class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-stone-200 overflow-hidden z-50 transition-all duration-200 max-h-[75vh] flex flex-col text-left">
@@ -512,15 +519,22 @@
         <div id="mobileSearchWrapper" class="relative">
           <input type="text" id="mobileSearchInput"
             placeholder="Search SRR Bazaar (e.g. leaf plates, nomu, kundan, saree)..."
-            class="w-full pl-8 pr-8 py-2 text-xs bg-stone-100 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white shadow-inner"
+            class="w-full pl-8 pr-16 py-2 text-xs bg-stone-100 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white shadow-inner"
             oninput="handleSearch(this.value)" onfocus="showSearchDropdown(this.value, 'mobile')"
             onclick="showSearchDropdown(this.value, 'mobile')" autocomplete="off">
           <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5"></i>
-          <button id="searchClearBtnMobile" onclick="clearSearch()"
-            class="hidden absolute right-2.5 top-2 text-stone-400 hover:text-stone-700 transition cursor-pointer"
-            title="Clear search">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
+          <div class="absolute right-2.5 top-1.5 flex items-center gap-1">
+            <button id="searchClearBtnMobile" onclick="clearSearch()"
+              class="hidden text-stone-400 hover:text-stone-700 transition cursor-pointer"
+              title="Clear search">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <button id="voiceSearchBtnMobile" onclick="startVoiceSearch('mobile')"
+              class="p-1 rounded-full text-stone-500 hover:text-amber-700 hover:bg-amber-100/80 transition cursor-pointer"
+              title="Speak to Search (Telugu, English, Hindi)">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
+          </div>
           <!-- Mobile Search Recommendations Dropdown -->
           <div id="mobileSearchDropdown"
             class="hidden absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-2xl border border-stone-200 overflow-hidden z-50 transition-all duration-200 max-h-[70vh] flex flex-col text-left">
@@ -1508,19 +1522,19 @@
               essentials, pure cotton sarees, or buffet disposables in English or Telugu!
             </p>
             <div class="pt-2 border-t border-stone-100 flex flex-wrap gap-1.5">
-              <span class="text-[10px] text-stone-400 w-full font-bold uppercase tracking-wider">Try asking:</span>
+              <span class="text-[10px] text-stone-400 w-full font-bold uppercase tracking-wider">Try asking or tap an occasion:</span>
+              <button onclick="sendAiQuickPrompt('Hosting Satyanarayana Pooja for 30 people combo kit')"
+                class="text-[11px] px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-full font-medium transition cursor-pointer">🪔
+                Satyanarayana Pooja (30 Guests)</button>
+              <button onclick="sendAiQuickPrompt('Bride wearing deep maroon Kanjeevaram wedding suite')"
+                class="text-[11px] px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-full font-medium transition cursor-pointer">👑
+                Maroon Saree Bridal Combo</button>
               <button onclick="sendAiQuickPrompt('Suggest traditional pooja items for Sankranti Nomu')"
                 class="text-[11px] px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-full font-medium transition cursor-pointer">🌾
-                Sankranti Nomu items</button>
-              <button onclick="sendAiQuickPrompt('Recommend Kundan choker and jewellery for wedding')"
-                class="text-[11px] px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-full font-medium transition cursor-pointer">👑
-                Bridal Kundan Sets</button>
-              <button onclick="sendAiQuickPrompt('What disposables do you have for 50 people party?')"
+                Sankranti Nomu Kit</button>
+              <button onclick="sendAiQuickPrompt('What leaf buffet plates do you have for party dining?')"
                 class="text-[11px] px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 rounded-full font-medium transition cursor-pointer">🍃
                 Leaf Buffet Plates</button>
-              <button onclick="sendAiQuickPrompt('Kartheeka masam pooja items and diya stand')"
-                class="text-[11px] px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-full font-medium transition cursor-pointer">🪔
-                33 Diya Stand</button>
             </div>
           </div>
         </div>
@@ -1529,14 +1543,21 @@
       <!-- Chat Input Footer -->
       <div class="p-3 bg-white border-t border-stone-200 flex-shrink-0">
         <form onsubmit="handleAiChatSubmit(event)" class="flex items-center gap-2 relative">
-          <input type="text" id="aiChatInput" placeholder="Ask in English or Telugu (e.g. nomu items, kundan choker)..."
-            class="flex-1 pl-3.5 pr-10 py-2.5 text-xs sm:text-sm bg-stone-100 rounded-xl border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
+          <input type="text" id="aiChatInput" placeholder="Ask or speak in English / Telugu (e.g. nomu, kundan, pooja kit)..."
+            class="flex-1 pl-3.5 pr-20 py-2.5 text-xs sm:text-sm bg-stone-100 rounded-xl border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
             autocomplete="off">
-          <button type="submit" id="aiChatSendBtn"
-            class="absolute right-1.5 top-1.5 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 text-white flex items-center justify-center hover:from-amber-700 hover:to-amber-800 transition shadow-2xs cursor-pointer"
-            title="Send">
-            <i data-lucide="send" class="w-3.5 h-3.5"></i>
-          </button>
+          <div class="absolute right-1.5 top-1.5 flex items-center gap-1">
+            <button type="button" id="voiceChatBtn" onclick="startVoiceSearch('chat')"
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-stone-500 hover:text-amber-800 hover:bg-amber-100/80 flex items-center justify-center transition cursor-pointer"
+              title="Speak your question (Telugu, Hindi, English)">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
+            <button type="submit" id="aiChatSendBtn"
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 text-white flex items-center justify-center hover:from-amber-700 hover:to-amber-800 transition shadow-2xs cursor-pointer"
+              title="Send">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
         </form>
         <div class="flex items-center justify-between text-[10px] text-stone-400 mt-1.5 px-1">
           <span>⚡ Sub-second response via Groq LPU</span>
@@ -4197,6 +4218,83 @@
       }
     }
 
+    let voiceRecognition = null;
+    let isVoiceListening = false;
+
+    function startVoiceSearch(target) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        showToastNotification("🎙️ Voice search is supported on Chrome, Edge & Android. Please type your query!");
+        return;
+      }
+
+      const desktopMic = document.getElementById('voiceSearchBtnDesktop');
+      const mobileMic = document.getElementById('voiceSearchBtnMobile');
+      const chatMic = document.getElementById('voiceChatBtn');
+      const allMics = [desktopMic, mobileMic, chatMic].filter(Boolean);
+
+      if (isVoiceListening) {
+        if (voiceRecognition) {
+          try { voiceRecognition.stop(); } catch(e) {}
+        }
+        return;
+      }
+
+      try {
+        voiceRecognition = new SpeechRecognition();
+        voiceRecognition.continuous = false;
+        voiceRecognition.interimResults = false;
+        voiceRecognition.lang = 'en-IN';
+
+        voiceRecognition.onstart = function() {
+          isVoiceListening = true;
+          allMics.forEach(btn => {
+            btn.classList.add('text-red-600', 'animate-pulse', 'bg-red-50');
+            btn.innerHTML = '<i data-lucide="mic-off" class="w-4 h-4"></i>';
+          });
+          if (window.lucide) lucide.createIcons();
+          showToastNotification("🎙️ Listening... Speak now in English or Telugu (e.g. 'Kundan choker' or 'nomu')", 3500);
+        };
+
+        voiceRecognition.onresult = function(event) {
+          if (!event.results || !event.results[0]) return;
+          const transcript = event.results[0][0].transcript;
+          console.log("[VoiceSearch] Heard:", transcript);
+
+          if (target === 'chat') {
+            const chatInput = document.getElementById('aiChatInput');
+            if (chatInput) {
+              chatInput.value = transcript;
+              handleAiChatSubmit();
+            }
+          } else {
+            handleSearch(transcript);
+            showSearchDropdown(transcript, target);
+          }
+        };
+
+        voiceRecognition.onerror = function(event) {
+          console.warn("[VoiceSearch] Error:", event.error);
+          if (event.error === 'not-allowed') {
+            showToastNotification("Microphone permission denied. Please allow microphone access in your browser settings.");
+          }
+        };
+
+        voiceRecognition.onend = function() {
+          isVoiceListening = false;
+          allMics.forEach(btn => {
+            btn.classList.remove('text-red-600', 'animate-pulse', 'bg-red-50');
+            btn.innerHTML = '<i data-lucide="mic" class="w-4 h-4"></i>';
+          });
+          if (window.lucide) lucide.createIcons();
+        };
+
+        voiceRecognition.start();
+      } catch (err) {
+        console.error("Voice search initialization failed:", err);
+      }
+    }
+
     function handleSearch(val) {
       searchQuery = val;
       const dInput = document.getElementById('searchInput');
@@ -4533,6 +4631,19 @@
           reply = `Namaste! We couldn't find items under ₹${priceIntent.maxPrice} as our lowest-priced authentic artisanal items start from ₹${minP}. Here are our best budget picks:`;
           return { reply, product_ids: productIds };
         }
+      }
+
+      // 2. Smart Occasion & Dynamic Combo Generator
+      if (q.includes('satyanarayana') || q.includes('satyanarayan') || (q.includes('pooja') && (q.includes('people') || q.includes('guest') || q.includes('combo') || q.includes('kit')))) {
+        reply = "🙏 Namaste! For an auspicious Satyanarayana Swamy Pooja or housewarming gathering, we have curated the Complete Sacred Pooja & Dining Combo. It includes our Handcrafted Brass 33 Diya Stand, 8-Inch Lotus Pooja Plate, Ashtothara Pooja Set, and 100% leak-proof Biodegradable Leaf Buffet Plates for guest prasad dining. Enjoy special combo package savings with same-day express courier dispatch!";
+        productIds = [703481457, 16088680, 928103031, 266442417];
+        return { reply, product_ids: productIds };
+      }
+
+      if (q.includes('maroon') || ((q.includes('bride') || q.includes('bridal')) && (q.includes('kanjeevaram') || q.includes('silk') || q.includes('combo') || q.includes('suite') || q.includes('look')))) {
+        reply = "👑 Namaste! For a bride adorning rich traditional silk (like deep maroon or crimson Kanjeevaram), we have assembled the Royal Heritage Bridal Suite. Pure Handcrafted Jadau Kundan Choker paired with matching Micro-Gold Studs and skin-safe Black Beads Mala for an imperial temple look with ₹598 package savings and Free Express Delivery!";
+        productIds = [378586240, 811552810, 255146495];
+        return { reply, product_ids: productIds };
       }
 
       if (q.includes('nomu') || q.includes('sankranti') || q.includes('నోము') || q.includes('సంక్రాంతి')) {
