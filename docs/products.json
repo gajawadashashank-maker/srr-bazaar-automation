@@ -1,5 +1,18 @@
 [
   {
+    "id": 342025745,
+    "title": "Premium Gold Replica",
+    "category": "necklace",
+    "price": 1599,
+    "originalPrice": 2398,
+    "tag": "New Arrival",
+    "image": "images/catalog/c3de3d5a78e24ee087643fafe3f593f5.jpg",
+    "description": "Branded item\nLord Shiva Parvathi Neck Set With Same Ear rings",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 654912212,
     "title": "Pink flowers",
     "category": "necklace",
