@@ -459,7 +459,7 @@
           </span>
           <h2 class="text-sm sm:text-base font-extrabold text-stone-900 mt-1 flex items-center gap-1.5">
             <span>Frequently Bought Together</span>
-            <span class="text-amber-800 font-bold text-xs bg-amber-100 px-2 py-0.5 rounded-full">Save up to ₹220</span>
+            <span class="text-amber-800 font-bold text-xs bg-amber-100 px-2 py-0.5 rounded-full">Save up to ₹400</span>
           </h2>
           <p class="text-[11px] text-stone-500">Hand-curated pairings dispatched together with multi-layer bubble wrap protection</p>
         </div>
@@ -3056,25 +3056,55 @@
     // FREQUENTLY BOUGHT TOGETHER (COMBO BUNDLES)
     // =========================================================================
     function addComboToCart(comboType) {
+      let comboItem = null;
       if (comboType === 'bridal') {
-        const item1 = products.find(p => p.id === 286241428) || products.find(p => p.category === 'necklace') || products[0];
-        const item2 = products.find(p => p.id === 972028016) || products.find(p => p.category === 'earrings') || products[1];
-        if (item1) addToCart(item1.id, { openDrawer: false, showToast: false });
-        if (item2) addToCart(item2.id, { openDrawer: false, showToast: false });
-        showAmazonToast({ title: 'Added Royal Bridal Duo to Cart (Save ₹220)' });
+        comboItem = {
+          id: 99001,
+          title: '👑 Royal Bridal Kundan & Matching Studs Duo (2-Piece Set)',
+          price: 999,
+          originalPrice: 1219,
+          savings: 220,
+          image: 'images/catalog/56bb18119e8d45f4a84b6fb01cb5d214.jpg',
+          qty: 1,
+          isCombo: true
+        };
       } else if (comboType === 'pooja') {
-        const item1 = products.find(p => p.id === 703481457) || products.find(p => p.title && p.title.toLowerCase().includes('diya')) || products[0];
-        const item2 = products.find(p => p.id === 247403588) || products.find(p => p.title && p.title.toLowerCase().includes('swan')) || products[1];
-        if (item1) addToCart(item1.id, { openDrawer: false, showToast: false });
-        if (item2) addToCart(item2.id, { openDrawer: false, showToast: false });
-        showAmazonToast({ title: 'Added 33 Diya Stand & Swan Tray Kit (Save ₹400)' });
+        comboItem = {
+          id: 99002,
+          title: '🪔 Festive 33 Diya Stand & Swan Tray Kit (2-Piece Set)',
+          price: 1899,
+          originalPrice: 2299,
+          savings: 400,
+          image: 'images/catalog/14e2a340dc204f72913a3a89d9eddeb1.jpg',
+          qty: 1,
+          isCombo: true
+        };
       } else if (comboType === 'nomu') {
-        const item1 = products.find(p => p.id === 592133224) || products[0];
-        const item2 = products.find(p => p.id === 250107691) || products[1];
-        if (item1) addToCart(item1.id, { openDrawer: false, showToast: false });
-        if (item2) addToCart(item2.id, { openDrawer: false, showToast: false });
-        showAmazonToast({ title: 'Added Sankranti Nomu Kit to Cart (Save ₹151)' });
+        comboItem = {
+          id: 99003,
+          title: '🌾 Sankranti Nomu Special Pooja Kit (Edu Kondala & Kadapalu)',
+          price: 649,
+          originalPrice: 800,
+          savings: 151,
+          image: 'images/catalog/0bb6251c30a74343942e815fba2c1f79.jpg',
+          qty: 1,
+          isCombo: true
+        };
       }
+
+      if (!comboItem) return;
+
+      const existing = cart.find(i => i.id === comboItem.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push(comboItem);
+      }
+
+      saveCart();
+      updateCartUI();
+      pulseCartBadge();
+      showAmazonToast(comboItem);
     }
 
     // =========================================================================
@@ -3465,7 +3495,11 @@
             <img src="${item.image}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
             <div class="flex-1 min-w-0">
               <h4 class="text-xs font-bold text-stone-900 truncate">${item.title}</h4>
-              <p class="text-xs font-extrabold text-maroon-950 mt-0.5">₹${item.price}</p>
+              <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
+                <span class="text-xs font-extrabold text-maroon-950">₹${item.price}</span>
+                ${item.originalPrice ? `<span class="text-[10px] text-stone-400 line-through">₹${item.originalPrice}</span>` : ''}
+                ${item.savings ? `<span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded">Saved ₹${item.savings}</span>` : ''}
+              </div>
               <div class="flex items-center gap-2 mt-2">
                 <button onclick="updateCartQty(${item.id}, -1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">-</button>
                 <span class="text-xs font-semibold px-1">${item.qty}</span>
