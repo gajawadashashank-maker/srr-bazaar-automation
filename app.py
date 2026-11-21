@@ -105,6 +105,8 @@ def claim_whatsapp_message(message: dict[str, Any]) -> bool:
     """Return True only for the first delivery of a WhatsApp message ID."""
     message_id = str(message.get("id", "")).strip()
     media_data = message.get("image") or message.get("video") or {}
+    text_data = message.get("text", {})
+    caption = str(media_data.get("caption", "") or text_data.get("body", "")).strip()
     if not message_id:
         return False
 
@@ -119,7 +121,7 @@ def claim_whatsapp_message(message: dict[str, Any]) -> bool:
                 message_id,
                 str(media_data.get("id", "")),
                 str(message.get("from", "")),
-                str(media_data.get("caption", "")),
+                caption,
             ),
         )
         connection.commit()
@@ -730,21 +732,15 @@ def home():
     }
 
 
-@app.post("/api/ai-stylist")
-async def ai_stylist_endpoint(request: Request):
+def ask_groq_stylist(user_query: str) -> dict[str, Any]:
     """
     SRR Bazaar AI Stylist & Pooja Concierge powered by Groq LPU (qwen/qwen3.8-27b).
-    Provides instant multilingual product styling recommendations with direct product IDs.
+    Provides instant multilingual product styling recommendations and order tracking assistance.
     """
-    try:
-        body = await request.json()
-    except Exception:
-        body = {}
-
-    user_query = str(body.get("message", "")).strip()
-    if not user_query:
+    clean_query = user_query.strip()
+    if not clean_query:
         return {
-            "reply": "Namaste! Please ask me about bridal jewellery, Sankranti pooja items, sarees, or wholesale disposables!",
+            "reply": "Namaste! Welcome to SRR Bazaar (Sujatha Collections). Please ask me about bridal jewellery, Sankranti pooja items, sarees, order tracking, or wholesale items!",
             "product_ids": []
         }
 
@@ -765,21 +761,23 @@ async def ai_stylist_endpoint(request: Request):
     ])
 
     system_prompt = f"""You are the official AI Shopping Stylist and Festive Concierge for SRR Bazaar (Sujatha Collections), based in Telangana.
-Logistics Partner: The Professional Couriers (Armoor Hub). Free express delivery across India. Cash on Delivery (COD) available. Direct WhatsApp assist: +91 8185012453.
+Logistics Partner: The Professional Couriers (Armoor Hub). Free express delivery across India. Cash on Delivery (COD) available.
+Direct WhatsApp assist: +91 8185012453 | Helpline: +91 9948633303 | Website: https://srrbazaar.com
 
 Active store catalogue:
 {catalog_summary}
 
 Instructions:
-1. Reply warmly in 2-4 friendly, concise sentences. Respond in the user's language (English, Telugu, or Hindi).
-2. Recommend 1 to 3 specific products from the catalogue that best fit their request, occasion, or budget.
-3. At the very end of your response, ALWAYS append the recommended product IDs formatted exactly as:
+1. Reply warmly in 2-4 friendly, concise sentences. Respond in the customer's language (English, Telugu, or Hindi).
+2. If they ask for recommendations or items: Recommend 1 to 3 specific products from the catalogue that fit their request, occasion, or budget.
+3. If they ask about order tracking / shipping: Explain that all orders are dispatched same-day via The Professional Couriers (Armoor Hub) and can be tracked at https://www.tpcindia.com/. Invite them to share their consignment number or city for instant status.
+4. At the very end of your response, if you recommended products, append the product IDs formatted exactly as:
 [PRODUCTS: id1, id2]
 Example: [PRODUCTS: 703481457, 592133224]"""
 
     if not groq_api_key:
         return {
-            "reply": "Namaste! Welcome to SRR Bazaar. Our AI engine is being configured. Please explore our curated collections or message our stylist on WhatsApp at +91 8185012453.",
+            "reply": "Namaste! Welcome to SRR Bazaar. Our AI engine is ready to assist. Please explore our curated collections on https://srrbazaar.com or message our stylist on WhatsApp at +91 8185012453.",
             "product_ids": [703481457, 592133224, 928103031]
         }
 
@@ -793,7 +791,7 @@ Example: [PRODUCTS: 703481457, 592133224]"""
             "model": "qwen/qwen3.8-27b",
             "messages": [
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_query}
+                {"role": "user", "content": clean_query}
             ],
             "max_tokens": 300,
             "temperature": 0.5
@@ -830,9 +828,105 @@ Example: [PRODUCTS: 703481457, 592133224]"""
     except Exception as exc:
         logger.exception("AI Stylist failed: %s", exc)
         return {
-            "reply": "Namaste! I am having trouble connecting right now, but you can explore our curated festive collections below or connect directly with our stylist on WhatsApp!",
+            "reply": "Namaste! I am having trouble connecting right now, but you can explore our curated festive collections on https://srrbazaar.com or connect directly with our stylist on WhatsApp!",
             "product_ids": [592133224, 703481457, 928103031]
         }
+
+
+def send_whatsapp_text(to_number: str, message_text: str) -> bool:
+    """Send a direct WhatsApp text reply to a customer via Meta WhatsApp Cloud API."""
+    if not WHATSAPP_ACCESS_TOKEN or not WHATSAPP_PHONE_NUMBER_ID:
+        logger.warning("WhatsApp credentials missing; cannot send direct reply.")
+        return False
+
+    url = f"https://graph.facebook.com/{WHATSAPP_API_VERSION}/{WHATSAPP_PHONE_NUMBER_ID}/messages"
+    headers = {
+        "Authorization": f"Bearer {WHATSAPP_ACCESS_TOKEN}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": to_number,
+        "type": "text",
+        "text": {"preview_url": True, "body": message_text},
+    }
+    try:
+        resp = requests.post(url, headers=headers, json=payload, timeout=15)
+        if resp.status_code in (200, 201):
+            logger.info("Successfully sent WhatsApp reply to %s", to_number)
+            return True
+        else:
+            logger.error(
+                "Failed to send WhatsApp message to %s (%d): %s",
+                to_number,
+                resp.status_code,
+                resp.text,
+            )
+            return False
+    except Exception as exc:
+        logger.exception("Error sending WhatsApp message to %s: %s", to_number, exc)
+        return False
+
+
+def format_whatsapp_reply_with_links(reply_text: str, product_ids: list[int]) -> str:
+    """Format AI Stylist reply for WhatsApp text message with store links and product details."""
+    parts = [reply_text]
+
+    # If product IDs recommended, attach their titles, prices and website links
+    if product_ids:
+        products_file = Path("docs/products.json")
+        if products_file.exists():
+            try:
+                products_list = json.loads(products_file.read_text(encoding="utf-8"))
+                matched = [p for p in products_list if p.get("id") in product_ids][:3]
+                if matched:
+                    parts.append("\n🛍️ Recommended Collections:")
+                    for p in matched:
+                        title = p.get("title", "")
+                        price = p.get("price", 0)
+                        parts.append(f"• {title} — ₹{price}")
+            except Exception:
+                pass
+
+    parts.append(
+        "\n🌐 View & Order Online: https://srrbazaar.com\n"
+        "🚚 Free Express Delivery via The Professional Couriers (Armoor Hub)\n"
+        "📦 COD Available | Support: +91 9948633303"
+    )
+    return "\n".join(parts).strip()
+
+
+def handle_whatsapp_customer_reply(sender: str, user_text: str, message_id: str | None = None) -> None:
+    """Process incoming customer question with Groq and send direct reply back to their WhatsApp."""
+    try:
+        logger.info("Processing customer WhatsApp message from %s: '%s'", sender, user_text)
+        result = ask_groq_stylist(user_text)
+        formatted_reply = format_whatsapp_reply_with_links(
+            result.get("reply", ""),
+            result.get("product_ids", [])
+        )
+        success = send_whatsapp_text(to_number=sender, message_text=formatted_reply)
+        if success and message_id:
+            update_whatsapp_job(message_id, status="replied")
+    except Exception as exc:
+        logger.exception("Failed customer WhatsApp reply to %s: %s", sender, exc)
+        if message_id:
+            update_whatsapp_job(message_id, status="failed", error=str(exc)[:500])
+
+
+@app.post("/api/ai-stylist")
+async def ai_stylist_endpoint(request: Request):
+    """
+    SRR Bazaar AI Stylist & Pooja Concierge API endpoint for website.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+
+    user_query = str(body.get("message", "")).strip()
+    return ask_groq_stylist(user_query)
 
 
 @app.post("/publish")
@@ -935,22 +1029,51 @@ async def receive_whatsapp_webhook(
 
             for message in value.get("messages", []):
                 msg_type = message.get("type")
-                if msg_type not in ("image", "video"):
-                    ignored += 1
-                    continue
-
                 sender = str(message.get("from", "")).strip().lstrip("+")
-                if WHATSAPP_ALLOWED_SENDERS and sender not in WHATSAPP_ALLOWED_SENDERS:
-                    logger.warning("Ignoring media from sender not in WHATSAPP_ALLOWED_SENDERS: %s", sender)
-                    ignored += 1
+                message_id = str(message.get("id", "")).strip()
+
+                # Case 1: Media (Image / Video) from Admin -> Product Reel Generation & Store Sync
+                if msg_type in ("image", "video"):
+                    if WHATSAPP_ALLOWED_SENDERS and sender not in WHATSAPP_ALLOWED_SENDERS:
+                        logger.warning("Ignoring media from sender not in WHATSAPP_ALLOWED_SENDERS: %s", sender)
+                        ignored += 1
+                        continue
+
+                    if claim_whatsapp_message(message):
+                        background_tasks.add_task(process_whatsapp_image, message)
+                        queued += 1
+                    else:
+                        logger.info("Ignoring duplicate WhatsApp media delivery: %s", message_id)
+                        ignored += 1
                     continue
 
-                if claim_whatsapp_message(message):
-                    background_tasks.add_task(process_whatsapp_image, message)
-                    queued += 1
-                else:
-                    logger.info("Ignoring duplicate WhatsApp message delivery: %s", message.get("id"))
-                    ignored += 1
+                # Case 2: Customer Text or Interactive Inquiry -> Groq AI Concierge Auto-Reply
+                if msg_type in ("text", "interactive"):
+                    user_text = ""
+                    if msg_type == "text":
+                        user_text = str(message.get("text", {}).get("body", "")).strip()
+                    elif msg_type == "interactive":
+                        interactive = message.get("interactive", {})
+                        user_text = (
+                            interactive.get("button_reply", {}).get("title")
+                            or interactive.get("list_reply", {}).get("title")
+                            or ""
+                        ).strip()
 
-    # Respond immediately. Media download, FFmpeg, Cloudinary and Instagram run after the ACK.
-    return {"status": "received", "queued_images": queued, "ignored_events": ignored}
+                    if not user_text:
+                        ignored += 1
+                        continue
+
+                    if claim_whatsapp_message(message):
+                        background_tasks.add_task(handle_whatsapp_customer_reply, sender, user_text, message_id)
+                        queued += 1
+                    else:
+                        logger.info("Ignoring duplicate WhatsApp customer message: %s", message_id)
+                        ignored += 1
+                    continue
+
+                # Unhandled message types
+                ignored += 1
+
+    # Respond immediately. Media processing & AI replies run asynchronously in background.
+    return {"status": "received", "queued_tasks": queued, "ignored_events": ignored}
