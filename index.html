@@ -439,13 +439,12 @@
         <div id="desktopSearchWrapper" class="hidden md:flex flex-1 max-w-md mx-6 relative">
           <input type="text" id="searchInput" placeholder="Search sarees, necklace, mangalsutra, swan tray..."
             class="w-full pl-9 pr-9 py-1.5 text-xs sm:text-sm bg-stone-100 rounded-full border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
-            oninput="handleSearch(this.value)"
-            onfocus="showSearchDropdown(this.value, 'desktop')"
-            onclick="showSearchDropdown(this.value, 'desktop')"
-            autocomplete="off">
+            oninput="handleSearch(this.value)" onfocus="showSearchDropdown(this.value, 'desktop')"
+            onclick="showSearchDropdown(this.value, 'desktop')" autocomplete="off">
           <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-3 top-2.5"></i>
           <button id="searchClearBtnDesktop" onclick="clearSearch()"
-            class="hidden absolute right-3 top-2 text-stone-400 hover:text-stone-700 transition cursor-pointer" title="Clear search">
+            class="hidden absolute right-3 top-2 text-stone-400 hover:text-stone-700 transition cursor-pointer"
+            title="Clear search">
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
           <!-- Desktop Search Recommendations Dropdown -->
@@ -456,6 +455,15 @@
 
         <!-- Action Buttons -->
         <div class="flex items-center gap-1.5 sm:gap-3">
+          <!-- AI Stylist Trigger -->
+          <button onclick="toggleAiStylistModal(true)"
+            class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-amber-50 to-amber-100/90 text-amber-950 border border-amber-300 text-xs font-bold rounded-full hover:bg-amber-200 transition shadow-2xs cursor-pointer group"
+            title="Ask SRR AI Stylist & Pooja Concierge">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600 group-hover:rotate-12 transition"></i>
+            <span class="hidden sm:inline">AI Stylist</span>
+            <span class="sm:hidden text-[11px]">AI</span>
+          </button>
+
           <!-- Order Tracking Trigger -->
           <button onclick="openTrackingModal()"
             class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-amber-50 text-amber-900 border border-amber-300/80 text-xs font-bold rounded-full hover:bg-amber-100 transition shadow-2xs cursor-pointer"
@@ -497,13 +505,12 @@
           <input type="text" id="mobileSearchInput"
             placeholder="Search SRR Bazaar (e.g. leaf plates, nomu, kundan, saree)..."
             class="w-full pl-8 pr-8 py-2 text-xs bg-stone-100 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white shadow-inner"
-            oninput="handleSearch(this.value)"
-            onfocus="showSearchDropdown(this.value, 'mobile')"
-            onclick="showSearchDropdown(this.value, 'mobile')"
-            autocomplete="off">
+            oninput="handleSearch(this.value)" onfocus="showSearchDropdown(this.value, 'mobile')"
+            onclick="showSearchDropdown(this.value, 'mobile')" autocomplete="off">
           <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5"></i>
           <button id="searchClearBtnMobile" onclick="clearSearch()"
-            class="hidden absolute right-2.5 top-2 text-stone-400 hover:text-stone-700 transition cursor-pointer" title="Clear search">
+            class="hidden absolute right-2.5 top-2 text-stone-400 hover:text-stone-700 transition cursor-pointer"
+            title="Clear search">
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
           <!-- Mobile Search Recommendations Dropdown -->
@@ -1422,6 +1429,97 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- FLOATING AI STYLIST & POOJA CONCIERGE BUTTON (GROQ POWERED)               -->
+  <!-- ========================================================================= -->
+  <button id="aiStylistFloatingBtn" onclick="toggleAiStylistModal(true)"
+    class="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-amber-700 via-amber-800 to-maroon-950 text-white font-bold text-xs sm:text-sm shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 border border-amber-300/40 cursor-pointer group"
+    title="Chat with SRR AI Stylist & Pooja Concierge">
+    <span class="relative flex h-2.5 w-2.5">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400"></span>
+    </span>
+    <i data-lucide="sparkles" class="w-4 h-4 text-amber-200 group-hover:rotate-12 transition"></i>
+    <span class="tracking-wide">Ask AI Stylist</span>
+  </button>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: SRR AI STYLIST & POOJA CONCIERGE (POWERED BY GROQ)                 -->
+  <!-- ========================================================================= -->
+  <div id="aiStylistModal"
+    class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4"
+    onclick="if(event.target === this) closeAiStylistModal()">
+    <div
+      class="bg-white w-full sm:max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden flex flex-col h-[85vh] sm:h-[650px] max-h-[92vh] relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-200 border border-stone-200">
+
+      <!-- Modal Header -->
+      <div class="px-4 py-3 bg-gradient-to-r from-maroon-950 via-maroon-900 to-stone-900 text-white flex items-center justify-between border-b border-amber-500/30 flex-shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-maroon-950 shadow-md font-bold">
+            <i data-lucide="sparkles" class="w-5 h-5 text-maroon-950"></i>
+          </div>
+          <div>
+            <h3 class="text-xs sm:text-sm font-extrabold flex items-center gap-1.5 text-white">
+              <span>SRR AI Stylist & Pooja Concierge</span>
+            </h3>
+            <p class="text-[10px] text-amber-200/90 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Sub-second AI • English, Telugu & Hindi</span>
+            </p>
+          </div>
+        </div>
+        <button onclick="closeAiStylistModal()"
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer" title="Close">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Chat Messages Scroll Container -->
+      <div id="aiChatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-stone-50/70 text-xs sm:text-sm">
+        <!-- AI Welcome Bubble -->
+        <div class="flex items-start gap-2.5">
+          <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 mt-0.5">
+            SR
+          </div>
+          <div class="bg-white rounded-2xl rounded-tl-xs p-3.5 border border-stone-200/80 shadow-2xs max-w-[88%] space-y-2">
+            <p class="text-stone-800 leading-relaxed text-xs">
+              <strong>Namaste! 🙏 Welcome to SRR Bazaar.</strong><br>
+              I am your personal AI shopping stylist. Ask me for bridal jewellery combinations, Sankranti pooja essentials, pure cotton sarees, or buffet disposables in English or Telugu!
+            </p>
+            <div class="pt-2 border-t border-stone-100 flex flex-wrap gap-1.5">
+              <span class="text-[10px] text-stone-400 w-full font-bold uppercase tracking-wider">Try asking:</span>
+              <button onclick="sendAiQuickPrompt('Suggest traditional pooja items for Sankranti Nomu')" class="text-[11px] px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-full font-medium transition cursor-pointer">🌾 Sankranti Nomu items</button>
+              <button onclick="sendAiQuickPrompt('Recommend Kundan choker and jewellery for wedding')" class="text-[11px] px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-full font-medium transition cursor-pointer">👑 Bridal Kundan Sets</button>
+              <button onclick="sendAiQuickPrompt('What disposables do you have for 50 people party?')" class="text-[11px] px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 rounded-full font-medium transition cursor-pointer">🍃 Leaf Buffet Plates</button>
+              <button onclick="sendAiQuickPrompt('Kartheeka masam pooja items and diya stand')" class="text-[11px] px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-full font-medium transition cursor-pointer">🪔 33 Diya Stand</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Footer -->
+      <div class="p-3 bg-white border-t border-stone-200 flex-shrink-0">
+        <form onsubmit="handleAiChatSubmit(event)" class="flex items-center gap-2 relative">
+          <input type="text" id="aiChatInput" placeholder="Ask in English or Telugu (e.g. nomu items, kundan choker)..."
+            class="flex-1 pl-3.5 pr-10 py-2.5 text-xs sm:text-sm bg-stone-100 rounded-xl border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
+            autocomplete="off">
+          <button type="submit" id="aiChatSendBtn"
+            class="absolute right-1.5 top-1.5 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 text-white flex items-center justify-center hover:from-amber-700 hover:to-amber-800 transition shadow-2xs cursor-pointer"
+            title="Send">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+          </button>
+        </form>
+        <div class="flex items-center justify-between text-[10px] text-stone-400 mt-1.5 px-1">
+          <span>⚡ Sub-second response via Groq LPU</span>
+          <a href="https://wa.me/918185012453" target="_blank" class="text-emerald-700 font-semibold hover:underline flex items-center gap-0.5">
+            <i data-lucide="message-circle" class="w-3 h-3 text-emerald-600"></i> Human WhatsApp Help
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- Floating Cart Toast Notification -->
   <!-- ========================================================================= -->
   <div id="amazonCartToast"
@@ -2221,6 +2319,7 @@
 
     function syncBodyScrollLock() {
       const anyOpen = [
+        'aiStylistModal',
         'orderSuccessModal',
         'merchantModal',
         'merchantPinModal',
@@ -3421,15 +3520,15 @@
     function getRelatedProducts(matchedProducts, maxCount = 8) {
       const matchedIds = new Set(matchedProducts.map(p => p.id));
       const matchedCategories = Array.from(new Set(matchedProducts.map(p => p.category)));
-      
+
       let related = [];
-      
+
       // 1. Same category items not already in matches
       for (const cat of matchedCategories) {
         const sameCat = products.filter(p => p.category === cat && !matchedIds.has(p.id));
         related.push(...sameCat);
       }
-      
+
       // 2. Complementary categories (e.g. decor <-> samagri, necklace <-> earrings <-> mangalsutra)
       const COMPLEMENTARY_CATS = {
         'decor': ['samagri'],
@@ -3443,7 +3542,7 @@
         'dryfruits': ['groceries', 'snacks'],
         'snacks': ['dryfruits', 'groceries']
       };
-      
+
       for (const cat of matchedCategories) {
         const compCats = COMPLEMENTARY_CATS[cat] || [];
         for (const compCat of compCats) {
@@ -3451,7 +3550,7 @@
           related.push(...compItems);
         }
       }
-      
+
       // De-duplicate related by id
       const seen = new Set();
       const uniqueRelated = [];
@@ -3461,7 +3560,7 @@
           uniqueRelated.push(p);
         }
       }
-      
+
       // 3. Fallback if still under 4 items, add top rated products
       if (uniqueRelated.length < 4) {
         const topRated = [...products]
@@ -3472,7 +3571,7 @@
           uniqueRelated.push(p);
         }
       }
-      
+
       return uniqueRelated.slice(0, maxCount);
     }
 
@@ -3663,7 +3762,7 @@
     }
 
     // Dismiss search dropdowns on outside click or Escape key
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       const dWrapper = document.getElementById('desktopSearchWrapper');
       const mWrapper = document.getElementById('mobileSearchWrapper');
       const dDropdown = document.getElementById('desktopSearchDropdown');
@@ -3677,7 +3776,7 @@
       }
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         hideAllSearchDropdowns();
       }
@@ -4272,6 +4371,197 @@
       }
     }
 
+    // =========================================================================
+    // SRR AI STYLIST & POOJA CONCIERGE (GROQ BACKEND & LOCAL KNOWLEDGE HYBRID)
+    // =========================================================================
+    function openAiStylistModal(triggerHistory = true) {
+      const modal = document.getElementById('aiStylistModal');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      if (triggerHistory) {
+        pushModalHistory('aiStylistModal');
+      }
+      lucide.createIcons();
+      const input = document.getElementById('aiChatInput');
+      if (input) setTimeout(() => input.focus(), 150);
+    }
+
+    function closeAiStylistModal(triggerHistory = true) {
+      hideModalDOM('aiStylistModal');
+      if (triggerHistory) {
+        popModalHistory('aiStylistModal');
+      }
+    }
+
+    function toggleAiStylistModal(open) {
+      if (open) openAiStylistModal(true);
+      else closeAiStylistModal(true);
+    }
+
+    function sendAiQuickPrompt(promptText) {
+      const input = document.getElementById('aiChatInput');
+      if (input) input.value = promptText;
+      handleAiChatSubmit();
+    }
+
+    function generateClientAiResponse(userText) {
+      const q = (userText || '').toLowerCase();
+      let reply = '';
+      let productIds = [];
+
+      if (q.includes('nomu') || q.includes('sankranti') || q.includes('నోము') || q.includes('సంక్రాంతి')) {
+        reply = "నమస్తే! Sankranti Nomu pooja is a revered festival in our traditions. For an authentic and divine ceremony, our handcrafted Edu Kondala Nomu set and Kadapalu Nomu are highly cherished by our customers across Telangana and Andhra Pradesh with Free Express Delivery.";
+        productIds = [338044272, 250107691, 703481457];
+      } else if (q.includes('diya') || q.includes('deepam') || q.includes('deepalu') || q.includes('kartheeka') || q.includes('దీపం')) {
+        reply = "Namaste! Our brass 33 Diya Stand is our most loved festive essential, designed for auspicious poojas and Kartheeka Masam. Paired with our 8-Inch Lotus Pooja Plate, your altar will glow with divine grace.";
+        productIds = [703481457, 16088680, 749296149];
+      } else if (q.includes('kundan') || q.includes('choker') || q.includes('necklace') || q.includes('wedding') || q.includes('bridal') || q.includes('కుందన్') || q.includes('నెక్లెస్')) {
+        reply = "For wedding celebrations, nothing compares to the royalty of Pure Jadau Kundan and Bridal Chokers! Handcrafted by master Telangana artisans with non-allergic skin-safe micro gold finish. Here are our top bridal picks:";
+        productIds = [378586240, 811552810, 773703568];
+      } else if (q.includes('leaf') || q.includes('plate') || q.includes('plates') || q.includes('buffet') || q.includes('disposable') || q.includes('ప్లేట్లు')) {
+        reply = "For dining and party catering, our 100% Biodegradable Leaf Buffet Plates are eco-friendly, sturdy, leak-proof, and microwave safe. Wholesale packs of 20 with pan-India express dispatch!";
+        productIds = [928103031];
+      } else if (q.includes('saree') || q.includes('sari') || q.includes('khadi') || q.includes('cotton') || q.includes('చీర')) {
+        reply = "Our Pure Khadi Cotton Sarees are sourced directly from Telangana handloom weavers, featuring breathable, rich traditional weave textures with matching blouse pieces.";
+        productIds = [128844229, 959992377, 987154951];
+      } else if (q.includes('swan') || q.includes('tray') || q.includes('organizer')) {
+        reply = "Our Royal 6.5\" Swan Organizer Tray is a showstopper for pooja prasad distribution, haldi-kumkum, or dressing table storage. Handcrafted antique gold finish!";
+        productIds = [247403588, 2];
+      } else if (q.includes('black beads') || q.includes('mangalsutra') || q.includes('mala') || q.includes('నల్లపూసలు')) {
+        reply = "Our lightweight daily wear Black Beads Malas and Tulip micro-gold polish chains are skin-safe and elegant for everyday temple and workplace wear.";
+        productIds = [255146495, 189373322, 733581582];
+      } else {
+        const matches = searchProducts(userText);
+        if (matches.length > 0) {
+          reply = `Namaste! Based on your request for "${userText}", I handpicked these top-rated items with authentic artisanal quality and free express courier delivery:`;
+          productIds = matches.slice(0, 3).map(p => p.id);
+        } else {
+          reply = "Namaste! Welcome to SRR Bazaar. We specialize in authentic bridal Kundan jewellery, festive Sankranti pooja decor, handloom sarees, and wholesale disposables. Here are our most loved essentials:";
+          productIds = [338044272, 703481457, 378586240];
+        }
+      }
+
+      return { reply, product_ids: productIds };
+    }
+
+    async function handleAiChatSubmit(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById('aiChatInput');
+      if (!input) return;
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      input.value = '';
+      const sendBtn = document.getElementById('aiChatSendBtn');
+      if (sendBtn) sendBtn.disabled = true;
+
+      const container = document.getElementById('aiChatMessages');
+
+      // Append Customer Message
+      const userBubble = document.createElement('div');
+      userBubble.className = "flex items-start justify-end gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-150";
+      userBubble.innerHTML = `
+        <div class="bg-gradient-to-r from-amber-700 to-maroon-900 text-white rounded-2xl rounded-tr-xs p-3 shadow-2xs max-w-[85%] text-xs leading-relaxed">
+          ${userText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+        </div>
+      `;
+      container.appendChild(userBubble);
+      container.scrollTop = container.scrollHeight;
+
+      // Append Typing Indicator
+      const typingIndicator = document.createElement('div');
+      typingIndicator.id = "aiTypingIndicator";
+      typingIndicator.className = "flex items-start gap-2.5 animate-in fade-in duration-150";
+      typingIndicator.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 mt-0.5">
+          SR
+        </div>
+        <div class="bg-white rounded-2xl rounded-tl-xs px-3.5 py-2.5 border border-stone-200 shadow-2xs flex items-center gap-2 text-stone-500 text-xs">
+          <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+          <span>AI Stylist is thinking (via Groq)...</span>
+        </div>
+      `;
+      container.appendChild(typingIndicator);
+      container.scrollTop = container.scrollHeight;
+
+      let aiReply = '';
+      let recommendedIds = [];
+
+      try {
+        const res = await fetch('/api/ai-stylist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: userText })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          aiReply = data.reply;
+          recommendedIds = data.product_ids || [];
+        } else {
+          throw new Error('Local API unavailable');
+        }
+      } catch (err) {
+        // Fallback to client-side catalog knowledge engine
+        const fallback = generateClientAiResponse(userText);
+        aiReply = fallback.reply;
+        recommendedIds = fallback.product_ids;
+      } finally {
+        const ind = document.getElementById('aiTypingIndicator');
+        if (ind) ind.remove();
+        if (sendBtn) sendBtn.disabled = false;
+      }
+
+      // Render AI Response Bubble with Interactive Product Cards
+      const matchedProds = (recommendedIds || [])
+        .map(id => products.find(p => p.id === id))
+        .filter(Boolean);
+
+      const aiBubble = document.createElement('div');
+      aiBubble.className = "flex items-start gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-200";
+      aiBubble.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 mt-0.5">
+          SR
+        </div>
+        <div class="bg-white rounded-2xl rounded-tl-xs p-3.5 border border-stone-200/80 shadow-2xs max-w-[88%] space-y-2">
+          <p class="text-stone-800 leading-relaxed text-xs">
+            ${aiReply}
+          </p>
+          ${matchedProds.length > 0 ? `
+            <div class="pt-2 border-t border-stone-100 space-y-2">
+              <span class="text-[10px] font-bold text-stone-500 uppercase tracking-wider flex items-center gap-1">
+                <i data-lucide="sparkles" class="w-3 h-3 text-amber-600"></i> Recommended for you:
+              </span>
+              <div class="space-y-1.5">
+                ${matchedProds.map(p => `
+                  <div class="p-2 bg-stone-50 hover:bg-amber-50/50 rounded-xl border border-stone-200 flex items-center gap-2.5 transition">
+                    <img src="${p.image}" alt="${p.title}" class="w-11 h-11 rounded-lg object-cover border border-stone-200 flex-shrink-0" onerror="this.src='https://placehold.co/80x80?text=SRR'">
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-xs font-bold text-stone-900 truncate">${p.title}</h4>
+                      <div class="flex items-center gap-1.5 mt-0.5">
+                        <span class="text-xs font-extrabold text-stone-950">₹${p.price}</span>
+                        <span class="text-[10px] text-emerald-700 font-bold">FREE Delivery</span>
+                      </div>
+                    </div>
+                    <div class="flex flex-col gap-1 flex-shrink-0">
+                      <button onclick="openQuickView(${p.id}); closeAiStylistModal();" class="px-2 py-1 text-[10px] font-bold bg-[#ffd814] hover:bg-[#f7ca00] text-stone-950 rounded-md transition shadow-2xs cursor-pointer">
+                        View
+                      </button>
+                      <button onclick="quickOrderProduct(${p.id}); closeAiStylistModal();" class="px-2 py-1 text-[10px] font-bold bg-[#ffa41c] hover:bg-[#fa8900] text-stone-950 rounded-md transition shadow-2xs cursor-pointer">
+                        Buy
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+      container.appendChild(aiBubble);
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
     function closeTrackingModal(triggerHistory = true) {
       hideModalDOM('trackingModal');
       if (triggerHistory) {
@@ -4420,6 +4710,7 @@
     // =========================================================================
     window.addEventListener('popstate', (e) => {
       const modalPriority = [
+        'aiStylistModal',
         'orderSuccessModal',
         'merchantModal',
         'merchantPinModal',
@@ -4446,6 +4737,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' || e.keyCode === 27) {
         const modalPriority = [
+          'aiStylistModal',
           'orderSuccessModal',
           'merchantModal',
           'merchantPinModal',
@@ -4458,7 +4750,8 @@
         for (const mId of modalPriority) {
           const el = document.getElementById(mId);
           if (el && !el.classList.contains('hidden')) {
-            if (mId === 'cartDrawer') toggleCartDrawer(false);
+            if (mId === 'aiStylistModal') closeAiStylistModal();
+            else if (mId === 'cartDrawer') toggleCartDrawer(false);
             else if (mId === 'quickViewModal') closeQuickView();
             else if (mId === 'checkoutModal') closeCheckout();
             else if (mId === 'trackingModal') closeTrackingModal();
