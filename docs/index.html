@@ -453,7 +453,7 @@
         <!-- Search Bar (Desktop) -->
         <div id="desktopSearchWrapper" class="hidden md:flex flex-1 max-w-md mx-6 relative">
           <input type="text" id="searchInput" placeholder="Search sarees, necklace, mangalsutra, swan tray..."
-            class="w-full pl-9 pr-16 py-1.5 text-xs sm:text-sm bg-stone-100 rounded-full border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
+            class="w-full pl-9 pr-24 py-1.5 text-xs sm:text-sm bg-stone-100 rounded-full border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
             oninput="handleSearch(this.value)" onfocus="showSearchDropdown(this.value, 'desktop')"
             onclick="showSearchDropdown(this.value, 'desktop')" autocomplete="off">
           <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-3 top-2.5"></i>
@@ -467,6 +467,11 @@
               class="p-1 rounded-full text-stone-500 hover:text-amber-700 hover:bg-amber-100/80 transition cursor-pointer"
               title="Speak to Search (Telugu, English, Hindi)">
               <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
+            <button id="visualSearchBtnDesktop" onclick="triggerVisualSearchUpload('desktop')"
+              class="p-1 rounded-full text-stone-500 hover:text-amber-700 hover:bg-amber-100/80 transition cursor-pointer"
+              title="Visual Search (Snap & Shop via AI Vision)">
+              <i data-lucide="camera" class="w-4 h-4"></i>
             </button>
           </div>
           <!-- Desktop Search Recommendations Dropdown -->
@@ -519,7 +524,7 @@
         <div id="mobileSearchWrapper" class="relative">
           <input type="text" id="mobileSearchInput"
             placeholder="Search SRR Bazaar (e.g. leaf plates, nomu, kundan, saree)..."
-            class="w-full pl-8 pr-16 py-2 text-xs bg-stone-100 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white shadow-inner"
+            class="w-full pl-8 pr-24 py-2 text-xs bg-stone-100 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white shadow-inner"
             oninput="handleSearch(this.value)" onfocus="showSearchDropdown(this.value, 'mobile')"
             onclick="showSearchDropdown(this.value, 'mobile')" autocomplete="off">
           <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5"></i>
@@ -533,6 +538,11 @@
               class="p-1 rounded-full text-stone-500 hover:text-amber-700 hover:bg-amber-100/80 transition cursor-pointer"
               title="Speak to Search (Telugu, English, Hindi)">
               <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
+            <button id="visualSearchBtnMobile" onclick="triggerVisualSearchUpload('mobile')"
+              class="p-1 rounded-full text-stone-500 hover:text-amber-700 hover:bg-amber-100/80 transition cursor-pointer"
+              title="Visual Search (Snap & Shop via AI Vision)">
+              <i data-lucide="camera" class="w-4 h-4"></i>
             </button>
           </div>
           <!-- Mobile Search Recommendations Dropdown -->
@@ -1542,11 +1552,19 @@
 
       <!-- Chat Input Footer -->
       <div class="p-3 bg-white border-t border-stone-200 flex-shrink-0">
+        <!-- Hidden input for Visual Search Snap & Shop -->
+        <input type="file" id="visualSearchFileInput" accept="image/*" class="hidden" onchange="handleVisualSearchFileSelected(event)">
+
         <form onsubmit="handleAiChatSubmit(event)" class="flex items-center gap-2 relative">
-          <input type="text" id="aiChatInput" placeholder="Ask or speak in English / Telugu (e.g. nomu, kundan, pooja kit)..."
-            class="flex-1 pl-3.5 pr-20 py-2.5 text-xs sm:text-sm bg-stone-100 rounded-xl border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
+          <input type="text" id="aiChatInput" placeholder="Ask, speak, or snap photo (nomu, kundan, bridal)..."
+            class="flex-1 pl-3.5 pr-28 py-2.5 text-xs sm:text-sm bg-stone-100 rounded-xl border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
             autocomplete="off">
           <div class="absolute right-1.5 top-1.5 flex items-center gap-1">
+            <button type="button" id="visualSearchBtnChat" onclick="triggerVisualSearchUpload('chat')"
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-stone-500 hover:text-amber-800 hover:bg-amber-100/80 flex items-center justify-center transition cursor-pointer"
+              title="Snap & Shop (Upload Photo for Visual Search)">
+              <i data-lucide="camera" class="w-4 h-4"></i>
+            </button>
             <button type="button" id="voiceChatBtn" onclick="startVoiceSearch('chat')"
               class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-stone-500 hover:text-amber-800 hover:bg-amber-100/80 flex items-center justify-center transition cursor-pointer"
               title="Speak your question (Telugu, Hindi, English)">
@@ -4292,6 +4310,75 @@
         voiceRecognition.start();
       } catch (err) {
         console.error("Voice search initialization failed:", err);
+      }
+    }
+
+    let visualSearchTarget = 'desktop';
+
+    function triggerVisualSearchUpload(target) {
+      visualSearchTarget = target || 'desktop';
+      const fileInput = document.getElementById('visualSearchFileInput');
+      if (fileInput) {
+        fileInput.value = '';
+        fileInput.click();
+      }
+    }
+
+    async function handleVisualSearchFileSelected(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      showToastNotification("📷 AI is analyzing your image with local Vision model...", 4000);
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch('/api/visual-search', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          console.log("[VisualSearch] Result:", data);
+          const desc = data.description || '';
+
+          let queryKeywords = '';
+          const kwMatch = desc.match(/<start of keywords>([\s\S]*?)<end of keywords>/i);
+          if (kwMatch) {
+            queryKeywords = kwMatch[1].replace(/,/g, ' ').trim();
+          } else {
+            queryKeywords = desc.split('.')[0].replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
+          }
+
+          if (!queryKeywords) queryKeywords = 'handcrafted jewellery pooja';
+
+          if (visualSearchTarget === 'chat') {
+            const chatInput = document.getElementById('aiChatInput');
+            if (chatInput) {
+              chatInput.value = `Find matching items for: ${queryKeywords}`;
+              handleAiChatSubmit();
+            }
+          } else {
+            const input = (visualSearchTarget === 'mobile') 
+              ? document.getElementById('mobileSearchInput') 
+              : document.getElementById('searchInput');
+            if (input) {
+              input.value = queryKeywords;
+              handleSearch(queryKeywords);
+              showSearchDropdown(queryKeywords, visualSearchTarget);
+            }
+          }
+          showToastNotification(`✨ Found matches for: "${queryKeywords.slice(0, 35)}..."`);
+        } else {
+          throw new Error('Local visual search endpoint unavailable');
+        }
+      } catch (err) {
+        console.warn("[VisualSearch] Fallback to filename/tag matcher:", err);
+        const fallbackQuery = file.name.replace(/[-_.]/g, ' ').replace(/(jpg|png|jpeg|webp)/gi, '').trim() || 'kundan choker';
+        handleSearch(fallbackQuery);
+        showToastNotification(`✨ Showing closest matches for "${fallbackQuery}"`);
       }
     }
 

@@ -1068,6 +1068,71 @@ async def ai_stylist_endpoint(request: Request):
     return ask_groq_stylist(user_query)
 
 
+def ask_ollama_vision(image_bytes: bytes) -> tuple[str, list[dict[str, Any]]]:
+    """
+    Use local Ollama minicpm-v vision model to inspect uploaded image,
+    extract keywords, and retrieve matching products from the store catalogue.
+    """
+    import base64
+    b64 = base64.b64encode(image_bytes).decode()
+
+    # Load catalogue
+    products_file = Path("docs/products.json")
+    products_list = []
+    if products_file.exists():
+        try:
+            products_list = json.loads(products_file.read_text(encoding="utf-8"))
+        except Exception:
+            products_list = []
+
+    prompt = (
+        "Identify what product is in this image. "
+        "Provide 3-5 keywords describing it (e.g. necklace, earrings, kundan choker, pooja tray, brass diya, saree, leaf plates):"
+    )
+
+    try:
+        resp = requests.post(
+            f"{os.getenv('OLLAMA_BASE_URL', 'http://127.0.0.1:11434').rstrip('/')}/api/chat",
+            json={
+                "model": "minicpm-v",
+                "messages": [{
+                    "role": "user",
+                    "content": prompt,
+                    "images": [b64]
+                }],
+                "stream": False,
+                "options": {"num_predict": 120}
+            },
+            timeout=40
+        )
+        if resp.status_code == 200:
+            content = resp.json().get("message", {}).get("content", "")
+            matches = _filter_relevant_catalog(content, products_list, max_items=4)
+            return content, matches
+    except Exception as e:
+        logger.warning("Local Ollama vision failed: %s", e)
+
+    return "Handcrafted festive jewellery & pooja collections", products_list[:4]
+
+
+@app.post("/api/visual-search")
+async def visual_search_endpoint(file: UploadFile = File(...)):
+    """
+    Inspect an uploaded photo with local Ollama minicpm-v vision model
+    and return closest matching items in SRR Bazaar catalogue.
+    """
+    contents = await file.read()
+    if not contents:
+        raise HTTPException(status_code=400, detail="Empty image file uploaded")
+    detected_desc, matches = ask_ollama_vision(contents)
+    return {
+        "status": "success",
+        "description": detected_desc,
+        "product_ids": [p.get("id") for p in matches],
+        "products": matches
+    }
+
+
 @app.post("/publish")
 async def publish_product(
     photo: UploadFile = File(...),

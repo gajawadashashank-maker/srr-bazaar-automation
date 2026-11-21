@@ -320,6 +320,7 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 | **Budget & Price Filters** | Shopper asks "under 500" but search/AI returns ₹999 items because "500" was treated as a text keyword | Extract `parsePriceIntent` regex (`under X`, `below X`, `between X and Y`) and filter `price <= maxPrice` BEFORE text scoring or LLM prompt generation |
 | **Voice Search Typing Barrier** | Non-English / mobile shoppers struggle typing complex traditional terms | Integrate HTML5 Web Speech API (`en-IN`) on desktop & mobile search bars with live animated mic toggle |
 | **Occasion-Based Kit Building** | Customers must manually find pooja brassware and buffet disposables individually | Smart Occasion Combo Engine generating complete 1-tap kits (e.g. Satyanarayana Pooja / Maroon Bridal) with bundled savings |
+| **Visual Search ("Snap & Shop")** | Low-capacity vision models (e.g. Moondream) misclassify Indian jewelry/pooja items as generic urns | Use high-capacity local vision model (`minicpm-v` via Ollama) or Groq Vision, extract structured tags, and query catalog |
 ```
 
 ---
@@ -463,6 +464,15 @@ This log documents every architectural pitfall discovered and resolved during re
   2. **Smart Occasion Combo Builder**:
      - Detect occasion and attire intents in the AI engine (e.g. *"Satyanarayana Pooja for 30 people"*, *"Maroon Kanjeevaram Bridal look"*).
      - Dynamically package complete kits (Pooja ritual brassware + guest buffet dining leaf plates; bridal choker + matching studs + black beads) with 1-tap combo discounts and direct WhatsApp purchase routing.
+
+### 11. Visual Search ("Snap & Shop"): Model Selection Pitfall (Moondream vs MiniCPM-V)
+- **What Happened**: When testing local visual search on traditional Indian retail products (Kundan choker necklace, CZ earrings, silver swan decorative tray), a lightweight vision model (`moondream:latest`, 1.7 GB) misidentified all items as generic *"urn"* or decorative pot, rendering the visual search feature unusable.
+- **Why It Happened**: Ultralight vision models lack domain features and cultural vocabulary for intricate ethnic jewelry, brass pooja ware, and Indian craft motifs.
+- **How to Avoid**:
+  1. Use high-capability vision models (`minicpm-v:latest`, 5.5 GB) in Ollama or Groq Vision (`llama-3.2-11b-vision-preview`).
+  2. Structure the vision prompt to force a specific keyword extraction syntax:
+     `Identify the primary product, category, jewelry/handicraft type, gemstone, and metal. Output 3-6 search keywords inside <start of keywords> and <end of keywords>.`
+  3. Wire a seamless client fallback: If backend visual inference is offline, extract clean keywords from the uploaded filename (`kundan-choker.jpg` $\rightarrow$ *"kundan choker"*) and trigger instant client-side catalog filtering without dropping the customer.
 
 
 
