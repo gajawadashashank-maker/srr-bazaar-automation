@@ -74,6 +74,24 @@ def main():
         assert "Edu Kondala Nomu" in grid_text, "Search for 'edukondala' must match 'Edu Kondala Nomu'"
         print("✓ Successfully matched 'edukondala' -> 'Edu Kondala Nomu'")
 
+        # 3b. Test Typo / Inflection Match: 'edukondalu' (User's Exact Typo)
+        print("\n--- Test 3b: Typing 'edukondalu' (Ending with 'u' typo) ---")
+        search_input.clear()
+        search_input.send_keys("edukondalu")
+        time.sleep(1)
+
+        dropdown_html = dropdown.get_attribute("innerHTML")
+        assert "Edu Kondala Nomu" in dropdown_html, "Dropdown must recommend 'Edu Kondala Nomu' for typo 'edukondalu'"
+        assert "Typo corrected" in dropdown_html or "Showing results for" in dropdown_html, "Dropdown should show auto-correction notice"
+        
+        grid_text = driver.find_element(By.ID, "productGrid").text
+        assert "Edu Kondala Nomu" in grid_text, "Grid must display 'Edu Kondala Nomu' for query 'edukondalu'"
+        
+        heading_text = driver.find_element(By.ID, "catalogueHeading").text
+        print(f"Catalogue heading for 'edukondalu': {heading_text}")
+        assert "Edu Kondala" in heading_text, "Heading should show corrected product name"
+        print("✓ Successfully handled typo 'edukondalu' -> 'Edu Kondala Nomu' with Amazon-style correction!")
+
         # 4. Test Synonym / Regional Keyword: 'diya'
         print("\n--- Test 4: Typing 'diya' ---")
         search_input.clear()

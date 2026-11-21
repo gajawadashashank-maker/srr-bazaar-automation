@@ -3194,49 +3194,107 @@
     }
 
     // =========================================================================
-    // ROBUST SEARCH & RECOMMENDATION ENGINE
+    // ROBUST SEARCH & RECOMMENDATION ENGINE (WITH FUZZY / TYPO RESILIENCE)
     // =========================================================================
     const SEARCH_SYNONYMS = {
-      'edukondala': ['edu', 'kondala', 'nomu', 'sankranti', 'sankranthi', 'festive', 'decor', 'pooja'],
-      'edu': ['edukondala', 'kondala', 'nomu'],
-      'kondala': ['edukondala', 'edu', 'nomu', 'sankranti'],
-      'nomu': ['edukondala', 'kondala', 'sankranti', 'kadapalu', 'pooja', 'festive'],
-      'sankranti': ['nomu', 'edukondala', 'kadapalu', 'festive', 'pooja'],
-      'sankranthi': ['sankranti', 'nomu', 'edukondala', 'kadapalu'],
-      'kadapalu': ['nomu', 'sankranti', 'edukondala', 'festive'],
-      'diya': ['deepam', 'deepalu', 'stand', 'kartheeka', 'brass', 'sanku', 'decor', 'pooja'],
-      'diyas': ['diya', 'deepam', 'deepalu', 'stand', 'brass'],
-      'deepam': ['diya', 'deepalu', 'stand', 'kartheeka'],
-      'deepalu': ['diya', 'deepam', 'stand', 'sanku'],
-      'stand': ['diya', 'deepam', 'kartheeka', 'brass'],
+      'edukondalu': ['edukondala', 'edu', 'kondala', 'nomu', 'sankranti', 'pooja', 'festive', 'decor'],
+      'edukondala': ['edukondalu', 'edu', 'kondala', 'nomu', 'sankranti', 'sankranthi', 'festive', 'decor', 'pooja'],
+      'edu': ['edukondala', 'edukondalu', 'kondala', 'kondalu', 'nomu'],
+      'kondala': ['edukondala', 'edukondalu', 'edu', 'kondalu', 'nomu', 'sankranti'],
+      'kondalu': ['edukondala', 'edukondalu', 'edu', 'kondala', 'nomu', 'sankranti'],
+      'nomu': ['edukondala', 'edukondalu', 'kondala', 'nomulu', 'sankranti', 'kadapalu', 'pooja', 'festive'],
+      'nomulu': ['edukondala', 'edukondalu', 'nomu', 'sankranti', 'kadapalu', 'pooja'],
+      'sankranti': ['nomu', 'nomulu', 'edukondala', 'edukondalu', 'kadapalu', 'festive', 'pooja'],
+      'sankranthi': ['sankranti', 'nomu', 'edukondala', 'edukondalu', 'kadapalu'],
+      'kadapalu': ['nomu', 'sankranti', 'edukondala', 'kadapa', 'festive'],
+      'kadapa': ['kadapalu', 'nomu', 'sankranti', 'edukondala'],
+      'diya': ['deepam', 'deepalu', 'diyas', 'diyalu', 'stand', 'kartheeka', 'brass', 'sanku', 'decor', 'pooja'],
+      'diyas': ['diya', 'deepam', 'deepalu', 'diyalu', 'stand', 'brass'],
+      'diyalu': ['diya', 'diyas', 'deepam', 'deepalu', 'stand'],
+      'deepam': ['diya', 'diyas', 'deepalu', 'diyalu', 'stand', 'kartheeka'],
+      'deepalu': ['diya', 'diyas', 'deepam', 'diyalu', 'stand', 'sanku'],
+      'stand': ['diya', 'deepam', 'deepalu', 'kartheeka', 'brass'],
       'plate': ['plates', 'leaf', 'buffet', 'lotus', 'disposables'],
       'plates': ['plate', 'leaf', 'buffet', 'disposables', 'lotus'],
       'leaf': ['plates', 'buffet', 'biodegradable', 'disposables'],
       'buffet': ['leaf', 'plates', 'disposables'],
       'disposable': ['disposables', 'leaf', 'plates', 'buffet', 'cup'],
       'disposables': ['disposable', 'leaf', 'plates', 'buffet'],
-      'kundan': ['kundhan', 'jadau', 'jadav', 'necklace', 'choker', 'jewellery', 'bridal', 'haar'],
-      'kundhan': ['kundan', 'jadau', 'jadav', 'necklace', 'choker'],
+      'kundan': ['kundhan', 'kundon', 'jadau', 'jadav', 'necklace', 'choker', 'jewellery', 'bridal', 'haar'],
+      'kundhan': ['kundan', 'kundon', 'jadau', 'jadav', 'necklace', 'choker'],
+      'kundon': ['kundan', 'kundhan', 'jadau', 'necklace'],
       'jadau': ['kundan', 'kundhan', 'jadav', 'necklace', 'bridal'],
       'jadav': ['jadau', 'kundan', 'kundhan', 'necklace'],
-      'choker': ['necklace', 'kundan', 'bridal', 'haar', 'floral'],
+      'choker': ['necklace', 'chokar', 'kundan', 'bridal', 'haar', 'floral'],
+      'chokar': ['choker', 'necklace', 'kundan', 'bridal'],
       'necklace': ['choker', 'kundan', 'haram', 'bridal', 'chain', 'jewellery'],
-      'saree': ['sari', 'khadi', 'cotton', 'handloom', 'weaves'],
-      'sari': ['saree', 'khadi', 'cotton'],
+      'saree': ['sarees', 'sari', 'khadi', 'cotton', 'handloom', 'weaves'],
+      'sarees': ['saree', 'sari', 'khadi', 'cotton'],
+      'sari': ['saree', 'sarees', 'khadi', 'cotton'],
       'khadi': ['cotton', 'saree', 'handloom'],
       'cotton': ['khadi', 'saree'],
       'swan': ['tray', 'organizer', 'decorative', 'decor'],
       'tray': ['swan', 'designer', 'lotus', 'decor'],
-      'black beads': ['mangalsutra', 'tulip', 'mala', 'chain'],
-      'mangalsutra': ['black beads', 'mala', 'tulip', 'tulips', 'chain', 'locket'],
+      'black beads': ['mangalsutra', 'nallapusalu', 'tulip', 'mala', 'chain'],
+      'nallapusalu': ['black beads', 'mangalsutra', 'mala'],
+      'mangalsutra': ['black beads', 'nallapusalu', 'mala', 'tulip', 'tulips', 'chain', 'locket'],
       'mala': ['mangalsutra', 'tulips', 'black beads'],
       'tulip': ['tulips', 'mangalsutra', 'black beads', 'mala'],
       'tulips': ['tulip', 'mangalsutra', 'black beads', 'mala'],
       'earring': ['earrings', 'jhumka', 'studs', 'cz', 'solitaire', 'bangles'],
       'earrings': ['earring', 'jhumka', 'studs', 'cz', 'solitaire', 'bangles'],
       'jhumka': ['earrings', 'studs'],
-      'studs': ['earrings', 'cz', 'solitaire']
+      'studs': ['earrings', 'cz', 'solitaire'],
+      'bangle': ['bangles', 'kangan', 'earrings'],
+      'bangles': ['bangle', 'kangan', 'earrings']
     };
+
+    function levenshteinDistance(s1, s2) {
+      if (s1 === s2) return 0;
+      if (!s1.length) return s2.length;
+      if (!s2.length) return s1.length;
+      const d = [];
+      for (let i = 0; i <= s1.length; i++) d[i] = [i];
+      for (let j = 0; j <= s2.length; j++) d[0][j] = j;
+      for (let i = 1; i <= s1.length; i++) {
+        for (let j = 1; j <= s2.length; j++) {
+          const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+          d[i][j] = Math.min(
+            d[i - 1][j] + 1,
+            d[i][j - 1] + 1,
+            d[i - 1][j - 1] + cost
+          );
+        }
+      }
+      return d[s1.length][s2.length];
+    }
+
+    function isFuzzyMatch(w1, w2, maxDist = 2) {
+      if (!w1 || !w2) return false;
+      if (w1 === w2) return true;
+      const minLen = Math.min(w1.length, w2.length);
+      if (minLen < 3) return false;
+      const allowed = minLen <= 4 ? 1 : (minLen <= 7 ? 2 : Math.min(maxDist, 3));
+      return levenshteinDistance(w1, w2) <= allowed;
+    }
+
+    function getWordStems(w) {
+      const stems = [w];
+      if (w.endsWith('alu')) {
+        stems.push(w.slice(0, -3) + 'ala');
+        stems.push(w.slice(0, -3));
+      } else if (w.endsWith('ala')) {
+        stems.push(w.slice(0, -3) + 'alu');
+        stems.push(w.slice(0, -3));
+      } else if (w.endsWith('am')) {
+        stems.push(w.slice(0, -2) + 'alu');
+        stems.push(w.slice(0, -2) + 'ala');
+        stems.push(w.slice(0, -2));
+      } else if (w.endsWith('s')) {
+        stems.push(w.slice(0, -1));
+      }
+      return Array.from(new Set(stems));
+    }
 
     function normalizeSearchStr(str) {
       return (str || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -3260,35 +3318,75 @@
       else if (titleNorm.startsWith(q)) score += 120;
       else if (titleNorm.includes(q)) score += 90;
 
-      // 2. Condensed match (handles "edukondala" matching "Edu Kondala" or "diyastand" matching "Diya Stand")
+      // 2. Condensed exact match
       if (titleCondensed.includes(qCondensed)) {
         score += 80;
       }
 
-      // 3. Token-based matching
-      const qTokens = q.split(' ').filter(Boolean);
-      let tokensMatched = 0;
-      for (const token of qTokens) {
-        if (titleNorm.includes(token)) {
-          tokensMatched++;
-          score += 35;
-        } else if (titleCondensed.includes(token)) {
-          tokensMatched++;
-          score += 30;
-        } else if (catNorm.includes(token) || tagNorm.includes(token)) {
-          tokensMatched++;
-          score += 25;
-        } else if (descNorm.includes(token)) {
-          tokensMatched++;
-          score += 15;
-        } else {
-          // Check synonyms
-          const syns = SEARCH_SYNONYMS[token] || [];
-          const synMatched = syns.some(s => titleNorm.includes(s) || titleCondensed.includes(s) || catNorm.includes(s) || descNorm.includes(s));
-          if (synMatched) {
-            tokensMatched++;
-            score += 20;
+      // 3. Sliding window fuzzy condensed match (e.g. "edukondalu" matches "edukondala" with distance 1)
+      const L = qCondensed.length;
+      if (titleCondensed.length >= L && L >= 4) {
+        for (let i = 0; i <= titleCondensed.length - L; i++) {
+          const sub = titleCondensed.substring(i, i + L);
+          if (isFuzzyMatch(qCondensed, sub)) {
+            score += 110;
+            break;
           }
+        }
+      } else if (isFuzzyMatch(qCondensed, titleCondensed)) {
+        score += 90;
+      }
+
+      // 4. Token-based matching with stems and fuzzy matching
+      const qTokens = q.split(' ').filter(Boolean);
+      const tTokens = titleNorm.split(' ').filter(Boolean);
+      let tokensMatched = 0;
+
+      for (const token of qTokens) {
+        const tokenStems = getWordStems(token);
+        const syns = SEARCH_SYNONYMS[token] || [];
+        const allVariants = new Set([...tokenStems, ...syns]);
+
+        let tokenHit = false;
+
+        // A. Direct & stem/synonym check in title, category, tag, desc
+        for (const variant of allVariants) {
+          if (titleNorm.includes(variant)) {
+            tokenHit = true;
+            score += 35;
+            break;
+          } else if (titleCondensed.includes(variant)) {
+            tokenHit = true;
+            score += 30;
+            break;
+          } else if (catNorm.includes(variant) || tagNorm.includes(variant)) {
+            tokenHit = true;
+            score += 25;
+            break;
+          } else if (descNorm.includes(variant)) {
+            tokenHit = true;
+            score += 15;
+            break;
+          } else if (tTokens.some(tTok => isFuzzyMatch(variant, tTok))) {
+            tokenHit = true;
+            score += 30;
+            break;
+          }
+        }
+
+        // B. Fuzzy match raw query token against title tokens
+        if (!tokenHit) {
+          if (tTokens.some(tTok => isFuzzyMatch(token, tTok))) {
+            tokenHit = true;
+            score += 28;
+          } else if (descNorm.split(' ').slice(0, 20).some(dTok => isFuzzyMatch(token, dTok))) {
+            tokenHit = true;
+            score += 15;
+          }
+        }
+
+        if (tokenHit) {
+          tokensMatched++;
         }
       }
 
@@ -3301,7 +3399,7 @@
       if (SEARCH_SYNONYMS[qCondensed]) {
         for (const syn of SEARCH_SYNONYMS[qCondensed]) {
           if (titleNorm.includes(syn) || titleCondensed.includes(syn) || catNorm.includes(syn)) {
-            score += 30;
+            score += 40;
           }
         }
       }
@@ -3437,14 +3535,31 @@
       if (matches.length > 0) {
         const topMatches = matches.slice(0, 5);
         const related = getRelatedProducts(matches, 3);
+        const qNorm = normalizeSearchStr(q);
+        const qCond = qNorm.replace(/\s+/g, '');
+        const topMatch = matches[0];
+        const topNorm = normalizeSearchStr(topMatch.title);
+        const topCond = topNorm.replace(/\s+/g, '');
+        const isDirectMatch = topNorm.includes(qNorm) || topCond.includes(qCond);
+        const correctedTitle = topMatch.title.split('(')[0].trim();
 
         dropdown.innerHTML = `
-          <div class="p-2.5 bg-stone-50/90 border-b border-stone-100 flex items-center justify-between">
-            <span class="text-[11px] font-extrabold text-stone-700 flex items-center gap-1.5">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i> Matching Products (${matches.length})
-            </span>
-            <span class="text-[10px] text-stone-400">Click item for instant preview</span>
-          </div>
+          ${!isDirectMatch ? `
+            <div class="px-3 py-1.5 bg-amber-50 text-amber-900 text-xs font-semibold border-b border-amber-200/80 flex items-center justify-between">
+              <span class="flex items-center gap-1.5 truncate">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0"></i>
+                <span>Showing results for <b class="text-amber-950 font-bold">${correctedTitle}</b></span>
+              </span>
+              <span class="text-[10px] text-stone-500 flex-shrink-0 ml-2">Typo corrected</span>
+            </div>
+          ` : `
+            <div class="p-2.5 bg-stone-50/90 border-b border-stone-100 flex items-center justify-between">
+              <span class="text-[11px] font-extrabold text-stone-700 flex items-center gap-1.5">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i> Matching Products (${matches.length})
+              </span>
+              <span class="text-[10px] text-stone-400">Click item for instant preview</span>
+            </div>
+          `}
           <div class="divide-y divide-stone-100 max-h-64 sm:max-h-72 overflow-y-auto">
             ${topMatches.map(p => `
               <div onclick="selectSearchDropdownItem(${p.id})" class="p-2.5 hover:bg-amber-50/60 flex items-center gap-3 cursor-pointer transition group">
@@ -3602,10 +3717,21 @@
       // Dynamic Heading
       if (headingEl && subHeadingEl) {
         if (isSearchMode) {
-          headingEl.textContent = `Search: "${searchQuery}"`;
-          subHeadingEl.textContent = filtered.length > 0
-            ? `Found ${filtered.length} products matching your query`
-            : `0 exact matches found`;
+          const topMatch = filtered[0];
+          const qNorm = normalizeSearchStr(searchQuery);
+          const qCond = qNorm.replace(/\s+/g, '');
+          const isDirect = topMatch && (normalizeSearchStr(topMatch.title).includes(qNorm) || normalizeSearchStr(topMatch.title).replace(/\s+/g, '').includes(qCond));
+
+          if (!isDirect && topMatch) {
+            const correctedName = topMatch.title.split('(')[0].trim();
+            headingEl.innerHTML = `Showing results for <span class="text-amber-900 font-extrabold underline decoration-amber-400">"${correctedName}"</span>`;
+            subHeadingEl.innerHTML = `<span class="italic text-stone-500">Search instead for <b>"${searchQuery}"</b></span> • Found ${filtered.length} products`;
+          } else {
+            headingEl.textContent = `Search: "${searchQuery}"`;
+            subHeadingEl.textContent = filtered.length > 0
+              ? `Found ${filtered.length} products matching your query`
+              : `0 exact matches found`;
+          }
         } else if (activeCategory !== 'all') {
           const catMeta = {
             'necklace': { title: '👑 Royal Kundan & Choker Collections', sub: 'Handcrafted wedding harams, antique gold polish & statement neckwear' },
