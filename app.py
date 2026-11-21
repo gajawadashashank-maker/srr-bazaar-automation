@@ -17,6 +17,7 @@ import cloudinary.uploader
 import requests
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 
 from instagram_publisher import publish_reel
@@ -30,6 +31,14 @@ logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
 logger = logging.getLogger("srr_bazaar_automation")
 
 app = FastAPI(title="SRR Bazaar Product Reel Automation")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 UPLOAD_DIR = Path("uploads")
 OUTPUT_DIR = Path("generated")
@@ -719,6 +728,111 @@ def home():
         "status": "running",
         "whatsapp_auto_publish": WHATSAPP_AUTO_PUBLISH,
     }
+
+
+@app.post("/api/ai-stylist")
+async def ai_stylist_endpoint(request: Request):
+    """
+    SRR Bazaar AI Stylist & Pooja Concierge powered by Groq LPU (qwen/qwen3.8-27b).
+    Provides instant multilingual product styling recommendations with direct product IDs.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+
+    user_query = str(body.get("message", "")).strip()
+    if not user_query:
+        return {
+            "reply": "Namaste! Please ask me about bridal jewellery, Sankranti pooja items, sarees, or wholesale disposables!",
+            "product_ids": []
+        }
+
+    groq_api_key = os.getenv("GROQ_API_KEY", "").strip()
+
+    # Load catalogue from docs/products.json
+    products_file = Path("docs/products.json")
+    products_list = []
+    if products_file.exists():
+        try:
+            products_list = json.loads(products_file.read_text(encoding="utf-8"))
+        except Exception:
+            products_list = []
+
+    catalog_summary = "\n".join([
+        f"- ID: {p.get('id')} | {p.get('title')} | Cat: {p.get('category')} | Rs {p.get('price')}"
+        for p in products_list[:40]
+    ])
+
+    system_prompt = f"""You are the official AI Shopping Stylist and Festive Concierge for SRR Bazaar (Sujatha Collections), based in Telangana.
+Logistics Partner: The Professional Couriers (Armoor Hub). Free express delivery across India. Cash on Delivery (COD) available. Direct WhatsApp assist: +91 8185012453.
+
+Active store catalogue:
+{catalog_summary}
+
+Instructions:
+1. Reply warmly in 2-4 friendly, concise sentences. Respond in the user's language (English, Telugu, or Hindi).
+2. Recommend 1 to 3 specific products from the catalogue that best fit their request, occasion, or budget.
+3. At the very end of your response, ALWAYS append the recommended product IDs formatted exactly as:
+[PRODUCTS: id1, id2]
+Example: [PRODUCTS: 703481457, 592133224]"""
+
+    if not groq_api_key:
+        return {
+            "reply": "Namaste! Welcome to SRR Bazaar. Our AI engine is being configured. Please explore our curated collections or message our stylist on WhatsApp at +91 8185012453.",
+            "product_ids": [703481457, 592133224, 928103031]
+        }
+
+    try:
+        headers = {
+            "Authorization": f"Bearer {groq_api_key}",
+            "Content-Type": "application/json",
+            "User-Agent": "SRR-Bazaar/1.0"
+        }
+        data = {
+            "model": "qwen/qwen3.8-27b",
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_query}
+            ],
+            "max_tokens": 300,
+            "temperature": 0.5
+        }
+        resp = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers=headers,
+            json=data,
+            timeout=10
+        )
+        if resp.status_code == 200:
+            res_json = resp.json()
+            raw_reply = res_json["choices"][0]["message"].get("content", "")
+            # Extract product IDs if present
+            product_ids = []
+            m = re.search(r'\[PRODUCTS:\s*([0-9,\s]+)\]', raw_reply)
+            if m:
+                ids_str = m.group(1)
+                for part in ids_str.split(','):
+                    part_clean = part.strip()
+                    if part_clean.isdigit():
+                        product_ids.append(int(part_clean))
+                clean_reply = re.sub(r'\[PRODUCTS:\s*[0-9,\s]+\]', '', raw_reply).strip()
+            else:
+                clean_reply = raw_reply.strip()
+
+            return {"reply": clean_reply, "product_ids": product_ids}
+        else:
+            logger.error("Groq API error: %d %s", resp.status_code, resp.text)
+            return {
+                "reply": "Namaste! I can recommend our popular festive collections like Edu Kondala Nomu, 33 Diya Stand, and Kundan Chokers with Free Express Delivery!",
+                "product_ids": [592133224, 703481457, 378586240]
+            }
+    except Exception as exc:
+        logger.exception("AI Stylist failed: %s", exc)
+        return {
+            "reply": "Namaste! I am having trouble connecting right now, but you can explore our curated festive collections below or connect directly with our stylist on WhatsApp!",
+            "product_ids": [592133224, 703481457, 928103031]
+        }
 
 
 @app.post("/publish")
