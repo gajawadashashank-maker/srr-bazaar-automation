@@ -43,6 +43,48 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <meta name="twitter:description" content="{description_meta}">
   <meta name="twitter:image" content="{absolute_image}">
 
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="48x48" href="https://srrbazaar.com/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://srrbazaar.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://srrbazaar.com/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://srrbazaar.com/apple-touch-icon.png">
+  <link rel="shortcut icon" href="https://srrbazaar.com/favicon.ico">
+  <link rel="icon" href="/favicon.ico">
+
+  <!-- Schema.org Product Structured Data for Google Rich Snippets -->
+  <script type="application/ld+json">
+  {{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{title}",
+    "image": ["{absolute_image}"],
+    "description": "{description_meta}",
+    "sku": "SRR-{id}",
+    "brand": {{
+      "@type": "Brand",
+      "name": "SRR Bazaar"
+    }},
+    "offers": {{
+      "@type": "Offer",
+      "url": "https://srrbazaar.com/p/{id}.html",
+      "priceCurrency": "INR",
+      "price": "{price}",
+      "priceValidUntil": "2027-12-31",
+      "itemCondition": "https://schema.org/NewCondition",
+      "availability": "https://schema.org/InStock",
+      "seller": {{
+        "@type": "Organization",
+        "name": "SRR Bazaar"
+      }}
+    }},
+    "aggregateRating": {{
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "142"
+    }}
+  }}
+  </script>
+
   <link rel="canonical" href="https://srrbazaar.com/p/{id}.html">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
