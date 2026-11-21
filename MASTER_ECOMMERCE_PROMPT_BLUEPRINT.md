@@ -127,18 +127,26 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 
 ---
 
-### 9. GOOGLE SEARCH SEO & RICH SNIPPETS (Schema.org JSON-LD)
-- **Problem Solved**: Default websites show a generic globe `🌐` icon in Google without star ratings, prices, or sitelinks.
-- **Mandatory Head Requirements**:
-  1. **Square Multiples of 48px Favicons**:
+### 9. GOOGLE SEARCH SEO, FAVICONS & RICH SNIPPETS (Schema.org JSON-LD)
+- **Problem Solved**: Default websites show a generic globe `🌐` icon in Google without star ratings, prices, sitelinks, or logos, or show outdated cached previews for weeks.
+- **Mandatory Requirements Across Homepage AND All Product Pages (`/p/<id>.html`)**:
+  1. **Square Multiples of 48px Favicons (Strict Googlebot Standard)**:
      - `favicon-48x48.png`, `favicon-32x32.png`, `icon-192.png`, `icon-512.png`, `apple-touch-icon.png`, and `favicon.ico`.
-     - Explicit `<link rel="icon" type="image/png" sizes="48x48" href="...">`.
+     - Explicit `<link rel="icon" type="image/png" sizes="48x48" href="...">` and `<link rel="shortcut icon" href="...">` must be embedded in the `<head>` of **every single HTML page**, not just the homepage.
   2. **Schema.org Structured Data (`application/ld+json`)**:
-     - `WebSite` with `SearchAction` (enables Google sitelinks searchbox).
-     - `OnlineStore` / `Organization` with official `logo`, `name`, `telephone`, `address`, and `aggregateRating` (e.g. 4.9 ★ across 4,800 reviews).
-     - `ItemList` of top featured `Product` items with individual prices in INR, `InStock` availability, and review ratings.
+     - **Homepage**:
+       - `WebSite` with `SearchAction` (enables Google sitelinks searchbox).
+       - `OnlineStore` / `Organization` with official `logo`, `name`, `telephone`, `address`, and `aggregateRating` (e.g. 4.9 ★ across 4,800 reviews).
+       - `ItemList` of top featured products with individual prices in INR, `InStock` availability, and review ratings.
+     - **Every Product Landing Page (`/p/<id>.html`)**:
+       - Standalone `Product` Schema with `sku`, `name`, `image`, `description`, `offers` (price in INR, `InStock`), and `aggregateRating`.
   3. **Google Image Sitemap (`sitemap.xml`)**:
      - Must include `<image:image>` tags with `<image:loc>`, `<image:title>`, and `<image:caption>` for all flagship products and logo.
+  4. **Google Search Console (GSC) Expedited Indexing Protocol**:
+     - Googlebot-Image crawls favicons independently and may show the generic globe `🌐` for 7–14 days if left alone.
+     - To force Google to update the logo and rich snippets within **24–48 hours**:
+       - In Google Search Console, inspect `https://<domain>` and click **"Request Indexing"**.
+       - Submit `/sitemap.xml` under the Sitemaps tab.
 
 ---
 
@@ -163,10 +171,38 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 
 ---
 
-### 12. AUTOMATED NEW PRODUCT PIPELINE
-- When new photos are uploaded via WhatsApp or script:
-  1. Auto-detect category using keyword heuristic (jewellery, sarees, decor, groceries, dry fruits, snacks, disposables, samagri).
-  2. Generate and compress matching reel using FFmpeg.
-  3. Prepend the new product with its matching video path into `products.json` and storefront fallback.
-  4. Auto-generate the individual SEO page `/p/<id>.html`.
+### 12. AUTOMATED NEW PRODUCT PIPELINE & SMART FALLBACK PARSER
+- **Problem Solved**: When sellers forward photos on WhatsApp, they often include NO caption or ONLY a price number (e.g., `1200` or `₹699 fs`). Hard validation halts the pipeline, parking the post in "needs review" indefinitely.
+- **Mandatory 2-Stage Extraction Hierarchy**:
+  1. **Stage 1 (Real Text Parsing)**:
+     - Ignore standalone price lines (`1300 rs`, `₹699`, `fs`, `free shipping`).
+     - Extract the first descriptive text line as the authentic product name.
+  2. **Stage 2 (Intelligent Price-Tier Fallback)**:
+     - If the caption has NO descriptive words (or is 100% blank), DO NOT halt or pause for review. Automatically assign an authentic collection name based on the detected price tier:
+       - **≥ ₹1,200**: `"Premium Bridal Pure Jadau Kundan Collection"`
+       - **₹750 – ₹1,199**: `"Festive Handcrafted Traditional Collection"`
+       - **₹400 – ₹749**: `"Handcrafted Designer Jewellery Collection"`
+       - **Under ₹400**: `"<StoreName> Curated Collection"`
+  3. **Auto-Generate & Sync**:
+     - Automatically compress the video reel using FFmpeg (`scale=540:-2`, `crf 26`, `+faststart`).
+     - Prepend the new product into `products.json` and storefront fallback array.
+     - Auto-generate the dedicated SEO landing page `/p/<id>.html` with complete favicons and Schema.org `Product` markup.
+
+---
+
+### 13. FULL-FUNNEL PAID ADVERTISING & MARKETING SPECIFICATION
+- **Tracking & Pixel Infrastructure**:
+  - Install Meta Pixel & Conversions API (CAPI) with standard events (`PageView`, `ViewContent`, `AddToCart`, `InitiateCheckout`, `Purchase` with dynamic `value` and `currency: "INR"`).
+  - Verify event firing via Meta Pixel Helper Chrome extension.
+- **Click-to-WhatsApp (CTWA) Ad Funnel**:
+  - For high-ticket items (₹1,000+), run Instagram/Facebook Reels ads with a **"Send WhatsApp Message"** CTA.
+  - Pre-fill WhatsApp greeting: *"Hi, I want to order [Product Name] (₹[Price]). Is COD available to my pincode?"*
+  - Establish a < 5 minute response SLA with automated greeting flows and address intake templates.
+- **Creative Standard (9:16 Vertical Video Reels)**:
+  - 3-second visual hook (macro close-up of sparkle, stone cut, or unboxing).
+  - On-screen bold subtitle overlays (since 80% of mobile users watch on mute).
+  - Slashing MRP price anchoring (*"Worth ₹1,650, Launch Offer ₹1,300 with Free Express Delivery"*).
+- **Abandoned Cart Follow-Up**:
+  - Automatically capture phone number on step 1 of checkout.
+  - Fire an automated WhatsApp recovery ping within 30 minutes with a one-tap direct checkout link.
 ```
