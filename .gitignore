@@ -19,6 +19,7 @@ generated/
 uploads/
 reel_
 *.mp4
+!docs/videos/*.mp4
 *.sqlite3
 
 # OS generated files
