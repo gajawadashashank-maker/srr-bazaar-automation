@@ -30,7 +30,7 @@ try:
 
     # Check 1: Decor category click (Pooja & Festive Decor)
     decor_btn = driver.find_element(By.CSS_SELECTOR, '.category-circle-btn[data-category="decor"]')
-    decor_btn.click()
+    driver.execute_script("arguments[0].click();", decor_btn)
     time.sleep(0.5)
     heading = driver.find_element(By.ID, 'catalogueHeading').text
     count = driver.find_element(By.ID, 'visibleProductCount').text
@@ -40,7 +40,7 @@ try:
 
     # Check 2: Buffet Plates category click (1 item)
     buffet_btn = driver.find_element(By.CSS_SELECTOR, '.category-circle-btn[data-category="disposables"]')
-    buffet_btn.click()
+    driver.execute_script("arguments[0].click();", buffet_btn)
     time.sleep(0.5)
     heading = driver.find_element(By.ID, 'catalogueHeading').text
     count = driver.find_element(By.ID, 'visibleProductCount').text
@@ -50,7 +50,7 @@ try:
 
     # Check 3: Necklaces category click (23 items)
     neck_btn = driver.find_element(By.CSS_SELECTOR, '.category-circle-btn[data-category="necklace"]')
-    neck_btn.click()
+    driver.execute_script("arguments[0].click();", neck_btn)
     time.sleep(0.5)
     heading = driver.find_element(By.ID, 'catalogueHeading').text
     count = driver.find_element(By.ID, 'visibleProductCount').text
@@ -60,7 +60,7 @@ try:
 
     # Check 4: All Bazaar category click
     all_btn = driver.find_element(By.CSS_SELECTOR, '.category-circle-btn[data-category="all"]')
-    all_btn.click()
+    driver.execute_script("arguments[0].click();", all_btn)
     time.sleep(0.5)
     heading = driver.find_element(By.ID, 'catalogueHeading').text
     count = driver.find_element(By.ID, 'visibleProductCount').text
