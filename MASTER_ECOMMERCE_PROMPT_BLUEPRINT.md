@@ -127,26 +127,18 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 
 ---
 
-### 9. GOOGLE SEARCH SEO, FAVICONS & RICH SNIPPETS (Schema.org JSON-LD)
-- **Problem Solved**: Default websites show a generic globe `🌐` icon in Google without star ratings, prices, sitelinks, or logos, or show outdated cached previews for weeks.
-- **Mandatory Requirements Across Homepage AND All Product Pages (`/p/<id>.html`)**:
-  1. **Square Multiples of 48px Favicons (Strict Googlebot Standard)**:
+### 9. GOOGLE SEARCH SEO & RICH SNIPPETS (Schema.org JSON-LD)
+- **Problem Solved**: Default websites show a generic globe `🌐` icon in Google without star ratings, prices, or sitelinks.
+- **Mandatory Head Requirements**:
+  1. **Square Multiples of 48px Favicons**:
      - `favicon-48x48.png`, `favicon-32x32.png`, `icon-192.png`, `icon-512.png`, `apple-touch-icon.png`, and `favicon.ico`.
-     - Explicit `<link rel="icon" type="image/png" sizes="48x48" href="...">` and `<link rel="shortcut icon" href="...">` must be embedded in the `<head>` of **every single HTML page**, not just the homepage.
+     - Explicit `<link rel="icon" type="image/png" sizes="48x48" href="...">`.
   2. **Schema.org Structured Data (`application/ld+json`)**:
-     - **Homepage**:
-       - `WebSite` with `SearchAction` (enables Google sitelinks searchbox).
-       - `OnlineStore` / `Organization` with official `logo`, `name`, `telephone`, `address`, and `aggregateRating` (e.g. 4.9 ★ across 4,800 reviews).
-       - `ItemList` of top featured products with individual prices in INR, `InStock` availability, and review ratings.
-     - **Every Product Landing Page (`/p/<id>.html`)**:
-       - Standalone `Product` Schema with `sku`, `name`, `image`, `description`, `offers` (price in INR, `InStock`), and `aggregateRating`.
+     - `WebSite` with `SearchAction` (enables Google sitelinks searchbox).
+     - `OnlineStore` / `Organization` with official `logo`, `name`, `telephone`, `address`, and `aggregateRating` (e.g. 4.9 ★ across 4,800 reviews).
+     - `ItemList` of top featured `Product` items with individual prices in INR, `InStock` availability, and review ratings.
   3. **Google Image Sitemap (`sitemap.xml`)**:
      - Must include `<image:image>` tags with `<image:loc>`, `<image:title>`, and `<image:caption>` for all flagship products and logo.
-  4. **Google Search Console (GSC) Expedited Indexing Protocol**:
-     - Googlebot-Image crawls favicons independently and may show the generic globe `🌐` for 7–14 days if left alone.
-     - To force Google to update the logo and rich snippets within **24–48 hours**:
-       - In Google Search Console, inspect `https://<domain>` and click **"Request Indexing"**.
-       - Submit `/sitemap.xml` under the Sitemaps tab.
 
 ---
 
@@ -171,38 +163,193 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 
 ---
 
-### 12. AUTOMATED NEW PRODUCT PIPELINE & SMART FALLBACK PARSER
-- **Problem Solved**: When sellers forward photos on WhatsApp, they often include NO caption or ONLY a price number (e.g., `1200` or `₹699 fs`). Hard validation halts the pipeline, parking the post in "needs review" indefinitely.
-- **Mandatory 2-Stage Extraction Hierarchy**:
-  1. **Stage 1 (Real Text Parsing)**:
-     - Ignore standalone price lines (`1300 rs`, `₹699`, `fs`, `free shipping`).
-     - Extract the first descriptive text line as the authentic product name.
-  2. **Stage 2 (Intelligent Price-Tier Fallback)**:
-     - If the caption has NO descriptive words (or is 100% blank), DO NOT halt or pause for review. Automatically assign an authentic collection name based on the detected price tier:
-       - **≥ ₹1,200**: `"Premium Bridal Pure Jadau Kundan Collection"`
-       - **₹750 – ₹1,199**: `"Festive Handcrafted Traditional Collection"`
-       - **₹400 – ₹749**: `"Handcrafted Designer Jewellery Collection"`
-       - **Under ₹400**: `"<StoreName> Curated Collection"`
-  3. **Auto-Generate & Sync**:
-     - Automatically compress the video reel using FFmpeg (`scale=540:-2`, `crf 26`, `+faststart`).
-     - Prepend the new product into `products.json` and storefront fallback array.
-     - Auto-generate the dedicated SEO landing page `/p/<id>.html` with complete favicons and Schema.org `Product` markup.
+### 12. AUTOMATED NEW PRODUCT PIPELINE
+- When new photos are uploaded via WhatsApp or script:
+  1. Auto-detect category using keyword heuristic (jewellery, sarees, decor, groceries, dry fruits, snacks, disposables, samagri).
+  2. Generate and compress matching reel using FFmpeg.
+  3. Prepend the new product with its matching video path into `products.json` and storefront fallback.
+  4. Auto-generate the individual SEO page `/p/<id>.html`.
 
 ---
 
-### 13. FULL-FUNNEL PAID ADVERTISING & MARKETING SPECIFICATION
-- **Tracking & Pixel Infrastructure**:
-  - Install Meta Pixel & Conversions API (CAPI) with standard events (`PageView`, `ViewContent`, `AddToCart`, `InitiateCheckout`, `Purchase` with dynamic `value` and `currency: "INR"`).
-  - Verify event firing via Meta Pixel Helper Chrome extension.
-- **Click-to-WhatsApp (CTWA) Ad Funnel**:
-  - For high-ticket items (₹1,000+), run Instagram/Facebook Reels ads with a **"Send WhatsApp Message"** CTA.
-  - Pre-fill WhatsApp greeting: *"Hi, I want to order [Product Name] (₹[Price]). Is COD available to my pincode?"*
-  - Establish a < 5 minute response SLA with automated greeting flows and address intake templates.
-- **Creative Standard (9:16 Vertical Video Reels)**:
-  - 3-second visual hook (macro close-up of sparkle, stone cut, or unboxing).
-  - On-screen bold subtitle overlays (since 80% of mobile users watch on mute).
-  - Slashing MRP price anchoring (*"Worth ₹1,650, Launch Offer ₹1,300 with Free Express Delivery"*).
-- **Abandoned Cart Follow-Up**:
-  - Automatically capture phone number on step 1 of checkout.
-  - Fire an automated WhatsApp recovery ping within 30 minutes with a one-tap direct checkout link.
+### 13. MULTI-LEVEL MODAL STACK & THE CART-TO-CHECKOUT NAVIGATION CONTRACT
+- **The Critical Trap**:
+  - When a customer adds items to their Cart Drawer and clicks **"Proceed to Order & Pay"**, the Address / Checkout modal opens.
+  - If the customer clicks the **"X" close button**, the top **Back arrow**, the bottom **"Back to Shopping Cart" button**, the **keyboard Escape key**, or the **mobile browser swipe-back gesture**, a naive implementation hides the checkout modal and dumps the user onto the Home page with everything closed! The customer gets frustrated and thinks their cart was erased.
+- **The Mandatory Solution**:
+  1. **Source State Tracking (`checkoutOpenedFrom`)**:
+     - When `proceedToCheckout()` is invoked, check if `#cartDrawer` is currently open or in the history stack:
+       `checkoutOpenedFrom = 'cartDrawer';`
+     - Cleanly hide the Cart Drawer DOM without destroying the history stack: `toggleCartDrawer(false, false);`.
+     - Push the checkout state: `pushModalHistory('checkoutModal');`.
+  2. **Multi-Exit Return Guarantee**:
+     - In `closeCheckout()`, check `if (checkoutOpenedFrom === 'cartDrawer')`:
+       Immediately reopen the Cart Drawer: `toggleCartDrawer(true, false);` with all items and quantities intact!
+     - Add 3 explicit visual escape hatches on the Checkout modal:
+       a) Top-Left: `<button onclick="closeCheckout()" title="Back to Shopping Cart"><i data-lucide="arrow-left"></i></button>`
+       b) Top-Right: `<button onclick="closeCheckout()" title="Close Checkout"><i data-lucide="x"></i></button>`
+       c) Bottom (under Confirm Order): `<button onclick="closeCheckout()">← Back to Shopping Cart</button>`
+  3. **Browser `popstate` Back-Gesture Interceptor**:
+     ```javascript
+     window.addEventListener('popstate', (e) => {
+       const checkoutEl = document.getElementById('checkoutModal');
+       if (checkoutEl && !checkoutEl.classList.contains('hidden')) {
+         const hadCart = (checkoutOpenedFrom === 'cartDrawer' || srrModalHistory.includes('cartDrawer'));
+         checkoutOpenedFrom = null;
+         hideModalDOM('checkoutModal');
+         const idx = srrModalHistory.lastIndexOf('checkoutModal');
+         if (idx !== -1) srrModalHistory.splice(idx, 1);
+         if (hadCart) {
+           toggleCartDrawer(true, false); // Reopens cart drawer seamlessly!
+           return;
+         }
+       }
+     });
+     ```
+  4. **Post-Order Cart Clear**:
+     - ONLY when the order is successfully placed (`submitFinalOrder()`), clear `checkoutOpenedFrom = null;`, empty the cart, close checkout, and open `#orderSuccessModal`. When the user closes the success modal, they return to the clean homepage.
+
+---
+
+### 14. AMAZON-GRADE ROBUST SEARCH: FUZZY TYPO-TOLERANCE & REGIONAL STEMMING
+- **The Critical Trap**:
+  - Strict substring matching (`title.toLowerCase().includes(query)`) fails completely when users:
+    - Type with spaces or missing spaces (e.g. `edu kondala` vs `edukondala`).
+    - Type regional spelling variations / typos (e.g. `edukondalu` ending in `u` instead of `a`).
+    - Use phonetic transliterations common in India.
+  - The store shows "No products found" even though the exact product is in stock!
+- **The Mandatory Solution**:
+  1. **Real-time Live Recommendation Dropdown (`#searchDropdown`)**:
+     - **On Focus (Empty Input)**: Display "Trending Searches" and popular quick-picks (e.g. 🌾 Edu Kondala Nomu, 🪔 33 Diya Stand, 🍃 Leaf Buffet Plates, 👑 Kundan Sets).
+     - **On Typing**: Display instant matching suggestions with thumbnail icons, categories, and prices.
+     - **Keyboard Navigation**: Pressing `ArrowDown` / `ArrowUp` navigates suggestions; `Enter` commits search; `Escape` closes dropdown.
+  2. **Levenshtein Distance & Sliding-Window Fuzzy Matching**:
+     - Allow up to **2 character typos** for word lengths $\ge 5$ (e.g., `edukondalu` $\rightarrow$ `edu kondala`, `kundan` $\rightarrow$ `kundan`).
+  3. **Indian Regional Language Inflection Stemmer (`getWordStems`)**:
+     - Strip common Telugu/Hindi noun declensions and plural suffixes (`lu`, `alu`, `am`, `ya`, `galu`) before matching:
+       `edukondalu` $\rightarrow$ stem `edukonda` $\rightarrow$ matches `Edu Kondala Nomu`!
+  4. **Two-Tier Search Results (Direct Matches + Related Products)**:
+     - When direct query matches are $< 4$, never show an empty screen or sparse grid.
+     - Display:
+       `Direct Matches (N)`: High-confidence keyword matches.
+       `Related Products (M)`: Same category or complementary items with "You May Also Like" styling.
+     - When typos are auto-corrected, render an Amazon-style headline:
+       *Showing results for "**Edu Kondala Nomu**". Search instead for "edukondalu"?*
+
+---
+
+### 15. AI CONCIERGE & STYLIST ENGINE (HYBRID CLIENT-BACKEND ARCHITECTURE)
+- **The Critical Trap**:
+  - Relying solely on a backend API endpoint (e.g., `/api/ai-stylist`) breaks completely on static CDNs or GitHub Pages because no Python server is running there.
+  - Using complex reasoning models (like `gpt-oss-20b`) burns through token limits on hidden reasoning tokens, returning empty responses.
+  - Using default `urllib` HTTP headers results in HTTP 403 Forbidden on Groq/Cloudflare endpoints.
+- **The Mandatory Solution**:
+  1. **Hybrid Architecture (Graceful Fallback)**:
+     - Try `POST /api/ai-stylist` with a 4-second timeout.
+     - If the fetch fails (network down or static hosting on GitHub Pages), catch the exception and immediately invoke the client-side JavaScript knowledge engine `generateClientAiResponse(query)` using live `products.json` and client-side fuzzy search!
+     - Zero disruption to the customer!
+  2. **Model Selection for E-Commerce Shopping**:
+     - Use fast, direct multilingual conversational models: `qwen/qwen3.8-27b` on Groq LPU (< 200ms response time).
+     - Always provide custom headers: `headers = {"User-Agent": "Storefront-AI/1.0", "Authorization": f"Bearer {key}"}`.
+  3. **Catalog Injection & Product ID Tagging**:
+     - Prompt includes store catalog summary (top 40 items with IDs, categories, prices in ₹).
+     - Instruct AI to append `[PRODUCTS: id1, id2]` at the end of its response.
+     - Frontend regex parses `[PRODUCTS: ...]` and dynamically renders interactive product cards with photo, price, "View in Quick View", and direct WhatsApp buy buttons right inside the chat bubble!
+  4. **Starter Chips & Floating Widget**:
+     - Include quick starter chips (e.g., "🌾 Sankranti Pooja Nomu", "👑 Bridal Kundan Sets", "✨ Sarees Under ₹1,500", "📦 Track My Order").
+     - Floating bottom-right button with pulse animation and mobile drawer view.
+
+---
+
+### 16. DUAL-CHANNEL WHATSAPP CLOUD API: ADMIN AUTOMATION VS CUSTOMER SUPPORT
+- **The Critical Trap**:
+  - Webhooks built for admin video automation typically reject all incoming text messages (`if msg_type not in ('image', 'video'): continue`) and block all phone numbers except admin numbers.
+  - Customers messaging the WhatsApp Business number receive zero response.
+- **The Mandatory Solution (Dual-Route Webhook in `app.py`)**:
+  1. **Route A: Admin Media Post (`msg_type in ('image', 'video')`)**:
+     - Verify sender against `WHATSAPP_ALLOWED_SENDERS`.
+     - Parse product title, price, and description from caption.
+     - Generate 4 video reels via FFmpeg, upload selected reel to Cloudinary, publish to Instagram Reels and YouTube Shorts, and auto-sync to `docs/products.json`.
+  2. **Route B: Customer Text Inquiries (`msg_type in ('text', 'interactive')`)**:
+     - Accept from **ANY customer phone number**.
+     - Extract customer question (`message['text']['body']`).
+     - Query Groq AI Stylist with full store catalog, cash on delivery terms, and **The Professional Couriers (Armoor Hub)** tracking link (`https://www.tpcindia.com/`).
+     - Reply directly to customer's WhatsApp via Meta Cloud API:
+       `POST https://graph.facebook.com/v27.0/{PHONE_NUMBER_ID}/messages`
+       Payload: `{"messaging_product": "whatsapp", "to": sender, "text": {"preview_url": true, "body": reply}}`.
+  3. **Idempotency & Deduplication**:
+     - Ingest message IDs into SQLite (`whatsapp_jobs`) before processing to prevent duplicate replies on Meta webhook retries.
+
+---
+
+### 17. FREQUENTLY BOUGHT TOGETHER (COMBO BUNDLES) DATA INTEGRITY
+- **The Critical Trap**:
+  - Adding combo kits to the cart as separate disconnected items causes the cart to re-charge full individual prices, dropping the bundle discount.
+  - Storing combo cards with hardcoded dummy videos causes unrelated jewellery videos to play on pooja trays.
+- **The Mandatory Solution**:
+  1. **Atomic Bundle Entry**:
+     - Add combos with unique bundle ID (e.g., `bundle_festive_duo`), title, combined original MRP, discounted combo price, and `isBundle: true`.
+     - Render bundle items inside Cart Drawer and Checkout with an explicit green badge: `🎁 Combo Package (Save ₹XYZ)`.
+  2. **Strict Video Association**:
+     - A video reel must ONLY be associated with a product or combo if the video file actually depicts that specific item.
+     - If no matching video reel exists, render ONLY the verified high-resolution photograph. NEVER show a dummy or placeholder video.
+
+---
+
+### 18. PREVENTING REPEATED ARCHITECTURAL MISTAKES (THE "DON'T DO THIS" CHECKLIST)
+| Component | Common Mistake / Bug Encountered | Mandatory Correct Pattern |
+| :--- | :--- | :--- |
+| **Checkout Close** | Closing checkout drops customer on Home page | Close handler MUST check `checkoutOpenedFrom` and reopen Cart Drawer |
+| **Checkout Back Navigation** | Browser Back on Address form exits the site | Intercept `popstate`: if checkout is open, close checkout and restore Cart Drawer |
+| **Search Matching** | Exact character-by-character substring search | Multi-word tokenization + Levenshtein distance $\le 2$ + Regional word stemmer |
+| **Search Dropdown** | Dropdown stays open after clicking outside | Auto-dismiss on click-outside, Escape key, or product selection |
+| **Video Reels** | Reusing a generic reel for all products | Strict 1-to-1 mapping; omit video toggle when video is missing |
+| **Promo Carousel** | Auto-scroll timer jerks carousel during manual swipe | Pause auto-scroll on `touchstart` / `mouseenter`; resume after 6s idle |
+| **WhatsApp Webhook** | Ignoring customer text messages | Dual-path routing: Media $\rightarrow$ Admin Publisher; Text $\rightarrow$ Groq AI Auto-Reply |
+| **Groq LLM Calls** | Using reasoning models (`gpt-oss`) with low token limits | Use conversational fast model (`qwen/qwen3.8-27b`) with custom `User-Agent` |
+| **Static Hosting AI** | Fetching `/api/ai-stylist` and throwing uncaught error | Wrap in try/catch and fallback immediately to client-side catalog search |
+| **Google Search SEO** | Missing 48px square favicons causing globe 🌐 icon | Provide `favicon-48x48.png` + Schema.org `OnlineStore` + `sitemap.xml` with images |
 ```
+
+---
+
+## 🛠️ Field Log: Mistakes Made, What Was Tweaked & Why (Developer Reference)
+
+This log documents every architectural pitfall discovered and resolved during real-world customer testing of this storefront. Reference this whenever building your next storefront to avoid repeating these mistakes:
+
+### 1. The Cart-to-Checkout "Home Dump" Bug
+- **What Happened**: User clicked "Proceed to Pay" from their cart drawer. The address modal opened. When they clicked the "X" button or used the phone's swipe-back gesture to adjust their cart, the entire store closed and returned them to the home page with everything shut.
+- **Why It Happened**: `proceedToCheckout()` hid the cart drawer DOM (`toggleCartDrawer(false, false)`). When `closeCheckout()` ran, it only knew how to hide the checkout modal; it had no state tracking of where the user came from.
+- **How to Avoid**: Always declare a navigation state variable `let checkoutOpenedFrom = null;`. Whenever checkout opens from the cart, set `checkoutOpenedFrom = 'cartDrawer'`. In both `closeCheckout()` and `window.onpopstate`, if `checkoutOpenedFrom === 'cartDrawer'`, ALWAYS invoke `toggleCartDrawer(true, false)` to bring the user back to their cart with all selected items intact.
+
+### 2. Character-to-Character Search Failure (Typo & Telugu Inflections)
+- **What Happened**: Searching for `edu kondala` or `edukondalu` showed 0 results even though "Edu Kondala Nomu" was a top seller.
+- **Why It Happened**: Simple JavaScript `.includes()` checks exact character substring. Missing spaces (`edukondala`) or regional suffixes (`-lu`, `-alu`) caused a complete string mismatch.
+- **How to Avoid**:
+  1. Tokenize query by whitespace and normalize punctuation.
+  2. Implement a regional word stemmer (`getWordStems`) that trims Telugu/Hindi noun endings (`lu`, `alu`, `am`, `ya`).
+  3. Run Levenshtein distance check ($\le 2$ edits) for words $\ge 5$ chars.
+  4. Always render a "Trending Searches" recommendation dropdown on search bar focus so shoppers can tap popular items without typing.
+
+### 3. Fake / Mismatched Video Reels on Unrelated Items
+- **What Happened**: Quick View modal played a Kundan choker necklace video on a brass Swan Pooja Tray.
+- **Why It Happened**: The code fell back to a default video when `product.video` was undefined.
+- **How to Avoid**: Enforce strict 1-to-1 video binding. If `product.video` is not explicitly set or confirmed for that exact product ID, DO NOT display the `[🎬 Video Reel]` pill. Display only the studio photograph with an Artisanal Quality guarantee badge.
+
+### 4. WhatsApp Webhook Rejecting Customer Messages
+- **What Happened**: Business WhatsApp number was set up for automated Instagram reel generation from images. When customers sent questions like "Price of 33 Diya Stand?" or "Where is my order?", the server dropped them with `if msg_type not in ('image', 'video'): continue`.
+- **Why It Happened**: The webhook was originally built exclusively as an admin publisher tool, not a customer concierge.
+- **How to Avoid**: Implement dual-channel routing in the webhook:
+  - If `image`/`video` AND sender is in `WHATSAPP_ALLOWED_SENDERS`: Route to Reel Publisher.
+  - If `text` from ANY sender: Route to Groq AI Shopping Concierge (`ask_groq_stylist`), format with store links and courier partner info (The Professional Couriers Armoor Hub), and send an immediate direct reply via Meta Cloud API.
+
+### 5. AI Assistant Crashing on Static GitHub Pages
+- **What Happened**: AI Stylist chat threw a console fetch error on GitHub Pages because there was no live FastAPI backend running on the static CDN.
+- **Why It Happened**: The frontend only had `fetch('/api/ai-stylist')`.
+- **How to Avoid**: Always build a hybrid AI engine: wrap the backend fetch in a timeout/catch block, and immediately fall back to a rich client-side search engine (`generateClientAiResponse`) that searches the local catalog and formats response cards with direct WhatsApp buy links.
+
+### 6. Google Search Showing Globe 🌐 Instead of Brand Logo
+- **What Happened**: Google search results displayed a generic globe `🌐` favicon.
+- **Why It Happened**: Google Search Console mandates a square favicon that is a multiple of 48px (e.g. 48x48, 96x96, 192x192) declared in a `<link rel="icon" type="image/png" sizes="48x48" ...>` tag. A simple 16x16 or 32x32 favicon is ignored by Google's crawler.
+- **How to Avoid**: Generate explicit `favicon-48x48.png` and `icon-192.png`, reference them with explicit sizes in `<head>`, and submit `sitemap.xml` containing image metadata `<image:image>`.
+<!-- add sitemap.xml google search console sitemaps for indesxing log showing in google instead of globe 🌐 logo -->
