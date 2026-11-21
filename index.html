@@ -2186,10 +2186,32 @@
       window.history.replaceState({ srrBase: true }, '');
     }
 
+    function syncBodyScrollLock() {
+      const anyOpen = [
+        'orderSuccessModal',
+        'merchantModal',
+        'merchantPinModal',
+        'checkoutModal',
+        'trackingModal',
+        'policyModal',
+        'cartDrawer',
+        'quickViewModal'
+      ].some(id => {
+        const el = document.getElementById(id);
+        return el && !el.classList.contains('hidden');
+      });
+      if (anyOpen) {
+        document.body.classList.add('overflow-hidden');
+      } else {
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
     function pushModalHistory(modalId) {
       if (srrModalHistory[srrModalHistory.length - 1] === modalId) return;
       srrModalHistory.push(modalId);
       window.history.pushState({ srrModal: modalId, depth: srrModalHistory.length }, '');
+      syncBodyScrollLock();
     }
 
     function popModalHistory(modalId) {
@@ -2200,6 +2222,7 @@
       if (window.history.state && window.history.state.srrModal === modalId) {
         window.history.back();
       }
+      syncBodyScrollLock();
     }
 
     function hideModalDOM(modalId) {
@@ -2210,6 +2233,7 @@
         const vid = document.getElementById('modalProductVid');
         if (vid) vid.pause();
       }
+      syncBodyScrollLock();
     }
 
     // =========================================================================
@@ -4370,6 +4394,12 @@
     }
 
     function submitFinalOrder() {
+      if (!cart || cart.length === 0) {
+        alert("Your cart is empty! Please add products before checking out.");
+        closeCheckout();
+        return;
+      }
+
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
@@ -4380,6 +4410,28 @@
 
       if (!name || !phone || !address || !pincode || !city || !state) {
         alert("Please fill in all shipping details (Name, Phone, Address, Pincode, City, State) so we can dispatch your parcel!");
+        return;
+      }
+
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      if (cleanPhone.length < 10) {
+        const phoneInput = document.getElementById('custPhone');
+        if (phoneInput) {
+          phoneInput.focus();
+          phoneInput.classList.add('border-red-500', 'ring-2', 'ring-red-200');
+        }
+        alert("⚠️ Please enter a valid 10-digit mobile number for courier dispatch!");
+        return;
+      }
+
+      const cleanPincode = pincode.replace(/[^0-9]/g, '');
+      if (cleanPincode.length !== 6) {
+        const pinInput = document.getElementById('custPincode');
+        if (pinInput) {
+          pinInput.focus();
+          pinInput.classList.add('border-red-500', 'ring-2', 'ring-red-200');
+        }
+        alert("⚠️ Please enter a valid 6-digit postal pincode!");
         return;
       }
 
@@ -4516,7 +4568,9 @@ Please confirm receipt and dispatch tracking details! ✨`
       cart = [];
       saveCart();
       updateCartUI();
-      closeCheckout();
+      closeCheckout(false);
+      const chkIdx = srrModalHistory.lastIndexOf('checkoutModal');
+      if (chkIdx !== -1) srrModalHistory.splice(chkIdx, 1);
 
       document.getElementById('orderSuccessModal').classList.remove('hidden');
       pushModalHistory('orderSuccessModal');
