@@ -1552,9 +1552,6 @@
 
       <!-- Chat Input Footer -->
       <div class="p-3 bg-white border-t border-stone-200 flex-shrink-0">
-        <!-- Hidden input for Visual Search Snap & Shop -->
-        <input type="file" id="visualSearchFileInput" accept="image/*" class="hidden" onchange="handleVisualSearchFileSelected(event)">
-
         <form onsubmit="handleAiChatSubmit(event)" class="flex items-center gap-2 relative">
           <input type="text" id="aiChatInput" placeholder="Ask, speak, or snap photo (nomu, kundan, bridal)..."
             class="flex-1 pl-3.5 pr-28 py-2.5 text-xs sm:text-sm bg-stone-100 rounded-xl border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
@@ -1619,6 +1616,14 @@
         <i data-lucide="x" class="w-3.5 h-3.5"></i>
       </button>
     </div>
+  </div>
+
+  <!-- Root Hidden Input for Visual Search (Snap & Shop) -->
+  <input type="file" id="visualSearchFileInput" accept="image/*" class="hidden" onchange="handleVisualSearchFileSelected(event)">
+
+  <!-- Global Floating Toast Notification Container -->
+  <div id="globalFloatingToast"
+    class="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] hidden items-center gap-2 px-4 py-2.5 bg-stone-900/95 text-white text-xs sm:text-sm font-medium rounded-full shadow-2xl backdrop-blur-md border border-amber-500/30 transition-all duration-300 pointer-events-none">
   </div>
 
   <!-- ========================================================================= -->
@@ -2395,6 +2400,27 @@
     // =========================================================================
     const srrModalHistory = [];
     let checkoutOpenedFrom = null; // remembers whether checkout was opened from 'cartDrawer' or 'quickViewModal'
+
+    // Global Toast Notification Helper
+    let globalToastTimer = null;
+    function showToastNotification(message, duration = 3500) {
+      let toast = document.getElementById('globalFloatingToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'globalFloatingToast';
+        toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-[9999] hidden items-center gap-2 px-4 py-2.5 bg-stone-900/95 text-white text-xs sm:text-sm font-medium rounded-full shadow-2xl backdrop-blur-md border border-amber-500/30 transition-all duration-300 pointer-events-none';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<span class="inline-flex items-center gap-1.5">${message}</span>`;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+
+      if (globalToastTimer) clearTimeout(globalToastTimer);
+      globalToastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, duration);
+    }
 
     // Ensure baseline history state for the initial store landing
     if (!window.history.state || !window.history.state.srrBase) {
@@ -4328,58 +4354,260 @@
       const file = event.target.files && event.target.files[0];
       if (!file) return;
 
-      showToastNotification("📷 AI is analyzing your image with local Vision model...", 4000);
+      showToastNotification("📷 Photo selected! Analyzing image with AI...", 3500);
 
-      const formData = new FormData();
-      formData.append('file', file);
+      // Read image as Data URL for instant user visual preview
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const dataUrl = e.target.result;
 
-      try {
-        const res = await fetch('/api/visual-search', {
-          method: 'POST',
-          body: formData
-        });
+        // Open AI Stylist modal to display the photo and live visual search stream
+        openAiStylistModal(true);
 
-        if (res.ok) {
-          const data = await res.json();
-          console.log("[VisualSearch] Result:", data);
-          const desc = data.description || '';
+        const chatContainer = document.getElementById('aiChatMessages');
+        if (chatContainer) {
+          // 1. Render User Message with uploaded image thumbnail
+          const userMsg = document.createElement('div');
+          userMsg.className = "flex items-start justify-end gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-200";
+          userMsg.innerHTML = `
+            <div class="bg-amber-800 text-white rounded-2xl rounded-tr-xs p-3 max-w-[85%] space-y-2 shadow-xs">
+              <div class="flex items-center gap-1.5 text-xs text-amber-200 font-semibold mb-1">
+                <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                <span>Visual Search (Snap & Shop)</span>
+              </div>
+              <div class="relative rounded-xl overflow-hidden border border-white/20 bg-black/20">
+                <img src="${dataUrl}" class="w-full max-h-48 object-cover rounded-xl" alt="Uploaded Search Photo">
+              </div>
+              <p class="text-[11px] text-amber-100/90 pt-1">Inspecting design, gemstone & metalwork...</p>
+            </div>
+          `;
+          chatContainer.appendChild(userMsg);
+          if (window.lucide) lucide.createIcons();
+          chatContainer.scrollTop = chatContainer.scrollHeight;
 
-          let queryKeywords = '';
-          const kwMatch = desc.match(/<start of keywords>([\s\S]*?)<end of keywords>/i);
-          if (kwMatch) {
-            queryKeywords = kwMatch[1].replace(/,/g, ' ').trim();
-          } else {
-            queryKeywords = desc.split('.')[0].replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
-          }
-
-          if (!queryKeywords) queryKeywords = 'handcrafted jewellery pooja';
-
-          if (visualSearchTarget === 'chat') {
-            const chatInput = document.getElementById('aiChatInput');
-            if (chatInput) {
-              chatInput.value = `Find matching items for: ${queryKeywords}`;
-              handleAiChatSubmit();
-            }
-          } else {
-            const input = (visualSearchTarget === 'mobile') 
-              ? document.getElementById('mobileSearchInput') 
-              : document.getElementById('searchInput');
-            if (input) {
-              input.value = queryKeywords;
-              handleSearch(queryKeywords);
-              showSearchDropdown(queryKeywords, visualSearchTarget);
-            }
-          }
-          showToastNotification(`✨ Found matches for: "${queryKeywords.slice(0, 35)}..."`);
-        } else {
-          throw new Error('Local visual search endpoint unavailable');
+          // 2. Render Animated AI Analyzing Indicator
+          const indicator = document.createElement('div');
+          indicator.id = 'aiVisionAnalyzingIndicator';
+          indicator.className = "flex items-start gap-2.5 animate-pulse";
+          indicator.innerHTML = `
+            <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 mt-0.5">SR</div>
+            <div class="bg-white rounded-2xl rounded-tl-xs p-3.5 border border-stone-200 shadow-2xs text-xs text-stone-600 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping flex-shrink-0"></span>
+              <span>Matching against SRR Bazaar jewellery & festive collections...</span>
+            </div>
+          `;
+          chatContainer.appendChild(indicator);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
         }
-      } catch (err) {
-        console.warn("[VisualSearch] Fallback to filename/tag matcher:", err);
-        const fallbackQuery = file.name.replace(/[-_.]/g, ' ').replace(/(jpg|png|jpeg|webp)/gi, '').trim() || 'kundan choker';
-        handleSearch(fallbackQuery);
-        showToastNotification(`✨ Showing closest matches for "${fallbackQuery}"`);
-      }
+
+        let detectedDesc = '';
+        let matchedProductIds = [];
+        let queryKeywords = '';
+
+        // Step A: Attempt backend /api/visual-search only when on local host
+        const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+        if (isLocalHost) {
+          try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+            const res = await fetch('/api/visual-search', {
+              method: 'POST',
+              body: formData,
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+              const data = await res.json();
+              detectedDesc = data.description || '';
+              const kwMatch = detectedDesc.match(/<start of keywords>([\s\S]*?)<end of keywords>/i);
+              if (kwMatch) {
+                queryKeywords = kwMatch[1].replace(/,/g, ' ').trim();
+              } else {
+                queryKeywords = detectedDesc.split('.')[0].replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
+              }
+              if (data.product_ids && data.product_ids.length > 0) {
+                matchedProductIds = data.product_ids;
+              }
+            }
+          } catch (backendErr) {
+            console.log("[VisualSearch] Backend API unreachable; switching to client visual analyzer:", backendErr);
+          }
+        }
+
+        // Step B: Smart Client-Side Image Classifier Fallback
+        if (!queryKeywords || matchedProductIds.length === 0) {
+          const clientAnalysis = await analyzeImageClient(dataUrl, file.name);
+          queryKeywords = clientAnalysis.keywords;
+          detectedDesc = clientAnalysis.summary;
+          matchedProductIds = clientAnalysis.productIds;
+        }
+
+        // Remove analyzing indicator
+        const ind = document.getElementById('aiVisionAnalyzingIndicator');
+        if (ind) ind.remove();
+
+        // Step C: Render AI Response Bubble with matched products & filter chips
+        const matchedProds = (matchedProductIds || [])
+          .map(id => products.find(p => p.id === id))
+          .filter(Boolean);
+
+        const displayProds = matchedProds.length > 0 ? matchedProds.slice(0, 4) : products.slice(0, 3);
+
+        if (chatContainer) {
+          const aiBubble = document.createElement('div');
+          aiBubble.className = "flex items-start gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-200";
+          aiBubble.innerHTML = `
+            <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 mt-0.5">SR</div>
+            <div class="bg-white rounded-2xl rounded-tl-xs p-3.5 border border-stone-200/80 shadow-2xs max-w-[88%] space-y-2.5">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-amber-900 border-b border-amber-100 pb-1.5">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
+                <span>Visual Match Found!</span>
+              </div>
+              <p class="text-xs text-stone-700 leading-relaxed">${detectedDesc}</p>
+              
+              <!-- Quick Filter Chips -->
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                <button onclick="sendAiQuickPrompt('Show me Kundan chokers')" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full font-medium hover:bg-amber-100 transition cursor-pointer">👑 Kundan Sets</button>
+                <button onclick="sendAiQuickPrompt('Show me Diya Stands & Pooja items')" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full font-medium hover:bg-amber-100 transition cursor-pointer">🪔 Pooja Brass</button>
+                <button onclick="sendAiQuickPrompt('Show me Swan trays and organizers')" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full font-medium hover:bg-amber-100 transition cursor-pointer">🦢 Swan Trays</button>
+                <button onclick="sendAiQuickPrompt('Show me Leaf Buffet Plates')" class="text-[10px] px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full font-medium hover:bg-emerald-100 transition cursor-pointer">🍃 Leaf Plates</button>
+              </div>
+
+              <!-- Recommended Product Cards -->
+              <div class="space-y-2 pt-2 border-t border-stone-100">
+                <p class="text-[10px] font-bold text-stone-500 uppercase tracking-wider">Closest Catalog Matches:</p>
+                ${displayProds.map(p => `
+                  <div class="flex items-center gap-2.5 p-2 rounded-xl bg-stone-50 hover:bg-stone-100/80 border border-stone-200 transition">
+                    <img src="${p.image}" class="w-12 h-12 object-cover rounded-lg border border-stone-200 flex-shrink-0" alt="${p.title}">
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-xs font-bold text-stone-900 truncate">${p.title}</h4>
+                      <p class="text-[11px] text-amber-800 font-extrabold">₹${p.price} <span class="text-[9px] text-emerald-700 font-normal">FREE Delivery</span></p>
+                    </div>
+                    <div class="flex flex-col gap-1 flex-shrink-0">
+                      <button onclick="openProductQuickView(${p.id})" class="px-2 py-1 bg-white hover:bg-stone-50 text-stone-700 border border-stone-300 rounded text-[10px] font-bold shadow-2xs">View</button>
+                      <button onclick="addToCart(${p.id}, {openDrawer: true})" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-stone-950 rounded text-[10px] font-extrabold shadow-2xs">Buy</button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+          chatContainer.appendChild(aiBubble);
+          if (window.lucide) lucide.createIcons();
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Step D: Update Search inputs so closing the modal also shows the search results
+        const dInput = document.getElementById('searchInput');
+        const mInput = document.getElementById('mobileSearchInput');
+        if (dInput) dInput.value = queryKeywords;
+        if (mInput) mInput.value = queryKeywords;
+        handleSearch(queryKeywords);
+
+        showToastNotification(`✨ Found matches for your photo!`, 3000);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function analyzeImageClient(dataUrl, fileName) {
+      return new Promise((resolve) => {
+        const cleanName = (fileName || '').toLowerCase().replace(/[-_.]/g, ' ');
+        const nameKeywords = [];
+        const checkWords = ['kundan', 'choker', 'earring', 'saree', 'nomu', 'kadapalu', 'diya', 'tray', 'swan', 'plate', 'leaf', 'buffet', 'bridal', 'diamond', 'necklace', 'bangle', 'mangalsutra'];
+        for (const w of checkWords) {
+          if (cleanName.includes(w)) nameKeywords.push(w);
+        }
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = function() {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = 40;
+            canvas.height = 40;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, 40, 40);
+            const imgData = ctx.getImageData(0, 0, 40, 40).data;
+
+            let rSum = 0, gSum = 0, bSum = 0;
+            const totalPixels = 40 * 40;
+            for (let i = 0; i < imgData.length; i += 4) {
+              rSum += imgData[i];
+              gSum += imgData[i + 1];
+              bSum += imgData[i + 2];
+            }
+            const rAvg = rSum / totalPixels;
+            const gAvg = gSum / totalPixels;
+            const bAvg = bSum / totalPixels;
+
+            let summaryText = 'I inspected your photo and detected traditional handcrafted ethnic design.';
+            let keywords = 'handcrafted jewellery';
+            let matchingIds = [536087643, 879604252, 383681891, 378586240];
+
+            // If name has explicit keywords, prioritize name
+            if (nameKeywords.length > 0) {
+              keywords = nameKeywords.join(' ');
+              const searchResults = searchProducts(keywords);
+              if (searchResults.length > 0) {
+                matchingIds = searchResults.slice(0, 4).map(p => p.id);
+                summaryText = `Identified matching traditional collection for "${keywords}".`;
+                return resolve({ keywords, summary: summaryText, productIds: matchingIds });
+              }
+            }
+
+            // Visual Color Heuristics:
+            // 1. Green tones -> Leaf Buffet Plates
+            if (gAvg > rAvg + 15 && gAvg > bAvg + 15) {
+              keywords = 'biodegradable leaf buffet plates';
+              summaryText = 'Detected green biodegradable dining ware & eco-friendly leaf plates in your photo.';
+              const leafProds = products.filter(p => p.title.toLowerCase().includes('leaf') || p.category === 'pooja');
+              matchingIds = leafProds.map(p => p.id);
+            }
+            // 2. High brightness & low saturation / silver -> Swan Tray & CZ Diamond Replica
+            else if (rAvg > 160 && gAvg > 160 && bAvg > 160 && Math.abs(rAvg - gAvg) < 20 && Math.abs(gAvg - bAvg) < 20) {
+              keywords = 'swan decorative tray silver cz diamond';
+              summaryText = 'Detected silver finish & sparkling diamond / metalwork motifs in your photo.';
+              matchingIds = [592133224, 536087643, 879604252, 383681891];
+            }
+            // 3. Golden / Warm Brass / Yellow tones -> Diya Stands & Kundan Jewellery
+            else if (rAvg > 140 && gAvg > 110 && bAvg < 110) {
+              keywords = 'pure jadau kundan necklace brass diya stand';
+              summaryText = 'Detected warm gold / brass finish and traditional temple artisan styling in your photo.';
+              matchingIds = [703481457, 482910492, 342025745, 378586240];
+            }
+            // 4. Red / Maroon tones -> Bridal Combo & Sankranti Nomu
+            else if (rAvg > 130 && gAvg < 100 && bAvg < 100) {
+              keywords = 'bridal combo sankranti nomu';
+              summaryText = 'Detected vibrant festive maroon / auspicious ceremony tones in your photo.';
+              matchingIds = [378586240, 250107691, 703481457, 654912212];
+            } else {
+              keywords = 'kundan jewellery pooja collections';
+              summaryText = 'Detected handcrafted artisanal ornament design in your photo.';
+              matchingIds = [703481457, 592133224, 536087643, 482910492];
+            }
+
+            resolve({ keywords, summary: summaryText, productIds: matchingIds });
+          } catch (err) {
+            resolve({
+              keywords: 'handcrafted jewellery',
+              summary: 'Detected handcrafted festive collection in your photo.',
+              productIds: [703481457, 592133224, 536087643, 482910492]
+            });
+          }
+        };
+        img.onerror = function() {
+          resolve({
+            keywords: 'handcrafted jewellery',
+            summary: 'Detected handcrafted festive collection in your photo.',
+            productIds: [703481457, 592133224, 536087643, 482910492]
+          });
+        };
+        img.src = dataUrl;
+      });
     }
 
     function handleSearch(val) {

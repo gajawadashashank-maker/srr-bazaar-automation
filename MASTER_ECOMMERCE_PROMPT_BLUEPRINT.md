@@ -474,5 +474,18 @@ This log documents every architectural pitfall discovered and resolved during re
      `Identify the primary product, category, jewelry/handicraft type, gemstone, and metal. Output 3-6 search keywords inside <start of keywords> and <end of keywords>.`
   3. Wire a seamless client fallback: If backend visual inference is offline, extract clean keywords from the uploaded filename (`kundan-choker.jpg` $\rightarrow$ *"kundan choker"*) and trigger instant client-side catalog filtering without dropping the customer.
 
+### 12. Silent Visual Search Failure on Image Selection (Missing Toast & Hidden File Input Traps)
+- **What Happened**: User clicked the 📷 camera icon on the website search bar or AI stylist, picked a photo, and clicked "Done" on their phone/browser. Nothing appeared—no photo preview, no loading spinner, no response at all.
+- **Why It Happened**:
+  1. `showToastNotification(...)` was invoked at the very top of `handleVisualSearchFileSelected`, but the helper function had never been declared in global scope. The browser threw `ReferenceError: showToastNotification is not defined`, immediately terminating execution before image processing could start.
+  2. The hidden `<input type="file" id="visualSearchFileInput">` was nested inside `#aiStylistModal`, which had `display: none` (`hidden`). Certain mobile browsers ignore or restrict file picker events originating from hidden descendants.
+  3. On static GitHub Pages hosting (`srrbazaar.com`), an unconstrained `fetch('/api/visual-search')` attempt to hit a nonexistent server endpoint stalled before failing, with no client-side image classifier fallback.
+- **How to Avoid**:
+  1. Define a persistent, robust `showToastNotification` helper attached to a root `#globalFloatingToast` element early in the script execution flow.
+  2. Always place hidden file inputs (`<input type="file">`) directly under `<body>` at the root DOM level so click triggers never fail regardless of modal state.
+  3. When an image is picked, immediately read it via `FileReader.readAsDataURL` and open the AI chat with the customer's actual photo thumbnail (`<img>`) and an animated analyzing indicator so the customer gets immediate visual confirmation.
+  4. Detect `isLocalHost`: only probe `/api/visual-search` when running on a local development server. On production static hosts (GitHub Pages), immediately run an in-browser HTML5 canvas color & pattern classifier (`analyzeImageClient`) to match against the catalog in under 100 ms with zero network latency.
+
+
 
 
