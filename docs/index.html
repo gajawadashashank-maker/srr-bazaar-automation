@@ -1638,11 +1638,17 @@
 
       <!-- Checkout Header -->
       <div class="p-4 sm:p-5 border-b border-stone-200 flex items-center justify-between bg-stone-50 sticky top-0 z-10">
-        <div>
-          <h3 class="font-serif text-lg font-bold text-maroon-950">Complete Your Order</h3>
-          <p class="text-xs text-stone-500">Pay securely via UPI or Card, then instant WhatsApp dispatch</p>
+        <div class="flex items-center gap-2.5">
+          <button onclick="closeCheckout()" type="button" title="Back to Shopping Cart" aria-label="Back to Shopping Cart"
+            class="p-2 -ml-1 rounded-full text-stone-600 hover:text-stone-900 hover:bg-stone-200 transition flex items-center justify-center">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          </button>
+          <div>
+            <h3 class="font-serif text-lg font-bold text-maroon-950">Complete Your Order</h3>
+            <p class="text-xs text-stone-500">Pay securely via UPI or Card, then instant WhatsApp dispatch</p>
+          </div>
         </div>
-        <button onclick="closeCheckout()" class="p-1.5 rounded-full text-stone-400 hover:text-stone-700">
+        <button onclick="closeCheckout()" type="button" title="Close" aria-label="Close" class="p-2 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-200 transition">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1967,11 +1973,16 @@
         </div>
 
         <!-- Submit & Order Button -->
-        <div class="pt-4 space-y-2">
+        <div class="pt-4 space-y-2.5">
           <button type="button" onclick="submitFinalOrder()" id="placeOrderBtn"
             class="w-full py-3.5 rounded-xl gold-gradient text-stone-900 font-extrabold text-sm sm:text-base shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2">
             <i data-lucide="lock" class="w-4 h-4"></i>
             <span>Confirm Order & Send to WhatsApp</span>
+          </button>
+          <button type="button" onclick="closeCheckout()"
+            class="w-full py-2.5 rounded-xl border border-stone-300 hover:border-stone-400 bg-white hover:bg-stone-50 text-stone-700 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Back to Shopping Cart</span>
           </button>
           <p class="text-center text-[11px] text-stone-500">
             🔒 By placing the order, your details and payment receipt are securely sent to Sujatha Collections for
@@ -2311,6 +2322,7 @@
     // accidentally exits the store when closing Cart Drawer or Modals.
     // =========================================================================
     const srrModalHistory = [];
+    let checkoutOpenedFrom = null; // remembers whether checkout was opened from 'cartDrawer' or 'quickViewModal'
 
     // Ensure baseline history state for the initial store landing
     if (!window.history.state || !window.history.state.srrBase) {
@@ -4709,6 +4721,41 @@
     // BROWSER & MOBILE HARDWARE / GESTURE BACK BUTTON INTERCEPTOR
     // =========================================================================
     window.addEventListener('popstate', (e) => {
+      const targetModal = e.state ? e.state.srrModal : null;
+
+      // Special handling when checkoutModal is closing via browser/gesture back
+      const checkoutEl = document.getElementById('checkoutModal');
+      if (checkoutEl && !checkoutEl.classList.contains('hidden')) {
+        const prevSource = checkoutOpenedFrom;
+        const hadCart = (prevSource === 'cartDrawer' || srrModalHistory.includes('cartDrawer') || targetModal === 'cartDrawer');
+        checkoutOpenedFrom = null;
+
+        hideModalDOM('checkoutModal');
+        const idx = srrModalHistory.lastIndexOf('checkoutModal');
+        if (idx !== -1) srrModalHistory.splice(idx, 1);
+
+        if (hadCart) {
+          const drawer = document.getElementById('cartDrawer');
+          if (drawer) {
+            drawer.classList.remove('hidden');
+            if (!srrModalHistory.includes('cartDrawer')) {
+              srrModalHistory.push('cartDrawer');
+            }
+          }
+          syncBodyScrollLock();
+          return;
+        } else if (prevSource === 'quickViewModal') {
+          const qv = document.getElementById('quickViewModal');
+          if (qv) {
+            qv.classList.remove('hidden');
+            syncBodyScrollLock();
+          }
+          return;
+        }
+        syncBodyScrollLock();
+        return;
+      }
+
       const modalPriority = [
         'aiStylistModal',
         'orderSuccessModal',
@@ -5031,6 +5078,17 @@
     let currentSelectedPayment = 'upi';
 
     function proceedToCheckout(triggerHistory = true) {
+      const cartDrawerEl = document.getElementById('cartDrawer');
+      const quickViewEl = document.getElementById('quickViewModal');
+
+      if ((cartDrawerEl && !cartDrawerEl.classList.contains('hidden')) || srrModalHistory.includes('cartDrawer')) {
+        checkoutOpenedFrom = 'cartDrawer';
+      } else if ((quickViewEl && !quickViewEl.classList.contains('hidden')) || srrModalHistory.includes('quickViewModal')) {
+        checkoutOpenedFrom = 'quickViewModal';
+      } else {
+        checkoutOpenedFrom = 'cartDrawer';
+      }
+
       // Cleanly close cart drawer and quick view DOM without popping history
       toggleCartDrawer(false, false);
       closeQuickView(false);
@@ -5059,10 +5117,28 @@
     }
 
     function closeCheckout(triggerHistory = true) {
-      hideModalDOM('checkoutModal');
-      if (triggerHistory) {
-        popModalHistory('checkoutModal');
+      const prevSource = checkoutOpenedFrom;
+      const hadCart = (prevSource === 'cartDrawer' || srrModalHistory.includes('cartDrawer'));
+
+      if (triggerHistory && window.history.state && window.history.state.srrModal === 'checkoutModal') {
+        window.history.back();
+        return;
       }
+
+      hideModalDOM('checkoutModal');
+      const idx = srrModalHistory.lastIndexOf('checkoutModal');
+      if (idx !== -1) srrModalHistory.splice(idx, 1);
+
+      if (hadCart) {
+        toggleCartDrawer(true, false);
+      } else if (prevSource === 'quickViewModal') {
+        const qv = document.getElementById('quickViewModal');
+        if (qv) {
+          qv.classList.remove('hidden');
+          syncBodyScrollLock();
+        }
+      }
+      checkoutOpenedFrom = null;
     }
 
     function handlePaymentMethodChange(method) {
@@ -5508,9 +5584,12 @@ Please confirm receipt and dispatch tracking details! ✨`
       cart = [];
       saveCart();
       updateCartUI();
+      checkoutOpenedFrom = null;
       closeCheckout(false);
       const chkIdx = srrModalHistory.lastIndexOf('checkoutModal');
       if (chkIdx !== -1) srrModalHistory.splice(chkIdx, 1);
+      const cartIdx = srrModalHistory.lastIndexOf('cartDrawer');
+      if (cartIdx !== -1) srrModalHistory.splice(cartIdx, 1);
 
       document.getElementById('orderSuccessModal').classList.remove('hidden');
       pushModalHistory('orderSuccessModal');
