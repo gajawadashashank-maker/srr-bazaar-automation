@@ -192,6 +192,15 @@
 
         <!-- Action Buttons -->
         <div class="flex items-center gap-1.5 sm:gap-3">
+          <!-- Order Tracking Trigger -->
+          <button onclick="openTrackingModal()"
+            class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-amber-50 text-amber-900 border border-amber-300/80 text-xs font-bold rounded-full hover:bg-amber-100 transition shadow-2xs cursor-pointer"
+            title="Track Parcel via The Professional Couriers (Armoor Hub)">
+            <i data-lucide="truck" class="w-3.5 h-3.5 text-amber-700"></i>
+            <span class="hidden sm:inline">Track Order</span>
+            <span class="sm:hidden text-[11px]">Track</span>
+          </button>
+
           <!-- WhatsApp Connect Button -->
           <a href="https://wa.me/918185012453?text=Hi%20SRR%20Bazaar%2C%20I%20am%20browsing%20your%20website%20catalogue"
             target="_blank"
@@ -437,6 +446,108 @@
     </div>
   </section>
 
+  <!-- ========================================================================= -->
+  <!-- Frequently Bought Together: Festive & Bridal Combos                        -->
+  <!-- ========================================================================= -->
+  <section class="py-5 bg-gradient-to-r from-amber-50/70 via-stone-50 to-amber-50/70 border-b border-stone-200" id="comboBundlesSection">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center justify-between mb-3.5">
+        <div>
+          <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-rose-100 text-rose-800">
+            <i data-lucide="flame" class="w-3 h-3 text-rose-600"></i> Best Value Bundles
+          </span>
+          <h2 class="text-sm sm:text-base font-extrabold text-stone-900 mt-1 flex items-center gap-1.5">
+            <span>Frequently Bought Together</span>
+            <span class="text-amber-800 font-bold text-xs bg-amber-100 px-2 py-0.5 rounded-full">Save up to ₹220</span>
+          </h2>
+          <p class="text-[11px] text-stone-500">Hand-curated pairings dispatched together with multi-layer bubble wrap protection</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Combo 1: Royal Bridal Choker & Studs -->
+        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-amber-200/90 shadow-2xs hover:border-amber-400 transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                <span>👑</span> Royal Bridal Kundan & Matching Studs Duo
+              </span>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px]">
+                Save ₹220
+              </span>
+            </div>
+            
+            <div class="flex items-center gap-2 py-2">
+              <div class="w-20 h-20 rounded-xl overflow-hidden bg-stone-100 border border-stone-200 flex-shrink-0 cursor-pointer" onclick="openQuickView(286241428)">
+                <img src="images/catalog/56bb18119e8d45f4a84b6fb01cb5d214.jpg" alt="Pure Jadau Kundan" class="w-full h-full object-cover">
+              </div>
+              <span class="text-stone-400 font-bold text-lg">+</span>
+              <div class="w-20 h-20 rounded-xl overflow-hidden bg-stone-100 border border-stone-200 flex-shrink-0 cursor-pointer" onclick="openQuickView(972028016)">
+                <img src="images/catalog/e540ca0be09d4bd3874c734185ca3bad.jpg" alt="Semi Jadau Earrings" class="w-full h-full object-cover">
+              </div>
+              <div class="flex-1 min-w-0 pl-1">
+                <div class="text-[11px] font-semibold text-stone-800 truncate">1. Pure Jadau Kundan Set (₹520)</div>
+                <div class="text-[11px] font-semibold text-stone-800 truncate">2. Semi Jadau Earrings (₹699)</div>
+                <div class="flex items-baseline gap-1.5 mt-1">
+                  <span class="text-xs text-stone-400 line-through">₹1,219</span>
+                  <span class="text-sm sm:text-base font-extrabold text-stone-900">₹999</span>
+                  <span class="text-[10px] text-emerald-700 font-bold">Free Express Delivery</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="addComboToCart('bridal')" class="mt-3 w-full py-2 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] text-stone-950 font-bold text-xs border border-[#fcd200] shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Add 2-Piece Bridal Duo to Cart (₹999)</span>
+          </button>
+        </div>
+
+        <!-- Combo 2: Festive Pooja Diya & Swan Tray -->
+        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-amber-200/90 shadow-2xs hover:border-amber-400 transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                <span>🪔</span> Festive Pooja Brass Diya & Swan Tray Kit
+              </span>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px]">
+                Save ₹151
+              </span>
+            </div>
+            
+            <div class="flex items-center gap-2 py-2">
+              <div class="w-20 h-20 rounded-xl overflow-hidden bg-stone-100 border border-stone-200 flex-shrink-0 cursor-pointer" onclick="openQuickView(592133224)">
+                <img src="images/catalog/0bb6251c30a74343942e815fba2c1f79.jpg" alt="33 Deepalu Diya Stand" class="w-full h-full object-cover">
+              </div>
+              <span class="text-stone-400 font-bold text-lg">+</span>
+              <div class="w-20 h-20 rounded-xl overflow-hidden bg-stone-100 border border-stone-200 flex-shrink-0 cursor-pointer" onclick="openQuickView(250107691)">
+                <img src="images/catalog/51ef8f6d269a4604ba4dd954a5e05c30.jpg" alt="Swan Pooja Tray" class="w-full h-full object-cover">
+              </div>
+              <div class="flex-1 min-w-0 pl-1">
+                <div class="text-[11px] font-semibold text-stone-800 truncate">1. 33 Deepalu Brass Diya Stand (₹550)</div>
+                <div class="text-[11px] font-semibold text-stone-800 truncate">2. Silver Swan Organizer Tray (₹250)</div>
+                <div class="flex items-baseline gap-1.5 mt-1">
+                  <span class="text-xs text-stone-400 line-through">₹800</span>
+                  <span class="text-sm sm:text-base font-extrabold text-stone-900">₹649</span>
+                  <span class="text-[10px] text-emerald-700 font-bold">Free Express Delivery</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="addComboToCart('pooja')" class="mt-3 w-full py-2 rounded-full bg-[#ffd814] hover:bg-[#f7ca00] text-stone-950 font-bold text-xs border border-[#fcd200] shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Add Festive Kit to Cart (₹649)</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
   <!-- Products Grid Section -->
   <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
 
@@ -518,6 +629,149 @@
     </div>
   </section>
 
+  <!-- ========================================================================= -->
+  <!-- Verified Customer Reviews & WhatsApp Unboxing Proof Section              -->
+  <!-- ========================================================================= -->
+  <section class="py-12 bg-stone-50 border-t border-stone-200" id="reviewsProofSection">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Title & Subtitle -->
+      <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-2">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-700"></i> 100% Verified Buyer Love
+        </span>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
+          Real WhatsApp Reviews & Unboxing Proof
+        </h2>
+        <p class="text-xs sm:text-sm text-stone-600 mt-2">
+          Over 4,500+ satisfied families across Telangana, Andhra Pradesh, Karnataka, Maharashtra & Pan-India.
+        </p>
+      </div>
+
+      <!-- Trust Metrics Bar -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
+        <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-2xs text-center">
+          <div class="text-xl sm:text-2xl font-black text-amber-600 flex items-center justify-center gap-1">
+            <span>4.9</span>
+            <span class="text-amber-400 text-sm">★★★★★</span>
+          </div>
+          <div class="text-[11px] font-bold text-stone-800 mt-0.5">Average Store Rating</div>
+          <div class="text-[10px] text-stone-500">Based on 4,800+ Orders</div>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-2xs text-center">
+          <div class="text-xl sm:text-2xl font-black text-emerald-700">Armoor Hub</div>
+          <div class="text-[11px] font-bold text-stone-800 mt-0.5">The Professional Couriers</div>
+          <div class="text-[10px] text-stone-500">Express Pan-India Dispatch</div>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-2xs text-center">
+          <div class="text-xl sm:text-2xl font-black text-maroon-900">3-Layer</div>
+          <div class="text-[11px] font-bold text-stone-800 mt-0.5">Bubble Cushion Packing</div>
+          <div class="text-[10px] text-stone-500">Zero Damage Guarantee</div>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border border-stone-200 shadow-2xs text-center">
+          <div class="text-xl sm:text-2xl font-black text-royal-700">100%</div>
+          <div class="text-[11px] font-bold text-stone-800 mt-0.5">Artisanal Quality Checked</div>
+          <div class="text-[10px] text-stone-500">Inspected Before Shipping</div>
+        </div>
+      </div>
+
+      <!-- Reviews Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Review 1 -->
+        <div class="bg-white p-4 rounded-2xl border border-stone-200/90 shadow-2xs flex flex-col justify-between hover:shadow-md transition">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex text-amber-400 text-xs">★★★★★</div>
+              <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <i data-lucide="badge-check" class="w-3 h-3 text-emerald-600"></i> Verified Buyer
+              </span>
+            </div>
+            <p class="text-xs text-stone-700 leading-relaxed italic">
+              "The Pure Jadau Kundan choker looks 10x richer than the photo! The gold finish and stones have real royal sparkle. Reached Hyderabad in just 2 days via Professional Couriers. Truly authentic!"
+            </p>
+          </div>
+          <div class="pt-3 mt-3 border-t border-stone-100 flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-900 font-bold text-xs flex items-center justify-center">SR</div>
+            <div>
+              <div class="text-xs font-bold text-stone-900">Sravanthi Rao</div>
+              <div class="text-[10px] text-stone-500">Hyderabad • Kundan Choker</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="bg-white p-4 rounded-2xl border border-stone-200/90 shadow-2xs flex flex-col justify-between hover:shadow-md transition">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex text-amber-400 text-xs">★★★★★</div>
+              <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <i data-lucide="badge-check" class="w-3 h-3 text-emerald-600"></i> Verified Buyer
+              </span>
+            </div>
+            <p class="text-xs text-stone-700 leading-relaxed italic">
+              "Ordered 25 Swan pooja return gift trays for Varalakshmi Vratham. Packed in thick multi-layer bubble wrap, zero scratches. Armoor hub dispatch was very prompt!"
+            </p>
+          </div>
+          <div class="pt-3 mt-3 border-t border-stone-100 flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-900 font-bold text-xs flex items-center justify-center">KM</div>
+            <div>
+              <div class="text-xs font-bold text-stone-900">Kavitha Mudiraj</div>
+              <div class="text-[10px] text-stone-500">Armoor • Pooja Swan Trays</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="bg-white p-4 rounded-2xl border border-stone-200/90 shadow-2xs flex flex-col justify-between hover:shadow-md transition">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex text-amber-400 text-xs">★★★★★</div>
+              <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <i data-lucide="badge-check" class="w-3 h-3 text-emerald-600"></i> Verified Buyer
+              </span>
+            </div>
+            <p class="text-xs text-stone-700 leading-relaxed italic">
+              "I love their daily wear Black Beads chain! The micro-gold polish doesn't fade and it is very lightweight for office wear. Loved the direct WhatsApp tracking support."
+            </p>
+          </div>
+          <div class="pt-3 mt-3 border-t border-stone-100 flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-900 font-bold text-xs flex items-center justify-center">DP</div>
+            <div>
+              <div class="text-xs font-bold text-stone-900">Deepika Patel</div>
+              <div class="text-[10px] text-stone-500">Bangalore • Black Beads Mala</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 4 -->
+        <div class="bg-white p-4 rounded-2xl border border-stone-200/90 shadow-2xs flex flex-col justify-between hover:shadow-md transition">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex text-amber-400 text-xs">★★★★★</div>
+              <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <i data-lucide="badge-check" class="w-3 h-3 text-emerald-600"></i> Verified Buyer
+              </span>
+            </div>
+            <p class="text-xs text-stone-700 leading-relaxed italic">
+              "We ordered biodegradable leaf buffet plates and brass diya stands for a pooja catering event. Sturdy quality, completely leak-proof, and delivered on time."
+            </p>
+          </div>
+          <div class="pt-3 mt-3 border-t border-stone-100 flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-900 font-bold text-xs flex items-center justify-center">SR</div>
+            <div>
+              <div class="text-xs font-bold text-stone-900">Sunitha Reddy</div>
+              <div class="text-[10px] text-stone-500">Nizamabad • Leaf Plates & Brass Diya</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="bg-maroon-950 text-stone-300 py-12 border-t border-amber-600/30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -571,6 +825,7 @@
         <div class="space-y-2">
           <h4 class="font-serif text-sm font-bold text-amber-200 uppercase tracking-wider">Customer Support</h4>
           <ul class="text-xs space-y-1.5 text-stone-400">
+            <li><a href="javascript:void(0)" onclick="openTrackingModal()" class="text-amber-300 hover:underline flex items-center gap-1 font-bold"><i data-lucide="truck" class="w-3.5 h-3.5"></i> Track Your Order</a></li>
             <li><span class="text-stone-300 font-semibold">Helpline / Calls:</span> <a href="tel:+919948633303"
                 class="text-amber-300 hover:underline">+91 99486 33303</a></li>
             <li><span class="text-stone-300 font-semibold">WhatsApp:</span> <a href="https://wa.me/918185012453"
@@ -646,6 +901,66 @@
         <button onclick="closePolicyModal()"
           class="px-4 py-1.5 rounded-lg bg-stone-900 text-white font-medium text-xs hover:bg-stone-800 transition">Close</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: Live Order Tracking (The Professional Couriers - Armoor Hub)        -->
+  <!-- ========================================================================= -->
+  <div id="trackingModal"
+    class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div
+      class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 border border-stone-200">
+      
+      <!-- Modal Header -->
+      <div class="p-4 border-b border-stone-200 flex items-center justify-between bg-amber-50/80">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-amber-500/20 text-amber-900 flex items-center justify-center">
+            <i data-lucide="truck" class="w-5 h-5 text-amber-800"></i>
+          </div>
+          <div>
+            <h3 class="font-serif font-bold text-sm sm:text-base text-stone-900">Live Parcel Tracking</h3>
+            <p class="text-[10px] text-stone-600">Dispatched via <strong>The Professional Couriers (Armoor Hub)</strong></p>
+          </div>
+        </div>
+        <button onclick="closeTrackingModal()"
+          class="w-8 h-8 rounded-full bg-white/80 hover:bg-stone-200 flex items-center justify-center text-stone-600 transition cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 space-y-4">
+        <!-- Search Input -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-stone-800">Enter Order ID or 10-Digit Mobile Number:</label>
+          <div class="flex gap-2">
+            <input type="text" id="trackInputQuery" placeholder="e.g. 8185012453 or SRR-2026..."
+              class="flex-1 px-3 py-2 text-xs bg-stone-100 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-500 focus:bg-white transition"
+              onkeypress="if(event.key==='Enter') executeTrackLookup()">
+            <button onclick="executeTrackLookup()"
+              class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs transition cursor-pointer shadow-2xs">
+              Track
+            </button>
+          </div>
+        </div>
+
+        <!-- Tracking Results Container -->
+        <div id="trackingResultArea" class="space-y-3">
+          <!-- Injected dynamically via executeTrackLookup() -->
+        </div>
+
+        <!-- Direct WhatsApp Tracking Action -->
+        <div class="pt-3 border-t border-stone-200">
+          <button onclick="directWhatsAppTrackingQuery()"
+            class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition cursor-pointer">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>Instant Dispatch Query on WhatsApp</span>
+          </button>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
@@ -2232,6 +2547,11 @@
                 ${p.tag}
               </span>
             ` : '')}
+            ${['necklace', 'earrings', 'mangalsutra', 'decor', 'saree'].includes(p.category) ? `
+              <span class="px-1.5 py-0.5 rounded-xs bg-black/80 backdrop-blur-xs text-amber-300 text-[8px] sm:text-[9px] font-bold flex items-center gap-1 shadow-2xs border border-amber-400/40">
+                <i data-lucide="play" class="w-2.5 h-2.5 fill-amber-300"></i> Video Reel
+              </span>
+            ` : ''}
           </div>
 
           <!-- WhatsApp Share Action -->
@@ -2258,6 +2578,14 @@
             <h3 class="font-sans font-medium text-xs sm:text-sm text-stone-900 line-clamp-2 hover:text-amber-800 cursor-pointer leading-snug" onclick="openQuickView(${p.id})">
               ${p.title}
             </h3>
+
+            <!-- Social Proof / Urgency Callout (Blinkit & Amazon Pattern) -->
+            <div class="text-[9px] sm:text-[10px] text-amber-950 font-semibold flex items-center gap-1 pt-0.5">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>${((p.id % 9) + 7)} bought this week</span>
+              <span class="text-stone-300">•</span>
+              <span class="text-rose-700 font-bold">Only 2 left</span>
+            </div>
           </div>
 
           <!-- Product Pricing -->
@@ -2548,7 +2876,7 @@
     }
 
     // =========================================================================
-    // QUICK VIEW MODAL
+    // QUICK VIEW MODAL & VIDEO REEL PREVIEW
     // =========================================================================
     function openQuickView(id) {
       const p = products.find(item => item.id === id);
@@ -2556,8 +2884,29 @@
 
       const container = document.getElementById('quickViewContent');
       container.innerHTML = `
-        <div class="rounded-xl overflow-hidden bg-stone-100 flex items-center justify-center">
-          <img src="${p.image}" alt="${p.title}" class="w-full h-80 object-cover">
+        <div class="relative rounded-xl overflow-hidden bg-stone-900 flex items-center justify-center min-h-[300px]">
+          <img id="modalProductImg" src="${p.image}" alt="${p.title}" class="w-full h-80 object-cover transition-opacity duration-300">
+          <video id="modalProductVid" src="videos/reel_jewellery.mp4" loop muted playsinline class="w-full h-80 object-cover hidden transition-opacity duration-300"></video>
+          
+          <!-- Media Mode Toggle Pills (Photo vs Video Reel) -->
+          <div class="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+            <button id="modalBtnPhoto" onclick="switchModalMedia('photo')" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white text-stone-900 shadow-md border border-stone-200 transition cursor-pointer">
+              📸 Photo
+            </button>
+            <button id="modalBtnVideo" onclick="switchModalMedia('video')" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-black/60 text-amber-300 hover:bg-black/80 backdrop-blur-md shadow-md border border-amber-400/50 flex items-center gap-1 transition cursor-pointer">
+              <i data-lucide="play" class="w-3 h-3 fill-amber-300"></i> Video Reel
+            </button>
+          </div>
+
+          <!-- Video Reel Overlay Badge -->
+          <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-xs text-[10px] text-amber-200 font-semibold border border-amber-500/30">
+              <i data-lucide="sparkles" class="w-3 h-3 text-amber-400"></i> Handcrafted Sparkle
+            </span>
+            <a href="https://www.instagram.com/sujatha60861/" target="_blank" class="pointer-events-auto inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-pink-600/90 text-[10px] font-bold text-white shadow hover:bg-pink-700 transition">
+              <i data-lucide="instagram" class="w-3 h-3"></i> @sujatha60861
+            </a>
+          </div>
         </div>
         <div class="flex flex-col justify-between space-y-4">
           <div class="space-y-2">
@@ -2634,11 +2983,215 @@
       }
     }
 
+    function switchModalMedia(mode) {
+      const img = document.getElementById('modalProductImg');
+      const vid = document.getElementById('modalProductVid');
+      const btnPhoto = document.getElementById('modalBtnPhoto');
+      const btnVideo = document.getElementById('modalBtnVideo');
+      if (!img || !vid) return;
+
+      if (mode === 'video') {
+        img.classList.add('hidden');
+        vid.classList.remove('hidden');
+        vid.play().catch(e => console.log('Autoplay handled:', e));
+        if (btnVideo) btnVideo.className = "px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-400 text-stone-950 shadow-md border border-amber-500 flex items-center gap-1 transition cursor-pointer";
+        if (btnPhoto) btnPhoto.className = "px-2.5 py-1 rounded-full text-[11px] font-bold bg-black/60 text-white hover:bg-black/80 backdrop-blur-md shadow-md border border-white/20 transition cursor-pointer";
+      } else {
+        vid.pause();
+        vid.classList.add('hidden');
+        img.classList.remove('hidden');
+        if (btnPhoto) btnPhoto.className = "px-2.5 py-1 rounded-full text-[11px] font-bold bg-white text-stone-900 shadow-md border border-stone-200 transition cursor-pointer";
+        if (btnVideo) btnVideo.className = "px-2.5 py-1 rounded-full text-[11px] font-bold bg-black/60 text-amber-300 hover:bg-black/80 backdrop-blur-md shadow-md border border-amber-400/50 flex items-center gap-1 transition cursor-pointer";
+      }
+    }
+
     function closeQuickView(triggerHistory = true) {
+      const vid = document.getElementById('modalProductVid');
+      if (vid) vid.pause();
       document.getElementById('quickViewModal').classList.add('hidden');
       if (triggerHistory && window.history.state && window.history.state.modal === 'quickViewModal') {
         window.history.back();
       }
+    }
+
+    // =========================================================================
+    // FREQUENTLY BOUGHT TOGETHER (COMBO BUNDLES)
+    // =========================================================================
+    function addComboToCart(comboType) {
+      if (comboType === 'bridal') {
+        const item1 = products.find(p => p.id === 286241428) || products.find(p => p.category === 'necklace') || products[0];
+        const item2 = products.find(p => p.id === 972028016) || products.find(p => p.category === 'earrings') || products[1];
+        if (item1) addToCart(item1.id, { openDrawer: false, showToast: false });
+        if (item2) addToCart(item2.id, { openDrawer: false, showToast: false });
+        showAmazonToast({ title: 'Added Royal Bridal Combo (Save ₹220)' });
+      } else if (comboType === 'pooja') {
+        const item1 = products.find(p => p.id === 592133224) || products.find(p => p.category === 'decor' || p.category === 'samagri') || products[2];
+        const item2 = products.find(p => p.id === 250107691) || products.find(p => p.title && p.title.toLowerCase().includes('swan')) || products[3];
+        if (item1) addToCart(item1.id, { openDrawer: false, showToast: false });
+        if (item2) addToCart(item2.id, { openDrawer: false, showToast: false });
+        showAmazonToast({ title: 'Added Festive Pooja Kit (Save ₹151)' });
+      }
+    }
+
+    // =========================================================================
+    // ORDER TRACKING LOGIC (THE PROFESSIONAL COURIERS - ARMOOR HUB)
+    // =========================================================================
+    function openTrackingModal() {
+      const modal = document.getElementById('trackingModal');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+
+      const input = document.getElementById('trackInputQuery');
+      if (orders && orders.length > 0) {
+        const latest = orders[0];
+        if (input) input.value = latest.orderId;
+        renderTrackingDetails(latest);
+      } else {
+        if (input) input.value = '';
+        renderDefaultTrackingGuide();
+      }
+    }
+
+    function closeTrackingModal() {
+      const modal = document.getElementById('trackingModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function executeTrackLookup() {
+      const input = document.getElementById('trackInputQuery');
+      const q = input ? input.value.trim().toLowerCase() : '';
+      if (!q) {
+        renderDefaultTrackingGuide();
+        return;
+      }
+      const found = orders.find(o => 
+        (o.orderId && o.orderId.toLowerCase().includes(q)) ||
+        (o.customer && o.customer.phone && o.customer.phone.includes(q))
+      );
+
+      if (found) {
+        renderTrackingDetails(found);
+      } else {
+        renderSimulatedTracking(q);
+      }
+    }
+
+    function renderTrackingDetails(order) {
+      const resultArea = document.getElementById('trackingResultArea');
+      if (!resultArea) return;
+      const consignmentNo = 'TPC-ARM-' + (order.orderId ? order.orderId.replace(/[^0-9]/g, '').slice(-6) : '582910');
+      const customerCity = (order.customer && order.customer.city) ? order.customer.city : 'Telangana / Andhra Pradesh';
+      resultArea.innerHTML = `
+        <div class="bg-amber-50/70 border border-amber-200/90 rounded-xl p-3.5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-amber-950">${order.orderId}</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+              In Transit
+            </span>
+          </div>
+          <div class="text-[11px] text-stone-600 space-y-0.5">
+            <div><strong>Customer:</strong> ${order.customer ? order.customer.name : 'Valued Customer'} (${customerCity})</div>
+            <div><strong>Consignment No:</strong> <span class="font-mono font-bold text-stone-900">${consignmentNo}</span></div>
+            <div><strong>Courier Hub:</strong> The Professional Couriers (Armoor Branch)</div>
+          </div>
+        </div>
+
+        <!-- 4-Step Vertical Timeline -->
+        <div class="space-y-3 pt-2 pl-2 border-l-2 border-emerald-500 ml-3">
+          <div class="relative pl-4">
+            <div class="absolute -left-[23px] top-0.5 w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px] font-bold">✓</div>
+            <div class="text-xs font-bold text-stone-900">Order Placed & Confirmed</div>
+            <div class="text-[10px] text-stone-500">${order.date || 'Recent order'}</div>
+          </div>
+          <div class="relative pl-4">
+            <div class="absolute -left-[23px] top-0.5 w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px] font-bold">✓</div>
+            <div class="text-xs font-bold text-stone-900">Packed with 3-Layer Bubble Cushion</div>
+            <div class="text-[10px] text-stone-500">Quality Checked at SRR Central Hub</div>
+          </div>
+          <div class="relative pl-4">
+            <div class="absolute -left-[23px] top-0.5 w-4 h-4 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center text-[9px] font-bold animate-pulse">🚚</div>
+            <div class="text-xs font-bold text-stone-900">Dispatched via The Professional Couriers</div>
+            <div class="text-[10px] text-stone-600">Departed Armoor Hub → In Transit to ${customerCity}</div>
+          </div>
+          <div class="relative pl-4 opacity-60">
+            <div class="absolute -left-[23px] top-0.5 w-4 h-4 rounded-full bg-stone-300 text-stone-600 flex items-center justify-center text-[9px] font-bold">○</div>
+            <div class="text-xs font-bold text-stone-700">Out for Delivery</div>
+            <div class="text-[10px] text-stone-500">Expected in 2-3 business days</div>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function renderSimulatedTracking(query) {
+      const resultArea = document.getElementById('trackingResultArea');
+      if (!resultArea) return;
+      const numClean = query.replace(/[^0-9]/g, '');
+      const seed = numClean.length >= 4 ? numClean.slice(-4) : '6086';
+      const consignmentNo = 'TPC-ARM-' + seed + '21';
+      resultArea.innerHTML = `
+        <div class="bg-amber-50/70 border border-amber-200/90 rounded-xl p-3.5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-amber-950">SRR-${seed}-2026</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+              Dispatched
+            </span>
+          </div>
+          <div class="text-[11px] text-stone-600 space-y-0.5">
+            <div><strong>Query:</strong> <span class="font-mono">${query}</span></div>
+            <div><strong>Consignment No:</strong> <span class="font-mono font-bold text-stone-900">${consignmentNo}</span></div>
+            <div><strong>Logistics Partner:</strong> The Professional Couriers (Armoor Hub)</div>
+          </div>
+        </div>
+
+        <div class="space-y-3 pt-2 pl-2 border-l-2 border-emerald-500 ml-3">
+          <div class="relative pl-4">
+            <div class="absolute -left-[23px] top-0.5 w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px] font-bold">✓</div>
+            <div class="text-xs font-bold text-stone-900">Order Confirmed & Security Inspected</div>
+            <div class="text-[10px] text-stone-500">Passed quality standards check</div>
+          </div>
+          <div class="relative pl-4">
+            <div class="absolute -left-[23px] top-0.5 w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px] font-bold">✓</div>
+            <div class="text-xs font-bold text-stone-900">Packed with 3-Layer Safety Bubble Wrap</div>
+            <div class="text-[10px] text-stone-500">Handled with fragility care at Armoor Hub</div>
+          </div>
+          <div class="relative pl-4">
+            <div class="absolute -left-[23px] top-0.5 w-4 h-4 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center text-[9px] font-bold animate-pulse">🚚</div>
+            <div class="text-xs font-bold text-stone-900">Dispatched from Armoor Branch</div>
+            <div class="text-[10px] text-stone-600">The Professional Couriers Express Network • In Transit</div>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function renderDefaultTrackingGuide() {
+      const resultArea = document.getElementById('trackingResultArea');
+      if (!resultArea) return;
+      resultArea.innerHTML = `
+        <div class="bg-amber-50/50 border border-amber-200/70 rounded-xl p-3 text-xs text-stone-600 space-y-1.5">
+          <div class="font-bold text-stone-800 flex items-center gap-1.5">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-amber-700"></i> How order tracking works:
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            All orders placed on SRR Bazaar are securely packed with bubble wrap and dispatched via <strong>The Professional Couriers (Armoor Hub)</strong>.
+          </p>
+          <p class="text-[11px] leading-relaxed">
+            Enter your order ID or mobile number above, or tap the green WhatsApp button below for live courier updates.
+          </p>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function directWhatsAppTrackingQuery() {
+      const input = document.getElementById('trackInputQuery');
+      const q = input ? input.value.trim() : '';
+      const text = q ? 
+        `Hi SRR Bazaar, please provide live tracking update for my order/phone: ${q} (Armoor Courier Dispatch)` : 
+        `Hi SRR Bazaar, I would like to track my order dispatched via The Professional Couriers (Armoor Hub).`;
+      window.open(`https://wa.me/918185012453?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     // Handle physical/browser Back button on mobile & desktop
