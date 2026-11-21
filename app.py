@@ -732,10 +732,96 @@ def home():
     }
 
 
+def _parse_ai_products_and_reply(raw_reply: str) -> tuple[str, list[int]]:
+    """Parse product IDs from [PRODUCTS: 123, 456] tag and return clean text with IDs."""
+    product_ids: list[int] = []
+    m = re.search(r'\[PRODUCTS:\s*([0-9,\s]+)\]', raw_reply)
+    if m:
+        ids_str = m.group(1)
+        for part in ids_str.split(','):
+            part_clean = part.strip()
+            if part_clean.isdigit():
+                product_ids.append(int(part_clean))
+        clean_reply = re.sub(r'\[PRODUCTS:\s*[0-9,\s]+\]', '', raw_reply).strip()
+    else:
+        clean_reply = raw_reply.strip()
+    return clean_reply, product_ids
+
+
+def _filter_relevant_catalog(query: str, products_list: list[dict], max_items: int = 8) -> list[dict]:
+    """Retrieve top relevant products for user query via token scoring to minimize LLM prompt size."""
+    if not products_list:
+        return []
+    tokens = [t.lower() for t in re.findall(r'[a-zA-Z0-9]+', query) if len(t) > 2]
+    if not tokens:
+        return products_list[:max_items]
+
+    scored = []
+    for p in products_list:
+        score = 0
+        text = f"{p.get('title', '')} {p.get('category', '')} {p.get('description', '')}".lower()
+        for t in tokens:
+            if t in text:
+                score += 2 if t in p.get('title', '').lower() else 1
+        scored.append((score, p))
+
+    scored.sort(key=lambda x: x[0], reverse=True)
+    top_matches = [p for score, p in scored if score > 0]
+    if top_matches:
+        return top_matches[:max_items]
+    return products_list[:max_items]
+
+
+def ask_ollama_stylist(user_query: str, system_prompt: str) -> dict[str, Any] | None:
+    """
+    Fallback to local Ollama inference (llama3.2).
+    100% free, private, and runs locally when cloud Groq is unavailable, rate-limited, or offline.
+    """
+    ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434").strip().rstrip("/")
+    ollama_model = os.getenv("OLLAMA_MODEL", "llama3.2").strip()
+    try:
+        payload = {
+            "model": ollama_model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_query}
+            ],
+            "stream": False,
+            "options": {
+                "temperature": 0.4,
+                "num_predict": 180
+            }
+        }
+        resp = requests.post(
+            f"{ollama_base_url}/api/chat",
+            json=payload,
+            timeout=45
+        )
+        if resp.status_code == 200:
+            res_json = resp.json()
+            raw_reply = res_json.get("message", {}).get("content", "")
+            clean_reply, product_ids = _parse_ai_products_and_reply(raw_reply)
+            logger.info("Successfully generated AI response via local Ollama (%s)", ollama_model)
+            return {
+                "reply": clean_reply,
+                "product_ids": product_ids,
+                "provider": f"ollama ({ollama_model})"
+            }
+        else:
+            logger.warning("Ollama HTTP %d: %s", resp.status_code, resp.text[:100])
+            return None
+    except Exception as exc:
+        logger.warning("Local Ollama fallback unreachable or timed out: %s", exc)
+        return None
+
+
 def ask_groq_stylist(user_query: str) -> dict[str, Any]:
     """
-    SRR Bazaar AI Stylist & Pooja Concierge powered by Groq LPU (qwen/qwen3.8-27b).
-    Provides instant multilingual product styling recommendations and order tracking assistance.
+    SRR Bazaar AI Stylist & Pooja Concierge.
+    Multi-tier architecture:
+    1. Primary: Groq Cloud LPU (qwen/qwen3.8-27b) for sub-second cloud responses.
+    2. Fallback: Local Ollama (llama3.2) when Groq is unavailable, out of quota, or offline.
+    3. Final Fallback: Curated catalog matching.
     """
     clean_query = user_query.strip()
     if not clean_query:
@@ -755,9 +841,11 @@ def ask_groq_stylist(user_query: str) -> dict[str, Any]:
         except Exception:
             products_list = []
 
+    # Filter catalog to top relevant items to maximize LLM speed and prevent timeouts
+    relevant_products = _filter_relevant_catalog(clean_query, products_list, max_items=8)
     catalog_summary = "\n".join([
-        f"- ID: {p.get('id')} | {p.get('title')} | Cat: {p.get('category')} | Rs {p.get('price')}"
-        for p in products_list[:40]
+        f"- ID: {p.get('id')} | {p.get('title')} | Rs {p.get('price')}"
+        for p in relevant_products
     ])
 
     system_prompt = f"""You are the official AI Shopping Stylist and Festive Concierge for SRR Bazaar (Sujatha Collections), based in Telangana.
@@ -775,62 +863,56 @@ Instructions:
 [PRODUCTS: id1, id2]
 Example: [PRODUCTS: 703481457, 592133224]"""
 
-    if not groq_api_key:
-        return {
-            "reply": "Namaste! Welcome to SRR Bazaar. Our AI engine is ready to assist. Please explore our curated collections on https://srrbazaar.com or message our stylist on WhatsApp at +91 8185012453.",
-            "product_ids": [703481457, 592133224, 928103031]
-        }
-
-    try:
-        headers = {
-            "Authorization": f"Bearer {groq_api_key}",
-            "Content-Type": "application/json",
-            "User-Agent": "SRR-Bazaar/1.0"
-        }
-        data = {
-            "model": "qwen/qwen3.8-27b",
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": clean_query}
-            ],
-            "max_tokens": 300,
-            "temperature": 0.5
-        }
-        resp = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers=headers,
-            json=data,
-            timeout=10
-        )
-        if resp.status_code == 200:
-            res_json = resp.json()
-            raw_reply = res_json["choices"][0]["message"].get("content", "")
-            # Extract product IDs if present
-            product_ids = []
-            m = re.search(r'\[PRODUCTS:\s*([0-9,\s]+)\]', raw_reply)
-            if m:
-                ids_str = m.group(1)
-                for part in ids_str.split(','):
-                    part_clean = part.strip()
-                    if part_clean.isdigit():
-                        product_ids.append(int(part_clean))
-                clean_reply = re.sub(r'\[PRODUCTS:\s*[0-9,\s]+\]', '', raw_reply).strip()
-            else:
-                clean_reply = raw_reply.strip()
-
-            return {"reply": clean_reply, "product_ids": product_ids}
-        else:
-            logger.error("Groq API error: %d %s", resp.status_code, resp.text)
-            return {
-                "reply": "Namaste! I can recommend our popular festive collections like Edu Kondala Nomu, 33 Diya Stand, and Kundan Chokers with Free Express Delivery!",
-                "product_ids": [592133224, 703481457, 378586240]
+    # Tier 1: Groq Cloud LPU
+    if groq_api_key:
+        try:
+            headers = {
+                "Authorization": f"Bearer {groq_api_key}",
+                "Content-Type": "application/json",
+                "User-Agent": "SRR-Bazaar/1.0"
             }
-    except Exception as exc:
-        logger.exception("AI Stylist failed: %s", exc)
-        return {
-            "reply": "Namaste! I am having trouble connecting right now, but you can explore our curated festive collections on https://srrbazaar.com or connect directly with our stylist on WhatsApp!",
-            "product_ids": [592133224, 703481457, 928103031]
-        }
+            data = {
+                "model": "qwen/qwen3.8-27b",
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": clean_query}
+                ],
+                "max_tokens": 300,
+                "temperature": 0.5
+            }
+            resp = requests.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers=headers,
+                json=data,
+                timeout=10
+            )
+            if resp.status_code == 200:
+                res_json = resp.json()
+                raw_reply = res_json["choices"][0]["message"].get("content", "")
+                clean_reply, product_ids = _parse_ai_products_and_reply(raw_reply)
+                return {"reply": clean_reply, "product_ids": product_ids, "provider": "groq"}
+            else:
+                logger.warning(
+                    "Groq API returned HTTP %d: %s. Falling back to local Ollama (llama3.2)...",
+                    resp.status_code, resp.text[:120]
+                )
+        except Exception as exc:
+            logger.warning("Groq API request failed (%s). Falling back to local Ollama (llama3.2)...", exc)
+    else:
+        logger.info("GROQ_API_KEY not configured. Falling back to local Ollama (llama3.2)...")
+
+    # Tier 2: Local Ollama (llama3.2) Fallback
+    ollama_result = ask_ollama_stylist(clean_query, system_prompt)
+    if ollama_result:
+        return ollama_result
+
+    # Tier 3: Static Curated Catalog Fallback (if both Groq and Ollama are unavailable)
+    logger.warning("Both Groq and local Ollama are unavailable; using catalog heuristic fallback.")
+    return {
+        "reply": "Namaste! Welcome to SRR Bazaar. Our festive recommendations include Edu Kondala Nomu, 33 Diya Stand, and Kundan Chokers with Free Express Delivery via The Professional Couriers!",
+        "product_ids": [592133224, 703481457, 378586240],
+        "provider": "static_fallback"
+    }
 
 
 def send_whatsapp_text(to_number: str, message_text: str) -> bool:

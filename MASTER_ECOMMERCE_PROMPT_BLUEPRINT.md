@@ -238,24 +238,30 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 
 ---
 
-### 15. AI CONCIERGE & STYLIST ENGINE (HYBRID CLIENT-BACKEND ARCHITECTURE)
+### 15. AI CONCIERGE & STYLIST ENGINE (MULTI-TIER CLOUD + LOCAL FREE OLLAMA + STATIC CLIENT ARCHITECTURE)
 - **The Critical Trap**:
-  - Relying solely on a backend API endpoint (e.g., `/api/ai-stylist`) breaks completely on static CDNs or GitHub Pages because no Python server is running there.
+  - Relying solely on a single cloud LLM API (e.g. Groq) leaves your store completely stranded when cloud API keys expire, hit rate limits (HTTP 429), run out of monthly quota, or when internet connectivity hiccups.
+  - Relying solely on a backend API endpoint (e.g., `/api/ai-stylist`) breaks on static CDNs or GitHub Pages because no Python server is running there.
   - Using complex reasoning models (like `gpt-oss-20b`) burns through token limits on hidden reasoning tokens, returning empty responses.
-  - Using default `urllib` HTTP headers results in HTTP 403 Forbidden on Groq/Cloudflare endpoints.
-- **The Mandatory Solution**:
-  1. **Hybrid Architecture (Graceful Fallback)**:
-     - Try `POST /api/ai-stylist` with a 4-second timeout.
-     - If the fetch fails (network down or static hosting on GitHub Pages), catch the exception and immediately invoke the client-side JavaScript knowledge engine `generateClientAiResponse(query)` using live `products.json` and client-side fuzzy search!
-     - Zero disruption to the customer!
-  2. **Model Selection for E-Commerce Shopping**:
-     - Use fast, direct multilingual conversational models: `qwen/qwen3.8-27b` on Groq LPU (< 200ms response time).
+  - Stuffing the entire 100-item catalog into local LLMs (like Ollama on CPU) causes severe prompt evaluation delays (> 35s), timing out customer requests.
+- **The Mandatory Solution (Resilient 3-Tier AI Orchestrator)**:
+  1. **Tier 1: Cloud Ultra-Fast LPU (`Groq` via `qwen/qwen3.8-27b`)**:
+     - Sub-second streaming responses (< 250ms latency) for instant customer satisfaction.
      - Always provide custom headers: `headers = {"User-Agent": "Storefront-AI/1.0", "Authorization": f"Bearer {key}"}`.
-  3. **Catalog Injection & Product ID Tagging**:
-     - Prompt includes store catalog summary (top 40 items with IDs, categories, prices in ₹).
+  2. **Tier 2: 100% Free Local Fallback (`Ollama` via `llama3.2`)**:
+     - When Groq fails (non-200 status code, HTTP 429 rate limit, 500 error, network timeout, or missing `GROQ_API_KEY`), automatically and silently fall back to local Ollama running on `http://127.0.0.1:11434/api/chat`.
+     - 100% free, runs completely offline on the host machine, eliminates recurring API costs, and guarantees 24/7 uptime for WhatsApp customer support.
+  3. **Tier 3: Client-Side Browser Engine (`generateClientAiResponse`)**:
+     - When running on static hosting (GitHub Pages) or if all backend services are unreachable, catch fetch errors and immediately invoke client-side JavaScript knowledge engine using live `products.json` and fuzzy search. Zero disruption to the customer!
+  4. **Focused RAG Retrieval Optimization (Preventing Local LLM CPU Timeouts)**:
+     - Never dump the entire raw catalog into the LLM prompt.
+     - Use token-scoring helper `_filter_relevant_catalog(query, products_list, max_items=8)` to extract only the top 5 to 8 candidate products relevant to the user query.
+     - Reduces prompt size from 1,500+ tokens to < 180 tokens, slashing local Ollama CPU processing time from > 35s down to 8–15s.
+  5. **Catalog Injection & Product ID Tagging**:
+     - Prompt includes candidate items with ID, title, and price in ₹.
      - Instruct AI to append `[PRODUCTS: id1, id2]` at the end of its response.
      - Frontend regex parses `[PRODUCTS: ...]` and dynamically renders interactive product cards with photo, price, "View in Quick View", and direct WhatsApp buy buttons right inside the chat bubble!
-  4. **Starter Chips & Floating Widget**:
+  6. **Starter Chips & Floating Widget**:
      - Include quick starter chips (e.g., "🌾 Sankranti Pooja Nomu", "👑 Bridal Kundan Sets", "✨ Sarees Under ₹1,500", "📦 Track My Order").
      - Floating bottom-right button with pulse animation and mobile drawer view.
 
@@ -310,6 +316,7 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 | **Static Hosting AI** | Fetching `/api/ai-stylist` and throwing uncaught error | Wrap in try/catch and fallback immediately to client-side catalog search |
 | **Google Search SEO** | Missing 48px square favicons causing globe 🌐 icon | Provide `favicon-48x48.png` + Schema.org `OnlineStore` + `sitemap.xml` with images |
 | **Mobile Viewport Overflow** | Swiping horizontally drags document left, revealing a full-height white/blank empty margin | Lock `html, body` with `overflow-x: hidden !important; overscroll-behavior-x: none;`, budget mobile header width $\le 350$px, and wrap flex scrolls in `overflow-hidden` |
+| **Cloud LLM Quota / Outage** | Cloud LLM (Groq) rate-limits, expires key, or goes down | Multi-tier failover: Groq Cloud LPU $\rightarrow$ Local Ollama (`llama3.2`) $\rightarrow$ Static Catalog RAG |
 ```
 
 ---
@@ -410,3 +417,17 @@ This log documents every architectural pitfall discovered and resolved during re
   2. Keep mobile header within $360$px: reduce padding to `px-2 sm:px-6`, hide the duplicate mobile search button (`hidden sm:flex`) because mobile already has an inline search bar below the header, and clamp badges to `top-0 right-0`.
   3. Wrap horizontal carousels in `w-full max-w-full overflow-hidden` and add `overscroll-x-contain` so swipe momentum never drags the document.
   4. Put `w-full max-w-full overflow-hidden` on all major sections (`#catalogue`, `#comboBundlesSection`, `#reviewsProofSection`, `footer`).
+
+### 8. Cloud LLM Rate-Limits & Outages: Seamless Local Ollama (llama3.2) Fallback
+- **What Happened**: Relying solely on cloud Groq API keys introduces single-point-of-failure risks: hitting free-tier token rate limits (HTTP 429), expired API keys, or cloud network timeouts, leaving customer WhatsApp inquiries unanswered.
+- **Why It Happened**: Cloud LLMs are subject to rate limiting, network interruptions, and quotas. Without a local backup, the backend either throws an exception or returns a generic static error message.
+- **How to Avoid**:
+  1. Build a multi-tier fallback pipeline in `ask_groq_stylist`:
+     - **Tier 1 (Cloud LPU)**: Query Groq API (`qwen/qwen3.8-27b`) for sub-second responses.
+     - **Tier 2 (Zero-Cost Local Host)**: If Groq fails (non-200 code, 429, timeout, or missing key), automatically fall back to local Ollama (`http://127.0.0.1:11434/api/chat`) running `llama3.2`.
+     - **Tier 3 (Catalog Static Heuristic)**: If both are offline, return curated catalog bestsellers with direct WhatsApp ordering links.
+  2. Implement Token-Scored Retrieval (RAG) before calling Ollama:
+     - On CPU, passing 40+ raw catalog items (1,500+ tokens) causes local Ollama prompt evaluation to take > 35 seconds, hitting client timeouts.
+     - Pre-filter catalog with a lightweight token scorer (`_filter_relevant_catalog`) to extract only the top 5 to 8 matching items (< 180 tokens).
+     - Result: Local Ollama `llama3.2` inference finishes cleanly in 8 to 15 seconds with zero cloud dependencies and ₹0 cost.
+

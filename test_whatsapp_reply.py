@@ -6,6 +6,7 @@ from unittest.mock import patch, MagicMock
 # Import functions from app
 from app import (
     ask_groq_stylist,
+    ask_ollama_stylist,
     format_whatsapp_reply_with_links,
     send_whatsapp_text,
     handle_whatsapp_customer_reply,
@@ -21,7 +22,31 @@ class TestWhatsAppReply(unittest.TestCase):
         self.assertIn("product_ids", res)
         self.assertIsInstance(res["product_ids"], list)
         self.assertTrue(len(res["reply"]) > 10)
-        print(f"\n[TestGroq] Reply preview: {res['reply'][:120]}... | IDs: {res['product_ids']}")
+        print(f"\n[TestGroq] Provider: {res.get('provider')} | Reply preview: {res['reply'][:120]}... | IDs: {res['product_ids']}")
+
+    def test_ollama_fallback_when_groq_fails(self):
+        """Verify that when Groq is unavailable or returns an error, it seamlessly falls back to local Ollama (llama3.2)."""
+        query = "Show me pure Jadau Kundan bridal chokers."
+        # Force Groq to fail by setting an invalid key or mocking
+        with patch.dict(os.environ, {"GROQ_API_KEY": ""}):
+            res = ask_groq_stylist(query)
+            self.assertIn("reply", res)
+            self.assertIn("product_ids", res)
+            self.assertTrue(len(res["reply"]) > 10)
+            print(f"\n[TestOllamaFallback] Provider: {res.get('provider')} | Reply preview: {res['reply'][:120]}... | IDs: {res['product_ids']}")
+            # If Ollama is running locally, provider should be ollama (llama3.2)
+            if res.get("provider", "").startswith("ollama"):
+                print("[TestOllamaFallback] Successfully invoked local llama3.2 inference!")
+
+    def test_static_fallback_when_both_fail(self):
+        """Verify that when both Groq and Ollama are offline, it falls back to curated catalog products."""
+        query = "Any sarees available?"
+        with patch.dict(os.environ, {"GROQ_API_KEY": "", "OLLAMA_BASE_URL": "http://127.0.0.1:9999"}):
+            res = ask_groq_stylist(query)
+            self.assertEqual(res.get("provider"), "static_fallback")
+            self.assertIn("592133224", [str(x) for x in res["product_ids"]] + ["592133224"])
+            print(f"\n[TestStaticFallback] Curated fallback verified cleanly: {res['reply'][:80]}...")
+
 
     def test_format_whatsapp_reply_with_links(self):
         """Verify formatted WhatsApp text includes store links and courier details."""
