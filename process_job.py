@@ -350,6 +350,7 @@ def sync_product_to_website_catalogue(
     price_str: str,
     description: str,
     job_id: str,
+    video_path: Path | None = None,
 ) -> None:
     """Auto-add product to docs/products.json and docs/images/catalog/ for live website."""
     try:
@@ -402,6 +403,32 @@ def sync_product_to_website_catalogue(
         elif any(w in text_lower for w in ["earring", "earrings", "stud", "studs", "jhumka", "jhumkas", "bangle", "bangles", "bracelet", "kada"]):
             category = "earrings"
 
+        new_id = int(uuid.uuid4().int % 1000000000)
+
+        # Process and link matching video reel if available
+        linked_video_rel = None
+        if video_path and Path(video_path).exists():
+            try:
+                docs_video_dir = docs_dir / "videos"
+                docs_video_dir.mkdir(parents=True, exist_ok=True)
+                dest_video_name = f"reel_{new_id}.mp4"
+                dest_video_path = docs_video_dir / dest_video_name
+                
+                cmd = [
+                    "ffmpeg", "-y", "-i", str(video_path),
+                    "-vf", "scale=540:-2",
+                    "-c:v", "libx264", "-crf", "26", "-preset", "fast",
+                    "-c:a", "aac", "-b:a", "96k",
+                    "-movflags", "+faststart",
+                    str(dest_video_path)
+                ]
+                subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                if dest_video_path.exists():
+                    linked_video_rel = f"videos/{dest_video_name}"
+                    logger.info("Auto-compressed & linked matching reel to product %d: %s", new_id, linked_video_rel)
+            except Exception as ve:
+                logger.warning("Could not link video reel to new product: %s", ve)
+
         products_json_path = docs_dir / "products.json"
         products: list[dict[str, Any]] = []
         if products_json_path.exists():
@@ -411,13 +438,14 @@ def sync_product_to_website_catalogue(
                 products = []
 
         new_entry = {
-            "id": int(uuid.uuid4().int % 1000000000),
+            "id": new_id,
             "title": product_name,
             "category": category,
             "price": numeric_price,
             "originalPrice": original_price,
             "tag": "New Arrival",
             "image": f"images/catalog/{target_img_name}",
+            "video": linked_video_rel,
             "description": description or f"Exclusive {product_name} with premium finish. Free express shipping across India.",
             "inStock": True,
             "rating": 5.0,
@@ -427,7 +455,23 @@ def sync_product_to_website_catalogue(
         # Prepend to catalogue so new arrivals appear first
         products.insert(0, new_entry)
         products_json_path.write_text(json.dumps(products, indent=2, ensure_ascii=False), encoding="utf-8")
-        logger.info("Auto-synced new product to website catalogue: '%s' (₹%d) -> %s", product_name, numeric_price, target_img_name)
+        logger.info("Auto-synced new product to website catalogue: '%s' (₹%d) -> %s (video: %s)", product_name, numeric_price, target_img_name, linked_video_rel)
+
+        # Also sync docs/index.html DEFAULT_PRODUCTS fallback
+        try:
+            index_path = docs_dir / "index.html"
+            if index_path.exists():
+                idx_html = index_path.read_text(encoding="utf-8")
+                m = re.search(r'const DEFAULT_PRODUCTS\s*=\s*(\[.*?\]);', idx_html, re.DOTALL)
+                if m:
+                    idx_prods = json.loads(m.group(1))
+                    idx_prods.insert(0, new_entry)
+                    new_idx_json = json.dumps(idx_prods, indent=2, ensure_ascii=False)
+                    updated_idx_html = idx_html[:m.start(1)] + new_idx_json + idx_html[m.end(1):]
+                    index_path.write_text(updated_idx_html, encoding="utf-8")
+                    logger.info("Auto-updated DEFAULT_PRODUCTS fallback in docs/index.html")
+        except Exception as idx_err:
+            logger.warning("Could not update docs/index.html fallback: %s", idx_err)
 
         # Generate individual product share/SEO page
         try:
@@ -586,6 +630,7 @@ def main() -> int:
             price_str=price,
             description=description,
             job_id=job_id,
+            video_path=selected_video,
         )
     else:
         logger.info("WHATSAPP_AUTO_PUBLISH=false. Reels generated and stored in %s without publishing.", job_output_dir)
@@ -596,6 +641,7 @@ def main() -> int:
             price_str=price,
             description=description,
             job_id=job_id,
+            video_path=selected_video,
         )
 
     print(json.dumps({
