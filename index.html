@@ -3293,7 +3293,7 @@
       lucide.createIcons();
     }
 
-    function filterCategory(category, btnElement) {
+    function filterCategory(category, btnElement, autoScroll = true) {
       activeCategory = category;
 
       // Update pills
@@ -3332,6 +3332,16 @@
       }
 
       renderProducts();
+
+      // Smooth auto-scroll down to the catalogue section so products appear immediately in view
+      if (autoScroll) {
+        const target = document.getElementById('catalogueHeading') || document.getElementById('productGrid');
+        if (target) {
+          const navOffset = 85;
+          const targetY = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
+          window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+        }
+      }
     }
 
     function toggleMobileSearch() {
@@ -3367,7 +3377,7 @@
       if (dInput) dInput.value = '';
       const mInput = document.getElementById('mobileSearchInput');
       if (mInput) mInput.value = '';
-      filterCategory('all');
+      filterCategory('all', null, false);
     }
 
     // =========================================================================
