@@ -748,16 +748,72 @@ def _parse_ai_products_and_reply(raw_reply: str) -> tuple[str, list[int]]:
     return clean_reply, product_ids
 
 
+def _parse_price_intent(query: str) -> tuple[float | None, float | None, str]:
+    """Extract max_price, min_price, and clean query from user text."""
+    q = query.lower()
+    max_price = None
+    min_price = None
+
+    # Range: "between 300 and 800", "300 to 800", "300 - 800"
+    m_range = re.search(r'(?:between|from)?\s*(?:rs\.?|inr|₹)?\s*([0-9]+)\s*(?:to|-|and)\s*(?:rs\.?|inr|₹)?\s*([0-9]+)', q)
+    if m_range:
+        p1, p2 = float(m_range.group(1)), float(m_range.group(2))
+        min_price, max_price = min(p1, p2), max(p1, p2)
+        q = q.replace(m_range.group(0), ' ')
+    else:
+        # Max price: "under 500", "below 500", "less than 500", "within 500", "500 lopala"
+        m_max = re.search(r'(?:under|below|less than|within|max|upto|up to|<|<=)\s*(?:rs\.?|inr|₹)?\s*([0-9]+)', q) or \
+                re.search(r'([0-9]+)\s*(?:rs\.?|inr|₹)?\s*(?:lopala|ke andar|or less)', q)
+        if m_max:
+            max_price = float(m_max.group(1))
+            q = q.replace(m_max.group(0), ' ')
+
+        # Min price: "above 500", "more than 500", "> 500", "min 500"
+        m_min = re.search(r'(?:above|more than|over|min|from|>|>=)\s*(?:rs\.?|inr|₹)?\s*([0-9]+)', q)
+        if m_min:
+            min_price = float(m_min.group(1))
+            q = q.replace(m_min.group(0), ' ')
+
+    # Clean noise words
+    cleaned = re.sub(r'\b(give|me|anything|something|items?|products?|collections?|show|find|search|price|inr|rs|rupees)\b', '', q).strip()
+    return max_price, min_price, cleaned
+
+
 def _filter_relevant_catalog(query: str, products_list: list[dict], max_items: int = 8) -> list[dict]:
-    """Retrieve top relevant products for user query via token scoring to minimize LLM prompt size."""
+    """Retrieve top relevant products for user query via price filtering and token scoring."""
     if not products_list:
         return []
-    tokens = [t.lower() for t in re.findall(r'[a-zA-Z0-9]+', query) if len(t) > 2]
+
+    max_price, min_price, cleaned_text = _parse_price_intent(query)
+    candidate_pool = products_list
+
+    # Apply strict price filtering if requested by user
+    if max_price is not None or min_price is not None:
+        filtered = []
+        for p in products_list:
+            try:
+                price = float(p.get('price', 999999))
+            except Exception:
+                price = 999999
+            if max_price is not None and price > max_price:
+                continue
+            if min_price is not None and price < min_price:
+                continue
+            filtered.append(p)
+
+        if filtered:
+            candidate_pool = filtered
+        else:
+            # Fallback: return cheapest items if no items meet extreme low budget
+            candidate_pool = sorted(products_list, key=lambda x: float(x.get('price', 999999)))[:max_items]
+
+    tokens = [t.lower() for t in re.findall(r'[a-zA-Z0-9]+', cleaned_text) if len(t) > 2]
     if not tokens:
-        return products_list[:max_items]
+        # If pure budget query (e.g. "under 500"), sort by price ascending
+        return sorted(candidate_pool, key=lambda x: float(x.get('price', 999999)))[:max_items]
 
     scored = []
-    for p in products_list:
+    for p in candidate_pool:
         score = 0
         text = f"{p.get('title', '')} {p.get('category', '')} {p.get('description', '')}".lower()
         for t in tokens:
@@ -769,7 +825,7 @@ def _filter_relevant_catalog(query: str, products_list: list[dict], max_items: i
     top_matches = [p for score, p in scored if score > 0]
     if top_matches:
         return top_matches[:max_items]
-    return products_list[:max_items]
+    return candidate_pool[:max_items]
 
 
 def ask_ollama_stylist(user_query: str, system_prompt: str) -> dict[str, Any] | None:

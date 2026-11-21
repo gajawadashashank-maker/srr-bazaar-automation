@@ -317,6 +317,7 @@ Your task is to build a modern, high-converting, mobile-first e-commerce storefr
 | **Google Search SEO** | Missing 48px square favicons causing globe 🌐 icon | Provide `favicon-48x48.png` + Schema.org `OnlineStore` + `sitemap.xml` with images |
 | **Mobile Viewport Overflow** | Swiping horizontally drags document left, revealing a full-height white/blank empty margin | Lock `html, body` with `overflow-x: hidden !important; overscroll-behavior-x: none;`, budget mobile header width $\le 350$px, and wrap flex scrolls in `overflow-hidden` |
 | **Cloud LLM Quota / Outage** | Cloud LLM (Groq) rate-limits, expires key, or goes down | Multi-tier failover: Groq Cloud LPU $\rightarrow$ Local Ollama (`llama3.2`) $\rightarrow$ Static Catalog RAG |
+| **Budget & Price Filters** | Shopper asks "under 500" but search/AI returns ₹999 items because "500" was treated as a text keyword | Extract `parsePriceIntent` regex (`under X`, `below X`, `between X and Y`) and filter `price <= maxPrice` BEFORE text scoring or LLM prompt generation |
 ```
 
 ---
@@ -430,4 +431,23 @@ This log documents every architectural pitfall discovered and resolved during re
      - On CPU, passing 40+ raw catalog items (1,500+ tokens) causes local Ollama prompt evaluation to take > 35 seconds, hitting client timeouts.
      - Pre-filter catalog with a lightweight token scorer (`_filter_relevant_catalog`) to extract only the top 5 to 8 matching items (< 180 tokens).
      - Result: Local Ollama `llama3.2` inference finishes cleanly in 8 to 15 seconds with zero cloud dependencies and ₹0 cost.
+
+### 9. The Budget Constraint Failure: "Under 500" Returning ₹999 Items
+- **What Happened**: Shopper opened the website AI Stylist and asked: *"give me anything under 500"*. The AI returned:
+  1. *Royal 6.5" Swan Decorative Tray & Organizer — ₹999* ❌
+  2. *Biodegradable Leaf Buffet Plates — ₹200* ✅
+  3. *Pure Cz Stone Ear rings — ₹499* ✅
+  The top recommendation was double the shopper's budget!
+- **Why It Happened**:
+  1. Both the search engine and client-side AI knowledge engine treated the query as a plain text string. The token `"500"` was matched against product text, and stopwords (`"give"`, `"me"`, `"anything"`, `"under"`) scored fuzzily against product descriptions.
+  2. There was zero semantic price parsing: the system had no concept that `"under 500"` represents a mathematical constraint (`price <= 500`).
+- **How to Avoid**:
+  1. Always parse numerical price intent first with a regex extractor (`parsePriceIntent`):
+     - Maximum price: `/(?:under|below|less than|within|max|upto|up to|<|<=)\s*(?:rs\.?|inr|₹)?\s*([0-9]+)/i` or Telugu `([0-9]+)\s*lopala`.
+     - Price range: `/(?:between|from)?\s*([0-9]+)\s*(?:to|-|and)\s*([0-9]+)/i`.
+     - Minimum price: `/(?:above|more than|over|min|from|>|>=)\s*([0-9]+)/i`.
+  2. Clean noise words (`"give me anything under"`, `"items"`, `"show me"`) to obtain the remaining subject query.
+  3. Filter the candidate pool strictly with `price <= maxPrice` BEFORE running text scoring, and sort budget queries by price ascending.
+  4. In backend LLM prompts (`_filter_relevant_catalog`), enforce the exact same price ceiling so the LLM is physically never shown items that exceed the customer's specified budget.
+
 
