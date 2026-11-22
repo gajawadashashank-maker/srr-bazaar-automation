@@ -1978,11 +1978,13 @@
                 <input type="radio" name="paymentMethod" value="partial_cod" checked
                   onchange="handlePaymentMethodChange('partial_cod')"
                   class="text-royal-600 focus:ring-royal-500 mt-0.5">
-                <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded font-extrabold uppercase tracking-wide">Popular</span>
+                <span
+                  class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded font-extrabold uppercase tracking-wide">Popular</span>
               </div>
               <div>
                 <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">⚡ Partial COD</span>
-                <span class="block text-[11px] text-stone-600 mt-0.5"><strong>20% Advance Token</strong> + Balance on Delivery</span>
+                <span class="block text-[11px] text-stone-600 mt-0.5"><strong>20% Advance Token</strong> + Balance on
+                  Delivery</span>
               </div>
             </label>
 
@@ -2027,10 +2029,16 @@
                   <span class="w-2 h-2 rounded-full bg-amber-600 animate-ping"></span>
                   ⚡ Partial COD: 20% Booking Token
                 </span>
-                <span id="partialCodAdvanceBadge" class="text-[10px] bg-amber-600 text-white font-extrabold px-2 py-0.5 rounded-full shadow-xs">Advance: ₹150 (20%)</span>
+                <span id="partialCodAdvanceBadge"
+                  class="text-[10px] bg-amber-600 text-white font-extrabold px-2 py-0.5 rounded-full shadow-xs">Advance:
+                  ₹150 (20%)</span>
               </div>
               <p class="text-[11px] text-stone-700 leading-relaxed">
-                Pay a 20% booking advance (<strong id="partialCodAdvanceDisplay" class="text-amber-950 font-bold">₹150</strong>) now via UPI to lock your parcel for dispatch. The remaining balance of <strong id="partialCodBalanceDisplay" class="text-stone-950 font-extrabold text-xs">₹0</strong> will be collected in <strong>Cash on Delivery</strong> upon arrival!
+                Pay a 20% booking advance (<strong id="partialCodAdvanceDisplay"
+                  class="text-amber-950 font-bold">₹150</strong>) now via UPI to lock your parcel for dispatch. The
+                remaining balance of <strong id="partialCodBalanceDisplay"
+                  class="text-stone-950 font-extrabold text-xs">₹0</strong> will be collected in <strong>Cash on
+                  Delivery</strong> upon arrival!
               </p>
               <div class="flex items-center gap-2 pt-1 text-[10px] text-stone-600">
                 <span class="flex items-center gap-1 text-emerald-700 font-semibold"><i data-lucide="shield-check"
@@ -3396,9 +3404,11 @@
         .then(res => res.json())
         .then(data => {
           if (Array.isArray(data) && data.length > 0) {
-            const localOrders = JSON.parse(localStorage.getItem('srr_orders')) || [];
-            const merged = [...data];
-            const seenIds = new Set(data.map(o => o.orderId));
+            const clearedSet = new Set(JSON.parse(localStorage.getItem('srr_cleared_orders')) || []);
+            const validData = data.filter(o => o && o.orderId && !clearedSet.has(o.orderId));
+            const localOrders = (JSON.parse(localStorage.getItem('srr_orders')) || []).filter(o => o && o.orderId && !clearedSet.has(o.orderId));
+            const merged = [...validData];
+            const seenIds = new Set(validData.map(o => o.orderId));
             localOrders.forEach(o => {
               if (o && o.orderId && !seenIds.has(o.orderId)) {
                 merged.push(o);
@@ -6710,9 +6720,11 @@ Please pack and dispatch! ✨`
         .then(res => res.json())
         .then(data => {
           if (data && data.status === 'success' && Array.isArray(data.orders)) {
-            const localOrders = JSON.parse(localStorage.getItem('srr_orders')) || [];
-            const merged = [...data.orders];
-            const seenIds = new Set(data.orders.map(o => o.orderId));
+            const clearedSet = new Set(JSON.parse(localStorage.getItem('srr_cleared_orders')) || []);
+            const validIncoming = data.orders.filter(o => o && o.orderId && !clearedSet.has(o.orderId));
+            const localOrders = (JSON.parse(localStorage.getItem('srr_orders')) || []).filter(o => o && o.orderId && !clearedSet.has(o.orderId));
+            const merged = [...validIncoming];
+            const seenIds = new Set(validIncoming.map(o => o.orderId));
             localOrders.forEach(o => {
               if (o && o.orderId && !seenIds.has(o.orderId)) {
                 merged.push(o);
@@ -7019,9 +7031,16 @@ Please pack and dispatch! ✨`
 
     function clearDemoOrders() {
       if (confirm("Are you sure you want to clear all order logs?")) {
+        try {
+          const existingCleared = JSON.parse(localStorage.getItem('srr_cleared_orders')) || [];
+          const currentIds = (orders || []).map(o => o && o.orderId).filter(Boolean);
+          const allCleared = Array.from(new Set([...existingCleared, ...currentIds]));
+          localStorage.setItem('srr_cleared_orders', JSON.stringify(allCleared));
+        } catch (e) { }
         orders = [];
-        localStorage.removeItem('srr_orders');
+        localStorage.setItem('srr_orders', JSON.stringify([]));
         renderMerchantOrders();
+        alert("✅ Order logs cleared successfully!");
       }
     }
 
