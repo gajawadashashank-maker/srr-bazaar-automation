@@ -6442,7 +6442,9 @@
 
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       let couponDiscount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
+      
       let referralDiscount = (activeReferralCode && subtotal >= 500) ? 100 : 0;
+
       let walletDiscount = (isWalletApplied && appliedWalletDiscount > 0) ? appliedWalletDiscount : 0;
       const total = Math.max(0, subtotal - couponDiscount - referralDiscount - walletDiscount);
       currentCheckoutTotal = total;
@@ -6863,7 +6865,34 @@
 
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       let couponDiscount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
-      let referralDiscount = (activeReferralCode && subtotal >= 500) ? 100 : 0;
+      
+      // ANTI-ABUSE REFERRAL VALIDATION
+      let referralDiscount = 0;
+      if (activeReferralCode && subtotal >= 500) {
+        const cleanRefCode = activeReferralCode.replace(/[^0-9]/g, '').slice(-10);
+        // Rule 1: Self-Referral Prevention (Buyer phone cannot match Referrer phone)
+        if (cleanRefCode && cleanRefCode === cleanPhone) {
+          activeReferralCode = null;
+          referralDiscount = 0;
+          console.warn("[Referral Abuse Prevented] Buyer attempted to use their own referral code:", cleanPhone);
+          alert("⚠️ Self-referral is not allowed.\nThe ₹100 referral discount only applies when invited by friends or family with a different mobile number.");
+        } else {
+          // Rule 2: First-Order Only (Existing customers cannot claim referral discount again)
+          const hasPriorOrder = Array.isArray(orders) && orders.some(o => {
+            const oPhone = (o.customer && o.customer.phone ? o.customer.phone : '').replace(/[^0-9]/g, '').slice(-10);
+            return oPhone === cleanPhone;
+          });
+          if (hasPriorOrder) {
+            activeReferralCode = null;
+            referralDiscount = 0;
+            console.warn("[Referral Abuse Prevented] Referral discount is only for first-time orders. Phone:", cleanPhone);
+            alert("ℹ️ Referral discount (₹100) is valid for first-time orders only. Thank you for shopping with SRR Bazaar again!");
+          } else {
+            referralDiscount = 100;
+          }
+        }
+      }
+
       let walletDiscount = (isWalletApplied && appliedWalletDiscount > 0) ? appliedWalletDiscount : 0;
       const total = Math.max(0, subtotal - couponDiscount - referralDiscount - walletDiscount);
 
