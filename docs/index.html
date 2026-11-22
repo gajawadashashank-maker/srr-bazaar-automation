@@ -544,7 +544,7 @@
           <!-- Festive Spin & Win Trigger (Desktop) -->
           <button onclick="openSpinWheelModal()"
             class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white text-xs font-black rounded-full hover:scale-105 transition shadow-sm animate-pulse cursor-pointer"
-            title="Spin the Festive Wheel to Win ₹50-₹100 Wallet Cash!">
+            title="Spin the Festive Wheel to Win Up to ₹150 Wallet Cash & Free Gifts!">
             <span>🎡</span>
             <span>Spin & Win</span>
           </button>
@@ -2509,7 +2509,7 @@
           <span>🪔</span>
           <span>Daily Festive Reward</span>
         </div>
-        <h3 class="font-serif text-xl sm:text-2xl font-bold text-amber-100">Spin & Win ₹50-₹100!</h3>
+        <h3 class="font-serif text-xl sm:text-2xl font-bold text-amber-100">Spin & Win Up to ₹150!</h3>
         <p class="text-xs text-stone-300">Spin the festive wheel daily to win instant wallet cash for your order</p>
       </div>
 
@@ -2586,7 +2586,7 @@
           <div class="flex items-center justify-between text-[11px] font-extrabold text-emerald-300">
             <span class="flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span id="viralDoubleHeading">⚡ 2-Share Chain Reaction (0/2 Shared)</span>
+              <span id="viralDoubleHeading">⚡ Festive Share Bonus (0/2 Shared)</span>
             </span>
             <span id="viralProgressPercent" class="text-amber-400 text-[10px] font-black">0% Done</span>
           </div>
@@ -6733,7 +6733,7 @@
           <div class="flex items-center justify-between text-[11px] font-extrabold text-emerald-300">
             <span class="flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-              <span>⚡ 2-Share Verification: Step 1 of 2</span>
+              <span>⚡ Festive Unlock: Step 1 of 2</span>
             </span>
             <span class="text-amber-400 text-[10px] font-black">0/2 (0%)</span>
           </div>
@@ -6755,7 +6755,7 @@
           <div class="flex items-center justify-between text-[11px] font-extrabold text-emerald-300">
             <span class="flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-              <span>⚡ 2-Share Verification: Step 2 of 2</span>
+              <span>⚡ Festive Unlock: Step 2 of 2</span>
             </span>
             <span class="text-amber-300 text-[10px] font-black">1/2 (50%)</span>
           </div>
@@ -6777,7 +6777,7 @@
           <div class="p-1 space-y-1.5 text-center text-white animate-in zoom-in-95">
             <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
               <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
-              <span>🎉 2-Share Verified: ${isCash ? `Prize DOUBLED to ₹${doubledAmount}!` : (isGift ? `+₹50 Cash Added!` : `Bonus 2nd Spin Unlocked!`)}</span>
+              <span>🎉 Festive Reward Unlocked: ${isCash ? `Prize DOUBLED to ₹${doubledAmount}!` : (isGift ? `+₹50 Cash Added!` : `Bonus 2nd Spin Unlocked!`)}</span>
             </div>
             <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
               <div class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
@@ -6886,7 +6886,7 @@
           const newTotal = currentSpinWin.amount * 2;
           localStorage.setItem('srr_festive_cash', newTotal.toString());
           const desc = document.getElementById('wheelResultDesc');
-          if (desc) desc.textContent = `₹${newTotal} cash (Doubled via 2-Share WhatsApp Chain!) is active in your Gold Wallet for 24 hours.`;
+          if (desc) desc.textContent = `₹${newTotal} cash (Doubled via WhatsApp Festive Invite!) is active in your Gold Wallet for 24 hours.`;
           localStorage.setItem('srr_last_prize_name', `₹${newTotal} (Doubled) Cash`);
           initFestiveTimer();
         } else if (currentSpinWin.type === 'gift') {
