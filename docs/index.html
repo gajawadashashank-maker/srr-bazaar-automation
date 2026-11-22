@@ -2896,6 +2896,20 @@
     // Initial Default Catalogue (extracted from Sujatha Collections WhatsApp feed & Instagram)
     const DEFAULT_PRODUCTS = [
   {
+    "id": 752242649,
+    "title": "Festive Handcrafted Traditional Collection",
+    "category": "necklace",
+    "price": 1099,
+    "originalPrice": 1648,
+    "tag": "New Arrival",
+    "image": "images/catalog/b3f4f2c91deb4f7ab9ef9b1ebe7982f6.jpg",
+    "video": "videos/reel_752242649.mp4",
+    "description": "Exclusive Festive Handcrafted Traditional Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 263209091,
     "title": "Festive Handcrafted Traditional Collection",
     "category": "necklace",
@@ -7044,6 +7058,8 @@
           referralDiscount = 0;
           console.warn("[Referral Abuse Prevented] Buyer attempted to use their own referral code:", cleanPhone);
           alert("⚠️ Self-referral is not allowed.\nThe ₹100 referral discount only applies when invited by friends or family with a different mobile number.");
+          resetOrderButtonState();
+          return;
         } else {
           // Rule 2: First-Order Only (Existing customers cannot claim referral discount again)
           const hasPriorOrder = Array.isArray(orders) && orders.some(o => {
