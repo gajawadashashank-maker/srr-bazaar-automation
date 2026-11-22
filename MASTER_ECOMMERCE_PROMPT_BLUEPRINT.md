@@ -870,3 +870,22 @@ ef) as it is strictly reserved for new buyer acquisition.
          `"🎉 Referral Link Active: Prize DOUBLED to ₹X! When friends order via your link, you'll earn another ₹100 per friend!"`
      - This aligns customer psychology: sharing feels like a genuine, earned referral action that creates viral loop momentum while keeping reward expectations clear and trustworthy.
 
+### 30. Anti-Cheat Dwell Guard & 2-Share Viral Chain Reaction Loop (Friend + Group Progress Bar)
+- **What Happened**:
+  - A single-click sharing multiplier allows clever visitors to click "Share on WhatsApp", immediately close or cancel WhatsApp, and return to receive double cash without actually sending any messages.
+  - Furthermore, sharing to only one friend limits the organic viral reach of each spin.
+- **Why It Happened**:
+  - Mobile web browsers cannot directly inspect external app activities inside WhatsApp due to OS security sandboxing.
+- **How to Avoid**:
+  1. **Anti-Cheat App-Switch & Dwell Time Guard**:
+     - When user triggers a share, record `viralShareTimestamp = Date.now()` and track browser visibility (`visibilitychange` / `window.onfocus`).
+     - If the user returns to the store in **under 2.5 seconds**, detect the premature cancellation and trigger an alert:
+       `⚠️ Invite Not Sent! You returned before selecting a contact and tapping Send in WhatsApp. Please send the invite to complete Step X!`
+     - Prevents instant button-click exploitation and requires genuine user engagement.
+  2. **2-Share Milestone Progress Bar (0/2 → 1/2 → 2/2)**:
+     - Require two distinct verified shares:
+       - **Share 1 (Friend - 50%)**: Tailored 1-on-1 personal recommendation copy. Progress bar fills to 50%.
+       - **Share 2 (Group - 100%)**: Tailored multi-person group broadcast copy. Progress bar fills to 100% and unlocks the full 2X prize.
+     - Exponentially expands viral reach: each sharing participant now reaches an individual plus an entire group (20–100 potential buyers) per spin.
+
+

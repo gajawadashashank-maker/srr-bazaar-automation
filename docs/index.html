@@ -2576,19 +2576,29 @@
         </div>
         <p id="wheelResultDesc" class="text-xs text-stone-200 leading-snug"></p>
 
-        <!-- Viral WhatsApp 2X Double / Extra Spin Trigger -->
-        <div id="viralDoubleBox" class="p-2.5 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-500/50 rounded-xl space-y-1.5 text-center">
-          <div class="flex items-center justify-center gap-1.5 text-[11px] font-extrabold text-emerald-300">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-            <span id="viralDoubleHeading">⚡ Share on WhatsApp to Double Your Prize!</span>
+        <!-- Viral WhatsApp 2-Share Verification & 2X Multiplier Box -->
+        <div id="viralDoubleBox" class="p-3 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-500/50 rounded-xl space-y-2 text-center">
+          <div class="flex items-center justify-between text-[11px] font-extrabold text-emerald-300">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span id="viralDoubleHeading">⚡ 2-Share Chain Reaction (0/2 Shared)</span>
+            </span>
+            <span id="viralProgressPercent" class="text-amber-400 text-[10px] font-black">0% Done</span>
           </div>
+
+          <!-- Progress Bar Track -->
+          <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
+            <div id="viralProgressBar" class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+          </div>
+
           <p id="viralDoubleDesc" class="text-[10px] text-emerald-100/90 leading-tight">
-            Share your lucky spin on WhatsApp with friends or family to instantly <strong>DOUBLE your reward</strong>!
+            Step 1: Share with <strong>1 Friend</strong> + Step 2: Share to <strong>1 WhatsApp Group</strong> to activate your <strong>2X Doubled Cash</strong>!
           </p>
+
           <button id="wheelShareDoubleBtn" onclick="shareSpinOnWhatsApp()" type="button"
             class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
             <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-            <span id="wheelShareBtnText">Share on WhatsApp to Double Prize →</span>
+            <span id="wheelShareBtnText">Step 1: Share with 1 Friend on WhatsApp →</span>
           </button>
         </div>
 
@@ -6597,6 +6607,9 @@
 
     let currentSpinWin = null;
     let hasSharedSpin = false;
+    let viralShareStep = 0; // 0: unshared (0/2), 1: friend shared (1/2), 2: group shared (2/2 verified)
+    let viralShareTimestamp = 0;
+    let isAwaitingViralReturn = false;
 
     function spinTheWheel() {
       if (isSpinning) return;
@@ -6666,28 +6679,21 @@
           resBox.classList.remove('hidden');
           const title = document.getElementById('wheelResultTitle');
           const desc = document.getElementById('wheelResultDesc');
-          const shareBtnText = document.getElementById('wheelShareBtnText');
-          const viralHeading = document.getElementById('viralDoubleHeading');
-          const viralDesc = document.getElementById('viralDoubleDesc');
 
           if (title) title.textContent = `🎉 You Won ${win.name}!`;
 
           if (win.type === 'cash') {
             if (desc) desc.textContent = `₹${win.amount} cash has been credited directly to your SRR Gold Wallet! Valid for 24 hours.`;
-            if (shareBtnText) shareBtnText.textContent = `Share Referral Link on WhatsApp to Double to ₹${win.amount * 2} →`;
-            if (viralHeading) viralHeading.textContent = `⚡ Share Referral Link to Double to ₹${win.amount * 2}!`;
-            if (viralDesc) viralDesc.textContent = `Invite friends on WhatsApp. As an active referrer, your cash doubles to ₹${win.amount * 2} today!`;
           } else if (win.type === 'gift') {
             if (desc) desc.textContent = `A special ${win.giftName} will be packed completely FREE with your order from Armoor Hub!`;
-            if (shareBtnText) shareBtnText.textContent = `Share on WhatsApp to Add ₹50 Cash Too →`;
-            if (viralHeading) viralHeading.textContent = `⚡ Add ₹50 Bonus Cash on Top!`;
-            if (viralDesc) viralDesc.textContent = `Share with friends to claim ₹50 Wallet Cash on top of your Free Surprise Gift!`;
           } else if (win.type === 'vip') {
             if (desc) desc.textContent = `You have been instantly upgraded to 👑 VIP Gold Tier! Enjoy 8% Lifetime Prepaid Cashback and Priority Dispatch.`;
-            if (shareBtnText) shareBtnText.textContent = `Share Lucky VIP Status on WhatsApp →`;
-            if (viralHeading) viralHeading.textContent = `⚡ Unlock a Bonus 2nd Spin!`;
-            if (viralDesc) viralDesc.textContent = `Share your VIP luck with friends to unlock an immediate Bonus 2nd Spin!`;
           }
+
+          // Reset viral steps for this new win
+          viralShareStep = 0;
+          isAwaitingViralReturn = false;
+          renderViralDoubleBox();
         }
 
         if (btn) {
@@ -6700,78 +6706,178 @@
       }, 9800);
     }
 
-    function shareSpinOnWhatsApp() {
-      if (!currentSpinWin || hasSharedSpin) return;
-      hasSharedSpin = true;
-      const phone = localStorage.getItem('srr_cust_phone') || '';
-      const refCode = phone ? phone.replace(/[^0-9]/g, '').slice(-10) : '';
-      const shareUrl = refCode ? `https://srrbazaar.com/?ref=${refCode}` : 'https://srrbazaar.com';
-      
-      const prizeText = currentSpinWin.type === 'gift' ? 'a Free Surprise Brass Gift in my parcel' : currentSpinWin.name;
-      const msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and win up to ₹150 Wallet Cash & free gifts:\n${shareUrl}`;
-      
-      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
-      window.open(waUrl, '_blank');
-
+    function renderViralDoubleBox() {
       const doubleBox = document.getElementById('viralDoubleBox');
-      if (doubleBox) {
-        // Step 1: Realistic Verification loader
+      if (!doubleBox || !currentSpinWin) return;
+
+      const isCash = currentSpinWin.type === 'cash';
+      const isGift = currentSpinWin.type === 'gift';
+      const doubledAmount = isCash ? currentSpinWin.amount * 2 : (isGift ? 50 : 0);
+
+      if (viralShareStep === 0) {
+        // Step 0: Initial state (0/2 shares)
         doubleBox.innerHTML = `
-          <div class="p-3 bg-stone-900/90 border border-amber-500/40 rounded-xl space-y-2 text-center text-white animate-in fade-in">
-            <div class="flex items-center justify-center gap-2 text-xs font-bold text-amber-300">
-              <svg class="animate-spin h-3.5 w-3.5 text-amber-400" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-              <span>Verifying WhatsApp Invite Dispatch...</span>
+          <div class="flex items-center justify-between text-[11px] font-extrabold text-emerald-300">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              <span>⚡ 2-Share Verification: Step 1 of 2</span>
+            </span>
+            <span class="text-amber-400 text-[10px] font-black">0/2 (0%)</span>
+          </div>
+          <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
+            <div class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+          </div>
+          <p class="text-[10px] text-emerald-100/90 leading-tight">
+            ${isCash ? `Share with <strong>1 Friend</strong> + <strong>1 WhatsApp Group</strong> to DOUBLE your cash to <strong>₹${doubledAmount}</strong>!` : (isGift ? `Share with <strong>1 Friend</strong> + <strong>1 WhatsApp Group</strong> to add <strong>₹50 Cash</strong> with your gift!` : `Share with <strong>1 Friend</strong> + <strong>1 WhatsApp Group</strong> to unlock a <strong>Bonus 2nd Spin</strong>!`)}
+          </p>
+          <button id="wheelShareDoubleBtn" onclick="shareSpinOnWhatsApp()" type="button"
+            class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+            <span>Step 1: Send Invite to 1 Friend on WhatsApp →</span>
+          </button>
+        `;
+      } else if (viralShareStep === 1) {
+        // Step 1: 1 share verified (1/2 shares = 50%)
+        doubleBox.innerHTML = `
+          <div class="flex items-center justify-between text-[11px] font-extrabold text-emerald-300">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+              <span>⚡ 2-Share Verification: Step 2 of 2</span>
+            </span>
+            <span class="text-amber-300 text-[10px] font-black">1/2 (50%)</span>
+          </div>
+          <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
+            <div class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 50%;"></div>
+          </div>
+          <p class="text-[10px] text-amber-200 leading-tight">
+            🎉 <strong>Step 1 Verified!</strong> Now share to <strong>1 WhatsApp Group</strong> (Family or Friends) to activate your 2X Doubled Cash!
+          </p>
+          <button id="wheelShareDoubleBtn" onclick="shareSpinOnWhatsApp()" type="button"
+            class="w-full py-2 px-3 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer animate-bounce">
+            <i data-lucide="users" class="w-3.5 h-3.5"></i>
+            <span>Step 2: Share to 1 WhatsApp Group (Final Step) →</span>
+          </button>
+        `;
+      } else if (viralShareStep === 2) {
+        // Step 2: 100% verified & activated!
+        doubleBox.innerHTML = `
+          <div class="p-1 space-y-1.5 text-center text-white animate-in zoom-in-95">
+            <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+              <span>🎉 2-Share Verified: ${isCash ? `Prize DOUBLED to ₹${doubledAmount}!` : (isGift ? `+₹50 Cash Added!` : `Bonus 2nd Spin Unlocked!`)}</span>
             </div>
-            <p class="text-[10px] text-stone-300 leading-tight">Connecting to referral server & linking your 2X festive reward...</p>
+            <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
+              <div class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+            </div>
+            <p class="text-[10px] text-emerald-100/90 leading-tight">
+              ${isCash ? `Your <strong>₹${doubledAmount} Wallet Cash</strong> is active for today's order! Plus, whenever friends order via your link, you'll earn another ₹100 per friend!` : (isGift ? `Your <strong>Free Surprise Gift + ₹50 Cash</strong> are both locked in!` : `Your <strong>Bonus 2nd Spin</strong> is unlocked below!`)}
+            </p>
+            <button onclick="closeSpinWheelModal(); toggleCartDrawer(true);" class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <span>🛒 Apply ₹${doubledAmount} to Cart Now →</span>
+            </button>
           </div>
         `;
       }
+      if (window.lucide) lucide.createIcons();
+    }
 
-      // Step 2: Authenticated Referral Reward Activation (after 2.5 seconds)
-      setTimeout(() => {
-        if (!doubleBox) return;
+    function shareSpinOnWhatsApp() {
+      if (!currentSpinWin || hasSharedSpin) return;
+
+      const phone = localStorage.getItem('srr_cust_phone') || '';
+      const refCode = phone ? phone.replace(/[^0-9]/g, '').slice(-10) : '';
+      const shareUrl = refCode ? `https://srrbazaar.com/?ref=${refCode}` : 'https://srrbazaar.com';
+      const prizeText = currentSpinWin.type === 'gift' ? 'a Free Surprise Brass Gift in my parcel' : currentSpinWin.name;
+
+      // Differentiate message copy for Friend (Step 1) vs Group (Step 2)
+      let msg = '';
+      if (viralShareStep === 0) {
+        msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and claim up to ₹150 Wallet Cash & free gifts:\n${shareUrl}`;
+      } else {
+        msg = `🪔 Hello Everyone! Check out SRR Bazaar Armoor — they have an active Festive Lucky Wheel today! 🎡🎁 Spin to win free gifts & up to ₹150 off with free delivery:\n${shareUrl}`;
+      }
+
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+
+      // Record dispatch timestamp and set waiting flag
+      viralShareTimestamp = Date.now();
+      isAwaitingViralReturn = true;
+
+      // Open WhatsApp
+      window.open(waUrl, '_blank');
+
+      // Show waiting & anti-cheat instruction state
+      const doubleBox = document.getElementById('viralDoubleBox');
+      if (doubleBox) {
+        const targetLabel = viralShareStep === 0 ? '1 Friend' : '1 WhatsApp Group';
+        doubleBox.innerHTML = `
+          <div class="p-2.5 bg-stone-900/95 border border-amber-500/50 rounded-xl space-y-2 text-center text-white animate-in fade-in">
+            <div class="flex items-center justify-center gap-2 text-xs font-bold text-amber-300">
+              <svg class="animate-spin h-3.5 w-3.5 text-amber-400" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+              <span>Opening WhatsApp (${targetLabel})...</span>
+            </div>
+            <p class="text-[10px] text-amber-100 leading-snug">
+              Please select <strong>${targetLabel}</strong> and tap <strong>Send</strong> in WhatsApp. Return here after sending to verify!
+            </p>
+            <div class="text-[9px] text-stone-400 italic">Anti-cheat active: Quick cancellations without sending will not unlock reward.</div>
+          </div>
+        `;
+      }
+    }
+
+    function handleViralReturnVerification() {
+      if (!isAwaitingViralReturn || !currentSpinWin) return;
+      isAwaitingViralReturn = false;
+
+      const dwellSec = (Date.now() - viralShareTimestamp) / 1000;
+      const doubleBox = document.getElementById('viralDoubleBox');
+
+      // ANTI-CHEAT DWELL CHECK:
+      // If user returned in less than 2.5 seconds, they canceled or closed WhatsApp without choosing contact/sending!
+      if (dwellSec < 2.5) {
+        if (doubleBox) {
+          const stepNum = viralShareStep + 1;
+          const target = viralShareStep === 0 ? 'a WhatsApp friend' : 'a WhatsApp group';
+          doubleBox.innerHTML = `
+            <div class="p-2.5 bg-rose-950/90 border border-rose-500/60 rounded-xl space-y-2 text-center text-white animate-in shake">
+              <div class="flex items-center justify-center gap-1.5 text-xs font-bold text-rose-300">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400"></i>
+                <span>⚠️ Invite Not Sent! (Returned too quickly)</span>
+              </div>
+              <p class="text-[10px] text-rose-100 leading-tight">
+                You returned before selecting ${target} and tapping Send. Please send the invite to complete Step ${stepNum}!
+              </p>
+              <button onclick="shareSpinOnWhatsApp()" type="button"
+                class="w-full py-2 px-3 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>Retry Step ${stepNum}: Select ${viralShareStep === 0 ? 'Friend' : 'Group'} and Send →</span>
+              </button>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+        }
+        return;
+      }
+
+      // LEGITIMATE DWELL: Advance step!
+      if (viralShareStep === 0) {
+        viralShareStep = 1;
+        renderViralDoubleBox();
+      } else if (viralShareStep === 1) {
+        viralShareStep = 2;
+        hasSharedSpin = true;
+
         if (currentSpinWin.type === 'cash') {
           const bonusAmount = currentSpinWin.amount; // Doubles the cash!
           addWalletCash(bonusAmount);
           const newTotal = currentSpinWin.amount * 2;
-          doubleBox.innerHTML = `
-            <div class="p-3 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-400/60 rounded-xl space-y-1.5 text-center text-white animate-in zoom-in-95">
-              <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
-                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
-                <span>🎉 Referral Link Active: Prize DOUBLED to ₹${newTotal}!</span>
-              </div>
-              <p class="text-[10px] text-emerald-100/90 leading-tight">
-                Thanks for sharing! Your <strong>₹${newTotal} Wallet Cash</strong> is active for today's order. When friends order via your link, you'll earn another ₹100 per friend!
-              </p>
-            </div>
-          `;
           const desc = document.getElementById('wheelResultDesc');
-          if (desc) desc.textContent = `₹${newTotal} cash (Doubled via Active Referral Link!) is active in your Gold Wallet for 24 hours.`;
+          if (desc) desc.textContent = `₹${newTotal} cash (Doubled via 2-Share WhatsApp Chain!) is active in your Gold Wallet for 24 hours.`;
           localStorage.setItem('srr_last_prize_name', `₹${newTotal} (Doubled) Cash`);
           initFestiveTimer();
         } else if (currentSpinWin.type === 'gift') {
           addWalletCash(50);
-          doubleBox.innerHTML = `
-            <div class="p-3 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-400/60 rounded-xl space-y-1.5 text-center text-white animate-in zoom-in-95">
-              <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
-                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
-                <span>🎉 Referral Bonus: +₹50 Cash Added!</span>
-              </div>
-              <p class="text-[10px] text-emerald-100/90 leading-tight">
-                Your <strong>Free Gift</strong> + <strong>₹50 Wallet Cash</strong> are both locked in for your order today.
-              </p>
-            </div>
-          `;
-        } else {
-          doubleBox.innerHTML = `
-            <div class="p-3 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-400/60 rounded-xl space-y-1.5 text-center text-white animate-in zoom-in-95">
-              <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
-                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
-                <span>🎉 Bonus 2nd Spin Unlocked!</span>
-              </div>
-              <p class="text-[10px] text-emerald-100/90 leading-tight">Spin again below to stack your festive rewards!</p>
-            </div>
-          `;
+        } else if (currentSpinWin.type === 'vip') {
           const btn = document.getElementById('spinWheelBtn');
           if (btn) {
             btn.disabled = false;
@@ -6779,9 +6885,19 @@
             btn.textContent = "🎡 Spin Your Bonus Round!";
           }
         }
-        if (window.lucide) lucide.createIcons();
-      }, 2500);
+        renderViralDoubleBox();
+      }
     }
+
+    // Attach listeners for app return detection
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        setTimeout(handleViralReturnVerification, 400);
+      }
+    });
+    window.addEventListener('focus', () => {
+      setTimeout(handleViralReturnVerification, 400);
+    });
 
     function initFestiveTimer() {
       const banner = document.getElementById('festiveRewardBanner');
