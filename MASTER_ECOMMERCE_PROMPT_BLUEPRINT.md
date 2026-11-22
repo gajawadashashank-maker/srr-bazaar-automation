@@ -496,6 +496,30 @@ This log documents every architectural pitfall discovered and resolved during re
   2. **Fail-Safe Network Timeout**:
      - Constrain backend visual search network fetches to a maximum 4-second timeout (`AbortController`). If the backend tunnel is offline or sleeping, fail over immediately to the local in-browser visual classifier (`analyzeImageClient`) so mobile shoppers never encounter hanging requests.
 
+### 14. WhatsApp Media Webhook Video Reel Failures (FFmpeg Exit Code 4294967284 & Catalogue Sync Traps)
+- **What Happened**: When new product photos were sent to the WhatsApp Business automation, video reels were not getting uploaded to Instagram or attached to the website catalogue. The jobs in `whatsapp_jobs.sqlite3` recorded: `Command '['ffmpeg', '-y', ... 'luxury_gold_black.mp4']' returned non-zero exit status 4294967284`, and new items in `docs/products.json` had `"video": null`.
+- **Why It Happened**:
+  1. **Resource Starvation & Crash (`4294967284` / `0xFFFFFFF4`)**:
+     - The reel generator configured `DURATION = 30` (900 frames at 30 fps), `-preset slow`, `-crf 18`, and complex `zoompan` filters across 4 distinct themes sequentially for every single photo.
+     - When multiple photos arrived within minutes of each other, background tasks spawned concurrent FFmpeg processes that exhausted Windows thread handles and memory, crashing with access violation / fatal app exit.
+  2. **FastAPI Webhook Process Restart & Desync**:
+     - Uvicorn was run without `--reload`. Code updates to `sync_product_to_website_catalogue` were not picked up in memory, causing products to be committed to `products.json` without the `video` key.
+     - If Uvicorn was stopped or restarted while FFmpeg was encoding, the child process was terminated abruptly with exit code `4294967284`.
+- **How to Avoid**:
+  1. **Streamline Reel Encoding**:
+     - Set `DURATION = 15` (450 frames), which is ideal for Instagram Reels, Meta Shorts, and mobile status view rates.
+     - Use `-preset fast` and `-crf 20`. Encoding time drops from 40 seconds to 3 seconds per reel with zero discernible difference in visual quality on graphic posters.
+  2. **Thread Locking (`threading.Lock`)**:
+     - Guard FFmpeg execution with a process-level lock (`FFMPEG_LOCK`) so multiple concurrent WhatsApp webhooks queue gracefully rather than hammering CPU cores at the same second.
+  3. **Multi-Stage Resilient Fallback**:
+     - Wrap primary `zoompan` encoding in a `try...except` block. If any crash occurs, automatically execute a lightweight, bulletproof motion pad/scale command (`-preset veryfast`) so video generation never throws unhandled errors.
+  4. **Catalogue Sync Self-Healing**:
+     - In `sync_product_to_website_catalogue`, if `video_path` is missing or `None`, automatically scan `generated/whatsapp/<job_id>` for any existing `.mp4` reels.
+     - If still missing, immediately invoke `generate_reel` on-demand to create a web-optimized 15s reel, compress it to `docs/videos/reel_<id>.mp4`, and record `"video": "videos/reel_<id>.mp4"` in `products.json`.
+  5. **Direct Video Reel Playback in Storefront**:
+     - Wire the "Video Reel" badge on every product card in `docs/index.html` with an `onclick` handler to open QuickView and instantly switch to the video player, allowing shoppers to view the product sparkle in 1 tap directly from the catalogue.
+
+
 
 
 

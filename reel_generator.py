@@ -229,13 +229,15 @@ from pathlib import Path
 import random
 import re
 import subprocess
+import threading
 
 from PIL import Image, ImageDraw, ImageFont
 
 WIDTH = 1080
 HEIGHT = 1920
-DURATION = 30
+DURATION = 15
 FPS = 30
+FFMPEG_LOCK = threading.Lock()
 MUSIC_DIR = Path(__file__).resolve().parent / "music"
 OUTPUT_DIR = Path("generated")
 OUTPUT_DIR.mkdir(exist_ok=True)
@@ -387,6 +389,7 @@ def generate_reel(image_path, product_name, price, theme_name, output_dir=None, 
         raise FileNotFoundError(f"Selected MP3 is missing or empty: {music}")
     print(f"Background music for {theme_name}: {music.name}")
 
+    total_frames = int(DURATION * FPS)
     command = [
         "ffmpeg", "-y",
         "-loop", "1", "-i", str(poster_path),
@@ -394,7 +397,7 @@ def generate_reel(image_path, product_name, price, theme_name, output_dir=None, 
         "-t", str(DURATION),
 
         "-vf",
-        "zoompan=z='min(zoom+0.000027,1.025)':d=900:"
+        f"zoompan=z='min(zoom+0.00005,1.03)':d={total_frames}:"
         "x='iw/2-(iw/zoom/2)':"
         "y='ih/2-(ih/zoom/2)':"
         "s=1080x1920:fps=30,"
@@ -403,8 +406,8 @@ def generate_reel(image_path, product_name, price, theme_name, output_dir=None, 
         "format=yuv420p",
 
         "-c:v", "libx264",
-        "-preset", "slow",
-        "-crf", "18",
+        "-preset", "fast",
+        "-crf", "20",
         "-profile:v", "high",
         "-level:v", "4.1",
         "-pix_fmt", "yuv420p",
@@ -424,9 +427,33 @@ def generate_reel(image_path, product_name, price, theme_name, output_dir=None, 
         str(video_path),
     ]
 
-    subprocess.run(command, check=True)
-    print(f"SUCCESS: {video_path}")
-    return video_path
+    with FFMPEG_LOCK:
+        try:
+            subprocess.run(command, check=True)
+            print(f"SUCCESS: {video_path}")
+            return video_path
+        except Exception as e:
+            print(f"Warning: Primary zoompan encode failed ({e}), using reliable fallback...")
+            fallback_command = [
+                "ffmpeg", "-y",
+                "-loop", "1", "-i", str(poster_path),
+                "-stream_loop", "-1", "-i", str(music),
+                "-t", str(DURATION),
+                "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p",
+                "-c:v", "libx264",
+                "-preset", "veryfast",
+                "-crf", "22",
+                "-pix_fmt", "yuv420p",
+                "-c:a", "aac",
+                "-b:a", "128k",
+                "-ar", "48000",
+                "-shortest",
+                "-movflags", "+faststart",
+                str(video_path),
+            ]
+            subprocess.run(fallback_command, check=True)
+            print(f"SUCCESS (fallback): {video_path}")
+            return video_path
 
 
 def generate_all(image_path, product_name, price, output_dir=None, music_path=None):

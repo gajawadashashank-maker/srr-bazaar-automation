@@ -449,7 +449,33 @@ def sync_product_to_website_catalogue(
 
         new_id = int(uuid.uuid4().int % 1000000000)
 
-        # Process and link matching video reel if available
+        # Fallback 1: If video_path is missing/None, search in WHATSAPP_OUTPUT_DIR / job_id
+        if not video_path or not Path(video_path).exists():
+            job_dir = WHATSAPP_OUTPUT_DIR / job_id
+            if job_dir.exists():
+                candidates = list(job_dir.glob("*.mp4"))
+                if candidates:
+                    video_path = candidates[0]
+                    logger.info("Discovered matching reel in job output dir: %s", video_path)
+
+        # Fallback 2: Generate an on-demand reel if still missing
+        if (not video_path or not Path(video_path).exists()) and image_path and Path(image_path).exists():
+            try:
+                from reel_generator import generate_reel
+                temp_reel_dir = WHATSAPP_OUTPUT_DIR / job_id
+                temp_reel_dir.mkdir(parents=True, exist_ok=True)
+                video_path = generate_reel(
+                    image_path=image_path,
+                    product_name=product_name,
+                    price=price_str or "Special Offer",
+                    theme_name="minimal_premium",
+                    output_dir=temp_reel_dir,
+                )
+                logger.info("Generated on-demand video reel fallback: %s", video_path)
+            except Exception as ge:
+                logger.warning("On-demand reel generation fallback failed: %s", ge)
+
+        # Process and link matching video reel to catalogue
         linked_video_rel = None
         if video_path and Path(video_path).exists():
             try:
