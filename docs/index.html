@@ -439,7 +439,8 @@
       class="hidden items-center gap-1.5 bg-amber-400/20 hover:bg-amber-400/30 text-amber-100 transition px-2.5 py-0.5 rounded-full border border-amber-400/30 cursor-pointer shadow-xs group">
       <span class="w-2 h-2 rounded-full bg-rose-400 animate-ping inline-block"></span>
       <span class="font-black text-amber-300 text-[10px] sm:text-xs tracking-wide">🔥 NEW DROP:</span>
-      <span id="latestDropTitle" class="truncate max-w-[140px] sm:max-w-[260px] font-semibold text-white group-hover:underline"></span>
+      <span id="latestDropTitle"
+        class="truncate max-w-[140px] sm:max-w-[260px] font-semibold text-white group-hover:underline"></span>
       <span class="text-[10px] sm:text-[11px] underline text-amber-300 font-bold ml-0.5">View →</span>
     </div>
     <span class="text-stone-400 hidden sm:inline" id="announcementDivider">•</span>
@@ -447,8 +448,8 @@
       <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
       <span>✨ <strong>FREE Express Shipping</strong> across India | Use code <strong>WELCOME100</strong></span>
     </span>
-    <span class="hidden md:inline">| <a href="https://www.instagram.com/sujatha60861/"
-        target="_blank" class="underline hover:text-white transition">@sujatha60861</a></span>
+    <span class="hidden md:inline">| <a href="https://www.instagram.com/sujatha60861/" target="_blank"
+        class="underline hover:text-white transition">@sujatha60861</a></span>
   </div>
 
   <!-- Header Navigation (Fixed Sticky at Top) -->
@@ -742,10 +743,12 @@
           class="category-circle-btn category-btn flex flex-col items-center gap-1 group cursor-pointer focus:outline-none w-full max-w-[76px] sm:max-w-[84px] md:max-w-[96px]">
           <div
             class="circle-box w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-rose-500 via-pink-500 to-amber-500 p-0.5 shadow-2xs transition group-hover:scale-105 border border-rose-300">
-            <div class="w-full h-full bg-white rounded-2xl flex flex-col items-center justify-center p-1 relative overflow-hidden">
+            <div
+              class="w-full h-full bg-white rounded-2xl flex flex-col items-center justify-center p-1 relative overflow-hidden">
               <span class="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full animate-ping"></span>
               <span class="text-xl sm:text-2xl">🔥</span>
-              <span class="text-[7.5px] sm:text-[8.5px] font-black text-rose-700 uppercase mt-0.5 tracking-tighter">New In</span>
+              <span class="text-[7.5px] sm:text-[8.5px] font-black text-rose-700 uppercase mt-0.5 tracking-tighter">New
+                In</span>
             </div>
           </div>
           <span
@@ -1966,39 +1969,39 @@
             Select Payment Method
           </h4>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
 
-            <!-- Option 1: Partial COD (Recommended) -->
+            <!-- Option 1: Partial COD (Recommended - 20% Token) -->
             <label onclick="handlePaymentMethodChange('partial_cod')"
-              class="payment-option cursor-pointer border-2 border-royal-500 bg-amber-50/50 rounded-xl p-2.5 sm:p-3 flex flex-col justify-between space-y-1.5 transition relative overflow-hidden shadow-2xs">
+              class="payment-option cursor-pointer border-2 border-royal-500 bg-amber-50/50 rounded-xl p-3 flex flex-col justify-between space-y-2 transition relative overflow-hidden shadow-2xs">
               <div class="flex items-start justify-between">
                 <input type="radio" name="paymentMethod" value="partial_cod" checked onchange="handlePaymentMethodChange('partial_cod')"
                   class="text-royal-600 focus:ring-royal-500 mt-0.5">
-                <span class="text-[9px] sm:text-[10px] bg-amber-600 text-white px-1.5 py-0.2 rounded font-extrabold uppercase tracking-wide">Popular</span>
+                <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded font-extrabold uppercase tracking-wide">Popular</span>
               </div>
               <div>
-                <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">Partial COD</span>
-                <span class="block text-[10px] sm:text-[11px] text-stone-600 mt-0.5"><strong>₹150 Advance</strong> + Bal COD</span>
+                <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">⚡ Partial COD</span>
+                <span class="block text-[11px] text-stone-600 mt-0.5"><strong>20% Advance Token</strong> + Balance on Delivery</span>
               </div>
             </label>
 
-            <!-- Option 2: Full Instant UPI -->
+            <!-- Option 2: Full Instant UPI (100% Prepaid) -->
             <label onclick="handlePaymentMethodChange('upi')"
-              class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-2.5 sm:p-3 flex flex-col justify-between space-y-1.5 transition">
+              class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-3 flex flex-col justify-between space-y-2 transition">
               <div class="flex items-start justify-between">
                 <input type="radio" name="paymentMethod" value="upi" onchange="handlePaymentMethodChange('upi')"
                   class="text-royal-600 focus:ring-royal-500 mt-0.5">
-                <span class="text-[9px] sm:text-[10px] bg-emerald-600 text-white px-1.5 py-0.2 rounded font-bold">100% Prepaid</span>
+                <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold">100% Prepaid</span>
               </div>
               <div>
-                <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">Instant UPI</span>
-                <span class="block text-[10px] sm:text-[11px] text-stone-500 mt-0.5">Full via UPI QR</span>
+                <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">Instant UPI QR</span>
+                <span class="block text-[11px] text-stone-500 mt-0.5">Pay full bill via PhonePe, GPay, Paytm</span>
               </div>
             </label>
 
             <!-- Option 3: Razorpay / Online Cards -->
             <label onclick="handlePaymentMethodChange('razorpay')"
-              class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-2.5 sm:p-3 flex flex-col justify-between space-y-1.5 transition">
+              class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-3 flex flex-col justify-between space-y-2 transition">
               <div class="flex items-start justify-between">
                 <input type="radio" name="paymentMethod" value="razorpay"
                   onchange="handlePaymentMethodChange('razorpay')" class="text-royal-600 focus:ring-royal-500 mt-0.5">
@@ -2006,21 +2009,7 @@
               </div>
               <div>
                 <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">Cards & Netbanking</span>
-                <span class="block text-[10px] sm:text-[11px] text-stone-500 mt-0.5">Online gateway</span>
-              </div>
-            </label>
-
-            <!-- Option 4: Full COD -->
-            <label onclick="handlePaymentMethodChange('cod')"
-              class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-2.5 sm:p-3 flex flex-col justify-between space-y-1.5 transition">
-              <div class="flex items-start justify-between">
-                <input type="radio" name="paymentMethod" value="cod" onchange="handlePaymentMethodChange('cod')"
-                  class="text-royal-600 focus:ring-royal-500 mt-0.5">
-                <i data-lucide="banknote" class="w-4 h-4 text-stone-600"></i>
-              </div>
-              <div>
-                <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">Full COD</span>
-                <span class="block text-[10px] sm:text-[11px] text-stone-500 mt-0.5">Pay 100% on delivery</span>
+                <span class="block text-[11px] text-stone-500 mt-0.5">Online gateway (Visa, MC, RuPay)</span>
               </div>
             </label>
 
@@ -2034,17 +2023,19 @@
               <div class="flex items-center justify-between">
                 <span class="inline-flex items-center gap-1.5 font-bold text-xs text-amber-950">
                   <span class="w-2 h-2 rounded-full bg-amber-600 animate-ping"></span>
-                  ⚡ Partial COD: Token Confirmation
+                  ⚡ Partial COD: 20% Booking Token
                 </span>
-                <span class="text-[10px] bg-amber-600 text-white font-extrabold px-2 py-0.5 rounded-full shadow-xs">Advance: ₹150</span>
+                <span id="partialCodAdvanceBadge" class="text-[10px] bg-amber-600 text-white font-extrabold px-2 py-0.5 rounded-full shadow-xs">Advance: ₹150 (20%)</span>
               </div>
               <p class="text-[11px] text-stone-700 leading-relaxed">
-                Pay a small booking token of <strong class="text-amber-950 font-bold">₹150</strong> now via any UPI App to lock your order. The remaining balance of <strong id="partialCodBalanceDisplay" class="text-stone-950 font-extrabold text-xs">₹0</strong> will be collected in <strong>Cash on Delivery</strong> upon arrival!
+                Pay a 20% booking advance (<strong id="partialCodAdvanceDisplay" class="text-amber-950 font-bold">₹150</strong>) now via UPI to lock your parcel for dispatch. The remaining balance of <strong id="partialCodBalanceDisplay" class="text-stone-950 font-extrabold text-xs">₹0</strong> will be collected in <strong>Cash on Delivery</strong> upon arrival!
               </p>
               <div class="flex items-center gap-2 pt-1 text-[10px] text-stone-600">
                 <span class="flex items-center gap-1 text-emerald-700 font-semibold"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> 100% Safe</span>
                 <span>•</span>
-                <span>Dispatched via The Professional Couriers</span>
+                <span>Min ₹150 (covers courier dispatch)</span>
+                <span>•</span>
+                <span>The Professional Couriers</span>
               </div>
             </div>
 
@@ -6015,6 +6006,13 @@
       checkoutOpenedFrom = null;
     }
 
+    function calculateAdvanceAmount(total) {
+      if (total <= 0) return 0;
+      // 20% of cart total, with a minimum floor of ₹150 (or total if < 150), rounded to nearest ₹10
+      const pct = Math.round((total * 0.20) / 10) * 10;
+      return Math.min(total, Math.max(150, pct));
+    }
+
     function handlePaymentMethodChange(method) {
       currentSelectedPayment = method;
 
@@ -6037,7 +6035,8 @@
       const isUpiFlow = (method === 'upi' || method === 'partial_cod');
       document.getElementById('upiPaymentBox').classList.toggle('hidden', !isUpiFlow);
       document.getElementById('razorpayNoticeBox').classList.toggle('hidden', method !== 'razorpay');
-      document.getElementById('codNoticeBox').classList.toggle('hidden', method !== 'cod');
+      const codBox = document.getElementById('codNoticeBox');
+      if (codBox) codBox.classList.add('hidden');
 
       const partialBanner = document.getElementById('partialCodBanner');
       const upiHeading = document.getElementById('upiBoxHeading');
@@ -6046,17 +6045,21 @@
       const btn = document.getElementById('placeOrderBtn');
 
       if (method === 'partial_cod') {
-        const advanceAmt = Math.min(150, currentCheckoutTotal);
+        const advanceAmt = calculateAdvanceAmount(currentCheckoutTotal);
         const codBal = Math.max(0, currentCheckoutTotal - advanceAmt);
 
         if (partialBanner) {
           partialBanner.classList.remove('hidden');
           const balEl = document.getElementById('partialCodBalanceDisplay');
           if (balEl) balEl.textContent = `₹${codBal}`;
+          const advEl = document.getElementById('partialCodAdvanceDisplay');
+          if (advEl) advEl.textContent = `₹${advanceAmt}`;
+          const badgeEl = document.getElementById('partialCodAdvanceBadge');
+          if (badgeEl) badgeEl.textContent = `Advance: ₹${advanceAmt} (20%)`;
         }
-        if (upiHeading) upiHeading.textContent = `Scan & Pay ₹${advanceAmt} Booking Advance`;
+        if (upiHeading) upiHeading.textContent = `Scan & Pay ₹${advanceAmt} (20% Booking Advance)`;
         if (refLabel) refLabel.innerHTML = `Enter 12-Digit UPI Ref / UTR for ₹${advanceAmt} Advance <span class="text-rose-600 font-black">*</span>`;
-        if (refHelp) refHelp.innerHTML = `Pay ₹${advanceAmt} advance in your UPI app ➔ Copy the <strong>12-digit UPI UTR</strong> to confirm your booking.`;
+        if (refHelp) refHelp.innerHTML = `Pay ₹${advanceAmt} (20%) advance in your UPI app ➔ Copy the <strong>12-digit UPI UTR</strong> to confirm your booking.`;
 
         generateUpiDetails(advanceAmt);
         btn.innerHTML = `<i data-lucide="shield-check" class="w-4 h-4 text-emerald-300"></i><span>Confirm Partial COD Order (₹${advanceAmt} Advance)</span>`;
@@ -6365,8 +6368,9 @@
             upiInput.classList.add('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-200');
           }
           const isPartial = (currentSelectedPayment === 'partial_cod');
+          const advPromptAmt = isPartial ? calculateAdvanceAmount(total) : 0;
           alert(isPartial
-            ? "⚠️ 12-Digit UPI Transaction ID / UTR is Required for Partial COD!\n\nPlease pay the ₹150 booking advance via your UPI app (GPay / PhonePe / Paytm) and enter the 12-digit UTR/Ref number from your payment receipt to confirm your order."
+            ? `⚠️ 12-Digit UPI Transaction ID / UTR is Required for Partial COD!\n\nPlease complete your ₹${advPromptAmt} (20%) booking advance payment in your UPI app (GPay / PhonePe / Paytm) and enter the 12-digit UTR/Ref number from your payment receipt before submitting your order.`
             : "⚠️ 12-Digit UPI Transaction ID / UTR is Required!\n\nPlease complete your payment in your UPI app (GPay / PhonePe / Paytm) and enter the 12-digit UTR/Ref number from your payment receipt before submitting your order."
           );
           return;
@@ -6422,13 +6426,13 @@
         return;
       }
 
-      // If Partial COD, UPI, or Full COD:
+      // If Partial COD or UPI:
       let paymentLabel = 'Cash on Delivery (COD)';
       let advanceAmount = 0;
       let codBalance = total;
 
       if (currentSelectedPayment === 'partial_cod') {
-        advanceAmount = Math.min(150, total);
+        advanceAmount = calculateAdvanceAmount(total);
         codBalance = Math.max(0, total - advanceAmount);
         paymentLabel = `Partial COD (Adv: ₹${advanceAmount}, COD Bal: ₹${codBalance})`;
       } else if (currentSelectedPayment === 'upi') {
@@ -7113,8 +7117,10 @@ Please pack and dispatch! ✨`
   <!-- Floating Fresh Drop Pill Alert (Non-intrusive, 1-tap view) -->
   <div id="freshDropToast"
     class="fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-500 ease-out max-w-[340px] sm:max-w-sm pointer-events-auto">
-    <div class="bg-stone-900/95 backdrop-blur-md text-white p-3 rounded-2xl shadow-2xl border border-amber-400/40 flex items-center gap-3">
-      <div id="freshDropThumbContainer" class="w-12 h-12 rounded-xl overflow-hidden bg-stone-800 flex-shrink-0 border border-amber-400/30">
+    <div
+      class="bg-stone-900/95 backdrop-blur-md text-white p-3 rounded-2xl shadow-2xl border border-amber-400/40 flex items-center gap-3">
+      <div id="freshDropThumbContainer"
+        class="w-12 h-12 rounded-xl overflow-hidden bg-stone-800 flex-shrink-0 border border-amber-400/30">
         <img id="freshDropThumb" src="" alt="New Drop" class="w-full h-full object-cover">
       </div>
       <div class="flex-1 min-w-0 cursor-pointer" onclick="scrollToLatestProduct()">
@@ -7125,8 +7131,12 @@ Please pack and dispatch! ✨`
         <p id="freshDropToastTitle" class="text-xs font-bold truncate text-white hover:text-amber-200 transition"></p>
         <p id="freshDropToastPrice" class="text-[11px] text-emerald-400 font-extrabold"></p>
       </div>
-      <button onclick="dismissFreshDropToast(event)" class="text-stone-400 hover:text-white p-1 rounded-full hover:bg-stone-800 transition cursor-pointer" aria-label="Dismiss">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      <button onclick="dismissFreshDropToast(event)"
+        class="text-stone-400 hover:text-white p-1 rounded-full hover:bg-stone-800 transition cursor-pointer"
+        aria-label="Dismiss">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
       </button>
     </div>
   </div>
