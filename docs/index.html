@@ -6887,6 +6887,8 @@
             referralDiscount = 0;
             console.warn("[Referral Abuse Prevented] Referral discount is only for first-time orders. Phone:", cleanPhone);
             alert("ℹ️ Referral discount (₹100) is valid for first-time orders only. Thank you for shopping with SRR Bazaar again!");
+          resetOrderButtonState();
+          return;
           } else {
             referralDiscount = 100;
           }
