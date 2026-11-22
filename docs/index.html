@@ -2524,7 +2524,7 @@
             <path d="M50 50 L93.3 25 A50 50 0 0 1 93.3 75 Z" fill="#e11d48" />
             <!-- Slice 3: ₹100 Cash -->
             <path d="M50 50 L93.3 75 A50 50 0 0 1 50 100 Z" fill="#d97706" />
-            <!-- Slice 4: ₹150 Mega Cash -->
+            <!-- Slice 4: Free Express Courier -->
             <path d="M50 50 L50 100 A50 50 0 0 1 6.7 75 Z" fill="#047857" />
             <!-- Slice 5: ₹75 Cash -->
             <path d="M50 50 L6.7 75 A50 50 0 0 1 6.7 25 Z" fill="#be123c" />
@@ -2532,12 +2532,14 @@
             <path d="M50 50 L6.7 25 A50 50 0 0 1 50 0 Z" fill="#92400e" />
           </svg>
 
-          <!-- Labels overlay inside slices -->
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-black text-amber-100">
-            <span class="absolute top-7 font-bold">₹50 Cash</span>
-            <span class="absolute right-6 font-bold">Free Gift</span>
-            <span class="absolute bottom-10 font-bold">₹100 Off</span>
-            <span class="absolute left-6 font-bold">₹150 Cash</span>
+          <!-- Labels overlay inside 6 slices -->
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-[8px] sm:text-[9px] font-black text-amber-100">
+            <span class="absolute top-5 font-bold">₹50 Cash</span>
+            <span class="absolute top-14 right-4 font-bold">🎁 Free Gift</span>
+            <span class="absolute bottom-14 right-4 font-bold">₹75 Cash</span>
+            <span class="absolute bottom-5 font-bold">₹100 Off</span>
+            <span class="absolute bottom-14 left-4 font-bold">👑 VIP 8%</span>
+            <span class="absolute top-14 left-4 font-bold">🔥 ₹150</span>
           </div>
         </div>
 
@@ -2556,14 +2558,31 @@
         <p class="text-[11px] text-amber-200/80 font-medium">1 Free Spin Every 24 Hours • Prizes valid for 24 hours</p>
       </div>
 
-      <div id="wheelResultBox" class="hidden p-3 bg-amber-500/20 border border-amber-400/40 rounded-xl space-y-1 text-left animate-in fade-in">
+      <div id="wheelResultBox" class="hidden p-3 bg-amber-500/20 border border-amber-400/40 rounded-xl space-y-2 text-left animate-in fade-in">
         <div class="flex items-center gap-1.5 text-xs font-bold text-amber-300">
           <span>🎉</span>
           <span id="wheelResultTitle">Congratulations!</span>
         </div>
         <p id="wheelResultDesc" class="text-xs text-stone-200 leading-snug"></p>
+
+        <!-- Viral WhatsApp 2X Double / Extra Spin Trigger -->
+        <div id="viralDoubleBox" class="p-2.5 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-500/50 rounded-xl space-y-1.5 text-center">
+          <div class="flex items-center justify-center gap-1.5 text-[11px] font-extrabold text-emerald-300">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span id="viralDoubleHeading">⚡ Share on WhatsApp to Double Your Prize!</span>
+          </div>
+          <p id="viralDoubleDesc" class="text-[10px] text-emerald-100/90 leading-tight">
+            Share your lucky spin on WhatsApp with friends or family to instantly <strong>DOUBLE your reward</strong>!
+          </p>
+          <button id="wheelShareDoubleBtn" onclick="shareSpinOnWhatsApp()" type="button"
+            class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+            <span id="wheelShareBtnText">Share on WhatsApp to Double Prize →</span>
+          </button>
+        </div>
+
         <div class="pt-1 flex gap-2">
-          <button onclick="closeSpinWheelModal(); toggleCartDrawer(true);" class="flex-1 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs transition">
+          <button onclick="closeSpinWheelModal(); toggleCartDrawer(true);" class="flex-1 py-2.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs transition">
             Apply to Cart Now →
           </button>
         </div>
@@ -3089,7 +3108,7 @@
   {
     "id": 797919421,
     "title": "Premium Bridal Pure Jadau Kundan Collection",
-    "category": "necklace",
+    "category": "groceries",
     "price": 1280,
     "originalPrice": 1920,
     "tag": "New Arrival",
@@ -3989,7 +4008,6 @@
 
       checkIncomingReferral();
       updateWalletUI();
-      initFestiveTimer();
       renderProducts();
       updateCartUI();
       renderMerchantOrders();
@@ -6566,6 +6584,9 @@
       if (triggerHistory) popModalHistory('spinWheelModal');
     }
 
+    let currentSpinWin = null;
+    let hasSharedSpin = false;
+
     function spinTheWheel() {
       if (isSpinning) return;
       const btn = document.getElementById('spinWheelBtn');
@@ -6578,28 +6599,47 @@
         btn.textContent = "Spinning...";
       }
 
-      // Slices: 0: 50 cash (rot 330), 1: Free Gift (rot 270), 2: 100 cash (rot 210), 3: 150 Mega cash (rot 150), 4: 75 cash (rot 90), 5: 8% vip (rot 30)
-      // High-converting prizes: ₹50, ₹75, ₹100, or ₹150 Mega Cash!
+      // Slices: 0: 50 cash (rot 330), 1: Free Gift (rot 270), 2: 75 cash (rot 90), 3: 100 cash (rot 210), 4: VIP 8% (rot 30), 5: 150 Mega cash (rot 150)
+      // HIGH-RETENTION WEIGHTED PROBABILITIES:
+      // Over 80% concentrated in safe low-value / non-cash surprise physical gifts!
       const prizes = [
-        { name: "₹50 Wallet Cash", amount: 50, rot: 1800 + 330 },
-        { name: "₹100 Wallet Cash", amount: 100, rot: 1800 + 210 },
-        { name: "₹75 Wallet Cash", amount: 75, rot: 1800 + 90 },
-        { name: "₹150 Mega Wallet Cash", amount: 150, rot: 1800 + 150 }
+        { id: 'cash50', name: "₹50 Wallet Cash", amount: 50, weight: 53, rot: 1800 + 330, type: 'cash' },
+        { id: 'gift', name: "🎁 Free Surprise Gift in Box", amount: 0, weight: 27, rot: 1800 + 270, type: 'gift', giftName: "Miniature Brass Pooja Bell / Kundan Bindi" },
+        { id: 'cash75', name: "₹75 Wallet Cash", amount: 75, weight: 12, rot: 1800 + 90, type: 'cash' },
+        { id: 'cash100', name: "₹100 Wallet Cash", amount: 100, weight: 4, rot: 1800 + 210, type: 'cash' },
+        { id: 'vip', name: "👑 VIP Gold Tier (8% Cashback)", amount: 0, weight: 2, rot: 1800 + 30, type: 'vip' },
+        { id: 'cash150', name: "🔥 ₹150 Mega Wallet Cash", amount: 150, weight: 2, rot: 1800 + 150, type: 'cash' }
       ];
-      const win = prizes[Math.floor(Math.random() * prizes.length)];
+
+      const rand = Math.random() * 100;
+      let cum = 0;
+      let win = prizes[0];
+      for (const p of prizes) {
+        cum += p.weight;
+        if (rand < cum) {
+          win = p;
+          break;
+        }
+      }
+      currentSpinWin = win;
+      hasSharedSpin = false;
 
       wheel.style.transform = `rotate(${win.rot}deg)`;
 
       setTimeout(() => {
         isSpinning = false;
-        // Credit to wallet
-        addWalletCash(win.amount);
-
-        // Save spin timestamp & 24h expiry
         const now = Date.now();
         localStorage.setItem('srr_last_spin_time', now.toString());
         localStorage.setItem('srr_festive_expiry', (now + 24 * 60 * 60 * 1000).toString());
         localStorage.setItem('srr_last_prize_name', win.name);
+
+        if (win.type === 'cash') {
+          addWalletCash(win.amount);
+        } else if (win.type === 'gift') {
+          localStorage.setItem('srr_free_gift', 'true');
+        } else if (win.type === 'vip') {
+          localStorage.setItem('srr_vip_tier', 'gold');
+        }
 
         // Start countdown banner
         initFestiveTimer();
@@ -6610,8 +6650,28 @@
           resBox.classList.remove('hidden');
           const title = document.getElementById('wheelResultTitle');
           const desc = document.getElementById('wheelResultDesc');
+          const shareBtnText = document.getElementById('wheelShareBtnText');
+          const viralHeading = document.getElementById('viralDoubleHeading');
+          const viralDesc = document.getElementById('viralDoubleDesc');
+
           if (title) title.textContent = `🎉 You Won ${win.name}!`;
-          if (desc) desc.textContent = `₹${win.amount} cash has been credited directly to your SRR Gold Wallet! Valid for 24 hours.`;
+
+          if (win.type === 'cash') {
+            if (desc) desc.textContent = `₹${win.amount} cash has been credited directly to your SRR Gold Wallet! Valid for 24 hours.`;
+            if (shareBtnText) shareBtnText.textContent = `Share on WhatsApp to Double to ₹${win.amount * 2} →`;
+            if (viralHeading) viralHeading.textContent = `⚡ Share on WhatsApp to Double to ₹${win.amount * 2}!`;
+            if (viralDesc) viralDesc.textContent = `Share this lucky spin with 1 friend or group to instantly double your cash to ₹${win.amount * 2}!`;
+          } else if (win.type === 'gift') {
+            if (desc) desc.textContent = `A special ${win.giftName} will be packed completely FREE with your order from Armoor Hub!`;
+            if (shareBtnText) shareBtnText.textContent = `Share on WhatsApp to Add ₹50 Cash Too →`;
+            if (viralHeading) viralHeading.textContent = `⚡ Add ₹50 Bonus Cash on Top!`;
+            if (viralDesc) viralDesc.textContent = `Share with friends to claim ₹50 Wallet Cash on top of your Free Surprise Gift!`;
+          } else if (win.type === 'vip') {
+            if (desc) desc.textContent = `You have been instantly upgraded to 👑 VIP Gold Tier! Enjoy 8% Lifetime Prepaid Cashback and Priority Dispatch.`;
+            if (shareBtnText) shareBtnText.textContent = `Share Lucky VIP Status on WhatsApp →`;
+            if (viralHeading) viralHeading.textContent = `⚡ Unlock a Bonus 2nd Spin!`;
+            if (viralDesc) viralDesc.textContent = `Share your VIP luck with friends to unlock an immediate Bonus 2nd Spin!`;
+          }
         }
 
         if (btn) {
@@ -6619,91 +6679,101 @@
           btn.classList.add('opacity-50', 'cursor-not-allowed');
           btn.textContent = "✅ Prize Claimed!";
         }
+
+        if (window.lucide) lucide.createIcons();
       }, 4200);
     }
 
-    let festiveTimerInterval = null;
+    function shareSpinOnWhatsApp() {
+      if (!currentSpinWin) return;
+      hasSharedSpin = true;
+      const phone = localStorage.getItem('srr_cust_phone') || '';
+      const refCode = phone ? phone.replace(/[^0-9]/g, '').slice(-10) : '';
+      const shareUrl = refCode ? `https://srrbazaar.com/?ref=${refCode}` : 'https://srrbazaar.com';
+      
+      const prizeText = currentSpinWin.type === 'gift' ? 'a Free Surprise Brass Gift in my parcel' : currentSpinWin.name;
+      const msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and win up to ₹150 Wallet Cash & free gifts:\n${shareUrl}`;
+      
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
+
+      // Award the Viral Bonus
+      setTimeout(() => {
+        const doubleBox = document.getElementById('viralDoubleBox');
+        if (currentSpinWin.type === 'cash') {
+          const bonusAmount = currentSpinWin.amount; // Doubles the cash!
+          addWalletCash(bonusAmount);
+          const newTotal = currentSpinWin.amount * 2;
+          if (doubleBox) {
+            doubleBox.innerHTML = `
+              <div class="p-2.5 bg-emerald-500/20 border border-emerald-400 rounded-lg text-emerald-300 font-bold text-xs space-y-1">
+                <div>🎉 Awesome! Your reward has DOUBLED to <strong>₹${newTotal} Wallet Cash</strong>!</div>
+                <div class="text-[10px] text-emerald-200">Credited to your SRR Gold Wallet for your order today.</div>
+              </div>
+            `;
+          }
+          const desc = document.getElementById('wheelResultDesc');
+          if (desc) desc.textContent = `₹${newTotal} cash (Doubled via WhatsApp Share!) is active in your Gold Wallet for 24 hours.`;
+          localStorage.setItem('srr_last_prize_name', `₹${newTotal} (Doubled) Cash`);
+          initFestiveTimer();
+        } else if (currentSpinWin.type === 'gift') {
+          addWalletCash(50);
+          if (doubleBox) {
+            doubleBox.innerHTML = `
+              <div class="p-2.5 bg-emerald-500/20 border border-emerald-400 rounded-lg text-emerald-300 font-bold text-xs space-y-1">
+                <div>🎉 Bonus Claimed! <strong>₹50 Wallet Cash</strong> added to your Gold Wallet alongside your Free Gift!</div>
+              </div>
+            `;
+          }
+        } else {
+          if (doubleBox) {
+            doubleBox.innerHTML = `
+              <div class="p-2.5 bg-emerald-500/20 border border-emerald-400 rounded-lg text-emerald-300 font-bold text-xs space-y-1">
+                <div>🎉 Bonus 2nd Spin Unlocked! Spin again below.</div>
+              </div>
+            `;
+          }
+          const btn = document.getElementById('spinWheelBtn');
+          if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.textContent = "🎡 Spin Your Bonus Round!";
+          }
+        }
+        if (window.lucide) lucide.createIcons();
+      }, 800);
+    }
 
     function initFestiveTimer() {
       const banner = document.getElementById('festiveRewardBanner');
-      if (!banner) return;
-
-      banner.classList.remove('hidden');
-
-      if (festiveTimerInterval) {
-        clearInterval(festiveTimerInterval);
-        festiveTimerInterval = null;
-      }
-
       const expiry = parseInt(localStorage.getItem('srr_festive_expiry') || '0', 10);
-      const prizeName = localStorage.getItem('srr_last_prize_name') || '';
-      const isClaimed = (expiry && Date.now() < expiry);
+      const prizeName = localStorage.getItem('srr_last_prize_name') || '₹50 Wallet Cash';
+      const prizeText = document.getElementById('festivePrizeText');
+      const timerText = document.getElementById('festiveTimerText');
 
-      if (isClaimed) {
-        // State A: User has won an active prize (24h countdown to use in cart)
-        banner.innerHTML = `
-          <div class="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
-            <span class="inline-flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span>🎉 Active Festive Prize: <strong class="text-amber-200 font-extrabold">${prizeName || '₹50–₹150 Cash'}</strong> expires in</span>
-              <span id="festiveTimerText" class="font-mono bg-black/40 px-2 py-0.5 rounded text-amber-300 font-extrabold tracking-wider border border-amber-400/30">23:59:59</span>
-            </span>
-            <button onclick="toggleCartDrawer(true)" class="underline text-amber-100 hover:text-white font-black ml-1 cursor-pointer text-xs">Apply to Cart →</button>
-          </div>
-        `;
-        const timerText = document.getElementById('festiveTimerText');
-
-        function tickClaimed() {
-          const diff = expiry - Date.now();
-          if (diff <= 0) {
-            localStorage.removeItem('srr_festive_expiry');
-            localStorage.removeItem('srr_last_prize_name');
-            initFestiveTimer();
-            return;
-          }
-          const h = Math.floor(diff / (1000 * 60 * 60));
-          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-          const s = Math.floor((diff % (1000 * 60)) / 1000);
-          if (timerText) {
-            timerText.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-          }
-        }
-        tickClaimed();
-        festiveTimerInterval = setInterval(tickClaimed, 1000);
-      } else {
-        // State B: Always-On Countdown for Unclaimed Spin (resets at midnight daily)
-        const now = new Date();
-        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
-
-        banner.innerHTML = `
-          <div class="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
-            <span class="inline-flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-amber-300 animate-pulse"></span>
-              <span>🎡 Daily Festive Spin: Win <strong class="text-amber-200 font-black">₹50–₹150 Cash!</strong> Today's spin resets in</span>
-              <span id="festiveTimerText" class="font-mono bg-black/40 px-2 py-0.5 rounded text-amber-300 font-extrabold tracking-wider border border-amber-400/30">--:--:--</span>
-            </span>
-            <button onclick="openSpinWheelModal()" class="px-2.5 py-0.5 rounded-full bg-amber-400 hover:bg-amber-300 text-stone-950 font-black ml-1 shadow-xs cursor-pointer text-[11px] transform active:scale-95 transition">Spin Now 🎡</button>
-          </div>
-        `;
-        const timerText = document.getElementById('festiveTimerText');
-
-        function tickUnclaimed() {
-          const nowMs = Date.now();
-          const diff = midnight - nowMs;
-          if (diff <= 0) {
-            initFestiveTimer();
-            return;
-          }
-          const h = Math.floor(diff / (1000 * 60 * 60));
-          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-          const s = Math.floor((diff % (1000 * 60)) / 1000);
-          if (timerText) {
-            timerText.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-          }
-        }
-        tickUnclaimed();
-        festiveTimerInterval = setInterval(tickUnclaimed, 1000);
+      if (!expiry || Date.now() >= expiry) {
+        if (banner) banner.classList.add('hidden');
+        return;
       }
+
+      if (banner) banner.classList.remove('hidden');
+      if (prizeText) prizeText.textContent = prizeName;
+
+      function updateClock() {
+        const diff = expiry - Date.now();
+        if (diff <= 0) {
+          if (banner) banner.classList.add('hidden');
+          return;
+        }
+        const h = Math.floor(diff / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+        if (timerText) {
+          timerText.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
     }
 
     // =========================================================================
@@ -6726,6 +6796,7 @@
     }
 
     function isCustomerGoldVIP(phone) {
+      if (localStorage.getItem('srr_vip_tier') === 'gold') return true;
       return getCustomerLifetimeSpend(phone) >= 2500;
     }
 
@@ -7738,6 +7809,12 @@
       }
 
       let walletWaDetails = '';
+      const hasFreeGift = (localStorage.getItem('srr_free_gift') === 'true');
+      if (hasFreeGift) {
+        walletWaDetails += `\n*🎁 Festive Wheel Winner:* Miniature Brass Pooja Bell / Kundan Bindi (Packed Free in Box!)`;
+        newOrder.freeGift = "Miniature Brass Pooja Bell / Kundan Bindi (Wheel Winner)";
+        localStorage.removeItem('srr_free_gift');
+      }
       if (usedWallet > 0) {
         walletWaDetails += `\n*🪙 Wallet Cash Redeemed:* -₹${usedWallet}`;
       }

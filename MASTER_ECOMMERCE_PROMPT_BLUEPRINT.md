@@ -804,3 +804,27 @@ ef) as it is strictly reserved for new buyer acquisition.
   3. **Universal Catalogue Remediation**:
      - Audited and corrected all existing products in `docs/products.json` and static product landing pages (`docs/p/*.html`).
      - Reclassified `Premium Bridal Pure Jadau Kundan Collection` back to `necklace` and `Vikram Brand Bleaching Powder` to `cleaning`.
+
+
+### 27. High-Retention Skewed Wheel Probabilities (80% Safe/Low-Cost Floor) & WhatsApp 2X Viral Prize Multiplier
+- **What Happened**:
+  - The previous festive wheel awarded equal 25% probabilities to cash slices (₹50, ₹75, ₹100, ₹150).
+  - Giving equal odds meant high payouts (₹100, ₹150) were awarded too frequently (50% of spins), eroding merchant profit margins, while offering zero non-cash surprise delights and zero incentive for customers to share the store on social media.
+- **Why It Happened**:
+  - Uniform random arrays (`Math.floor(Math.random() * prizes.length)`) do not allow business-calibrated weighting.
+  - The post-spin win modal only had a static checkout button without a viral social sharing loop.
+- **How to Avoid**:
+  1. **Skewed Weighted Probabilities (80% Low-Cost / Zero-Cash Drain Floor)**:
+     - Calibrate odds so the vast majority of spins fall into safe, high-perceived-value categories:
+       - **₹50 Wallet Cash (53% weight)**: Safe, high-frequency discount that triggers immediate first purchases.
+       - **🎁 Free Surprise Gift in Box (27% weight)**: Packed free inside the parcel (Miniature Brass Pooja Bell or Kundan Bindi Set). High emotional perceived value for festive shoppers, near-zero margin cost (~₹15 wholesale).
+       - **₹75 Festive Cash (12% weight)**: Mid-tier cart booster for carts ₹500+.
+       - **₹100 Bonus Cash (4% weight)**: Low-frequency reward.
+       - **👑 Instant VIP Gold Tier (2% weight)**: Upgrades customer to 8% lifetime prepaid cashback.
+       - **🔥 ₹150 Mega Cash (2% weight)**: Rare jackpot thrill that maintains authentic excitement.
+  2. **1-Tap WhatsApp "Double Your Prize" Viral Growth Loop (`#viralDoubleBox`)**:
+     - Right below the won prize in the wheel modal, render an animated WhatsApp multiplier card:
+       - If won ₹50 cash: *"⚡ Share on WhatsApp with 1 friend to instantly DOUBLE your reward to ₹100!"*
+       - If won Free Gift: *"⚡ Share with friends on WhatsApp to claim an extra ₹50 Wallet Cash on top!"*
+     - Tapping the button opens WhatsApp with the customer's personalized deep-link (`https://srrbazaar.com/?ref=[PHONE]`) pre-filled with an enthusiastic recommendation message.
+     - Upon returning, the system doubles their wallet cash (e.g. ₹50 becomes ₹100) or unlocks a Bonus 2nd Spin, creating organic customer acquisition and peer referrals with zero ad spend.
