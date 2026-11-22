@@ -6685,7 +6685,7 @@
     }
 
     function shareSpinOnWhatsApp() {
-      if (!currentSpinWin) return;
+      if (!currentSpinWin || hasSharedSpin) return;
       hasSharedSpin = true;
       const phone = localStorage.getItem('srr_cust_phone') || '';
       const refCode = phone ? phone.replace(/[^0-9]/g, '').slice(-10) : '';
