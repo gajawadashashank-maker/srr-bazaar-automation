@@ -735,3 +735,25 @@ ef) as it is strictly reserved for new buyer acquisition.
   3. **Dedicated Mobile Quick-Action Chip Strip (`#mobileQuickBar`)**:
      - Place a sleek, horizontally scrollable chip row right below the mobile search bar (`[✨ AI Stylist] [🎡 Spin & Win] [🚚 Track Order] [💬 WhatsApp]`).
      - This gives mobile shoppers instant 1-tap utility access without creating vertical overcrowding or horizontal text collisions.
+
+
+### 24. Always-On Dual Countdown Banner (Midnight Reset & 24h Expiry) & Replacing Redundant Free Shipping Wheel Slice with ₹150 Mega Cash
+- **What Happened**:
+  1. The top festive banner (`#festiveRewardBanner`) only appeared conditionally when a user had already spun the wheel. For new visitors who had not yet spun, the banner was hidden, missing an immediate FOMO / urgency trigger before they browsed the catalogue.
+  2. The Spin & Win wheel included a "Free Express Courier" / "Free Ship" prize slice. Since SRR Bazaar already provides 100% Free Shipping across India on all orders, winning "Free Ship" felt redundant and unrewarding to customers.
+- **Why It Happened**:
+  - The banner initialization logic (`initFestiveTimer`) previously gated the banner with `if (!reward || !expiry) { banner.classList.add('hidden'); return; }`.
+  - The wheel prize array had historical placeholder slices including `"Free Express Courier"` with `amount: 0`.
+- **How to Avoid**:
+  1. **Dual-State Always-On Countdown Banner**:
+     - Keep `#festiveRewardBanner` persistently visible at the top of the viewport for 100% of visitors.
+     - **State A (Unclaimed Daily Spin)**: For new visitors or users whose previous prize expired, calculate the ticking countdown until midnight reset (`Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0)`):
+       `🎡 Daily Festive Spin: Win ₹50–₹150 Cash! Today's spin resets in [ HH:MM:SS ] [ Spin Now 🎡 ]`.
+       Tapping the button immediately opens `#spinWheelModal`.
+     - **State B (Claimed Active Prize)**: Once spun, seamlessly transition the banner to a ticking 24-hour expiration countdown (`srr_festive_expiry`):
+       `🎉 Active Festive Prize: ₹[amount] expires in [ HH:MM:SS ] [ Apply to Cart → ]`.
+       When the timer reaches zero, auto-clear the expired prize from `localStorage` and transition back to State A.
+  2. **High-Value Prize Overhaul (₹150 Mega Cash)**:
+     - Completely eliminate "Free Ship" from the SVG wheel slices, slice text labels, and winning selection algorithm.
+     - Replace with **"₹150 Mega Cash"** (e.g. `{ name: "₹150 Mega Wallet Cash", amount: 150, rot: 1800 + 150 }`).
+     - Every slice on the wheel now delivers tangible instant wallet currency (₹50, ₹75, ₹100, ₹150) credited directly to `localStorage['srr_wallet_balance']`.

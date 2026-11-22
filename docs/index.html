@@ -2488,7 +2488,7 @@
             <path d="M50 50 L93.3 25 A50 50 0 0 1 93.3 75 Z" fill="#e11d48" />
             <!-- Slice 3: ₹100 Cash -->
             <path d="M50 50 L93.3 75 A50 50 0 0 1 50 100 Z" fill="#d97706" />
-            <!-- Slice 4: Free Express Courier -->
+            <!-- Slice 4: ₹150 Mega Cash -->
             <path d="M50 50 L50 100 A50 50 0 0 1 6.7 75 Z" fill="#047857" />
             <!-- Slice 5: ₹75 Cash -->
             <path d="M50 50 L6.7 75 A50 50 0 0 1 6.7 25 Z" fill="#be123c" />
@@ -2501,7 +2501,7 @@
             <span class="absolute top-7 font-bold">₹50 Cash</span>
             <span class="absolute right-6 font-bold">Free Gift</span>
             <span class="absolute bottom-10 font-bold">₹100 Off</span>
-            <span class="absolute left-6 font-bold">Free Ship</span>
+            <span class="absolute left-6 font-bold">₹150 Cash</span>
           </div>
         </div>
 
@@ -3953,6 +3953,7 @@
 
       checkIncomingReferral();
       updateWalletUI();
+      initFestiveTimer();
       renderProducts();
       updateCartUI();
       renderMerchantOrders();
@@ -6520,13 +6521,13 @@
         btn.textContent = "Spinning...";
       }
 
-      // Slices: 0: 50 cash (rot 330), 1: Free Gift (rot 270), 2: 100 cash (rot 210), 3: Free ship (rot 150), 4: 75 cash (rot 90), 5: 8% vip (rot 30)
-      // We guarantee winning 50 or 100 cash!
+      // Slices: 0: 50 cash (rot 330), 1: Free Gift (rot 270), 2: 100 cash (rot 210), 3: 150 Mega cash (rot 150), 4: 75 cash (rot 90), 5: 8% vip (rot 30)
+      // High-converting prizes: ₹50, ₹75, ₹100, or ₹150 Mega Cash!
       const prizes = [
         { name: "₹50 Wallet Cash", amount: 50, rot: 1800 + 330 },
         { name: "₹100 Wallet Cash", amount: 100, rot: 1800 + 210 },
-        { name: "₹50 Wallet Cash", amount: 50, rot: 1800 + 330 },
-        { name: "₹75 Wallet Cash", amount: 75, rot: 1800 + 90 }
+        { name: "₹75 Wallet Cash", amount: 75, rot: 1800 + 90 },
+        { name: "₹150 Mega Wallet Cash", amount: 150, rot: 1800 + 150 }
       ];
       const win = prizes[Math.floor(Math.random() * prizes.length)];
 
@@ -6564,36 +6565,88 @@
       }, 4200);
     }
 
+    let festiveTimerInterval = null;
+
     function initFestiveTimer() {
       const banner = document.getElementById('festiveRewardBanner');
+      if (!banner) return;
+
+      banner.classList.remove('hidden');
+
+      if (festiveTimerInterval) {
+        clearInterval(festiveTimerInterval);
+        festiveTimerInterval = null;
+      }
+
       const expiry = parseInt(localStorage.getItem('srr_festive_expiry') || '0', 10);
-      const prizeName = localStorage.getItem('srr_last_prize_name') || '₹50 Wallet Cash';
-      const prizeText = document.getElementById('festivePrizeText');
-      const timerText = document.getElementById('festiveTimerText');
+      const prizeName = localStorage.getItem('srr_last_prize_name') || '';
+      const isClaimed = (expiry && Date.now() < expiry);
 
-      if (!expiry || Date.now() >= expiry) {
-        if (banner) banner.classList.add('hidden');
-        return;
-      }
+      if (isClaimed) {
+        // State A: User has won an active prize (24h countdown to use in cart)
+        banner.innerHTML = `
+          <div class="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
+            <span class="inline-flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>🎉 Active Festive Prize: <strong class="text-amber-200 font-extrabold">${prizeName || '₹50–₹150 Cash'}</strong> expires in</span>
+              <span id="festiveTimerText" class="font-mono bg-black/40 px-2 py-0.5 rounded text-amber-300 font-extrabold tracking-wider border border-amber-400/30">23:59:59</span>
+            </span>
+            <button onclick="toggleCartDrawer(true)" class="underline text-amber-100 hover:text-white font-black ml-1 cursor-pointer text-xs">Apply to Cart →</button>
+          </div>
+        `;
+        const timerText = document.getElementById('festiveTimerText');
 
-      if (banner) banner.classList.remove('hidden');
-      if (prizeText) prizeText.textContent = prizeName;
-
-      function updateClock() {
-        const diff = expiry - Date.now();
-        if (diff <= 0) {
-          if (banner) banner.classList.add('hidden');
-          return;
+        function tickClaimed() {
+          const diff = expiry - Date.now();
+          if (diff <= 0) {
+            localStorage.removeItem('srr_festive_expiry');
+            localStorage.removeItem('srr_last_prize_name');
+            initFestiveTimer();
+            return;
+          }
+          const h = Math.floor(diff / (1000 * 60 * 60));
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((diff % (1000 * 60)) / 1000);
+          if (timerText) {
+            timerText.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+          }
         }
-        const h = Math.floor(diff / (1000 * 60 * 60));
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((diff % (1000 * 60)) / 1000);
-        if (timerText) {
-          timerText.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        tickClaimed();
+        festiveTimerInterval = setInterval(tickClaimed, 1000);
+      } else {
+        // State B: Always-On Countdown for Unclaimed Spin (resets at midnight daily)
+        const now = new Date();
+        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
+
+        banner.innerHTML = `
+          <div class="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
+            <span class="inline-flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-300 animate-pulse"></span>
+              <span>🎡 Daily Festive Spin: Win <strong class="text-amber-200 font-black">₹50–₹150 Cash!</strong> Today's spin resets in</span>
+              <span id="festiveTimerText" class="font-mono bg-black/40 px-2 py-0.5 rounded text-amber-300 font-extrabold tracking-wider border border-amber-400/30">--:--:--</span>
+            </span>
+            <button onclick="openSpinWheelModal()" class="px-2.5 py-0.5 rounded-full bg-amber-400 hover:bg-amber-300 text-stone-950 font-black ml-1 shadow-xs cursor-pointer text-[11px] transform active:scale-95 transition">Spin Now 🎡</button>
+          </div>
+        `;
+        const timerText = document.getElementById('festiveTimerText');
+
+        function tickUnclaimed() {
+          const nowMs = Date.now();
+          const diff = midnight - nowMs;
+          if (diff <= 0) {
+            initFestiveTimer();
+            return;
+          }
+          const h = Math.floor(diff / (1000 * 60 * 60));
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((diff % (1000 * 60)) / 1000);
+          if (timerText) {
+            timerText.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+          }
         }
+        tickUnclaimed();
+        festiveTimerInterval = setInterval(tickUnclaimed, 1000);
       }
-      updateClock();
-      setInterval(updateClock, 1000);
     }
 
     // =========================================================================
