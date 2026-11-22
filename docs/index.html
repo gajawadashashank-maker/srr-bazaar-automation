@@ -453,6 +453,13 @@
   </div>
 
   <!-- Referral Welcome Sticky Notification Banner (shown if visited via ?ref=...) -->
+    <!-- Sticky Festive 24-Hour Reward Countdown Banner -->
+  <div id="festiveRewardBanner"
+    class="hidden bg-gradient-to-r from-amber-600 via-rose-600 to-amber-700 text-white py-1.5 px-3 text-center text-xs font-bold shadow-sm flex items-center justify-center gap-2 z-40 relative">
+    <span>🎉 Festive Reward: <strong id="festivePrizeText">₹50 Wallet Cash</strong> expires in <span id="festiveTimerText" class="font-mono bg-black/30 px-2 py-0.5 rounded text-amber-200 tracking-wider">23:59:59</span></span>
+    <button onclick="toggleCartDrawer(true)" class="underline text-amber-100 hover:text-white font-extrabold ml-1 cursor-pointer">Shop Now →</button>
+  </div>
+
   <div id="referralWelcomeBanner"
     class="hidden bg-gradient-to-r from-rose-700 via-pink-600 to-amber-600 text-white py-2 px-3 sm:px-4 text-center text-xs font-semibold shadow-md flex items-center justify-center gap-2 animate-in fade-in duration-300">
     <span class="text-sm">🎁</span>
@@ -528,6 +535,14 @@
             <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600 group-hover:rotate-12 transition"></i>
             <span class="hidden sm:inline">AI Stylist</span>
             <span class="sm:hidden text-[11px]">AI</span>
+          </button>
+
+                    <!-- Festive Spin & Win Trigger -->
+          <button onclick="openSpinWheelModal()"
+            class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white text-xs font-black rounded-full hover:scale-105 transition shadow-sm animate-pulse cursor-pointer"
+            title="Spin the Festive Wheel to Win ₹50-₹100 Wallet Cash!">
+            <span>🎡</span>
+            <span class="hidden sm:inline">Spin & Win</span>
           </button>
 
           <!-- Refer & Earn Trigger -->
@@ -1159,6 +1174,31 @@
         <button onclick="applyVisualRefine('pure khadhi cotton saree')"
           class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-rose-900 border border-rose-300 hover:bg-rose-50 transition cursor-pointer">🥻
           Sarees</button>
+      </div>
+    </div>
+
+        <!-- Function & Return-Gift Bulk Inquiry Banner (Catering & Weddings) -->
+    <div id="bulkInquiryBanner" class="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white shadow-md border border-emerald-700/60 relative overflow-hidden">
+      <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-800/80 text-[10px] font-bold uppercase tracking-wider text-emerald-200 border border-emerald-600/60">
+            <span>🍃</span>
+            <span>Wholesale & Function Orders</span>
+          </div>
+          <h4 class="font-serif text-base sm:text-lg font-bold text-emerald-50 flex items-center gap-2">
+            <span>Organizing a Pooja, Wedding, or Family Function? 🪔</span>
+          </h4>
+          <p class="text-xs text-emerald-200/90 leading-relaxed max-w-xl">
+            Get wholesale slab discounts on <strong>200+ Biodegradable Leaf Buffet Plates & Handcrafted Return Gifts</strong> with express dispatch via The Professional Couriers (Armoor Hub)!
+          </p>
+        </div>
+        <a href="https://api.whatsapp.com/send?phone=917013416296&text=Namaste%20SRR%20Bazaar!%20%F0%9F%AA%94%20I%20am%20planning%20a%20family%20function/wedding%20and%20need%20a%20bulk%20wholesale%20quote%20for%20Biodegradable%20Leaf%20Buffet%20Plates%20&%20Return%20Gifts.%20Please%20share%20slab%20pricing%20and%20express%20dispatch%20details%20from%20Armoor."
+          target="_blank"
+          class="shrink-0 w-full md:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition transform active:scale-95">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <span>💬 Get Instant Bulk Quote on WhatsApp</span>
+        </a>
       </div>
     </div>
 
@@ -2390,6 +2430,93 @@
   </div>
 
   <!-- ========================================================================= -->
+    <!-- ========================================================================= -->
+  <!-- MODAL: Festive Spin & Win (Daily Wheel / 24-Hour Expiry)                   -->
+  <!-- ========================================================================= -->
+  <div id="spinWheelModal"
+    class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
+    onclick="if(event.target === this) closeSpinWheelModal()">
+    <div class="bg-gradient-to-b from-stone-900 to-stone-950 text-white rounded-3xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl relative border border-amber-500/30 animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
+      <button onclick="closeSpinWheelModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white z-20">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Glow background -->
+      <div class="absolute -top-20 -left-20 w-44 h-44 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -right-20 w-44 h-44 bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold uppercase tracking-wider border border-amber-500/30">
+          <span>🪔</span>
+          <span>Daily Festive Reward</span>
+        </div>
+        <h3 class="font-serif text-xl sm:text-2xl font-bold text-amber-100">Spin & Win ₹50-₹100!</h3>
+        <p class="text-xs text-stone-300">Spin the festive wheel daily to win instant wallet cash for your order</p>
+      </div>
+
+      <!-- Interactive SVG Wheel Canvas -->
+      <div class="relative w-64 h-64 mx-auto my-2 flex items-center justify-center">
+        <!-- Center Pointer -->
+        <div class="absolute -top-2 z-30 transform -translate-x-1/2 left-1/2 filter drop-shadow">
+          <div class="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[20px] border-t-amber-400"></div>
+        </div>
+
+        <!-- The Spinning Wheel -->
+        <div id="wheelCanvasWrapper" class="w-60 h-60 rounded-full border-4 border-amber-400 shadow-xl overflow-hidden relative transition-transform duration-4000 ease-out" style="transform: rotate(0deg);">
+          <svg viewBox="0 0 100 100" class="w-full h-full transform -rotate-30">
+            <!-- Slice 1: ₹50 Cash -->
+            <path d="M50 50 L50 0 A50 50 0 0 1 93.3 25 Z" fill="#b45309" />
+            <!-- Slice 2: Free Gift -->
+            <path d="M50 50 L93.3 25 A50 50 0 0 1 93.3 75 Z" fill="#e11d48" />
+            <!-- Slice 3: ₹100 Cash -->
+            <path d="M50 50 L93.3 75 A50 50 0 0 1 50 100 Z" fill="#d97706" />
+            <!-- Slice 4: Free Express Courier -->
+            <path d="M50 50 L50 100 A50 50 0 0 1 6.7 75 Z" fill="#047857" />
+            <!-- Slice 5: ₹75 Cash -->
+            <path d="M50 50 L6.7 75 A50 50 0 0 1 6.7 25 Z" fill="#be123c" />
+            <!-- Slice 6: 8% VIP Bonus -->
+            <path d="M50 50 L6.7 25 A50 50 0 0 1 50 0 Z" fill="#92400e" />
+          </svg>
+
+          <!-- Labels overlay inside slices -->
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-black text-amber-100">
+            <span class="absolute top-7 font-bold">₹50 Cash</span>
+            <span class="absolute right-6 font-bold">Free Gift</span>
+            <span class="absolute bottom-10 font-bold">₹100 Off</span>
+            <span class="absolute left-6 font-bold">Free Ship</span>
+          </div>
+        </div>
+
+        <!-- Wheel Center Hub -->
+        <div class="absolute w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 to-amber-300 border-2 border-white shadow-md flex items-center justify-center z-20 pointer-events-none text-xs font-black text-stone-900">
+          SRR
+        </div>
+      </div>
+
+      <!-- Action Button or Cooldown Notice -->
+      <div id="wheelActionArea" class="space-y-2 pt-1">
+        <button id="spinWheelBtn" type="button" onclick="spinTheWheel()"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-stone-950 font-black text-sm shadow-lg transition transform active:scale-95 cursor-pointer">
+          🎡 Spin The Wheel Now!
+        </button>
+        <p class="text-[11px] text-amber-200/80 font-medium">1 Free Spin Every 24 Hours • Prizes valid for 24 hours</p>
+      </div>
+
+      <div id="wheelResultBox" class="hidden p-3 bg-amber-500/20 border border-amber-400/40 rounded-xl space-y-1 text-left animate-in fade-in">
+        <div class="flex items-center gap-1.5 text-xs font-bold text-amber-300">
+          <span>🎉</span>
+          <span id="wheelResultTitle">Congratulations!</span>
+        </div>
+        <p id="wheelResultDesc" class="text-xs text-stone-200 leading-snug"></p>
+        <div class="pt-1 flex gap-2">
+          <button onclick="closeSpinWheelModal(); toggleCartDrawer(true);" class="flex-1 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs transition">
+            Apply to Cart Now →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: Refer & Earn (WhatsApp Viral Sharing)                             -->
   <!-- ========================================================================= -->
   <div id="referModal"
@@ -2438,6 +2565,16 @@
           <div id="walletOwnerBadge" class="text-[10px] text-amber-900 bg-amber-100/90 px-2 py-0.5 rounded-md inline-flex items-center gap-1 border border-amber-300 font-medium">
             📱 Private Device Wallet • Enter your number below to link
           </div>
+        </div>
+        <!-- VIP Tier Progress Badge -->
+        <div id="vipTierStatusBox" class="p-2 bg-gradient-to-r from-amber-100 to-amber-200/80 rounded-lg border border-amber-300 text-left text-[11px] space-y-0.5">
+          <div class="flex items-center justify-between font-bold text-amber-950">
+            <span class="flex items-center gap-1">👑 <span id="vipTierTitle">Silver Member (5% Cashback)</span></span>
+            <span id="vipTierSpendDisplay" class="font-mono text-[10px] bg-amber-300/80 px-1.5 py-0.2 rounded">₹0 / ₹2,500</span>
+          </div>
+          <p id="vipTierDesc" class="text-[10px] text-stone-600 leading-snug">
+            Spend ₹2,500+ across orders to unlock <strong>VIP Gold (8% Cashback + Free Surprise Gifts)</strong>!
+          </p>
         </div>
         <div class="grid grid-cols-2 gap-2 text-[11px] text-stone-700 pt-1 border-t border-amber-200/80">
           <div>Friends Joined: <strong id="referralCountDisplay" class="text-stone-900">0</strong></div>
@@ -6302,6 +6439,168 @@
       }
     }
 
+    
+    // =========================================================================
+    // GROWTH FEATURE: Festive Spin & Win (Daily Wheel / 24-Hour Timer)
+    // =========================================================================
+    let isSpinning = false;
+
+    function openSpinWheelModal() {
+      const modal = document.getElementById('spinWheelModal');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      pushModalHistory('spinWheelModal');
+
+      // Check if already spun within last 24h
+      const lastSpin = parseInt(localStorage.getItem('srr_last_spin_time') || '0', 10);
+      const now = Date.now();
+      const oneDay = 24 * 60 * 60 * 1000;
+      const btn = document.getElementById('spinWheelBtn');
+      const resBox = document.getElementById('wheelResultBox');
+
+      if (now - lastSpin < oneDay) {
+        const remainingHours = Math.ceil((oneDay - (now - lastSpin)) / (60 * 60 * 1000));
+        if (btn) {
+          btn.disabled = true;
+          btn.classList.add('opacity-50', 'cursor-not-allowed');
+          btn.textContent = `⏳ Next Spin in ${remainingHours} Hours`;
+        }
+        if (resBox) {
+          resBox.classList.remove('hidden');
+          const title = document.getElementById('wheelResultTitle');
+          const desc = document.getElementById('wheelResultDesc');
+          const prizeName = localStorage.getItem('srr_last_prize_name') || '₹50 Wallet Cash';
+          if (title) title.textContent = "Today's Spin Completed!";
+          if (desc) desc.textContent = `You won ${prizeName}! Your prize is saved in your SRR Wallet. Complete your order today before the 24-hour timer expires!`;
+        }
+      } else {
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          btn.textContent = "🎡 Spin The Wheel Now!";
+        }
+        if (resBox) resBox.classList.add('hidden');
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeSpinWheelModal(triggerHistory = true) {
+      hideModalDOM('spinWheelModal');
+      if (triggerHistory) popModalHistory('spinWheelModal');
+    }
+
+    function spinTheWheel() {
+      if (isSpinning) return;
+      const btn = document.getElementById('spinWheelBtn');
+      const wheel = document.getElementById('wheelCanvasWrapper');
+      if (!wheel) return;
+
+      isSpinning = true;
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Spinning...";
+      }
+
+      // Slices: 0: 50 cash (rot 330), 1: Free Gift (rot 270), 2: 100 cash (rot 210), 3: Free ship (rot 150), 4: 75 cash (rot 90), 5: 8% vip (rot 30)
+      // We guarantee winning 50 or 100 cash!
+      const prizes = [
+        { name: "₹50 Wallet Cash", amount: 50, rot: 1800 + 330 },
+        { name: "₹100 Wallet Cash", amount: 100, rot: 1800 + 210 },
+        { name: "₹50 Wallet Cash", amount: 50, rot: 1800 + 330 },
+        { name: "₹75 Wallet Cash", amount: 75, rot: 1800 + 90 }
+      ];
+      const win = prizes[Math.floor(Math.random() * prizes.length)];
+
+      wheel.style.transform = `rotate(${win.rot}deg)`;
+
+      setTimeout(() => {
+        isSpinning = false;
+        // Credit to wallet
+        addWalletCash(win.amount);
+
+        // Save spin timestamp & 24h expiry
+        const now = Date.now();
+        localStorage.setItem('srr_last_spin_time', now.toString());
+        localStorage.setItem('srr_festive_expiry', (now + 24 * 60 * 60 * 1000).toString());
+        localStorage.setItem('srr_last_prize_name', win.name);
+
+        // Start countdown banner
+        initFestiveTimer();
+
+        // Show result box
+        const resBox = document.getElementById('wheelResultBox');
+        if (resBox) {
+          resBox.classList.remove('hidden');
+          const title = document.getElementById('wheelResultTitle');
+          const desc = document.getElementById('wheelResultDesc');
+          if (title) title.textContent = `🎉 You Won ${win.name}!`;
+          if (desc) desc.textContent = `₹${win.amount} cash has been credited directly to your SRR Gold Wallet! Valid for 24 hours.`;
+        }
+
+        if (btn) {
+          btn.disabled = true;
+          btn.classList.add('opacity-50', 'cursor-not-allowed');
+          btn.textContent = "✅ Prize Claimed!";
+        }
+      }, 4200);
+    }
+
+    function initFestiveTimer() {
+      const banner = document.getElementById('festiveRewardBanner');
+      const expiry = parseInt(localStorage.getItem('srr_festive_expiry') || '0', 10);
+      const prizeName = localStorage.getItem('srr_last_prize_name') || '₹50 Wallet Cash';
+      const prizeText = document.getElementById('festivePrizeText');
+      const timerText = document.getElementById('festiveTimerText');
+
+      if (!expiry || Date.now() >= expiry) {
+        if (banner) banner.classList.add('hidden');
+        return;
+      }
+
+      if (banner) banner.classList.remove('hidden');
+      if (prizeText) prizeText.textContent = prizeName;
+
+      function updateClock() {
+        const diff = expiry - Date.now();
+        if (diff <= 0) {
+          if (banner) banner.classList.add('hidden');
+          return;
+        }
+        const h = Math.floor(diff / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+        if (timerText) {
+          timerText.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+
+    // =========================================================================
+    // GROWTH FEATURE: VIP Gold Tier (Spend ₹2,500+ total -> 8% Cashback)
+    // =========================================================================
+    function getCustomerLifetimeSpend(phone) {
+      const clean = (phone || localStorage.getItem('srr_cust_phone') || '').replace(/[^0-9]/g, '').slice(-10);
+      if (!clean || clean.length !== 10) return 0;
+      let total = 0;
+      if (Array.isArray(orders)) {
+        orders.forEach(o => {
+          if (!o) return;
+          const oPhone = (o.customer && o.customer.phone ? o.customer.phone : '').replace(/[^0-9]/g, '').slice(-10);
+          if (oPhone === clean) {
+            total += Number(o.total) || 0;
+          }
+        });
+      }
+      return total;
+    }
+
+    function isCustomerGoldVIP(phone) {
+      return getCustomerLifetimeSpend(phone) >= 2500;
+    }
+
     function checkIncomingReferral() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
@@ -6398,6 +6697,25 @@
         if (balEl) balEl.textContent = `₹${effectiveBal}`;
         if (countEl) countEl.textContent = `${referralCount} Friends`;
         if (earnedEl) earnedEl.textContent = `₹${totalReferralEarned}`;
+        
+        // Update VIP Gold Tier status
+        const lifetimeSpend = getCustomerLifetimeSpend(cleanPhone);
+        const vipBox = document.getElementById('vipTierStatusBox');
+        const vipTitle = document.getElementById('vipTierTitle');
+        const vipSpend = document.getElementById('vipTierSpendDisplay');
+        const vipDesc = document.getElementById('vipTierDesc');
+
+        if (lifetimeSpend >= 2500) {
+          if (vipTitle) vipTitle.innerHTML = `<span class="text-amber-900 font-black">👑 VIP Gold Member (8% Cashback Active)</span>`;
+          if (vipSpend) vipSpend.textContent = `₹${lifetimeSpend} Spent (VIP Unlocked)`;
+          if (vipDesc) vipDesc.innerHTML = `<span class="text-emerald-800 font-bold">✓ 8% Prepaid Cashback Active • Priority Armoor Dispatch • Free Mystery Gift with every box!</span>`;
+        } else {
+          if (vipTitle) vipTitle.textContent = "Silver Member (5% Cashback)";
+          if (vipSpend) vipSpend.textContent = `₹${lifetimeSpend} / ₹2,500`;
+          const needed = 2500 - lifetimeSpend;
+          if (vipDesc) vipDesc.innerHTML = `Spend ₹${needed} more to unlock <strong>VIP Gold (8% Cashback + Free Surprise Gift)</strong>!`;
+        }
+
         if (ownerBadge) {
           ownerBadge.innerHTML = `<span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i> <strong>Wallet Account:</strong> +91 ${cleanPhone}</span>`;
           ownerBadge.className = "text-[10px] text-emerald-900 bg-emerald-100/90 px-2.5 py-1 rounded-md inline-flex items-center gap-1 border border-emerald-300 font-semibold";
@@ -7211,10 +7529,13 @@
       const isPartial = (currentSelectedPayment === 'partial_cod');
       const isPrepaid = (currentSelectedPayment === 'upi' || currentSelectedPayment === 'razorpay');
 
-      // 5% Cashback on 100% Prepaid orders (UPI or Razorpay)
+      // VIP Gold Tier Cashback: 8% on 100% Prepaid for VIP Gold (Spend >= ₹2500), 5% for Standard
       let cashbackEarned = 0;
+      const isGold = isCustomerGoldVIP(phone);
+      const cashbackRate = isGold ? 0.08 : 0.05;
+
       if (currentSelectedPayment === 'upi' || currentSelectedPayment === 'razorpay') {
-        cashbackEarned = Math.round(total * 0.05);
+        cashbackEarned = Math.round(total * cashbackRate);
         if (cashbackEarned > 0) {
           addWalletCash(cashbackEarned);
         }
