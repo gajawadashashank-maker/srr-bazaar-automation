@@ -936,6 +936,32 @@
             (3)</span>
         </button>
 
+        <!-- Electricals & Lighting -->
+        <button onclick="filterCategory('electrical', this)" data-category="electrical"
+          class="category-circle-btn category-btn flex flex-col items-center gap-1 group cursor-pointer focus:outline-none w-full max-w-[76px] sm:max-w-[84px] md:max-w-[96px]">
+          <div
+            class="circle-box w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-amber-500">
+            <img src="images/categories/cat_electrical.jpg" alt="Electricals & Lighting"
+              onerror="this.onerror=null; this.src='images/catalog/88846458a4a544eda9c03477c177b77a.jpg';"
+              class="w-full h-full object-cover">
+          </div>
+          <span
+            class="circle-label text-[10px] sm:text-[11px] md:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition text-center leading-tight">Electricals</span>
+        </button>
+
+        <!-- Cleaning & Hygiene -->
+        <button onclick="filterCategory('cleaning', this)" data-category="cleaning"
+          class="category-circle-btn category-btn flex flex-col items-center gap-1 group cursor-pointer focus:outline-none w-full max-w-[76px] sm:max-w-[84px] md:max-w-[96px]">
+          <div
+            class="circle-box w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-cyan-500">
+            <img src="images/categories/cat_cleaning.jpg" alt="Cleaning & Hygiene"
+              onerror="this.onerror=null; this.src='images/catalog/88846458a4a544eda9c03477c177b77a.jpg';"
+              class="w-full h-full object-cover">
+          </div>
+          <span
+            class="circle-label text-[10px] sm:text-[11px] md:text-xs font-semibold text-stone-700 group-hover:text-stone-900 transition text-center leading-tight">Cleaning</span>
+        </button>
+
       </div>
 
     </div>
@@ -1192,6 +1218,12 @@
         <button onclick="applyVisualRefine('pure khadhi cotton saree')"
           class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-rose-900 border border-rose-300 hover:bg-rose-50 transition cursor-pointer">🥻
           Sarees</button>
+        <button onclick="applyVisualRefine('led bulb electrical')"
+          class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-amber-800 border border-amber-300 hover:bg-amber-50 transition cursor-pointer">💡
+          LED Bulbs</button>
+        <button onclick="applyVisualRefine('phenyl cleaning hygiene')"
+          class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-cyan-800 border border-cyan-300 hover:bg-cyan-50 transition cursor-pointer">🧴
+          Cleaning</button>
       </div>
     </div>
 
@@ -1500,6 +1532,10 @@
                 Studs & Bangles</a></li>
             <li><a href="#catalogue" onclick="filterCategory('decor')" class="hover:text-amber-300 transition">Trays &
                 Home Decor</a></li>
+            <li><a href="#catalogue" onclick="filterCategory('electrical')" class="hover:text-amber-300 transition">Electricals &
+                LED Bulbs</a></li>
+            <li><a href="#catalogue" onclick="filterCategory('cleaning')" class="hover:text-amber-300 transition">Cleaning &
+                Hygiene</a></li>
           </ul>
         </div>
 
@@ -4235,7 +4271,18 @@
       'jhumka': ['earrings', 'studs'],
       'studs': ['earrings', 'cz', 'solitaire'],
       'bangle': ['bangles', 'kangan', 'earrings'],
-      'bangles': ['bangle', 'kangan', 'earrings']
+      'bangles': ['bangle', 'kangan', 'earrings'],
+      'bulb': ['bulbs', 'led', 'light', 'lighting', 'electrical', 'tube', 'batten'],
+      'bulbs': ['bulb', 'led', 'light', 'lighting', 'electrical'],
+      'led': ['bulb', 'bulbs', 'light', 'lighting', 'electrical', 'batten'],
+      'light': ['bulb', 'bulbs', 'led', 'lighting', 'electrical'],
+      'electrical': ['bulb', 'led', 'light', 'wire', 'socket', 'switch', 'electricals'],
+      'electricals': ['bulb', 'led', 'light', 'wire', 'socket', 'switch', 'electrical'],
+      'phenyl': ['cleaning', 'cleaner', 'disinfectant', 'floor', 'acid', 'bleach', 'bleaching'],
+      'bleach': ['bleaching', 'bleaching powder', 'cleaning', 'hygiene', 'disinfectant', 'acid', 'phenyl'],
+      'bleaching': ['bleach', 'bleaching powder', 'cleaning', 'hygiene', 'disinfectant', 'acid', 'phenyl'],
+      'acid': ['cleaning', 'toilet', 'bathroom', 'hygiene', 'floor', 'phenyl'],
+      'cleaning': ['cleaner', 'phenyl', 'acid', 'bleach', 'bleaching', 'hygiene', 'disinfectant', 'harpic']
     };
 
     function levenshteinDistance(s1, s2) {
@@ -4949,6 +4996,16 @@
             title: "🥻 Sarees & Handloom Heritage",
             subtitle: "Pure Khadi cotton & festive handlooms directly from weavers",
             catKey: "saree"
+          },
+          {
+            title: "💡 Electricals, LED Bulbs & Lighting",
+            subtitle: "Energy-efficient LED bulbs, batten lights, emergency lamps & home electricals",
+            catKey: "electrical"
+          },
+          {
+            title: "🧴 Cleaning, Phenyl & Hygiene Essentials",
+            subtitle: "Disinfectant floor phenyls, bleaching powder, toilet cleaners & sanitizing supplies",
+            catKey: "cleaning"
           }
         ];
 

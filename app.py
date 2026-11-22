@@ -402,6 +402,10 @@ def regenerate_google_merchant_feed() -> None:
 
         def get_g_category(cat: str, title: str) -> str:
             t = title.lower()
+            if cat == "electrical" or any(k in t for k in ["bulb", "led", "light", "electrical", "lamp", "torch", "batten"]):
+                return "Home & Garden > Lighting > Light Bulbs"
+            if cat == "cleaning" or any(k in t for k in ["bleach", "acid", "phenyl", "cleaner", "hygiene", "detergent", "disinfectant"]):
+                return "Home & Garden > Household Supplies > Household Cleaning Supplies"
             if "saree" in t or cat == "saree":
                 return "Apparel & Accessories > Clothing > Traditional & Cultural Wear > Sarees"
             if any(k in t for k in ["diya", "tray", "plate", "pooja", "bowl", "lotus flower", "nomu", "shatanamavali", "kadapalu", "wooden steps", "decor"]):
@@ -533,6 +537,12 @@ def sync_product_to_website_catalogue(
         # 7. Earrings & Bangles
         elif any(w in text_lower for w in ["earring", "earrings", "stud", "studs", "jhumka", "jhumkas", "bangle", "bangles", "bracelet", "kada"]):
             category = "earrings"
+        # 8. Electricals & Lighting
+        elif any(w in text_lower for w in ["led", "bulb", "bulbs", "light", "lighting", "tubelight", "batten", "lamp", "torch", "socket", "holder", "wire", "switch", "electrical", "extension box"]):
+            category = "electrical"
+        # 9. Cleaning & Hygiene Essentials
+        elif any(w in text_lower for w in ["bleach", "bleaching", "acid", "phenyl", "phenyls", "floor cleaner", "toilet cleaner", "harpic", "lizol", "detergent", "surf", "mop", "broom", "disinfectant", "hygiene", "sanitizer", "handwash"]):
+            category = "cleaning"
 
         new_id = int(uuid.uuid4().int % 1000000000)
 

@@ -757,3 +757,26 @@ ef) as it is strictly reserved for new buyer acquisition.
      - Completely eliminate "Free Ship" from the SVG wheel slices, slice text labels, and winning selection algorithm.
      - Replace with **"₹150 Mega Cash"** (e.g. `{ name: "₹150 Mega Wallet Cash", amount: 150, rot: 1800 + 150 }`).
      - Every slice on the wheel now delivers tangible instant wallet currency (₹50, ₹75, ₹100, ₹150) credited directly to `localStorage['srr_wallet_balance']`.
+
+
+### 25. Omnichannel Department Expansion: Electricals & Lighting (LED Bulbs) and Cleaning & Hygiene Essentials (Bleaching Powder, Phenyl, Acid)
+- **What Happened**:
+  - The store expanded into household utility departments by introducing everyday electrical supplies (e.g. LED bulbs, tubelights, switches) and commercial cleaning/sanitation supplies (e.g. bleaching powder, floor phenyl, tile acid).
+  - Without dedicated categories and automated keyword mapping, new utility items risk falling back into unrelated default categories (e.g. jewelry or generic groceries), diluting store navigation and search accuracy.
+- **Why It Happened**:
+  - WhatsApp catalogue ingestion and frontend filtering relied on fixed keyword lists that only covered jewelry, disposables, groceries, and pooja items.
+  - Search synonyms, visual refine pills, Google Merchant classifications, and home catalogue aisle shelves lacked electrical and sanitation departments.
+- **How to Avoid**:
+  1. **Two Dedicated Department Taxonomies**:
+     - **Category 1 (`electrical`)**: "Electricals & Lighting" (`images/categories/cat_electrical.jpg`). Covers LED bulbs, batten lights, emergency lamps, wires, sockets, and switches.
+     - **Category 2 (`cleaning`)**: "Cleaning & Hygiene" (`images/categories/cat_cleaning.jpg`). Covers bleaching powder, floor phenyl, tile acids, surface cleaners, and disinfectants.
+  2. **Automated WhatsApp Pipeline Keyword Classification (`process_job.py` & `app.py`)**:
+     - Keyword rules for `cleaning`: `["bleach", "bleaching", "acid", "phenyl", "phenyls", "floor cleaner", "toilet cleaner", "harpic", "lizol", "detergent", "disinfectant", "hygiene"]`.
+     - Keyword rules for `electrical`: `["led", "bulb", "bulbs", "light", "lighting", "tubelight", "batten", "lamp", "torch", "socket", "holder", "wire", "switch", "electrical"]`.
+  3. **Full Storefront Integration (`docs/index.html`)**:
+     - Added dynamic category circle buttons with live product counter integration (`updateCategoryCounts()`).
+     - Added curated storefront aisle shelves (`allAisles`) so new additions automatically appear as dedicated shelves on the homepage when in stock.
+     - Enriched `SEARCH_SYNONYMS` for natural language searches (e.g. "phenyl" -> "disinfectant", "floor cleaner"; "bulb" -> "led", "lighting").
+     - Added Google Merchant Center XML feed categorization:
+       - `electrical` -> `Home & Garden > Lighting > Light Bulbs`
+       - `cleaning` -> `Home & Garden > Household Supplies > Household Cleaning Supplies`
