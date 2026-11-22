@@ -566,3 +566,32 @@ This log documents every architectural pitfall discovered and resolved during re
      - **Top Shelf Catalogue Aisle**: Automatically position `"🔥 Just Dropped — Fresh New Arrivals"` as the very #1 shelf above all category aisles in the storefront catalogue.
      - **Dedicated "New Drops" Quick Filter**: Provide a high-visibility circular tab (`data-category="new"`) with an animated pulsing notification dot in the category navigation bar.
      - **Floating Fresh Drop Toast (`#freshDropToast`)**: Display a sleek, non-intrusive floating pill on the bottom edge (`Just Added to Store: [Title] - [Price]`) with 1-tap view and session dismissal memory (`sessionStorage`) so shoppers are immediately aware without being disrupted.
+
+
+### 17. High-Conversion "Partial COD" (Advance Token via UPI + 12-Digit UTR + Balance on Delivery) Architecture
+- **What Happened**: 
+  1. Offering 100% Cash on Delivery (COD) on high-value jewelry and artisanal festive products exposes the merchant to high Return to Origin (RTO) rates (up to 30–40% in Indian D2C e-commerce) caused by impulse/fake orders or unreachable customers.
+  2. Conversely, forcing 100% upfront prepaid checkout causes significant cart abandonment from first-time shoppers who have not yet established trust with a newly launched boutique store.
+- **Why It Happened**:
+  - Full COD carries zero financial commitment from the buyer, leading to frivolous checkouts where customers refuse parcels upon courier delivery.
+  - Full online prepayment creates high customer friction when purchasing from boutique brands discovered via Instagram or Facebook ads.
+- **How to Avoid**:
+  1. **Partial COD Hybrid Checkout Model**:
+     - Offer **Partial COD (₹150 Booking Advance via UPI + Balance on Delivery)** as the #1 recommended payment option.
+     - The small advance token (₹150) establishes serious buyer intent, dropping RTO rates from ~35% down to under 2%, while preserving high conversion rates.
+  2. **Automated Balance Calculation & Dynamic Payee Routing**:
+     - When Partial COD is selected, automatically calculate:
+       - `advanceAmount = Math.min(150, cartTotal)`
+       - `codBalance = Math.max(0, cartTotal - advanceAmount)`
+     - Render a clear, confidence-building banner explaining: *"Pay ₹150 booking advance now via UPI to lock your order. Remaining ₹[codBalance] will be collected in Cash on Delivery."*
+     - Dynamically generate the UPI QR code and 1-tap mobile deep links (PhonePe, GPay, Paytm, BHIM) pre-filled with the exact ₹150 advance amount.
+  3. **Strict Client-Side 12-Digit UTR Validation**:
+     - Require customers to enter their **12-digit UPI Transaction Reference (UTR)** from their payment receipt into `#upiRefNumber`.
+     - Block order submission and highlight the input field with a shake/red ring alert if the UTR is missing or fewer than 10 digits.
+  4. **Itemized Transparency Across Receipts & WhatsApp**:
+     - Format customer receipts and the automated WhatsApp order dispatch message with an explicit breakdown:
+       - `Payment Mode: ⚡ Partial COD (Advance Token Paid)`
+       - `Advance Paid via UPI: ₹150 (UTR: 123456789012)`
+       - `Remaining Balance Payable on Delivery: ₹[codBalance]`
+       - `Order Status: ✅ Confirmed & Locked for Dispatch`
+     - Highlight Partial COD orders in the merchant portal with dedicated gold badges and instant WhatsApp chat links so the fulfillment team can verify the UTR in their banking app before parcel handoff to The Professional Couriers.
