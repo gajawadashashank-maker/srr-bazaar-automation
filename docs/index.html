@@ -2515,32 +2515,43 @@
           <div class="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[20px] border-t-amber-400"></div>
         </div>
 
-        <!-- The Spinning Wheel -->
+        <!-- The Spinning Wheel (Mathematically Aligned Radial Slices & Labels) -->
         <div id="wheelCanvasWrapper" class="w-60 h-60 rounded-full border-4 border-amber-400 shadow-xl overflow-hidden relative transition-transform duration-4000 ease-out" style="transform: rotate(0deg);">
-          <svg viewBox="0 0 100 100" class="w-full h-full transform -rotate-30">
-            <!-- Slice 1: ₹50 Cash -->
-            <path d="M50 50 L50 0 A50 50 0 0 1 93.3 25 Z" fill="#b45309" />
-            <!-- Slice 2: Free Gift -->
-            <path d="M50 50 L93.3 25 A50 50 0 0 1 93.3 75 Z" fill="#e11d48" />
-            <!-- Slice 3: ₹100 Cash -->
-            <path d="M50 50 L93.3 75 A50 50 0 0 1 50 100 Z" fill="#d97706" />
-            <!-- Slice 4: Free Express Courier -->
-            <path d="M50 50 L50 100 A50 50 0 0 1 6.7 75 Z" fill="#047857" />
-            <!-- Slice 5: ₹75 Cash -->
-            <path d="M50 50 L6.7 75 A50 50 0 0 1 6.7 25 Z" fill="#be123c" />
-            <!-- Slice 6: 8% VIP Bonus -->
-            <path d="M50 50 L6.7 25 A50 50 0 0 1 50 0 Z" fill="#92400e" />
-          </svg>
+          <svg viewBox="0 0 100 100" class="w-full h-full select-none">
+            <!-- 6 Equal 60-degree Radial Slices (Center: 50,50, Radius: 50) -->
+            <!-- Slice 0: ₹50 Cash (Center at 0 deg / 12 o'clock) -->
+            <path d="M 50 50 L 25 6.7 A 50 50 0 0 1 75 6.7 Z" fill="#b45309" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 1: Free Gift (Center at 60 deg) -->
+            <path d="M 50 50 L 75 6.7 A 50 50 0 0 1 100 50 Z" fill="#e11d48" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 2: ₹75 Cash (Center at 120 deg) -->
+            <path d="M 50 50 L 100 50 A 50 50 0 0 1 75 93.3 Z" fill="#d97706" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 3: ₹100 Off (Center at 180 deg / 6 o'clock) -->
+            <path d="M 50 50 L 75 93.3 A 50 50 0 0 1 25 93.3 Z" fill="#047857" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 4: VIP 8% (Center at 240 deg) -->
+            <path d="M 50 50 L 25 93.3 A 50 50 0 0 1 0 50 Z" fill="#be123c" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 5: ₹150 Mega Cash (Center at 300 deg) -->
+            <path d="M 50 50 L 0 50 A 50 50 0 0 1 25 6.7 Z" fill="#92400e" stroke="#fef3c7" stroke-width="0.6" />
 
-          <!-- Labels overlay inside 6 slices -->
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-[8px] sm:text-[9px] font-black text-amber-100">
-            <span class="absolute top-5 font-bold">₹50 Cash</span>
-            <span class="absolute top-14 right-4 font-bold">🎁 Free Gift</span>
-            <span class="absolute bottom-14 right-4 font-bold">₹75 Cash</span>
-            <span class="absolute bottom-5 font-bold">₹100 Off</span>
-            <span class="absolute bottom-14 left-4 font-bold">👑 VIP 8%</span>
-            <span class="absolute top-14 left-4 font-bold">🔥 ₹150</span>
-          </div>
+            <!-- Mathematically Centered Radial SVG Text (Never overlaps dividing lines) -->
+            <g transform="rotate(0 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.5" font-weight="900" letter-spacing="0.2">₹50 Cash</text>
+            </g>
+            <g transform="rotate(60 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.2" font-weight="900">🎁 Free Gift</text>
+            </g>
+            <g transform="rotate(120 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.5" font-weight="900">₹75 Cash</text>
+            </g>
+            <g transform="rotate(180 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.5" font-weight="900">₹100 Off</text>
+            </g>
+            <g transform="rotate(240 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.2" font-weight="900">👑 VIP 8%</text>
+            </g>
+            <g transform="rotate(300 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.2" font-weight="900">🔥 ₹150</text>
+            </g>
+          </svg>
         </div>
 
         <!-- Wheel Center Hub -->
@@ -6603,12 +6614,12 @@
       // HIGH-RETENTION WEIGHTED PROBABILITIES:
       // Over 80% concentrated in safe low-value / non-cash surprise physical gifts!
       const prizes = [
-        { id: 'cash50', name: "₹50 Wallet Cash", amount: 50, weight: 53, rot: 1800 + 330, type: 'cash' },
-        { id: 'gift', name: "🎁 Free Surprise Gift in Box", amount: 0, weight: 27, rot: 1800 + 270, type: 'gift', giftName: "Miniature Brass Pooja Bell / Kundan Bindi" },
-        { id: 'cash75', name: "₹75 Wallet Cash", amount: 75, weight: 12, rot: 1800 + 90, type: 'cash' },
-        { id: 'cash100', name: "₹100 Wallet Cash", amount: 100, weight: 4, rot: 1800 + 210, type: 'cash' },
-        { id: 'vip', name: "👑 VIP Gold Tier (8% Cashback)", amount: 0, weight: 2, rot: 1800 + 30, type: 'vip' },
-        { id: 'cash150', name: "🔥 ₹150 Mega Wallet Cash", amount: 150, weight: 2, rot: 1800 + 150, type: 'cash' }
+        { id: 'cash50', name: "₹50 Wallet Cash", amount: 50, weight: 53, rot: 1800 + 0, type: 'cash' },
+        { id: 'gift', name: "🎁 Free Surprise Gift in Box", amount: 0, weight: 27, rot: 1800 + 300, type: 'gift', giftName: "Miniature Brass Pooja Bell / Kundan Bindi" },
+        { id: 'cash75', name: "₹75 Wallet Cash", amount: 75, weight: 12, rot: 1800 + 240, type: 'cash' },
+        { id: 'cash100', name: "₹100 Wallet Cash", amount: 100, weight: 4, rot: 1800 + 180, type: 'cash' },
+        { id: 'vip', name: "👑 VIP Gold Tier (8% Cashback)", amount: 0, weight: 2, rot: 1800 + 120, type: 'vip' },
+        { id: 'cash150', name: "🔥 ₹150 Mega Wallet Cash", amount: 150, weight: 2, rot: 1800 + 60, type: 'cash' }
       ];
 
       const rand = Math.random() * 100;

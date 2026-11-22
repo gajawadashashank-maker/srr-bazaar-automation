@@ -828,3 +828,23 @@ ef) as it is strictly reserved for new buyer acquisition.
        - If won Free Gift: *"⚡ Share with friends on WhatsApp to claim an extra ₹50 Wallet Cash on top!"*
      - Tapping the button opens WhatsApp with the customer's personalized deep-link (`https://srrbazaar.com/?ref=[PHONE]`) pre-filled with an enthusiastic recommendation message.
      - Upon returning, the system doubles their wallet cash (e.g. ₹50 becomes ₹100) or unlocks a Bonus 2nd Spin, creating organic customer acquisition and peer referrals with zero ad spend.
+
+
+### 28. Mathematical Radial SVG Slices & Eliminating Misaligned HTML Absolute Text Overlays on Rotating Wheels
+- **What Happened**:
+  - Slices on the interactive wheel displayed text labels directly overlapping slice boundary lines (e.g. "Free Gift", "VIP 8%", and "₹150" split across dividers, and "₹50 Cash" split down the middle by the 12 o'clock vertical divider).
+  - The pointer at the top was pointing at a dividing border line rather than the center of a slice.
+- **Why It Happened**:
+  - The slice labels were implemented as floating HTML `<span>` elements positioned with approximate CSS Tailwind classes (`top-5`, `right-4`, `bottom-14`) inside an HTML container overlaying the SVG.
+  - The SVG circle had an arbitrary `-rotate-30` class that mismatched the CSS labels, causing slices and labels to land out of sync.
+- **How to Avoid**:
+  1. **Direct Mathematical SVG Geometry**:
+     - Calculate each 60-degree slice's boundary vertices with trigonometry ($x = 50 + R\sin\theta, y = 50 - R\cos\theta$).
+     - Center Slice 0 at $0^\circ$ (12 o'clock, spanning $-30^\circ$ to $+30^\circ$) so the top pointer lands squarely in the dead center of the slice.
+  2. **Embedded Radial SVG Text Transforms**:
+     - Completely eliminate HTML `div` / `span` overlays for wheel labels.
+     - Embed SVG `<text>` directly inside the SVG, rotated to the bisector radial angle of each slice:
+       `<g transform="rotate(ANGLE 50 50)"><text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.5" font-weight="900">LABEL</text></g>`.
+     - Text is mathematically guaranteed to stay in the exact center of its slice and rotates synchronously during animation with zero misalignment.
+  3. **Exact Trigonometric Win Rotation Mapping**:
+     - Compute winning rotation angles matching slice centers: Slice 0 ($0^\circ$) $\rightarrow 1800^\circ$; Slice 1 ($60^\circ$) $\rightarrow 2100^\circ$ ($1800 + 300^\circ$); Slice 2 ($120^\circ$) $\rightarrow 2040^\circ$ ($1800 + 240^\circ$), etc.
