@@ -670,3 +670,27 @@ ef) as it is strictly reserved for new buyer acquisition.
   4. **Closed-Loop Store Credit Economy**:
      - Wallet balances cannot be withdrawn to external bank accounts; they function strictly as store credit for subsequent purchases on SRR Bazaar.
      - With minimum payable caps, customers must always pay the remainder with real cash, ensuring every referral transaction yields net positive cash flow for the store.
+
+### 21. High-Velocity Impulse & Retention Growth: Daily Festive Spin & Win (24h Expiry), VIP Gold Tier (8% Cashback), and Wholesale Function Inquiry
+- **What Happened**:
+  1. Social ad visitors from Instagram Reels often browse without buying on their first session without a time-sensitive incentive.
+  2. Repeat loyal shoppers who spend high amounts (₹2,500+) had no differentiated tier status, limiting lifetime customer value (LTV).
+  3. High-ticket catering and function planners (poojas, weddings, community events) requiring 200+ leaf buffet plates and return gift sets lacked a dedicated wholesale inquiry channel.
+- **Why It Happened**:
+  - Without urgency, buyers defer purchase decisions.
+  - Standard cashback flat-rates do not incentivize larger basket sizes or repeat orders.
+- **How to Avoid**:
+  1. **Daily Festive Spin the Wheel (`#spinWheelModal`)**:
+     - Allow 1 free spin per visitor every 24 hours (tracked via `localStorage['srr_last_spin_time']`).
+     - Real-time animated festive wheel awarding **₹50, ₹75, or ₹100 instant wallet cash** credited directly to `localStorage['srr_wallet_balance']`.
+     - Sticky top banner with a **live 24-hour countdown clock** (`#festiveRewardBanner`): *"🎉 Festive Reward: ₹50 Wallet Cash expires in [ 23:59:59 ] • Shop Now →"*.
+  2. **Zero-Login VIP Gold Tier (Spend ₹2,500+)**:
+     - Automatically compute lifetime spend per customer mobile number across past orders (`getCustomerLifetimeSpend(phone)`).
+     - Upon reaching ₹2,500+ spend:
+       - Upgrade customer to **👑 VIP Gold Member**.
+       - Prepaid Cashback increases from **5% to 8%** on all 100% UPI/Razorpay orders.
+       - Priority same-day courier dispatch from Armoor Hub.
+       - Free surprise gift (miniature brass pooja bell or pure kundan bindi set) added to parcel manifest.
+  3. **Function & Return-Gift Bulk Inquiry Banner (`#bulkInquiryBanner`)**:
+     - Embedded above the product catalogue: *"Organizing a Pooja, Wedding, or Family Function? 🪔🍃 Get wholesale slab discounts on 200+ Biodegradable Leaf Buffet Plates & Handcrafted Return Gifts!"*
+     - Direct WhatsApp inquiry deep-link to merchant helpline (`+91 7013416296`) with pre-filled event quotation template.
