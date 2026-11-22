@@ -2425,12 +2425,27 @@
         </div>
       </div>
 
+      <!-- Live Wallet Balance & Earnings Card (Auto-synced by phone) -->
+      <div id="referralStatsBox" class="p-3 bg-gradient-to-r from-amber-50 to-amber-100/90 rounded-xl border border-amber-300 text-left space-y-1.5 shadow-2xs">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+            <span>🪙</span>
+            <span>Your SRR Gold Wallet</span>
+          </span>
+          <span id="referralWalletBalDisplay" class="text-xs font-black text-amber-950 bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-300">₹0</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-[11px] text-stone-700 pt-1 border-t border-amber-200/80">
+          <div>Friends Joined: <strong id="referralCountDisplay" class="text-stone-900">0</strong></div>
+          <div>Referral Earned: <strong id="referralEarnedDisplay" class="text-emerald-700">₹0</strong></div>
+        </div>
+      </div>
+
       <!-- Mobile Number to Generate Link -->
       <div class="space-y-2 text-left pt-1">
         <label class="block text-xs font-bold text-stone-700">Your WhatsApp Mobile Number</label>
         <div class="flex gap-2">
           <input type="tel" id="referralPhoneInput" maxlength="10" placeholder="e.g. 9849012345"
-            oninput="updateReferralLinkPreview(this.value)"
+            oninput="updateReferralLinkPreview(this.value); syncWalletByPhone(this.value);"
             class="flex-1 px-3 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:border-royal-500 font-mono">
           <button type="button" onclick="copyReferralLink()"
             class="px-3 py-2 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-xl text-xs font-bold text-stone-700 flex items-center gap-1 transition">
@@ -6117,8 +6132,10 @@
       if (phoneInput && savedPhone) {
         phoneInput.value = savedPhone;
         updateReferralLinkPreview(savedPhone);
+        syncWalletByPhone(savedPhone);
       } else {
         updateReferralLinkPreview('');
+        syncWalletByPhone('');
       }
       modal.classList.remove('hidden');
       pushModalHistory('referModal');
@@ -6128,6 +6145,57 @@
     function closeReferModal(triggerHistory = true) {
       hideModalDOM('referModal');
       if (triggerHistory) popModalHistory('referModal');
+    }
+
+    function syncWalletByPhone(phone) {
+      const cleanPhone = (phone || '').replace(/[^0-9]/g, '').slice(-10);
+      let referralCount = 0;
+      let totalReferralEarned = 0;
+      let prepaidCashbackEarned = 0;
+
+      if (cleanPhone.length === 10) {
+        localStorage.setItem('srr_cust_phone', cleanPhone);
+
+        // Check stored orders to calculate referral credits and cashbacks
+        if (Array.isArray(orders)) {
+          orders.forEach(o => {
+            if (!o) return;
+            // Referral match: if someone placed an order invited by this phone
+            if (o.referredBy && o.referredBy.slice(-10) === cleanPhone) {
+              referralCount++;
+              totalReferralEarned += 100;
+            }
+            // Prepaid cashback match
+            const oPhone = (o.customer && o.customer.phone ? o.customer.phone : '').replace(/[^0-9]/g, '').slice(-10);
+            if (oPhone === cleanPhone && o.walletCashbackEarned) {
+              prepaidCashbackEarned += Number(o.walletCashbackEarned) || 0;
+            }
+          });
+        }
+
+        const calculatedTotal = totalReferralEarned + prepaidCashbackEarned;
+        const currentStored = getWalletBalance();
+        const effectiveBal = Math.max(currentStored, calculatedTotal);
+
+        if (effectiveBal !== currentStored) {
+          localStorage.setItem('srr_wallet_balance', effectiveBal.toString());
+          updateWalletUI();
+        }
+
+        const balEl = document.getElementById('referralWalletBalDisplay');
+        const countEl = document.getElementById('referralCountDisplay');
+        const earnedEl = document.getElementById('referralEarnedDisplay');
+        if (balEl) balEl.textContent = `₹${effectiveBal}`;
+        if (countEl) countEl.textContent = `${referralCount} Friends`;
+        if (earnedEl) earnedEl.textContent = `₹${totalReferralEarned}`;
+      } else {
+        const balEl = document.getElementById('referralWalletBalDisplay');
+        const countEl = document.getElementById('referralCountDisplay');
+        const earnedEl = document.getElementById('referralEarnedDisplay');
+        if (balEl) balEl.textContent = `₹${getWalletBalance()}`;
+        if (countEl) countEl.textContent = `0 Friends`;
+        if (earnedEl) earnedEl.textContent = `₹0`;
+      }
     }
 
     function updateReferralLinkPreview(val) {
@@ -6160,7 +6228,7 @@
       const code = val.length >= 10 ? val.slice(-10) : 'SRR100';
       const link = `https://srrbazaar.com/?ref=${code}`;
       const msg = encodeURIComponent(
-        `✨ Hey! Look at these exquisite handcrafted jewellery and pooja collections on *SRR Bazaar*! 🛍️👑\n\nUse my invite link to get an *INSTANT ₹100 DISCOUNT* on your order:\n👉 ${link}\n\nThey have authentic temple harams, pure kundan sets, brass diya stands, and free express delivery across India! 🪔`
+        `✨ Hey! Look at these exquisite collections on *SRR Bazaar*! 🛍️👑\n\nUse my invite link to get an *INSTANT ₹100 DISCOUNT* on your order:\n👉 ${link}\n\nThey have authentic temple harams & pure kundan sets, brass diya stands, biodegradable leaf buffet plates for pooja & catering, and free express delivery across India! 🪔🍃`
       );
       window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
     }
@@ -7314,6 +7382,8 @@ Please pack and dispatch! ✨`
               <td class="p-3">
                 <span class="font-bold text-stone-900 block text-xs">${custName}</span>
                 <span class="text-stone-600 block text-[11px] font-mono">${custPhone}</span>
+                ${o.referredBy ? `<span class="text-[10px] text-pink-700 font-bold bg-pink-50 px-1.5 py-0.5 rounded border border-pink-200 block w-max mt-1">🎁 Ref by: ${o.referredBy}</span>` : ''}
+                ${o.walletDiscountUsed ? `<span class="text-[10px] text-amber-800 font-bold bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 block w-max mt-0.5">🪙 Wallet Used: ₹${o.walletDiscountUsed}</span>` : ''}
                 <span class="text-stone-400 block text-[10px] truncate max-w-xs" title="${fullLocation}">
                   ${fullLocation}
                 </span>
