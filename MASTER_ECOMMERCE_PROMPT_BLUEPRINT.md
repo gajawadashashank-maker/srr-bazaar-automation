@@ -649,3 +649,24 @@ This log documents every architectural pitfall discovered and resolved during re
      - **Referrer Incentive**: Upon dispatch of the friend's order, the referrer's wallet is credited with ₹100 cash.
   3. **1-Tap WhatsApp Viral Social Pre-Fills**:
      - Pre-format viral WhatsApp invite messages featuring localized emojis, store highlights (temple harams, pure kundan, brass diyas), and personal deep-links for instant sharing into Indian family WhatsApp groups.
+
+### 20. Referral & Wallet Anti-Abuse Guardrails: Fraud Protection & Profit Preservation
+- **What Happened**:
+  1. In zero-login referral systems, customers might attempt **self-referrals** (clicking their own invite link ?ref=MY_PHONE and ordering to their own number to obtain both the ₹100 cart discount and the ₹100 referrer credit).
+  2. Customers might attempt to cycle family/relative phone numbers to repeatedly claim welcome referral discounts on subsequent personal orders.
+  3. Risk of malicious users attempting to stack wallet cash to obtain high-value products completely free of cost.
+- **Why It Happened**:
+  - Without algorithmic guardrails, referral and promotional incentives can be exploited to erode product profit margins.
+- **How to Avoid**:
+  1. **Strict Self-Referral Prevention**:
+     - At final checkout submission (submitFinalOrder), systematically compare the customer's sanitized 10-digit delivery phone (cleanPhone) against the referring invite code (ctiveReferralCode).
+     - If cleanPhone === cleanRefCode, immediately strip the referral tag (ctiveReferralCode = null), zero out the discount, and alert the user that self-referrals are prohibited.
+  2. **First-Time Customer Enforcement**:
+     - Cross-check cleanPhone against historical store orders (localStorage and merchant records). If prior completed orders exist for that number, disallow the referral welcome discount (WELCOME100 / 
+ef) as it is strictly reserved for new buyer acquisition.
+  3. **Mandatory Real-Cash Barrier**:
+     - Referral benefits only trigger on minimum cart values of ₹500+.
+     - Every order mandates real money commitment: either 100% Prepaid or 20% Non-refundable Advance with a verified bank UTR.
+  4. **Closed-Loop Store Credit Economy**:
+     - Wallet balances cannot be withdrawn to external bank accounts; they function strictly as store credit for subsequent purchases on SRR Bazaar.
+     - With minimum payable caps, customers must always pay the remainder with real cash, ensuring every referral transaction yields net positive cash flow for the store.
