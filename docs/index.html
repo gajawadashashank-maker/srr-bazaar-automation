@@ -2434,6 +2434,11 @@
           </span>
           <span id="referralWalletBalDisplay" class="text-xs font-black text-amber-950 bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-300">₹0</span>
         </div>
+        <div>
+          <div id="walletOwnerBadge" class="text-[10px] text-amber-900 bg-amber-100/90 px-2 py-0.5 rounded-md inline-flex items-center gap-1 border border-amber-300 font-medium">
+            📱 Private Device Wallet • Enter your number below to link
+          </div>
+        </div>
         <div class="grid grid-cols-2 gap-2 text-[11px] text-stone-700 pt-1 border-t border-amber-200/80">
           <div>Friends Joined: <strong id="referralCountDisplay" class="text-stone-900">0</strong></div>
           <div>Referral Earned: <strong id="referralEarnedDisplay" class="text-emerald-700">₹0</strong></div>
@@ -6193,16 +6198,27 @@
         const balEl = document.getElementById('referralWalletBalDisplay');
         const countEl = document.getElementById('referralCountDisplay');
         const earnedEl = document.getElementById('referralEarnedDisplay');
+        const ownerBadge = document.getElementById('walletOwnerBadge');
         if (balEl) balEl.textContent = `₹${effectiveBal}`;
         if (countEl) countEl.textContent = `${referralCount} Friends`;
         if (earnedEl) earnedEl.textContent = `₹${totalReferralEarned}`;
+        if (ownerBadge) {
+          ownerBadge.innerHTML = `<span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i> <strong>Wallet Account:</strong> +91 ${cleanPhone}</span>`;
+          ownerBadge.className = "text-[10px] text-emerald-900 bg-emerald-100/90 px-2.5 py-1 rounded-md inline-flex items-center gap-1 border border-emerald-300 font-semibold";
+          if (window.lucide) lucide.createIcons();
+        }
       } else {
         const balEl = document.getElementById('referralWalletBalDisplay');
         const countEl = document.getElementById('referralCountDisplay');
         const earnedEl = document.getElementById('referralEarnedDisplay');
+        const ownerBadge = document.getElementById('walletOwnerBadge');
         if (balEl) balEl.textContent = `₹${getWalletBalance()}`;
         if (countEl) countEl.textContent = `0 Friends`;
         if (earnedEl) earnedEl.textContent = `₹0`;
+        if (ownerBadge) {
+          ownerBadge.innerHTML = `📱 Private Device Wallet • Enter your number below to link`;
+          ownerBadge.className = "text-[10px] text-amber-900 bg-amber-100/90 px-2 py-0.5 rounded-md inline-flex items-center gap-1 border border-amber-300 font-medium";
+        }
       }
     }
 
