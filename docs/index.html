@@ -452,6 +452,14 @@
         class="underline hover:text-white transition">@sujatha60861</a></span>
   </div>
 
+  <!-- Referral Welcome Sticky Notification Banner (shown if visited via ?ref=...) -->
+  <div id="referralWelcomeBanner"
+    class="hidden bg-gradient-to-r from-rose-700 via-pink-600 to-amber-600 text-white py-2 px-3 sm:px-4 text-center text-xs font-semibold shadow-md flex items-center justify-center gap-2 animate-in fade-in duration-300">
+    <span class="text-sm">🎁</span>
+    <span>You were invited by a friend! <strong>₹100 Welcome Discount</strong> applied on your cart! (Invite: <span id="referralBannerCodeText" class="font-mono underline"></span>)</span>
+    <button onclick="this.parentElement.remove()" class="text-white/80 hover:text-white p-0.5 ml-2 text-xs font-bold" title="Dismiss">✕</button>
+  </div>
+
   <!-- Header Navigation (Fixed Sticky at Top) -->
   <header id="mainHeader" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-xs">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -522,6 +530,15 @@
             <span class="sm:hidden text-[11px]">AI</span>
           </button>
 
+          <!-- Refer & Earn Trigger -->
+          <button onclick="openReferModal()"
+            class="inline-flex items-center gap-1 px-2 sm:px-3 py-1.5 bg-gradient-to-r from-pink-50 to-rose-100 text-rose-950 border border-rose-300 text-xs font-bold rounded-full hover:bg-rose-200 transition shadow-2xs cursor-pointer"
+            title="Refer a Friend & Earn ₹100">
+            <i data-lucide="gift" class="w-3.5 h-3.5 text-rose-600"></i>
+            <span class="hidden sm:inline">Refer & Earn</span>
+            <span class="sm:hidden text-[11px]">Earn ₹100</span>
+          </button>
+
           <!-- Order Tracking Trigger -->
           <button onclick="openTrackingModal()"
             class="inline-flex items-center gap-1 px-2 sm:px-3 py-1.5 bg-amber-50 text-amber-900 border border-amber-300/80 text-xs font-bold rounded-full hover:bg-amber-100 transition shadow-2xs cursor-pointer"
@@ -529,6 +546,14 @@
             <i data-lucide="truck" class="w-3.5 h-3.5 text-amber-700"></i>
             <span class="hidden sm:inline">Track Order</span>
             <span class="sm:hidden text-[11px]">Track</span>
+          </button>
+
+          <!-- SRR Gold Wallet Pill (Shows dynamically when wallet has cash) -->
+          <button id="headerWalletPill" onclick="toggleCartDrawer(true)"
+            class="hidden items-center gap-1 px-2 sm:px-3 py-1 bg-amber-100 text-amber-900 border border-amber-400 text-xs font-extrabold rounded-full hover:bg-amber-200 transition shadow-xs cursor-pointer"
+            title="Your SRR Gold Wallet Cash">
+            <span>🪙</span>
+            <span id="headerWalletAmount">₹0</span>
           </button>
 
           <!-- WhatsApp Connect Button -->
@@ -1783,6 +1808,27 @@
       <!-- Cart Footer / Summary -->
       <div class="p-4 sm:p-5 border-t border-stone-200 bg-stone-50 space-y-3">
 
+        <!-- SRR Gold Wallet Redemption Box (Dynamic) -->
+        <div id="cartWalletBox" class="hidden p-2.5 bg-gradient-to-r from-amber-50 to-amber-100/70 rounded-xl border border-amber-300 flex items-center justify-between shadow-2xs">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-amber-400 flex items-center justify-center text-amber-950 font-bold text-xs shadow-xs">🪙</div>
+            <div>
+              <div class="text-xs font-bold text-amber-950">SRR Gold Wallet</div>
+              <div class="text-[10px] text-amber-800">Cash Available: <strong id="walletBalanceDisplay">₹0</strong></div>
+            </div>
+          </div>
+          <label class="flex items-center gap-1.5 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-amber-300 text-xs font-bold text-amber-900 hover:bg-amber-50 shadow-2xs">
+            <input type="checkbox" id="useWalletCheckbox" onchange="toggleWalletRedemption(this.checked)" class="accent-amber-600 rounded">
+            <span>Apply</span>
+          </label>
+        </div>
+
+        <!-- Referral Bonus Banner in Cart (if visited with ?ref=...) -->
+        <div id="cartReferralNotice" class="hidden p-2 bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg border border-rose-200 text-rose-900 text-[11px] font-semibold flex items-center gap-1.5">
+          <span>🎁</span>
+          <span>Friend Invite Active: <strong>₹100 Bonus</strong> applied!</span>
+        </div>
+
         <!-- Coupon input -->
         <div class="flex gap-2">
           <input type="text" id="couponCodeInput" placeholder="Coupon code (try WELCOME100)"
@@ -1801,6 +1847,14 @@
           <div class="flex justify-between" id="discountRow" style="display: none;">
             <span class="text-emerald-700">Coupon Discount</span>
             <span id="cartDiscount" class="font-semibold text-emerald-700">-₹0</span>
+          </div>
+          <div class="flex justify-between" id="referralDiscountRow" style="display: none;">
+            <span class="text-rose-700 font-medium">🎁 Friend Referral Bonus</span>
+            <span id="cartReferralDiscount" class="font-bold text-rose-700">-₹100</span>
+          </div>
+          <div class="flex justify-between" id="walletDiscountRow" style="display: none;">
+            <span class="text-amber-800 font-medium">🪙 SRR Wallet Cash Used</span>
+            <span id="cartWalletDiscount" class="font-bold text-amber-800">-₹0</span>
           </div>
           <div class="flex justify-between">
             <span>Shipping Charge</span>
@@ -1988,17 +2042,17 @@
               </div>
             </label>
 
-            <!-- Option 2: Full Instant UPI (100% Prepaid) -->
+            <!-- Option 2: Full Instant UPI (100% Prepaid • 5% Cashback) -->
             <label onclick="handlePaymentMethodChange('upi')"
               class="payment-option cursor-pointer border border-stone-300 hover:border-royal-400 bg-white rounded-xl p-3 flex flex-col justify-between space-y-2 transition">
               <div class="flex items-start justify-between">
                 <input type="radio" name="paymentMethod" value="upi" onchange="handlePaymentMethodChange('upi')"
                   class="text-royal-600 focus:ring-royal-500 mt-0.5">
-                <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold">100% Prepaid</span>
+                <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold">100% Prepaid • 5% Cashback</span>
               </div>
               <div>
                 <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">Instant UPI QR</span>
-                <span class="block text-[11px] text-stone-500 mt-0.5">Pay full bill via PhonePe, GPay, Paytm</span>
+                <span class="block text-[11px] text-stone-500 mt-0.5">Pay full bill • <strong class="text-emerald-700">Get 5% Wallet Cash</strong></span>
               </div>
             </label>
 
@@ -2008,11 +2062,11 @@
               <div class="flex items-start justify-between">
                 <input type="radio" name="paymentMethod" value="razorpay"
                   onchange="handlePaymentMethodChange('razorpay')" class="text-royal-600 focus:ring-royal-500 mt-0.5">
-                <i data-lucide="credit-card" class="w-4 h-4 text-royal-600"></i>
+                <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold">5% Cashback</span>
               </div>
               <div>
                 <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">Cards & Netbanking</span>
-                <span class="block text-[11px] text-stone-500 mt-0.5">Online gateway (Visa, MC, RuPay)</span>
+                <span class="block text-[11px] text-stone-500 mt-0.5">Online gateway • <strong class="text-emerald-700">Get 5% Wallet Cash</strong></span>
               </div>
             </label>
 
@@ -2287,6 +2341,37 @@
         </div>
       </div>
 
+      <!-- 5% Prepaid Cashback Earned Notification Box -->
+      <div id="successCashbackBox"
+        class="hidden p-3.5 bg-gradient-to-r from-amber-50 to-amber-100/80 rounded-xl border border-amber-300 text-left space-y-1 shadow-2xs">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🪙</span>
+          <span class="text-xs font-bold text-amber-950">5% Prepaid Cashback Added to Your Wallet!</span>
+        </div>
+        <p class="text-[11px] text-stone-700 leading-tight">
+          You earned <strong id="successCashbackAmt" class="text-emerald-700 font-extrabold text-xs">₹0</strong> into your <strong>SRR Gold Wallet</strong>! It is securely saved in your browser and will automatically be available for your next order.
+        </p>
+      </div>
+
+      <!-- Viral Refer & Earn Share Card on WhatsApp -->
+      <div class="p-3.5 bg-gradient-to-r from-rose-50 via-pink-50 to-amber-50 rounded-xl border border-rose-200 text-left space-y-2 shadow-2xs">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-rose-950">
+            <span>🎁</span>
+            <span>Refer a Friend & Earn ₹100 Cash!</span>
+          </div>
+          <span class="text-[9px] font-extrabold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-full uppercase tracking-wider">Viral Offer</span>
+        </div>
+        <p class="text-[11px] text-stone-600 leading-tight">
+          Share your personal invite link with friends on WhatsApp. When they order, they get <strong>₹100 OFF</strong> and you get <strong>₹100 Wallet Cash</strong>!
+        </p>
+        <button type="button" onclick="shareReferralLinkWhatsApp()"
+          class="w-full py-2 bg-gradient-to-r from-emerald-600 to-teal-700 hover:opacity-95 text-white rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition">
+          <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+          <span>Share Invite Link on WhatsApp</span>
+        </button>
+      </div>
+
       <!-- Action buttons -->
       <div class="space-y-2">
         <a id="successWhatsAppBtn" href="#" target="_blank"
@@ -2301,6 +2386,73 @@
         </button>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: Refer & Earn (WhatsApp Viral Sharing)                             -->
+  <!-- ========================================================================= -->
+  <div id="referModal"
+    class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
+    onclick="if(event.target === this) closeReferModal()">
+    <div
+      class="bg-white rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+      <button onclick="closeReferModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Header Icon -->
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-400 text-white flex items-center justify-center mx-auto shadow-md">
+        <i data-lucide="gift" class="w-8 h-8"></i>
+      </div>
+
+      <div>
+        <h3 class="font-serif text-xl sm:text-2xl font-bold text-stone-900">Refer & Earn ₹100 Cash!</h3>
+        <p class="text-xs text-stone-500 mt-1">Share genuine handcrafted temple jewellery with your loved ones</p>
+      </div>
+
+      <!-- Perks Summary Cards -->
+      <div class="grid grid-cols-2 gap-2 text-left">
+        <div class="p-3 bg-rose-50 rounded-xl border border-rose-200 space-y-0.5">
+          <div class="text-[10px] font-bold text-rose-800 uppercase tracking-wider">Your Friend Gets</div>
+          <div class="text-sm font-extrabold text-rose-950">₹100 OFF</div>
+          <p class="text-[10px] text-stone-600">On their first order (₹500+)</p>
+        </div>
+        <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 space-y-0.5">
+          <div class="text-[10px] font-bold text-amber-800 uppercase tracking-wider">You Receive</div>
+          <div class="text-sm font-extrabold text-amber-950">₹100 Cash</div>
+          <p class="text-[10px] text-stone-600">Credited to your SRR Wallet</p>
+        </div>
+      </div>
+
+      <!-- Mobile Number to Generate Link -->
+      <div class="space-y-2 text-left pt-1">
+        <label class="block text-xs font-bold text-stone-700">Your WhatsApp Mobile Number</label>
+        <div class="flex gap-2">
+          <input type="tel" id="referralPhoneInput" maxlength="10" placeholder="e.g. 9849012345"
+            oninput="updateReferralLinkPreview(this.value)"
+            class="flex-1 px-3 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:border-royal-500 font-mono">
+          <button type="button" onclick="copyReferralLink()"
+            class="px-3 py-2 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-xl text-xs font-bold text-stone-700 flex items-center gap-1 transition">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span id="copyBtnText">Copy</span>
+          </button>
+        </div>
+        <p class="text-[10px] text-stone-500 truncate font-mono" id="referralLinkPreviewText">Link: https://srrbazaar.com/?ref=SRR100</p>
+      </div>
+
+      <!-- 1-Tap WhatsApp Share Button -->
+      <button type="button" onclick="shareReferralLinkWhatsApp()"
+        class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2">
+        <i data-lucide="share-2" class="w-4 h-4"></i>
+        <span>Share Invite on WhatsApp</span>
+      </button>
+
+      <div class="pt-1 text-[11px] text-stone-500 flex items-center justify-center gap-2">
+        <span>⚡ Instant Referral Link</span>
+        <span>•</span>
+        <span>No Sign-up Needed</span>
+      </div>
     </div>
   </div>
 
@@ -3420,6 +3572,8 @@
         })
         .catch(() => { });
 
+      checkIncomingReferral();
+      updateWalletUI();
       renderProducts();
       updateCartUI();
       renderMerchantOrders();
@@ -5859,24 +6013,209 @@
       localStorage.setItem('srr_cart', JSON.stringify(cart));
     }
 
+    // =========================================================================
+    // SRR GOLD WALLET & REFERRAL ENGINE (No Passwords / Zero-friction)
+    // =========================================================================
+    let isWalletApplied = false;
+    let appliedWalletDiscount = 0;
+    let activeReferralCode = null;
+    let activeReferralDiscount = 0;
+
+    function getWalletBalance() {
+      const bal = parseInt(localStorage.getItem('srr_wallet_balance') || '0', 10);
+      return isNaN(bal) ? 0 : Math.max(0, bal);
+    }
+
+    function addWalletCash(amount) {
+      if (!amount || amount <= 0) return;
+      const current = getWalletBalance();
+      const updated = current + amount;
+      localStorage.setItem('srr_wallet_balance', updated.toString());
+      updateWalletUI();
+    }
+
+    function deductWalletCash(amount) {
+      if (!amount || amount <= 0) return;
+      const current = getWalletBalance();
+      const updated = Math.max(0, current - amount);
+      localStorage.setItem('srr_wallet_balance', updated.toString());
+      updateWalletUI();
+    }
+
+    function toggleWalletRedemption(checked) {
+      isWalletApplied = checked;
+      updateCartUI();
+    }
+
+    function updateWalletUI() {
+      const bal = getWalletBalance();
+      const pill = document.getElementById('headerWalletPill');
+      const amtEl = document.getElementById('headerWalletAmount');
+      const cartBox = document.getElementById('cartWalletBox');
+      const dispEl = document.getElementById('walletBalanceDisplay');
+
+      if (pill && amtEl) {
+        if (bal > 0) {
+          pill.classList.remove('hidden');
+          pill.classList.add('inline-flex');
+          amtEl.textContent = `₹${bal}`;
+        } else {
+          pill.classList.add('hidden');
+          pill.classList.remove('inline-flex');
+        }
+      }
+
+      if (cartBox && dispEl) {
+        if (bal > 0) {
+          cartBox.classList.remove('hidden');
+          dispEl.textContent = `₹${bal}`;
+        } else {
+          cartBox.classList.add('hidden');
+          isWalletApplied = false;
+          const chk = document.getElementById('useWalletCheckbox');
+          if (chk) chk.checked = false;
+        }
+      }
+    }
+
+    function checkIncomingReferral() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const ref = urlParams.get('ref');
+        if (ref) {
+          const cleanRef = ref.trim().replace(/[^0-9a-zA-Z]/g, '').slice(0, 15);
+          if (cleanRef) {
+            activeReferralCode = cleanRef;
+            sessionStorage.setItem('srr_referral_code', cleanRef);
+            showReferralWelcomeBanner(cleanRef);
+          }
+        } else {
+          const savedRef = sessionStorage.getItem('srr_referral_code');
+          if (savedRef) {
+            activeReferralCode = savedRef;
+            showReferralWelcomeBanner(savedRef);
+          }
+        }
+      } catch (e) { }
+    }
+
+    function showReferralWelcomeBanner(code) {
+      const banner = document.getElementById('referralWelcomeBanner');
+      if (banner) {
+        banner.classList.remove('hidden');
+        const codeText = document.getElementById('referralBannerCodeText');
+        if (codeText) codeText.textContent = code;
+      }
+      updateCartUI();
+    }
+
+    function openReferModal() {
+      const modal = document.getElementById('referModal');
+      if (!modal) return;
+      const phoneInput = document.getElementById('referralPhoneInput');
+      const savedPhone = localStorage.getItem('srr_cust_phone') || '';
+      if (phoneInput && savedPhone) {
+        phoneInput.value = savedPhone;
+        updateReferralLinkPreview(savedPhone);
+      } else {
+        updateReferralLinkPreview('');
+      }
+      modal.classList.remove('hidden');
+      pushModalHistory('referModal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeReferModal(triggerHistory = true) {
+      hideModalDOM('referModal');
+      if (triggerHistory) popModalHistory('referModal');
+    }
+
+    function updateReferralLinkPreview(val) {
+      const preview = document.getElementById('referralLinkPreviewText');
+      if (!preview) return;
+      const clean = val.replace(/[^0-9]/g, '');
+      const code = clean.length >= 10 ? clean.slice(-10) : 'SRR100';
+      preview.textContent = `Link: https://srrbazaar.com/?ref=${code}`;
+    }
+
+    function copyReferralLink() {
+      const phoneInput = document.getElementById('referralPhoneInput');
+      const val = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
+      const code = val.length >= 10 ? val.slice(-10) : 'SRR100';
+      const link = `https://srrbazaar.com/?ref=${code}`;
+      navigator.clipboard.writeText(link).then(() => {
+        const btnText = document.getElementById('copyBtnText');
+        if (btnText) {
+          btnText.textContent = "Copied!";
+          setTimeout(() => { btnText.textContent = "Copy"; }, 2000);
+        }
+      }).catch(() => {
+        alert("Link: " + link);
+      });
+    }
+
+    function shareReferralLinkWhatsApp() {
+      const phoneInput = document.getElementById('referralPhoneInput');
+      const val = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
+      const code = val.length >= 10 ? val.slice(-10) : 'SRR100';
+      const link = `https://srrbazaar.com/?ref=${code}`;
+      const msg = encodeURIComponent(
+        `✨ Hey! Look at these exquisite handcrafted jewellery and pooja collections on *SRR Bazaar*! 🛍️👑\n\nUse my invite link to get an *INSTANT ₹100 DISCOUNT* on your order:\n👉 ${link}\n\nThey have authentic temple harams, pure kundan sets, brass diya stands, and free express delivery across India! 🪔`
+      );
+      window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
+    }
+
     function updateCartUI() {
       const count = cart.reduce((sum, item) => sum + item.qty, 0);
       document.getElementById('cartCountBadge').textContent = count;
       document.getElementById('cartItemCount').textContent = count;
 
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      let discount = 0;
+      let couponDiscount = 0;
       if (activeCoupon === 'WELCOME100' && subtotal >= 500) {
-        discount = 100;
+        couponDiscount = 100;
         document.getElementById('discountRow').style.display = 'flex';
-        document.getElementById('cartDiscount').textContent = `-₹${discount}`;
+        document.getElementById('cartDiscount').textContent = `-₹${couponDiscount}`;
       } else {
         document.getElementById('discountRow').style.display = 'none';
       }
 
-      const total = Math.max(0, subtotal - discount);
+      // Referral Discount: ₹100 OFF on orders >= 500
+      let referralDiscount = 0;
+      const refRow = document.getElementById('referralDiscountRow');
+      const refNotice = document.getElementById('cartReferralNotice');
+      if (activeReferralCode && subtotal >= 500) {
+        referralDiscount = 100;
+        activeReferralDiscount = 100;
+        if (refRow) refRow.style.display = 'flex';
+        if (refNotice) refNotice.classList.remove('hidden');
+      } else {
+        activeReferralDiscount = 0;
+        if (refRow) refRow.style.display = 'none';
+        if (refNotice) refNotice.classList.add('hidden');
+      }
+
+      // Wallet Discount
+      let walletDiscount = 0;
+      const walletBal = getWalletBalance();
+      const currentNet = Math.max(0, subtotal - couponDiscount - referralDiscount);
+      const wRow = document.getElementById('walletDiscountRow');
+      const wDis = document.getElementById('cartWalletDiscount');
+
+      if (isWalletApplied && walletBal > 0 && currentNet > 50) {
+        walletDiscount = Math.min(walletBal, currentNet - 50);
+        appliedWalletDiscount = walletDiscount;
+        if (wRow) wRow.style.display = 'flex';
+        if (wDis) wDis.textContent = `-₹${walletDiscount}`;
+      } else {
+        appliedWalletDiscount = 0;
+        if (wRow) wRow.style.display = 'none';
+      }
+
+      const total = Math.max(0, subtotal - couponDiscount - referralDiscount - walletDiscount);
       document.getElementById('cartSubtotal').textContent = `₹${subtotal}`;
       document.getElementById('cartTotal').textContent = `₹${total}`;
+      updateWalletUI();
 
       const list = document.getElementById('cartItemsList');
       if (cart.length === 0) {
@@ -5978,8 +6317,10 @@
       }
 
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      let discount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
-      const total = Math.max(0, subtotal - discount);
+      let couponDiscount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
+      let referralDiscount = (activeReferralCode && subtotal >= 500) ? 100 : 0;
+      let walletDiscount = (isWalletApplied && appliedWalletDiscount > 0) ? appliedWalletDiscount : 0;
+      const total = Math.max(0, subtotal - couponDiscount - referralDiscount - walletDiscount);
       currentCheckoutTotal = total;
 
       document.getElementById('checkoutTotalDisplay').textContent = `₹${total}`;
@@ -6397,8 +6738,10 @@
       }
 
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      let discount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
-      const total = Math.max(0, subtotal - discount);
+      let couponDiscount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
+      let referralDiscount = (activeReferralCode && subtotal >= 500) ? 100 : 0;
+      let walletDiscount = (isWalletApplied && appliedWalletDiscount > 0) ? appliedWalletDiscount : 0;
+      const total = Math.max(0, subtotal - couponDiscount - referralDiscount - walletDiscount);
 
       // STRICT VALIDATION: If paying via UPI QR or Partial COD, UTR/Ref number is mandatory!
       if (currentSelectedPayment === 'upi' || currentSelectedPayment === 'partial_cod') {
@@ -6505,6 +6848,28 @@
       const isPartial = (currentSelectedPayment === 'partial_cod');
       const isPrepaid = (currentSelectedPayment === 'upi' || currentSelectedPayment === 'razorpay');
 
+      // 5% Cashback on 100% Prepaid orders (UPI or Razorpay)
+      let cashbackEarned = 0;
+      if (currentSelectedPayment === 'upi' || currentSelectedPayment === 'razorpay') {
+        cashbackEarned = Math.round(total * 0.05);
+        if (cashbackEarned > 0) {
+          addWalletCash(cashbackEarned);
+        }
+      }
+
+      const usedWallet = appliedWalletDiscount;
+      if (usedWallet > 0) {
+        deductWalletCash(usedWallet);
+        appliedWalletDiscount = 0;
+        isWalletApplied = false;
+        const chk = document.getElementById('useWalletCheckbox');
+        if (chk) chk.checked = false;
+      }
+
+      if (phone) {
+        localStorage.setItem('srr_cust_phone', phone.replace(/[^0-9]/g, '').slice(-10));
+      }
+
       const newOrder = {
         orderId: orderId,
         date: new Date().toLocaleString(),
@@ -6515,6 +6880,9 @@
         advancePaid: advanceAmount,
         codBalance: codBalance,
         refNumber: refNumber,
+        walletCashbackEarned: cashbackEarned,
+        walletDiscountUsed: usedWallet,
+        referredBy: activeReferralCode || null,
         total: total,
         status: (isPartial || isPrepaid) ? 'Confirmed (Advance Received)' : 'Processing'
       };
@@ -6557,6 +6925,17 @@
 *Order Status:* ⏳ Awaiting Courier Verification`;
       }
 
+      let walletWaDetails = '';
+      if (usedWallet > 0) {
+        walletWaDetails += `\n*🪙 Wallet Cash Redeemed:* -₹${usedWallet}`;
+      }
+      if (activeReferralCode) {
+        walletWaDetails += `\n*🎁 Friend Referral Bonus:* -₹100 (Invited by: ${activeReferralCode})`;
+      }
+      if (cashbackEarned > 0) {
+        walletWaDetails += `\n*✨ 5% Prepaid Cashback Credited:* +₹${cashbackEarned} to SRR Gold Wallet!`;
+      }
+
       const waText = encodeURIComponent(
         `🛍️ *NEW ORDER PLACED ON SRR BAZAAR*
 ----------------------------------------
@@ -6570,7 +6949,7 @@ ${address}, ${city}, ${state} - ${pincode}
 ${itemLines}
 
 *Total Order Value:* ₹${total} (Free Express Shipping)
-${paymentWaDetails}
+${paymentWaDetails}${walletWaDetails}
 *Logistics Hub:* The Professional Couriers (Armoor Hub)
 *Instagram Store:* @${STORE_CONFIG.instagramHandle}
 ----------------------------------------
@@ -6595,6 +6974,16 @@ Please pack and dispatch! ✨`
           document.getElementById('successUtrNumber').textContent = refNumber || 'N/A';
         } else {
           partBox.classList.add('hidden');
+        }
+      }
+
+      const cbBox = document.getElementById('successCashbackBox');
+      if (cbBox) {
+        if (cashbackEarned > 0) {
+          cbBox.classList.remove('hidden');
+          document.getElementById('successCashbackAmt').textContent = `₹${cashbackEarned}`;
+        } else {
+          cbBox.classList.add('hidden');
         }
       }
 
