@@ -2516,7 +2516,7 @@
         </div>
 
         <!-- The Spinning Wheel (Mathematically Aligned Radial Slices & Labels) -->
-        <div id="wheelCanvasWrapper" class="w-60 h-60 rounded-full border-4 border-amber-400 shadow-xl overflow-hidden relative transition-transform duration-4000 ease-out" style="transform: rotate(0deg);">
+        <div id="wheelCanvasWrapper" class="w-60 h-60 rounded-full border-4 border-amber-400 shadow-xl overflow-hidden relative" style="transform: rotate(0deg); transition: transform 9.5s cubic-bezier(0.12, 0.95, 0.32, 1);">
           <svg viewBox="0 0 100 100" class="w-full h-full select-none">
             <!-- 6 Equal 60-degree Radial Slices (Center: 50,50, Radius: 50) -->
             <!-- Slice 0: ₹50 Cash (Center at 0 deg / 12 o'clock) -->
@@ -6610,16 +6610,15 @@
         btn.textContent = "Spinning...";
       }
 
-      // Slices: 0: 50 cash (rot 330), 1: Free Gift (rot 270), 2: 75 cash (rot 90), 3: 100 cash (rot 210), 4: VIP 8% (rot 30), 5: 150 Mega cash (rot 150)
-      // HIGH-RETENTION WEIGHTED PROBABILITIES:
-      // Over 80% concentrated in safe low-value / non-cash surprise physical gifts!
+      // Slices: 0: 50 cash (0 deg), 1: Free Gift (300 deg), 2: 75 cash (240 deg), 3: 100 cash (180 deg), 4: VIP 8% (120 deg), 5: 150 Mega cash (60 deg)
+      // AUTHENTIC 10-SECOND HIGH-SUSPENSE CARNIVAL WHEEL (12 Full Rotations = 4320 deg)
       const prizes = [
-        { id: 'cash50', name: "₹50 Wallet Cash", amount: 50, weight: 53, rot: 1800 + 0, type: 'cash' },
-        { id: 'gift', name: "🎁 Free Surprise Gift in Box", amount: 0, weight: 27, rot: 1800 + 300, type: 'gift', giftName: "Miniature Brass Pooja Bell / Kundan Bindi" },
-        { id: 'cash75', name: "₹75 Wallet Cash", amount: 75, weight: 12, rot: 1800 + 240, type: 'cash' },
-        { id: 'cash100', name: "₹100 Wallet Cash", amount: 100, weight: 4, rot: 1800 + 180, type: 'cash' },
-        { id: 'vip', name: "👑 VIP Gold Tier (8% Cashback)", amount: 0, weight: 2, rot: 1800 + 120, type: 'vip' },
-        { id: 'cash150', name: "🔥 ₹150 Mega Wallet Cash", amount: 150, weight: 2, rot: 1800 + 60, type: 'cash' }
+        { id: 'cash50', name: "₹50 Wallet Cash", amount: 50, weight: 53, rot: 4320 + 0, type: 'cash' },
+        { id: 'gift', name: "🎁 Free Surprise Gift in Box", amount: 0, weight: 27, rot: 4320 + 300, type: 'gift', giftName: "Miniature Brass Pooja Bell / Kundan Bindi" },
+        { id: 'cash75', name: "₹75 Wallet Cash", amount: 75, weight: 12, rot: 4320 + 240, type: 'cash' },
+        { id: 'cash100', name: "₹100 Wallet Cash", amount: 100, weight: 4, rot: 4320 + 180, type: 'cash' },
+        { id: 'vip', name: "👑 VIP Gold Tier (8% Cashback)", amount: 0, weight: 2, rot: 4320 + 120, type: 'vip' },
+        { id: 'cash150', name: "🔥 ₹150 Mega Wallet Cash", amount: 150, weight: 2, rot: 4320 + 60, type: 'cash' }
       ];
 
       const rand = Math.random() * 100;
@@ -6635,6 +6634,12 @@
       currentSpinWin = win;
       hasSharedSpin = false;
 
+      // Update button text with suspense
+      if (btn) {
+        btn.innerHTML = `<span class="inline-flex items-center gap-1.5"><svg class="animate-spin h-4 w-4 text-stone-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> 🎡 Spinning Lucky Wheel... (Suspense building!)</span>`;
+      }
+
+      // Execute 9.5-second spin
       wheel.style.transform = `rotate(${win.rot}deg)`;
 
       setTimeout(() => {
@@ -6669,9 +6674,9 @@
 
           if (win.type === 'cash') {
             if (desc) desc.textContent = `₹${win.amount} cash has been credited directly to your SRR Gold Wallet! Valid for 24 hours.`;
-            if (shareBtnText) shareBtnText.textContent = `Share on WhatsApp to Double to ₹${win.amount * 2} →`;
-            if (viralHeading) viralHeading.textContent = `⚡ Share on WhatsApp to Double to ₹${win.amount * 2}!`;
-            if (viralDesc) viralDesc.textContent = `Share this lucky spin with 1 friend or group to instantly double your cash to ₹${win.amount * 2}!`;
+            if (shareBtnText) shareBtnText.textContent = `Share Referral Link on WhatsApp to Double to ₹${win.amount * 2} →`;
+            if (viralHeading) viralHeading.textContent = `⚡ Share Referral Link to Double to ₹${win.amount * 2}!`;
+            if (viralDesc) viralDesc.textContent = `Invite friends on WhatsApp. As an active referrer, your cash doubles to ₹${win.amount * 2} today!`;
           } else if (win.type === 'gift') {
             if (desc) desc.textContent = `A special ${win.giftName} will be packed completely FREE with your order from Armoor Hub!`;
             if (shareBtnText) shareBtnText.textContent = `Share on WhatsApp to Add ₹50 Cash Too →`;
@@ -6692,7 +6697,7 @@
         }
 
         if (window.lucide) lucide.createIcons();
-      }, 4200);
+      }, 9800);
     }
 
     function shareSpinOnWhatsApp() {
@@ -6708,42 +6713,65 @@
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
       window.open(waUrl, '_blank');
 
-      // Award the Viral Bonus
+      const doubleBox = document.getElementById('viralDoubleBox');
+      if (doubleBox) {
+        // Step 1: Realistic Verification loader
+        doubleBox.innerHTML = `
+          <div class="p-3 bg-stone-900/90 border border-amber-500/40 rounded-xl space-y-2 text-center text-white animate-in fade-in">
+            <div class="flex items-center justify-center gap-2 text-xs font-bold text-amber-300">
+              <svg class="animate-spin h-3.5 w-3.5 text-amber-400" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+              <span>Verifying WhatsApp Invite Dispatch...</span>
+            </div>
+            <p class="text-[10px] text-stone-300 leading-tight">Connecting to referral server & linking your 2X festive reward...</p>
+          </div>
+        `;
+      }
+
+      // Step 2: Authenticated Referral Reward Activation (after 2.5 seconds)
       setTimeout(() => {
-        const doubleBox = document.getElementById('viralDoubleBox');
+        if (!doubleBox) return;
         if (currentSpinWin.type === 'cash') {
           const bonusAmount = currentSpinWin.amount; // Doubles the cash!
           addWalletCash(bonusAmount);
           const newTotal = currentSpinWin.amount * 2;
-          if (doubleBox) {
-            doubleBox.innerHTML = `
-              <div class="p-2.5 bg-emerald-500/20 border border-emerald-400 rounded-lg text-emerald-300 font-bold text-xs space-y-1">
-                <div>🎉 Awesome! Your reward has DOUBLED to <strong>₹${newTotal} Wallet Cash</strong>!</div>
-                <div class="text-[10px] text-emerald-200">Credited to your SRR Gold Wallet for your order today.</div>
+          doubleBox.innerHTML = `
+            <div class="p-3 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-400/60 rounded-xl space-y-1.5 text-center text-white animate-in zoom-in-95">
+              <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
+                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+                <span>🎉 Referral Link Active: Prize DOUBLED to ₹${newTotal}!</span>
               </div>
-            `;
-          }
+              <p class="text-[10px] text-emerald-100/90 leading-tight">
+                Thanks for sharing! Your <strong>₹${newTotal} Wallet Cash</strong> is active for today's order. When friends order via your link, you'll earn another ₹100 per friend!
+              </p>
+            </div>
+          `;
           const desc = document.getElementById('wheelResultDesc');
-          if (desc) desc.textContent = `₹${newTotal} cash (Doubled via WhatsApp Share!) is active in your Gold Wallet for 24 hours.`;
+          if (desc) desc.textContent = `₹${newTotal} cash (Doubled via Active Referral Link!) is active in your Gold Wallet for 24 hours.`;
           localStorage.setItem('srr_last_prize_name', `₹${newTotal} (Doubled) Cash`);
           initFestiveTimer();
         } else if (currentSpinWin.type === 'gift') {
           addWalletCash(50);
-          if (doubleBox) {
-            doubleBox.innerHTML = `
-              <div class="p-2.5 bg-emerald-500/20 border border-emerald-400 rounded-lg text-emerald-300 font-bold text-xs space-y-1">
-                <div>🎉 Bonus Claimed! <strong>₹50 Wallet Cash</strong> added to your Gold Wallet alongside your Free Gift!</div>
+          doubleBox.innerHTML = `
+            <div class="p-3 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-400/60 rounded-xl space-y-1.5 text-center text-white animate-in zoom-in-95">
+              <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
+                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+                <span>🎉 Referral Bonus: +₹50 Cash Added!</span>
               </div>
-            `;
-          }
+              <p class="text-[10px] text-emerald-100/90 leading-tight">
+                Your <strong>Free Gift</strong> + <strong>₹50 Wallet Cash</strong> are both locked in for your order today.
+              </p>
+            </div>
+          `;
         } else {
-          if (doubleBox) {
-            doubleBox.innerHTML = `
-              <div class="p-2.5 bg-emerald-500/20 border border-emerald-400 rounded-lg text-emerald-300 font-bold text-xs space-y-1">
-                <div>🎉 Bonus 2nd Spin Unlocked! Spin again below.</div>
+          doubleBox.innerHTML = `
+            <div class="p-3 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-400/60 rounded-xl space-y-1.5 text-center text-white animate-in zoom-in-95">
+              <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
+                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+                <span>🎉 Bonus 2nd Spin Unlocked!</span>
               </div>
-            `;
-          }
+              <p class="text-[10px] text-emerald-100/90 leading-tight">Spin again below to stack your festive rewards!</p>
+            </div>
+          `;
           const btn = document.getElementById('spinWheelBtn');
           if (btn) {
             btn.disabled = false;
@@ -6752,7 +6780,7 @@
           }
         }
         if (window.lucide) lucide.createIcons();
-      }, 800);
+      }, 2500);
     }
 
     function initFestiveTimer() {

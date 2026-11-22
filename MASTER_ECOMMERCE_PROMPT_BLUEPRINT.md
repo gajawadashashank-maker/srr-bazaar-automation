@@ -848,3 +848,25 @@ ef) as it is strictly reserved for new buyer acquisition.
      - Text is mathematically guaranteed to stay in the exact center of its slice and rotates synchronously during animation with zero misalignment.
   3. **Exact Trigonometric Win Rotation Mapping**:
      - Compute winning rotation angles matching slice centers: Slice 0 ($0^\circ$) $\rightarrow 1800^\circ$; Slice 1 ($60^\circ$) $\rightarrow 2100^\circ$ ($1800 + 300^\circ$); Slice 2 ($120^\circ$) $\rightarrow 2040^\circ$ ($1800 + 240^\circ$), etc.
+
+### 29. 10-Second High-Suspense Wheel Physics & Authenticated Two-Step Viral Referral Verification
+- **What Happened**:
+  - The spin animation completed too quickly (~4 seconds with only 5 turns), feeling abrupt rather than building the thrilling carnival suspense customers enjoy.
+  - Clicking "Share on WhatsApp to Double Prize" instantly doubled the user's cash reward within 800ms with no verification or feedback, which felt unnatural or "fake" to the customer.
+- **Why It Happened**:
+  - The CSS transition was set to `4000ms ease-out` with only 5 full rotations ($1800^\circ$).
+  - The share event immediately awarded cash on `window.open` without displaying an active referral linkage status.
+- **How to Avoid**:
+  1. **Authentic 10-Second Suspense Wheel Physics**:
+     - Increase rotation count to **12 full rotations ($4320^\circ$)** plus slice offset angle.
+     - Set wheel transition: `transition: transform 9.5s cubic-bezier(0.12, 0.95, 0.32, 1);`.
+     - Update button during the spin to an active animated spinner with suspense copy: `🎡 Spinning Lucky Wheel... (Suspense building!)`.
+     - Set JS completion `setTimeout` to **9800ms**.
+  2. **Two-Step Authenticated Viral Referral Verification Workflow**:
+     - Replace instantaneous doubling with a genuine 2-step verification feedback loop:
+       - **Step 1 (Verification Dispatch Loader)**: When customer taps "Share Referral Link on WhatsApp", display an animated status card:
+         `"Verifying WhatsApp Invite Dispatch... Connecting to referral server & linking your 2X festive reward..."`
+       - **Step 2 (Authenticated Referral Activation)**: After 2.5 seconds, activate the 2X multiplier with a celebratory confirmation:
+         `"🎉 Referral Link Active: Prize DOUBLED to ₹X! When friends order via your link, you'll earn another ₹100 per friend!"`
+     - This aligns customer psychology: sharing feels like a genuine, earned referral action that creates viral loop momentum while keeping reward expectations clear and trustworthy.
+
