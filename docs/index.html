@@ -2442,18 +2442,26 @@
 
       <!-- Mobile Number to Generate Link -->
       <div class="space-y-2 text-left pt-1">
-        <label class="block text-xs font-bold text-stone-700">Your WhatsApp Mobile Number</label>
+        <div class="flex items-center justify-between">
+          <label class="block text-xs font-bold text-stone-800">Your WhatsApp Mobile Number</label>
+          <span class="text-[10px] text-stone-500">Links your ₹100 rewards</span>
+        </div>
         <div class="flex gap-2">
-          <input type="tel" id="referralPhoneInput" maxlength="10" placeholder="e.g. 9849012345"
+          <input type="tel" id="referralPhoneInput" maxlength="10" placeholder="Enter your 10-digit number"
             oninput="updateReferralLinkPreview(this.value); syncWalletByPhone(this.value);"
-            class="flex-1 px-3 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:border-royal-500 font-mono">
+            class="flex-1 px-3 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:outline-none focus:border-royal-500 font-mono font-bold text-stone-900">
           <button type="button" onclick="copyReferralLink()"
             class="px-3 py-2 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-xl text-xs font-bold text-stone-700 flex items-center gap-1 transition">
             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
             <span id="copyBtnText">Copy</span>
           </button>
         </div>
-        <p class="text-[10px] text-stone-500 truncate font-mono" id="referralLinkPreviewText">Link: https://srrbazaar.com/?ref=SRR100</p>
+        <div id="referralPhoneStatus" class="text-[11px] font-semibold text-amber-800">
+          👉 Type your 10-digit number above to create your personal link
+        </div>
+        <p class="text-[10px] text-stone-500 truncate font-mono bg-stone-50 p-2 rounded-lg border border-stone-200" id="referralLinkPreviewText">
+          Link: https://srrbazaar.com/?ref=YOUR_NUMBER
+        </p>
       </div>
 
       <!-- 1-Tap WhatsApp Share Button -->
@@ -6200,16 +6208,40 @@
 
     function updateReferralLinkPreview(val) {
       const preview = document.getElementById('referralLinkPreviewText');
-      if (!preview) return;
-      const clean = val.replace(/[^0-9]/g, '');
-      const code = clean.length >= 10 ? clean.slice(-10) : 'SRR100';
-      preview.textContent = `Link: https://srrbazaar.com/?ref=${code}`;
+      const status = document.getElementById('referralPhoneStatus');
+      const clean = (val || '').replace(/[^0-9]/g, '');
+      const code = clean.length >= 10 ? clean.slice(-10) : '';
+
+      if (preview) {
+        if (code) {
+          preview.innerHTML = `<strong>Your Link:</strong> <span class="text-royal-600 font-bold">https://srrbazaar.com/?ref=${code}</span>`;
+        } else {
+          preview.textContent = `Link: https://srrbazaar.com/?ref=YOUR_NUMBER`;
+        }
+      }
+
+      if (status) {
+        if (code.length === 10) {
+          status.innerHTML = `<span class="text-emerald-700 font-bold flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Linked to ${code} • ₹100 from every friend's order goes to your wallet!</span>`;
+          if (window.lucide) lucide.createIcons();
+        } else {
+          status.innerHTML = `<span class="text-amber-800 font-medium">👉 Type your 10-digit number above to create your personal link</span>`;
+        }
+      }
     }
 
     function copyReferralLink() {
       const phoneInput = document.getElementById('referralPhoneInput');
       const val = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
-      const code = val.length >= 10 ? val.slice(-10) : 'SRR100';
+      if (val.length < 10) {
+        if (phoneInput) {
+          phoneInput.focus();
+          phoneInput.classList.add('border-amber-500', 'ring-2', 'ring-amber-300');
+        }
+        alert("Please enter your 10-digit WhatsApp number first so your referral link is personalized to you!");
+        return;
+      }
+      const code = val.slice(-10);
       const link = `https://srrbazaar.com/?ref=${code}`;
       navigator.clipboard.writeText(link).then(() => {
         const btnText = document.getElementById('copyBtnText');
@@ -6225,10 +6257,18 @@
     function shareReferralLinkWhatsApp() {
       const phoneInput = document.getElementById('referralPhoneInput');
       const val = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
-      const code = val.length >= 10 ? val.slice(-10) : 'SRR100';
+      if (val.length < 10) {
+        if (phoneInput) {
+          phoneInput.focus();
+          phoneInput.classList.add('border-amber-500', 'ring-2', 'ring-amber-300');
+        }
+        alert("Please enter your 10-digit WhatsApp number above so your referral earnings are credited to YOU!");
+        return;
+      }
+      const code = val.slice(-10);
       const link = `https://srrbazaar.com/?ref=${code}`;
       const msg = encodeURIComponent(
-        `✨ Hey! Look at these exquisite collections on *SRR Bazaar*! 🛍️👑\n\nUse my invite link to get an *INSTANT ₹100 DISCOUNT* on your order:\n👉 ${link}\n\nThey have authentic temple harams & pure kundan sets, brass diya stands, biodegradable leaf buffet plates for pooja & catering, and free express delivery across India! 🪔🍃`
+        `✨ Hey! Look at these exquisite collections on *SRR Bazaar*! 🛍️👑\n\nUse my invite link to get an *INSTANT ₹100 DISCOUNT* on your order:\n👉 ${link}\n\nThey have authentic temple harams & pure kundan sets, brass diya stands, biodegradable leaf buffet plates for pooja & catering, and free express delivery across India via Armoor Professional Courier! 🪔🍃`
       );
       window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
     }
