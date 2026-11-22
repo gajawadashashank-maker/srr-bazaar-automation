@@ -459,8 +459,7 @@
           <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-3 top-2.5"></i>
           <div class="absolute right-3 top-1.5 flex items-center gap-1.5">
             <button id="searchClearBtnDesktop" onclick="clearSearch()"
-              class="hidden text-stone-400 hover:text-stone-700 transition cursor-pointer"
-              title="Clear search">
+              class="hidden text-stone-400 hover:text-stone-700 transition cursor-pointer" title="Clear search">
               <i data-lucide="x" class="w-4 h-4"></i>
             </button>
             <button id="voiceSearchBtnDesktop" onclick="startVoiceSearch('desktop')"
@@ -530,8 +529,7 @@
           <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5"></i>
           <div class="absolute right-2.5 top-1.5 flex items-center gap-1">
             <button id="searchClearBtnMobile" onclick="clearSearch()"
-              class="hidden text-stone-400 hover:text-stone-700 transition cursor-pointer"
-              title="Clear search">
+              class="hidden text-stone-400 hover:text-stone-700 transition cursor-pointer" title="Clear search">
               <i data-lucide="x" class="w-4 h-4"></i>
             </button>
             <button id="voiceSearchBtnMobile" onclick="startVoiceSearch('mobile')"
@@ -1550,7 +1548,8 @@
               essentials, pure cotton sarees, or buffet disposables in English or Telugu!
             </p>
             <div class="pt-2 border-t border-stone-100 flex flex-wrap gap-1.5">
-              <span class="text-[10px] text-stone-400 w-full font-bold uppercase tracking-wider">Try asking or tap an occasion:</span>
+              <span class="text-[10px] text-stone-400 w-full font-bold uppercase tracking-wider">Try asking or tap an
+                occasion:</span>
               <button onclick="sendAiQuickPrompt('Hosting Satyanarayana Pooja for 30 people combo kit')"
                 class="text-[11px] px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-full font-medium transition cursor-pointer">🪔
                 Satyanarayana Pooja (30 Guests)</button>
@@ -1637,7 +1636,8 @@
   </div>
 
   <!-- Root Hidden Input for Visual Search (Snap & Shop) -->
-  <input type="file" id="visualSearchFileInput" accept="image/*" class="hidden" onchange="handleVisualSearchFileSelected(event)">
+  <input type="file" id="visualSearchFileInput" accept="image/*" class="hidden"
+    onchange="handleVisualSearchFileSelected(event)">
 
   <!-- Global Floating Toast Notification Container -->
   <div id="globalFloatingToast"
@@ -2418,9 +2418,6 @@
     // =========================================================================
     const srrModalHistory = [];
     let checkoutOpenedFrom = null; // remembers whether checkout was opened from 'cartDrawer' or 'quickViewModal'
-    const BACKEND_API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-      ? ''
-      : 'https://squander-gristle-panhandle.ngrok-free.dev';
 
     // Global Toast Notification Helper
     let globalToastTimer = null;
@@ -2565,665 +2562,679 @@
 
     // Initial Default Catalogue (extracted from Sujatha Collections WhatsApp feed & Instagram)
     const DEFAULT_PRODUCTS = [
-      {
-        "id": 286241428,
-        "title": "Handcrafted Designer Jewellery Collection",
-        "category": "necklace",
-        "price": 520,
-        "originalPrice": 780,
-        "tag": "New Arrival",
-        "image": "images/catalog/56bb18119e8d45f4a84b6fb01cb5d214.jpg",
-        "description": "Exclusive Handcrafted Designer Jewellery Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_286241428.mp4"
-      },
-      {
-        "id": 928103031,
-        "title": "Biodegradable Leaf Buffet Plates (Pack of 20)",
-        "category": "disposables",
-        "price": 200,
-        "originalPrice": 300,
-        "tag": "Eco-Friendly",
-        "image": "images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg",
-        "description": "100% natural and eco-friendly biodegradable leaf buffet plates (Pack of 20). Chemical-free, sturdy, and hygienic disposable dining plates perfect for pooja, weddings, catering, and festive gatherings. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_928103031.mp4"
-      },
-      {
-        "id": 338044272,
-        "title": "Edu Kondala Nomu (Sankranti Special)",
-        "category": "decor",
-        "price": 550,
-        "originalPrice": 825,
-        "tag": "New Arrival",
-        "image": "images/catalog/70000aa227c843088c6c564e4251b225.jpg",
-        "description": "Traditional Edu Kondala Nomu festive set for Sankranti pooja. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_338044272.mp4"
-      },
-      {
-        "id": 592133224,
-        "title": "Edu Kondala Nomu (Sankranti Special)",
-        "category": "decor",
-        "price": 550,
-        "originalPrice": 825,
-        "tag": "New Arrival",
-        "image": "images/catalog/0bb6251c30a74343942e815fba2c1f79.jpg",
-        "description": "Traditional Edu Kondala Nomu festive set for Sankranti pooja. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_592133224.mp4"
-      },
-      {
-        "id": 659123465,
-        "title": "1190 free ship",
-        "category": "necklace",
-        "price": 999,
-        "originalPrice": 1498,
-        "tag": "New Arrival",
-        "image": "images/catalog/2cb969f5eb3f42f0a8fbb76abdad1094.jpg",
-        "description": "Exclusive 1190 free ship with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_659123465.mp4"
-      },
-      {
-        "id": 889136348,
-        "title": "plus shipping",
-        "category": "necklace",
-        "price": 2999,
-        "originalPrice": 4498,
-        "tag": "New Arrival",
-        "image": "images/catalog/a9279d6b7912450692272550ceec5600.jpg",
-        "description": "Exclusive plus shipping with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_889136348.mp4"
-      },
-      {
-        "id": 823822680,
-        "title": "Pure AD and Jadau Kundhan Stone",
-        "category": "necklace",
-        "price": 999,
-        "originalPrice": 1498,
-        "tag": "New Arrival",
-        "image": "images/catalog/0e895d5a9c50420899f9126cc34a63ef.jpg",
-        "description": "Exclusive Pure AD and Jadau Kundhan Stone with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_823822680.mp4"
-      },
-      {
-        "id": 811552810,
-        "title": "Jadau Kundan Stone",
-        "category": "necklace",
-        "price": 2888,
-        "originalPrice": 4332,
-        "tag": "New Arrival",
-        "image": "images/catalog/9a21259c01ff42eabedddfe6be3ad2df.jpg",
-        "description": "Exclusive Jadau Kundan Stone with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_811552810.mp4"
-      },
-      {
-        "id": 703481457,
-        "title": "33 Diya Stand for Kartheeka Masam",
-        "category": "decor",
-        "price": 1300,
-        "originalPrice": 1950,
-        "tag": "New Arrival",
-        "image": "images/catalog/14e2a340dc204f72913a3a89d9eddeb1.jpg",
-        "description": "33 diyas can be lighten 1300 rs",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_703481457.mp4"
-      },
-      {
-        "id": 544617468,
-        "title": "33 Diya Stand for Kartheeka Masam",
-        "category": "decor",
-        "price": 1300,
-        "originalPrice": 1950,
-        "tag": "New Arrival",
-        "image": "images/catalog/7af02091243f498391609884d5aa1315.jpg",
-        "description": "33 diyas can be lighten",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_544617468.mp4"
-      },
-      {
-        "id": 16088680,
-        "title": "8 Inch Lotus Plate with 5 Bowls",
-        "category": "decor",
-        "price": 4500,
-        "originalPrice": 6750,
-        "tag": "New Arrival",
-        "image": "images/catalog/30dc470692d04fdf9b1dda616fe4932d.jpg",
-        "description": "5 bowls .",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_16088680.mp4"
-      },
-      {
-        "id": 229307292,
-        "title": "Pooja set",
-        "category": "decor",
-        "price": 2399,
-        "originalPrice": 3598,
-        "tag": "New Arrival",
-        "image": "images/catalog/25a44f15b17c4fd3a0d679f1c117afc8.jpg",
-        "description": "8 inches tray with Products .",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_229307292.mp4"
-      },
-      {
-        "id": 972028016,
-        "title": "Pure Semi Jadau Kundhan earrings",
-        "category": "earrings",
-        "price": 699,
-        "originalPrice": 1048,
-        "tag": "New Arrival",
-        "image": "images/catalog/e540ca0be09d4bd3874c734185ca3bad.jpg",
-        "description": "Exclusive Pure Semi Jadau Kundhan earrings with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_972028016.mp4"
-      },
-      {
-        "id": 103076108,
-        "title": "fs",
-        "category": "necklace",
-        "price": 620,
-        "originalPrice": 930,
-        "tag": "New Arrival",
-        "image": "images/catalog/dd6011ad4f4c4c64aa9c72b9aa5ff668.jpg",
-        "description": "Exclusive fs with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": "videos/reel_103076108.mp4"
-      },
-      {
-        "id": 773703568,
-        "title": "Bridal Kundan Designer Jewellery Set",
-        "category": "necklace",
-        "price": 999,
-        "originalPrice": 1498,
-        "tag": "New Arrival",
-        "image": "images/catalog/designer_set_999.jpg",
-        "description": "Handcrafted Bridal Kundan Designer Jewellery Set. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 255146495,
-        "title": "Premium Black Diamonds Tulips Multi Layered Mala",
-        "category": "mangalsutra",
-        "price": 777,
-        "originalPrice": 1165,
-        "tag": "New Arrival",
-        "image": "images/catalog/tulips_mala_777.jpg",
-        "description": "Exclusive Premium Black Diamonds Tulips Multi Layered Mala with high finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 829002473,
-        "title": "Pure Jadau Kundhan Item",
-        "category": "necklace",
-        "price": 2099,
-        "originalPrice": 3148,
-        "tag": "New Arrival",
-        "image": "images/catalog/5218caf3f048.jpg",
-        "description": "Offer",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 869632963,
-        "title": "/+ freeshipping",
-        "category": "necklace",
-        "price": 999,
-        "originalPrice": 1498,
-        "tag": "New Arrival",
-        "image": "images/catalog/8c2d57f8180f.jpg",
-        "description": "Exclusive /+ freeshipping with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 128844229,
-        "title": "Pure Khadhi Cotton",
-        "category": "saree",
-        "price": 650,
-        "originalPrice": 975,
-        "tag": "New Arrival",
-        "image": "images/catalog/b0e4371730ae.jpg",
-        "description": "Exclusive Pure Khadhi Cotton with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 959992377,
-        "title": "Pure Khadhi Cotton",
-        "category": "saree",
-        "price": 650,
-        "originalPrice": 975,
-        "tag": "New Arrival",
-        "image": "images/catalog/def5235cd43b.jpg",
-        "description": "Exclusive Pure Khadhi Cotton with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 604740379,
-        "title": "Exclusive Handcrafted Collection",
-        "category": "necklace",
-        "price": 699,
-        "originalPrice": 1048,
-        "tag": "New Arrival",
-        "image": "images/catalog/efb5e9ddda8d.jpg",
-        "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 657117075,
-        "title": "Today special offer",
-        "category": "necklace",
-        "price": 1555,
-        "originalPrice": 2332,
-        "tag": "New Arrival",
-        "image": "images/catalog/8831ae91363d.jpg",
-        "description": "Exclusive Today special offer with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 183685021,
-        "title": "Exclusive Handcrafted Collection",
-        "category": "necklace",
-        "price": 2200,
-        "originalPrice": 3300,
-        "tag": "New Arrival",
-        "image": "images/catalog/ccd9f2a6b95b.jpg",
-        "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 189373322,
-        "title": "Lord venkateswara locket with short chain",
-        "category": "mangalsutra",
-        "price": 799,
-        "originalPrice": 1198,
-        "tag": "New Arrival",
-        "image": "images/catalog/bafed3a378d8.jpg",
-        "description": "Offer",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 831671068,
-        "title": "Premium pure jadav kundhan",
-        "category": "necklace",
-        "price": 999,
-        "originalPrice": 1498,
-        "tag": "New Arrival",
-        "image": "images/catalog/918bdefd20f1.jpg",
-        "description": "Heavy quality...",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 247403588,
-        "title": "6.5 inches swan tray",
-        "category": "decor",
-        "price": 999,
-        "originalPrice": 1498,
-        "tag": "New Arrival",
-        "image": "images/catalog/f99a8f9086d4.jpg",
-        "description": "Excellent quality Book your orders.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 612760543,
-        "title": "Exclusive Handcrafted Collection",
-        "category": "necklace",
-        "price": 799,
-        "originalPrice": 1198,
-        "tag": "New Arrival",
-        "image": "images/catalog/87a1d90c6e5c.jpg",
-        "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 265629242,
-        "title": "Single",
-        "category": "necklace",
-        "price": 550,
-        "originalPrice": 825,
-        "tag": "New Arrival",
-        "image": "images/catalog/a3ff884a7b2a.jpg",
-        "description": "Exclusive Single with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 200245808,
-        "title": "Exclusive Handcrafted Collection",
-        "category": "necklace",
-        "price": 999,
-        "originalPrice": 1498,
-        "tag": "New Arrival",
-        "image": "images/catalog/1cd41b563a84.jpg",
-        "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 75640739,
-        "title": "fs",
-        "category": "necklace",
-        "price": 550,
-        "originalPrice": 825,
-        "tag": "New Arrival",
-        "image": "images/catalog/7d69a95dcfee.jpg",
-        "description": "Exclusive fs with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 749296149,
-        "title": "Sanku chara diyas",
-        "category": "decor",
-        "price": 3200,
-        "originalPrice": 4800,
-        "tag": "New Arrival",
-        "image": "images/catalog/5c8833e6c0cb.jpg",
-        "description": ".",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 64841853,
-        "title": "Pure Cz Stone Ear rings with Screw Backs",
-        "category": "earrings",
-        "price": 499,
-        "originalPrice": 748,
-        "tag": "New Arrival",
-        "image": "images/catalog/12fc897ca8bc.jpg",
-        "description": "Offer DM to order @8185012453",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 398961370,
-        "title": "Exclusive Handcrafted Collection",
-        "category": "necklace",
-        "price": 380,
-        "originalPrice": 570,
-        "tag": "New Arrival",
-        "image": "images/catalog/0d7ad213f457.jpg",
-        "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 602963368,
-        "title": "fs",
-        "category": "necklace",
-        "price": 450,
-        "originalPrice": 675,
-        "tag": "New Arrival",
-        "image": "images/catalog/051a1de4a7f5.jpg",
-        "description": "Exclusive fs with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 266442417,
-        "title": "108 Pieces Ashtothara Shatanamavali Set",
-        "category": "decor",
-        "price": 499,
-        "originalPrice": 799,
-        "tag": "New Arrival",
-        "image": "images/catalog/6ee84825ff25.jpg",
-        "description": "used for ashtotara shatanamavali price 799 2 sets 1 set 499",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 674255422,
-        "title": "10 Inch Designer Tray",
-        "category": "decor",
-        "price": 1900,
-        "originalPrice": 2850,
-        "tag": "New Arrival",
-        "image": "images/catalog/d7b8e2b8abda.jpg",
-        "description": "1900 rs.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 115033516,
-        "title": "Sanku chara diyas",
-        "category": "decor",
-        "price": 3200,
-        "originalPrice": 4800,
-        "tag": "New Arrival",
-        "image": "images/catalog/564e5776a7b5.jpg",
-        "description": ".",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 733581582,
-        "title": "Premium Pure Jadav Kundhan Nec Set With 2 Changeable lockets",
-        "category": "mangalsutra",
-        "price": 1999,
-        "originalPrice": 2998,
-        "tag": "New Arrival",
-        "image": "images/catalog/6ed7889a4698.jpg",
-        "description": "Full stones and jadau kundhan neck set",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 987154951,
-        "title": "Pure Khadhi Cotton",
-        "category": "saree",
-        "price": 650,
-        "originalPrice": 975,
-        "tag": "New Arrival",
-        "image": "images/catalog/681087e46564.jpg",
-        "description": "Exclusive Pure Khadhi Cotton with premium finish. Free express shipping across India.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 1,
-        "video": null
-      },
-      {
-        "id": 1,
-        "title": "Premium Pure Jadau Kundan Necklace Set",
-        "category": "necklace",
-        "price": 999,
-        "originalPrice": 1899,
-        "tag": "Bestseller",
-        "image": "images/jadau_kundan_necklace.jpg",
-        "description": "Heavy bridal quality Jadau Kundan necklace set with intricate stone work, matching earrings, and adjustable dori. Guaranteed non-allergic micro-gold plating.",
-        "inStock": true,
-        "rating": 4.9,
-        "reviewsCount": 142,
-        "video": null
-      },
-      {
-        "id": 2,
-        "title": "Royal 6.5\" Swan Decorative Tray & Organizer",
-        "category": "decor",
-        "price": 999,
-        "originalPrice": 1599,
-        "tag": "Home Decor",
-        "image": "images/swan_tray.jpg",
-        "description": "6.5 inches exquisite metallic swan decorative tray. Excellent quality for pooja thali, vanity jewellery organizer, and premium festive gifting.",
-        "inStock": true,
-        "rating": 4.8,
-        "reviewsCount": 88,
-        "video": null
-      },
-      {
-        "id": 3,
-        "title": "Handcrafted Floral Choker Set with Pearls",
-        "category": "necklace",
-        "price": 799,
-        "originalPrice": 1499,
-        "tag": "Free Shipping",
-        "image": "images/floral_choker.jpg",
-        "description": "Traditional floral choker necklace with freshwater-look cluster pearls. Lightweight yet royal look, perfect for sarees and lehengas.",
-        "inStock": true,
-        "rating": 4.9,
-        "reviewsCount": 65,
-        "video": null
-      },
-      {
-        "id": 4,
-        "title": "3-Lines Long Traditional Black Beads Mangalsutra",
-        "category": "mangalsutra",
-        "price": 699,
-        "originalPrice": 1299,
-        "tag": "Daily Wear",
-        "image": "images/black_beads_mangalsutra.jpg",
-        "description": "Authentic 3-lines long black beads chain with gold-plated spacers and durable finish. Ideal for everyday elegance and festive celebrations.",
-        "inStock": true,
-        "rating": 4.9,
-        "reviewsCount": 110,
-        "video": null
-      },
-      {
-        "id": 5,
-        "title": "Single CZ Solitaire Bridal Studs / Earrings",
-        "category": "earrings",
-        "price": 550,
-        "originalPrice": 899,
-        "tag": "Free Shipping",
-        "image": "images/cz_bridal_earrings.jpg",
-        "description": "High sparkle round American Diamond / CZ stone earrings with secure push-back lock. Anti-tarnish micro coating for long-lasting brilliance.",
-        "inStock": true,
-        "rating": 4.7,
-        "reviewsCount": 52,
-        "video": null
-      },
-      {
-        "id": 6,
-        "title": "Royal Kundan & Pearl Haar / Haram Set",
-        "category": "necklace",
-        "price": 999,
-        "originalPrice": 1999,
-        "tag": "Festive Special",
-        "image": "images/kundan_pearl_haar.jpg",
-        "description": "Royal wedding haar set studded with uncut Kundan and pearl drops. Comes with heavy matching designer jhumkas.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 94,
-        "video": null
-      },
-      {
-        "id": 7,
-        "title": "Classic Micro-Gold Daily Wear Bangles",
-        "category": "earrings",
-        "price": 550,
-        "originalPrice": 999,
-        "tag": "Value Pick",
-        "image": "images/gold_finish_bangles.jpg",
-        "description": "Premium matte-gold finish traditional bangles with smooth inner comfort fit. Suitable for everyday wear and weddings.",
-        "inStock": true,
-        "rating": 4.8,
-        "reviewsCount": 43,
-        "video": null
-      },
-      {
-        "id": 8,
-        "title": "Royal Antique Gold Temple Jewellery Necklace",
-        "category": "necklace",
-        "price": 1999,
-        "originalPrice": 3499,
-        "tag": "Luxury Collection",
-        "image": "images/temple_necklace.jpg",
-        "description": "Masterpiece South Indian antique temple necklace set featuring traditional handcrafted motifs and ruby-colored stone embellishments.",
-        "inStock": true,
-        "rating": 5.0,
-        "reviewsCount": 178,
-        "video": null
-      }
-    ];
+  {
+    "id": 841979572,
+    "title": "Pure Diamond Replica",
+    "category": "necklace",
+    "price": 699,
+    "originalPrice": 1048,
+    "tag": "New Arrival",
+    "image": "images/catalog/6b8805468f8afbfb20a0821d.jpg",
+    "video": "videos/reel_841979572.mp4",
+    "description": "American diamond (AD Stone) NeckSet With Beautiful Ear rings",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 286241428,
+    "title": "Handcrafted Designer Jewellery Collection",
+    "category": "necklace",
+    "price": 520,
+    "originalPrice": 780,
+    "tag": "New Arrival",
+    "image": "images/catalog/56bb18119e8d45f4a84b6fb01cb5d214.jpg",
+    "description": "Exclusive Handcrafted Designer Jewellery Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_286241428.mp4"
+  },
+  {
+    "id": 928103031,
+    "title": "Biodegradable Leaf Buffet Plates (Pack of 20)",
+    "category": "disposables",
+    "price": 200,
+    "originalPrice": 300,
+    "tag": "Eco-Friendly",
+    "image": "images/catalog/1f7cff44636e464eb866d1fdda1e6af3.jpg",
+    "description": "100% natural and eco-friendly biodegradable leaf buffet plates (Pack of 20). Chemical-free, sturdy, and hygienic disposable dining plates perfect for pooja, weddings, catering, and festive gatherings. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_928103031.mp4"
+  },
+  {
+    "id": 338044272,
+    "title": "Edu Kondala Nomu (Sankranti Special)",
+    "category": "decor",
+    "price": 550,
+    "originalPrice": 825,
+    "tag": "New Arrival",
+    "image": "images/catalog/70000aa227c843088c6c564e4251b225.jpg",
+    "description": "Traditional Edu Kondala Nomu festive set for Sankranti pooja. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_338044272.mp4"
+  },
+  {
+    "id": 592133224,
+    "title": "Edu Kondala Nomu (Sankranti Special)",
+    "category": "decor",
+    "price": 550,
+    "originalPrice": 825,
+    "tag": "New Arrival",
+    "image": "images/catalog/0bb6251c30a74343942e815fba2c1f79.jpg",
+    "description": "Traditional Edu Kondala Nomu festive set for Sankranti pooja. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_592133224.mp4"
+  },
+  {
+    "id": 659123465,
+    "title": "1190 free ship",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/2cb969f5eb3f42f0a8fbb76abdad1094.jpg",
+    "description": "Exclusive 1190 free ship with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_659123465.mp4"
+  },
+  {
+    "id": 889136348,
+    "title": "plus shipping",
+    "category": "necklace",
+    "price": 2999,
+    "originalPrice": 4498,
+    "tag": "New Arrival",
+    "image": "images/catalog/a9279d6b7912450692272550ceec5600.jpg",
+    "description": "Exclusive plus shipping with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_889136348.mp4"
+  },
+  {
+    "id": 823822680,
+    "title": "Pure AD and Jadau Kundhan Stone",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/0e895d5a9c50420899f9126cc34a63ef.jpg",
+    "description": "Exclusive Pure AD and Jadau Kundhan Stone with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_823822680.mp4"
+  },
+  {
+    "id": 811552810,
+    "title": "Jadau Kundan Stone",
+    "category": "necklace",
+    "price": 2888,
+    "originalPrice": 4332,
+    "tag": "New Arrival",
+    "image": "images/catalog/9a21259c01ff42eabedddfe6be3ad2df.jpg",
+    "description": "Exclusive Jadau Kundan Stone with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_811552810.mp4"
+  },
+  {
+    "id": 703481457,
+    "title": "33 Diya Stand for Kartheeka Masam",
+    "category": "decor",
+    "price": 1300,
+    "originalPrice": 1950,
+    "tag": "New Arrival",
+    "image": "images/catalog/14e2a340dc204f72913a3a89d9eddeb1.jpg",
+    "description": "33 diyas can be lighten 1300 rs",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_703481457.mp4"
+  },
+  {
+    "id": 544617468,
+    "title": "33 Diya Stand for Kartheeka Masam",
+    "category": "decor",
+    "price": 1300,
+    "originalPrice": 1950,
+    "tag": "New Arrival",
+    "image": "images/catalog/7af02091243f498391609884d5aa1315.jpg",
+    "description": "33 diyas can be lighten",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_544617468.mp4"
+  },
+  {
+    "id": 16088680,
+    "title": "8 Inch Lotus Plate with 5 Bowls",
+    "category": "decor",
+    "price": 4500,
+    "originalPrice": 6750,
+    "tag": "New Arrival",
+    "image": "images/catalog/30dc470692d04fdf9b1dda616fe4932d.jpg",
+    "description": "5 bowls .",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_16088680.mp4"
+  },
+  {
+    "id": 229307292,
+    "title": "Pooja set",
+    "category": "decor",
+    "price": 2399,
+    "originalPrice": 3598,
+    "tag": "New Arrival",
+    "image": "images/catalog/25a44f15b17c4fd3a0d679f1c117afc8.jpg",
+    "description": "8 inches tray with Products .",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_229307292.mp4"
+  },
+  {
+    "id": 972028016,
+    "title": "Pure Semi Jadau Kundhan earrings",
+    "category": "earrings",
+    "price": 699,
+    "originalPrice": 1048,
+    "tag": "New Arrival",
+    "image": "images/catalog/e540ca0be09d4bd3874c734185ca3bad.jpg",
+    "description": "Exclusive Pure Semi Jadau Kundhan earrings with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_972028016.mp4"
+  },
+  {
+    "id": 103076108,
+    "title": "fs",
+    "category": "necklace",
+    "price": 620,
+    "originalPrice": 930,
+    "tag": "New Arrival",
+    "image": "images/catalog/dd6011ad4f4c4c64aa9c72b9aa5ff668.jpg",
+    "description": "Exclusive fs with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_103076108.mp4"
+  },
+  {
+    "id": 773703568,
+    "title": "Bridal Kundan Designer Jewellery Set",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/designer_set_999.jpg",
+    "description": "Handcrafted Bridal Kundan Designer Jewellery Set. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 255146495,
+    "title": "Premium Black Diamonds Tulips Multi Layered Mala",
+    "category": "mangalsutra",
+    "price": 777,
+    "originalPrice": 1165,
+    "tag": "New Arrival",
+    "image": "images/catalog/tulips_mala_777.jpg",
+    "description": "Exclusive Premium Black Diamonds Tulips Multi Layered Mala with high finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 829002473,
+    "title": "Pure Jadau Kundhan Item",
+    "category": "necklace",
+    "price": 2099,
+    "originalPrice": 3148,
+    "tag": "New Arrival",
+    "image": "images/catalog/5218caf3f048.jpg",
+    "description": "Offer",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 869632963,
+    "title": "/+ freeshipping",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/8c2d57f8180f.jpg",
+    "description": "Exclusive /+ freeshipping with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 128844229,
+    "title": "Pure Khadhi Cotton",
+    "category": "saree",
+    "price": 650,
+    "originalPrice": 975,
+    "tag": "New Arrival",
+    "image": "images/catalog/b0e4371730ae.jpg",
+    "description": "Exclusive Pure Khadhi Cotton with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 959992377,
+    "title": "Pure Khadhi Cotton",
+    "category": "saree",
+    "price": 650,
+    "originalPrice": 975,
+    "tag": "New Arrival",
+    "image": "images/catalog/def5235cd43b.jpg",
+    "description": "Exclusive Pure Khadhi Cotton with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 604740379,
+    "title": "Exclusive Handcrafted Collection",
+    "category": "necklace",
+    "price": 699,
+    "originalPrice": 1048,
+    "tag": "New Arrival",
+    "image": "images/catalog/efb5e9ddda8d.jpg",
+    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 657117075,
+    "title": "Today special offer",
+    "category": "necklace",
+    "price": 1555,
+    "originalPrice": 2332,
+    "tag": "New Arrival",
+    "image": "images/catalog/8831ae91363d.jpg",
+    "description": "Exclusive Today special offer with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 183685021,
+    "title": "Exclusive Handcrafted Collection",
+    "category": "necklace",
+    "price": 2200,
+    "originalPrice": 3300,
+    "tag": "New Arrival",
+    "image": "images/catalog/ccd9f2a6b95b.jpg",
+    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 189373322,
+    "title": "Lord venkateswara locket with short chain",
+    "category": "mangalsutra",
+    "price": 799,
+    "originalPrice": 1198,
+    "tag": "New Arrival",
+    "image": "images/catalog/bafed3a378d8.jpg",
+    "description": "Offer",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 831671068,
+    "title": "Premium pure jadav kundhan",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/918bdefd20f1.jpg",
+    "description": "Heavy quality...",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 247403588,
+    "title": "6.5 inches swan tray",
+    "category": "decor",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/f99a8f9086d4.jpg",
+    "description": "Excellent quality Book your orders.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 612760543,
+    "title": "Exclusive Handcrafted Collection",
+    "category": "necklace",
+    "price": 799,
+    "originalPrice": 1198,
+    "tag": "New Arrival",
+    "image": "images/catalog/87a1d90c6e5c.jpg",
+    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 265629242,
+    "title": "Single",
+    "category": "necklace",
+    "price": 550,
+    "originalPrice": 825,
+    "tag": "New Arrival",
+    "image": "images/catalog/a3ff884a7b2a.jpg",
+    "description": "Exclusive Single with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 200245808,
+    "title": "Exclusive Handcrafted Collection",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/1cd41b563a84.jpg",
+    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 75640739,
+    "title": "fs",
+    "category": "necklace",
+    "price": 550,
+    "originalPrice": 825,
+    "tag": "New Arrival",
+    "image": "images/catalog/7d69a95dcfee.jpg",
+    "description": "Exclusive fs with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 749296149,
+    "title": "Sanku chara diyas",
+    "category": "decor",
+    "price": 3200,
+    "originalPrice": 4800,
+    "tag": "New Arrival",
+    "image": "images/catalog/5c8833e6c0cb.jpg",
+    "description": ".",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 64841853,
+    "title": "Pure Cz Stone Ear rings with Screw Backs",
+    "category": "earrings",
+    "price": 499,
+    "originalPrice": 748,
+    "tag": "New Arrival",
+    "image": "images/catalog/12fc897ca8bc.jpg",
+    "description": "Offer DM to order @8185012453",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 398961370,
+    "title": "Exclusive Handcrafted Collection",
+    "category": "necklace",
+    "price": 380,
+    "originalPrice": 570,
+    "tag": "New Arrival",
+    "image": "images/catalog/0d7ad213f457.jpg",
+    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 602963368,
+    "title": "fs",
+    "category": "necklace",
+    "price": 450,
+    "originalPrice": 675,
+    "tag": "New Arrival",
+    "image": "images/catalog/051a1de4a7f5.jpg",
+    "description": "Exclusive fs with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 266442417,
+    "title": "108 Pieces Ashtothara Shatanamavali Set",
+    "category": "decor",
+    "price": 499,
+    "originalPrice": 799,
+    "tag": "New Arrival",
+    "image": "images/catalog/6ee84825ff25.jpg",
+    "description": "used for ashtotara shatanamavali price 799 2 sets 1 set 499",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 674255422,
+    "title": "10 Inch Designer Tray",
+    "category": "decor",
+    "price": 1900,
+    "originalPrice": 2850,
+    "tag": "New Arrival",
+    "image": "images/catalog/d7b8e2b8abda.jpg",
+    "description": "1900 rs.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 115033516,
+    "title": "Sanku chara diyas",
+    "category": "decor",
+    "price": 3200,
+    "originalPrice": 4800,
+    "tag": "New Arrival",
+    "image": "images/catalog/564e5776a7b5.jpg",
+    "description": ".",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 733581582,
+    "title": "Premium Pure Jadav Kundhan Nec Set With 2 Changeable lockets",
+    "category": "mangalsutra",
+    "price": 1999,
+    "originalPrice": 2998,
+    "tag": "New Arrival",
+    "image": "images/catalog/6ed7889a4698.jpg",
+    "description": "Full stones and jadau kundhan neck set",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 987154951,
+    "title": "Pure Khadhi Cotton",
+    "category": "saree",
+    "price": 650,
+    "originalPrice": 975,
+    "tag": "New Arrival",
+    "image": "images/catalog/681087e46564.jpg",
+    "description": "Exclusive Pure Khadhi Cotton with premium finish. Free express shipping across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": null
+  },
+  {
+    "id": 1,
+    "title": "Premium Pure Jadau Kundan Necklace Set",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1899,
+    "tag": "Bestseller",
+    "image": "images/jadau_kundan_necklace.jpg",
+    "description": "Heavy bridal quality Jadau Kundan necklace set with intricate stone work, matching earrings, and adjustable dori. Guaranteed non-allergic micro-gold plating.",
+    "inStock": true,
+    "rating": 4.9,
+    "reviewsCount": 142,
+    "video": null
+  },
+  {
+    "id": 2,
+    "title": "Royal 6.5\" Swan Decorative Tray & Organizer",
+    "category": "decor",
+    "price": 999,
+    "originalPrice": 1599,
+    "tag": "Home Decor",
+    "image": "images/swan_tray.jpg",
+    "description": "6.5 inches exquisite metallic swan decorative tray. Excellent quality for pooja thali, vanity jewellery organizer, and premium festive gifting.",
+    "inStock": true,
+    "rating": 4.8,
+    "reviewsCount": 88,
+    "video": null
+  },
+  {
+    "id": 3,
+    "title": "Handcrafted Floral Choker Set with Pearls",
+    "category": "necklace",
+    "price": 799,
+    "originalPrice": 1499,
+    "tag": "Free Shipping",
+    "image": "images/floral_choker.jpg",
+    "description": "Traditional floral choker necklace with freshwater-look cluster pearls. Lightweight yet royal look, perfect for sarees and lehengas.",
+    "inStock": true,
+    "rating": 4.9,
+    "reviewsCount": 65,
+    "video": null
+  },
+  {
+    "id": 4,
+    "title": "3-Lines Long Traditional Black Beads Mangalsutra",
+    "category": "mangalsutra",
+    "price": 699,
+    "originalPrice": 1299,
+    "tag": "Daily Wear",
+    "image": "images/black_beads_mangalsutra.jpg",
+    "description": "Authentic 3-lines long black beads chain with gold-plated spacers and durable finish. Ideal for everyday elegance and festive celebrations.",
+    "inStock": true,
+    "rating": 4.9,
+    "reviewsCount": 110,
+    "video": null
+  },
+  {
+    "id": 5,
+    "title": "Single CZ Solitaire Bridal Studs / Earrings",
+    "category": "earrings",
+    "price": 550,
+    "originalPrice": 899,
+    "tag": "Free Shipping",
+    "image": "images/cz_bridal_earrings.jpg",
+    "description": "High sparkle round American Diamond / CZ stone earrings with secure push-back lock. Anti-tarnish micro coating for long-lasting brilliance.",
+    "inStock": true,
+    "rating": 4.7,
+    "reviewsCount": 52,
+    "video": null
+  },
+  {
+    "id": 6,
+    "title": "Royal Kundan & Pearl Haar / Haram Set",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1999,
+    "tag": "Festive Special",
+    "image": "images/kundan_pearl_haar.jpg",
+    "description": "Royal wedding haar set studded with uncut Kundan and pearl drops. Comes with heavy matching designer jhumkas.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 94,
+    "video": null
+  },
+  {
+    "id": 7,
+    "title": "Classic Micro-Gold Daily Wear Bangles",
+    "category": "earrings",
+    "price": 550,
+    "originalPrice": 999,
+    "tag": "Value Pick",
+    "image": "images/gold_finish_bangles.jpg",
+    "description": "Premium matte-gold finish traditional bangles with smooth inner comfort fit. Suitable for everyday wear and weddings.",
+    "inStock": true,
+    "rating": 4.8,
+    "reviewsCount": 43,
+    "video": null
+  },
+  {
+    "id": 8,
+    "title": "Royal Antique Gold Temple Jewellery Necklace",
+    "category": "necklace",
+    "price": 1999,
+    "originalPrice": 3499,
+    "tag": "Luxury Collection",
+    "image": "images/temple_necklace.jpg",
+    "description": "Masterpiece South Indian antique temple necklace set featuring traditional handcrafted motifs and ruby-colored stone embellishments.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 178,
+    "video": null
+  }
+];
     let products = [...DEFAULT_PRODUCTS];
     let cart = JSON.parse(localStorage.getItem('srr_cart')) || [];
     let orders = JSON.parse(localStorage.getItem('srr_orders')) || [];
@@ -4300,7 +4311,7 @@
 
       if (isVoiceListening) {
         if (voiceRecognition) {
-          try { voiceRecognition.stop(); } catch(e) {}
+          try { voiceRecognition.stop(); } catch (e) { }
         }
         return;
       }
@@ -4311,7 +4322,7 @@
         voiceRecognition.interimResults = false;
         voiceRecognition.lang = 'en-IN';
 
-        voiceRecognition.onstart = function() {
+        voiceRecognition.onstart = function () {
           isVoiceListening = true;
           allMics.forEach(btn => {
             btn.classList.add('text-red-600', 'animate-pulse', 'bg-red-50');
@@ -4321,7 +4332,7 @@
           showToastNotification("🎙️ Listening... Speak now in English or Telugu (e.g. 'Kundan choker' or 'nomu')", 3500);
         };
 
-        voiceRecognition.onresult = function(event) {
+        voiceRecognition.onresult = function (event) {
           if (!event.results || !event.results[0]) return;
           const transcript = event.results[0][0].transcript;
           console.log("[VoiceSearch] Heard:", transcript);
@@ -4338,14 +4349,14 @@
           }
         };
 
-        voiceRecognition.onerror = function(event) {
+        voiceRecognition.onerror = function (event) {
           console.warn("[VoiceSearch] Error:", event.error);
           if (event.error === 'not-allowed') {
             showToastNotification("Microphone permission denied. Please allow microphone access in your browser settings.");
           }
         };
 
-        voiceRecognition.onend = function() {
+        voiceRecognition.onend = function () {
           isVoiceListening = false;
           allMics.forEach(btn => {
             btn.classList.remove('text-red-600', 'animate-pulse', 'bg-red-50');
@@ -4380,7 +4391,7 @@
 
       // Read image as Data URL for instant user visual preview
       const reader = new FileReader();
-      reader.onload = async function(e) {
+      reader.onload = async function (e) {
         const dataUrl = e.target.result;
 
         // If triggered inside AI Stylist chat, show live chat interaction
@@ -4434,28 +4445,29 @@
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 4000);
 
-          const res = await fetch(`${BACKEND_API_BASE}/api/visual-search`, {
-            method: 'POST',
-            body: formData,
-            signal: controller.signal
-          });
-          clearTimeout(timeoutId);
+            const res = await fetch('/api/visual-search', {
+              method: 'POST',
+              body: formData,
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
 
-          if (res.ok) {
-            const data = await res.json();
-            detectedDesc = data.description || '';
-            const kwMatch = detectedDesc.match(/<start of keywords>([\s\S]*?)<end of keywords>/i);
-            if (kwMatch) {
-              queryKeywords = kwMatch[1].replace(/,/g, ' ').trim();
-            } else {
-              queryKeywords = detectedDesc.split('.')[0].replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
+            if (res.ok) {
+              const data = await res.json();
+              detectedDesc = data.description || '';
+              const kwMatch = detectedDesc.match(/<start of keywords>([\s\S]*?)<end of keywords>/i);
+              if (kwMatch) {
+                queryKeywords = kwMatch[1].replace(/,/g, ' ').trim();
+              } else {
+                queryKeywords = detectedDesc.split('.')[0].replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
+              }
+              if (data.product_ids && data.product_ids.length > 0) {
+                matchedProductIds = data.product_ids;
+              }
             }
-            if (data.product_ids && data.product_ids.length > 0) {
-              matchedProductIds = data.product_ids;
-            }
+          } catch (backendErr) {
+            console.log("[VisualSearch] Backend API unreachable; switching to client visual analyzer:", backendErr);
           }
-        } catch (backendErr) {
-          console.log("[VisualSearch] Backend API unreachable or timed out; switching to client visual analyzer:", backendErr);
         }
 
         // Step B: Smart Client-Side Image Classifier Fallback
@@ -4568,7 +4580,7 @@
 
         const img = new Image();
         img.crossOrigin = "anonymous";
-        img.onload = function() {
+        img.onload = function () {
           try {
             const canvas = document.createElement('canvas');
             canvas.width = 40;
@@ -4643,7 +4655,7 @@
             });
           }
         };
-        img.onerror = function() {
+        img.onerror = function () {
           resolve({
             keywords: 'handcrafted jewellery',
             summary: 'Detected handcrafted festive collection in your photo.',
@@ -5084,7 +5096,7 @@
       let recommendedIds = [];
 
       try {
-        const res = await fetch(`${BACKEND_API_BASE}/api/ai-stylist`, {
+        const res = await fetch('/api/ai-stylist', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: userText })
