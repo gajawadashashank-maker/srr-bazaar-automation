@@ -544,8 +544,25 @@ This log documents every architectural pitfall discovered and resolved during re
      - Provide 1-tap quick category refine pills (`🍃 Buffet Plates`, `🪔 Diya Stands`, `🦢 Swan Trays`, `👑 Kundan Sets`, `🥻 Sarees`) on `#visualLensBanner` so shoppers can jump to any department in a single tap.
 
 
-
-
-
-
-
+### 16. Google Merchant Center Shopping Feed Compliance & "Instant Fresh Drops" Storefront Architecture
+- **What Happened**: 
+  1. Google Merchant Center flagged 31 out of 40 products as "Not being shown on Google", with products showing "Not approved" and "Limited". Products imported from raw social media captions contained titles like `Single`, `fs`, `1190 free ship`, `/+ freeshipping`, and `Today special offer`.
+  2. Newly uploaded products to the storefront were not immediately visible when shoppers opened the website, as they were buried below top banners, carousels, and category grids.
+- **Why It Happened**:
+  1. **Google Shopping Strict Policy Violations**:
+     - Google explicitly bans promotional text in product titles (e.g., "free shipping", "fs", "special offer", "discount", or prices).
+     - Titles that are too short or generic (like `Single` or `fs`) trigger immediate automated disapprovals for lack of descriptive product information.
+     - Products lacked `<g:identifier_exists>no</g:identifier_exists>` and standard `<g:google_product_category>` tags, causing Google to flag them as "Limited" for missing global GTIN/barcode identifiers.
+  2. **Storefront Visual Hierarchy Friction**:
+     - On mobile and desktop, rich hero banners, promotions, and category tabs occupy the first 1200+ pixels. Without a prominent top drop trigger, shoppers opening the store had no way of knowing a new item had just launched without scrolling deep into the catalogue.
+- **How to Avoid**:
+  1. **Google Merchant Shopping Feed Sanitization**:
+     - Automatically sanitize titles when generating RSS/XML feeds (`docs/google_merchant_feed.xml`): strip all promotional keywords, pricing strings, and special characters (`/+`).
+     - Map every product to descriptive, high-converting titles (e.g. `Delicate Lotus Pendant Pearl & Ruby Green Beaded Necklace Set`, `Traditional Ruby & Emerald Floral Kada Bangles Set of 4`).
+     - Set `<g:identifier_exists>no</g:identifier_exists>` for custom handcrafted, boutique, and artisanal products that do not carry manufacturer GTIN/EAN barcodes to completely eliminate "Limited" visibility penalties.
+     - Assign granular `<g:google_product_category>` (e.g. `Apparel & Accessories > Jewelry`, `Apparel & Accessories > Clothing > Traditional & Cultural Wear > Sarees`, `Home & Garden > Religious & Ceremonial`).
+  2. **Multi-Touch "Fresh Drops" Storefront Architecture**:
+     - **Top Marquee Ticker (`#latestDropTicker`)**: Embed a live, clickable pill in the top announcement bar: `🔥 NEW DROP: [Latest Product Title] | View →` that smoothly auto-scrolls down and highlights the product card with a 4px golden ring.
+     - **Top Shelf Catalogue Aisle**: Automatically position `"🔥 Just Dropped — Fresh New Arrivals"` as the very #1 shelf above all category aisles in the storefront catalogue.
+     - **Dedicated "New Drops" Quick Filter**: Provide a high-visibility circular tab (`data-category="new"`) with an animated pulsing notification dot in the category navigation bar.
+     - **Floating Fresh Drop Toast (`#freshDropToast`)**: Display a sleek, non-intrusive floating pill on the bottom edge (`Just Added to Store: [Title] - [Price]`) with 1-tap view and session dismissal memory (`sessionStorage`) so shoppers are immediately aware without being disrupted.
