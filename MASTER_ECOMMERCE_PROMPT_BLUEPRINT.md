@@ -694,3 +694,24 @@ ef) as it is strictly reserved for new buyer acquisition.
   3. **Function & Return-Gift Bulk Inquiry Banner (`#bulkInquiryBanner`)**:
      - Embedded above the product catalogue: *"Organizing a Pooja, Wedding, or Family Function? 🪔🍃 Get wholesale slab discounts on 200+ Biodegradable Leaf Buffet Plates & Handcrafted Return Gifts!"*
      - Direct WhatsApp inquiry deep-link to merchant helpline (`+91 7013416296`) with pre-filled event quotation template.
+
+### 22. Automated WhatsApp Video Uploads: Preventing MP4-Disguised-as-JPG and Eliminating Blank Product Thumbnails
+- **What Happened**:
+  - When merchant uploaded video reels (e.g. for "Premium Bridal Pure Jadau Kundan Collection") via WhatsApp / automated catalogue pipeline, the product was created with a "Video Reel" badge, but the product photo card was completely blank with a broken image icon.
+- **Why It Happened**:
+  1. **Premature Input Seeking & Fragile FFmpeg Extraction**:
+     - The frame extraction command `ffmpeg -ss 00:00:01 -i video.mp4 ...` placed `-ss` before `-i`. On fragmented WhatsApp MP4 videos without MOOV atom faststart, input seeking failed to decode the stream, causing `subprocess.run` to raise an exception.
+  2. **Catastrophic Fallback Copying MP4 Bytes into `.jpg` File**:
+     - In the `except` block of `app.py` and `process_job.py`, the fallback was `catalog_cover_image = image_file`. Because `image_file` was an MP4 video, `sync_product_to_website_catalogue` copied the raw MP4 binary bytes into `docs/images/catalog/<job_id>.jpg`.
+     - Browsers attempting to load `<img src="images/catalog/<job_id>.jpg">` could not decode the MP4 stream as an image, displaying a broken image icon and an empty blank card.
+  3. **Missing Frontend Image Error Boundary**:
+     - `renderProductCard` and `openQuickView` in `docs/index.html` lacked `onerror` fallback handlers on `<img>` tags, allowing failed network fetches or unparseable formats to display raw broken image icons and overlapping alt text.
+- **How to Avoid**:
+  1. **Multi-Stage Output Seeking & Explicit Update Flag**:
+     - Use output seeking (`ffmpeg -i input.mp4 -ss 00:00:01 -vframes 1 -q:v 2 -update 1 output.jpg`) so FFmpeg parses the container before seeking.
+     - Fall back sequentially across multiple timestamps: `00:00:01` -> `00:00:00.500` -> `00:00:00`.
+  2. **Strict Media Type Header Guard in Catalogue Sync**:
+     - Before writing to `docs/images/catalog/<job_id>.jpg`, inspect the file header for `ftyp` (MP4/video signature).
+     - Under NO circumstances copy video bytes to a `.jpg` path. If extraction fails, copy a verified fallback JPEG (`88846458a4a544eda9c03477c177b77a.jpg`).
+  3. **Universal Frontend Image Error Boundaries**:
+     - Attach `onerror="this.onerror=null; this.src='images/catalog/88846458a4a544eda9c03477c177b77a.jpg';"` to all product card `<img>` elements, modals, search suggestions, and cart drawers.

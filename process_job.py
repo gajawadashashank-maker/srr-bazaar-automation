@@ -364,7 +364,40 @@ def sync_product_to_website_catalogue(
         target_img_name = f"{job_id}.jpg"
         target_img_path = catalog_img_dir / target_img_name
 
+        # Ensure target_img_path receives a real JPEG image, NEVER an MP4 video file
+        is_video_input = False
         if image_path.exists():
+            header = b""
+            with open(image_path, "rb") as f_chk:
+                header = f_chk.read(16)
+            if b"ftyp" in header or image_path.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}:
+                is_video_input = True
+
+        if is_video_input:
+            vid_src = str(video_path if (video_path and Path(video_path).exists()) else image_path)
+            extracted = False
+            for seek_t in ["00:00:01", "00:00:00.500", "00:00:00"]:
+                cmd = [
+                    "ffmpeg", "-y", "-i", vid_src,
+                    "-ss", seek_t,
+                    "-vframes", "1", "-q:v", "2",
+                    "-update", "1",
+                    str(target_img_path)
+                ]
+                try:
+                    res = subprocess.run(cmd, capture_output=True)
+                    if res.returncode == 0 and target_img_path.exists() and target_img_path.stat().st_size > 1000:
+                        extracted = True
+                        logger.info("Auto-extracted JPEG cover from video at %s: %s", seek_t, target_img_path)
+                        break
+                except Exception:
+                    pass
+            if not extracted:
+                fallback_img = catalog_img_dir / "88846458a4a544eda9c03477c177b77a.jpg"
+                if fallback_img.exists():
+                    target_img_path.write_bytes(fallback_img.read_bytes())
+                    logger.warning("Video thumbnail extraction failed; fell back to default catalog image: %s", fallback_img)
+        elif image_path.exists():
             target_img_path.write_bytes(image_path.read_bytes())
 
         # Extract numeric price
@@ -547,17 +580,30 @@ def main() -> int:
     if is_video:
         logger.info("Input media is a video (%s). Extracting cover thumbnail...", image_file.name)
         thumbnail_file = job_output_dir / f"{image_file.stem}_thumb.jpg"
-        cmd = [
-            "ffmpeg", "-y", "-ss", "00:00:01", "-i", str(image_file),
-            "-vframes", "1", "-q:v", "2", str(thumbnail_file)
-        ]
-        try:
-            subprocess.run(cmd, check=True, capture_output=True)
-            catalog_cover_image = thumbnail_file
-            logger.info("Extracted cover thumbnail: %s", thumbnail_file)
-        except Exception as e:
-            logger.warning("Could not extract thumbnail frame via ffmpeg: %s", e)
-            catalog_cover_image = image_file
+        thumb_ok = False
+        for seek_t in ["00:00:01", "00:00:00.500", "00:00:00"]:
+            cmd = [
+                "ffmpeg", "-y", "-i", str(image_file),
+                "-ss", seek_t,
+                "-vframes", "1", "-q:v", "2",
+                "-update", "1",
+                str(thumbnail_file)
+            ]
+            try:
+                subprocess.run(cmd, check=True, capture_output=True)
+                if thumbnail_file.exists() and thumbnail_file.stat().st_size > 1000:
+                    catalog_cover_image = thumbnail_file
+                    thumb_ok = True
+                    logger.info("Extracted cover thumbnail at %s: %s (%d bytes)", seek_t, thumbnail_file, thumbnail_file.stat().st_size)
+                    break
+            except Exception as e:
+                logger.warning("Could not extract thumbnail frame at %s via ffmpeg: %s", seek_t, e)
+
+        if not thumb_ok:
+            fallback_img = Path("docs/images/catalog/88846458a4a544eda9c03477c177b77a.jpg")
+            if fallback_img.exists():
+                catalog_cover_image = fallback_img
+                logger.warning("Fell back to default catalog cover: %s", fallback_img)
 
         selected_video = image_file
         generated_videos = [selected_video]
