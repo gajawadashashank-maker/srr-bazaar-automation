@@ -715,3 +715,23 @@ ef) as it is strictly reserved for new buyer acquisition.
      - Under NO circumstances copy video bytes to a `.jpg` path. If extraction fails, copy a verified fallback JPEG (`88846458a4a544eda9c03477c177b77a.jpg`).
   3. **Universal Frontend Image Error Boundaries**:
      - Attach `onerror="this.onerror=null; this.src='images/catalog/88846458a4a544eda9c03477c177b77a.jpg';"` to all product card `<img>` elements, modals, search suggestions, and cart drawers.
+
+### 23. Mobile Header Layout Density: Preventing Action Pill Overflow and Logo Text Overlap on Narrow Screens
+- **What Happened**:
+  - On mobile devices (<= 390px width), the action pills row (`AI Stylist`, `Spin & Win`, `Earn ₹100`, `Track Order`, `Gold Wallet`, `Cart`) collided with and visually overlapped directly on top of the "SRR BAZAAR" logo text.
+- **Why It Happened**:
+  - The header row (`h-14`) crammed 9 separate utility and brand elements into a single horizontal flex line totaling 476px in width.
+  - On a 360px viewport, `Logo & Branding` had `min-w-0` without `flex-shrink-0`, while `Action Buttons` had `flex-shrink-0`.
+  - When the wallet pill (`🪙 ₹50`) became visible, the right action buttons took up 304px, forcing `SRR BAZAAR` text to overflow its container and render directly underneath the action buttons.
+- **How to Avoid**:
+  1. **Strict Logo Container Rigidity**:
+     - Ensure `#headerLogoBrand` has `flex-shrink-0` so the store brand identity can never be compressed or overlapped by adjacent controls.
+  2. **Responsive Visual Hierarchy on Header Action Row**:
+     - Keep only essential, high-priority utility badges in the top mobile header row:
+       - Compact `[🎁 ₹100]` Refer pill
+       - Compact `[🪙 ₹50]` Wallet pill (when active)
+       - `[🛍️ Cart (count)]`
+     - Hide secondary discovery triggers (`AI Stylist`, `Spin & Win`, `Track Order`) on small screens in the top header (`hidden sm:inline-flex`), because they are already surfaced via dedicated primary UI components (the floating `#aiStylistFloatingBtn` at bottom-right and `#festiveRewardBanner` countdown at the top).
+  3. **Dedicated Mobile Quick-Action Chip Strip (`#mobileQuickBar`)**:
+     - Place a sleek, horizontally scrollable chip row right below the mobile search bar (`[✨ AI Stylist] [🎡 Spin & Win] [🚚 Track Order] [💬 WhatsApp]`).
+     - This gives mobile shoppers instant 1-tap utility access without creating vertical overcrowding or horizontal text collisions.
