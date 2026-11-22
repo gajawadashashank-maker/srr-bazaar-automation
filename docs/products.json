@@ -1,5 +1,33 @@
 [
   {
+    "id": 263209091,
+    "title": "Festive Handcrafted Traditional Collection",
+    "category": "necklace",
+    "price": 950,
+    "originalPrice": 1425,
+    "tag": "New Arrival",
+    "image": "images/catalog/55dec8fdb1304952a47589fac45a4668.jpg",
+    "video": "videos/reel_263209091.mp4",
+    "description": "Exclusive Festive Handcrafted Traditional Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 471620299,
+    "title": "Premium Bridal Pure Jadau Kundan Collection",
+    "category": "groceries",
+    "price": 1599,
+    "originalPrice": 2398,
+    "tag": "New Arrival",
+    "image": "images/catalog/71f8acf9924f4f419eb153ea3f73f97c.jpg",
+    "video": "videos/reel_471620299.mp4",
+    "description": "Exclusive Premium Bridal Pure Jadau Kundan Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 721411888,
     "title": "Festive Handcrafted Traditional Collection",
     "category": "necklace",
