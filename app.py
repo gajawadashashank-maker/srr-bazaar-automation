@@ -553,6 +553,17 @@ def sync_product_to_website_catalogue(
             category = "groceries"
         else:
             category = "necklace"
+        # 9. Dry Fruits & Nuts
+        elif any(has_word(x) for x in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dryfruit", "dryfruits", "dates", "khajoor", "anjeer"]):
+            category = "dryfruits"
+        # 10. Snacks & Namkeen
+        elif any(has_word(x) for x in ["chips", "biscuit", "biscuits", "namkeen", "mixture", "cookie", "cookies", "murukku", "sev", "bhujia"]):
+            category = "snacks"
+        # 11. Groceries & Daily Staples (STRICT WHOLE WORD ONLY)
+        elif any(has_word(x) for x in ["grocery", "groceries", "rice", "dal", "flour", "atta", "wheat", "ghee", "masala", "spices", "chilli", "mirchi", "turmeric", "salt", "sugar", "jaggery", "bellam", "rava", "suji", "maida", "besan", "pulses", "lentils", "tamarind"]):
+            category = "groceries"
+        else:
+            category = "necklace"
 
         new_id = int(uuid.uuid4().int % 1000000000)
 
