@@ -1070,7 +1070,7 @@ async def ai_stylist_endpoint(request: Request):
 
 def ask_ollama_vision(image_bytes: bytes) -> tuple[str, list[dict[str, Any]]]:
     """
-    Use local Ollama minicpm-v vision model to inspect uploaded image,
+    Use local Ollama vision model (llava-phi3) to inspect uploaded image,
     extract keywords, and retrieve matching products from the store catalogue.
     """
     import base64
@@ -1085,28 +1085,35 @@ def ask_ollama_vision(image_bytes: bytes) -> tuple[str, list[dict[str, Any]]]:
         except Exception:
             products_list = []
 
+    vision_model = os.getenv("OLLAMA_VISION_MODEL", "llava-phi3")
     prompt = (
-        "Identify what product is in this image. "
-        "Provide 3-5 keywords describing it (e.g. necklace, earrings, kundan choker, pooja tray, brass diya, saree, leaf plates):"
+        "Inspect this image carefully. Is it traditional Indian jewelry (necklace, earrings, choker, mangalsutra), "
+        "pooja brassware (diya stand, plate, tray), dining (leaf plates), or a non-catalog document/screenshot? "
+        "Give a concise 1-2 sentence description and 3-5 search keywords."
     )
 
     try:
         resp = requests.post(
-            f"{os.getenv('OLLAMA_BASE_URL', 'http://127.0.0.1:11434').rstrip('/')}/api/chat",
+            f"{os.getenv('OLLAMA_BASE_URL', 'http://127.0.0.1:11434').rstrip('/')}/api/generate",
             json={
-                "model": "minicpm-v",
-                "messages": [{
-                    "role": "user",
-                    "content": prompt,
-                    "images": [b64]
-                }],
+                "model": vision_model,
+                "prompt": prompt,
+                "images": [b64],
                 "stream": False,
-                "options": {"num_predict": 120}
+                "options": {
+                    "temperature": 0.2,
+                    "num_predict": 100
+                }
             },
-            timeout=40
+            timeout=70
         )
         if resp.status_code == 200:
-            content = resp.json().get("message", {}).get("content", "")
+            content = resp.json().get("response", "").strip()
+            lower_content = content.lower()
+            if any(term in lower_content for term in ["document", "screenshot", "form", "text", "receipt", "invoice", "application"]):
+                desc = "I inspected your image and noticed it appears to be a document or screenshot rather than a jewelry or pooja piece. Here are SRR Bazaar's authentic handcrafted collections:"
+                return desc, products_list[:4]
+
             matches = _filter_relevant_catalog(content, products_list, max_items=4)
             return content, matches
     except Exception as e:

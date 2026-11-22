@@ -2400,6 +2400,9 @@
     // =========================================================================
     const srrModalHistory = [];
     let checkoutOpenedFrom = null; // remembers whether checkout was opened from 'cartDrawer' or 'quickViewModal'
+    const BACKEND_API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? ''
+      : 'https://squander-gristle-panhandle.ngrok-free.dev';
 
     // Global Toast Notification Helper
     let globalToastTimer = null;
@@ -4404,38 +4407,35 @@
         let matchedProductIds = [];
         let queryKeywords = '';
 
-        // Step A: Attempt backend /api/visual-search only when on local host
-        const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-        if (isLocalHost) {
-          try {
-            const formData = new FormData();
-            formData.append('file', file);
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 6000);
+        // Step A: Attempt backend /api/visual-search (Live Ngrok Tunnel or Localhost)
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 45000);
 
-            const res = await fetch('/api/visual-search', {
-              method: 'POST',
-              body: formData,
-              signal: controller.signal
-            });
-            clearTimeout(timeoutId);
+          const res = await fetch(`${BACKEND_API_BASE}/api/visual-search`, {
+            method: 'POST',
+            body: formData,
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
 
-            if (res.ok) {
-              const data = await res.json();
-              detectedDesc = data.description || '';
-              const kwMatch = detectedDesc.match(/<start of keywords>([\s\S]*?)<end of keywords>/i);
-              if (kwMatch) {
-                queryKeywords = kwMatch[1].replace(/,/g, ' ').trim();
-              } else {
-                queryKeywords = detectedDesc.split('.')[0].replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
-              }
-              if (data.product_ids && data.product_ids.length > 0) {
-                matchedProductIds = data.product_ids;
-              }
+          if (res.ok) {
+            const data = await res.json();
+            detectedDesc = data.description || '';
+            const kwMatch = detectedDesc.match(/<start of keywords>([\s\S]*?)<end of keywords>/i);
+            if (kwMatch) {
+              queryKeywords = kwMatch[1].replace(/,/g, ' ').trim();
+            } else {
+              queryKeywords = detectedDesc.split('.')[0].replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
             }
-          } catch (backendErr) {
-            console.log("[VisualSearch] Backend API unreachable; switching to client visual analyzer:", backendErr);
+            if (data.product_ids && data.product_ids.length > 0) {
+              matchedProductIds = data.product_ids;
+            }
           }
+        } catch (backendErr) {
+          console.log("[VisualSearch] Backend API unreachable or timed out; switching to client visual analyzer:", backendErr);
         }
 
         // Step B: Smart Client-Side Image Classifier Fallback
@@ -5040,7 +5040,7 @@
       let recommendedIds = [];
 
       try {
-        const res = await fetch('/api/ai-stylist', {
+        const res = await fetch(`${BACKEND_API_BASE}/api/ai-stylist`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: userText })
