@@ -6802,12 +6802,12 @@
       const shareUrl = refCode ? `https://srrbazaar.com/?ref=${refCode}` : 'https://srrbazaar.com';
       const prizeText = currentSpinWin.type === 'gift' ? 'a Free Surprise Brass Gift in my parcel' : currentSpinWin.name;
 
-      // Differentiate message copy for Friend (Step 1) vs Group (Step 2)
+      // Differentiate message copy for Friend (Step 1) vs WhatsApp Group (Step 2)
       let msg = '';
       if (viralShareStep === 0) {
         msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and claim up to ₹150 Wallet Cash & free gifts:\n${shareUrl}`;
       } else {
-        msg = `🪔 Hello Everyone! Check out SRR Bazaar Armoor — they have an active Festive Lucky Wheel today! 🎡🎁 Spin to win free gifts & up to ₹150 off with free delivery:\n${shareUrl}`;
+        msg = `👨‍👩‍👧‍👦 Namaste Everyone in this group! 🪔\n\nCheck out SRR Bazaar Armoor today! 🎡🎁 Spin their festive lucky wheel to claim free surprise gifts & up to ₹150 Wallet Cash with free delivery across India:\n${shareUrl}`;
       }
 
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
@@ -6844,26 +6844,32 @@
 
       const dwellSec = (Date.now() - viralShareTimestamp) / 1000;
       const doubleBox = document.getElementById('viralDoubleBox');
+      
+      // Step-specific minimum dwell thresholds:
+      // Step 1 (Friend): minimum 4.5s
+      // Step 2 (Group): minimum 6.0s (selecting a group takes longer than single contact)
+      const minDwell = (viralShareStep === 1) ? 6.0 : 4.5;
 
-      // ANTI-CHEAT DWELL CHECK:
-      // If user returned in less than 4.5 seconds, they canceled or closed WhatsApp without choosing contact/sending!
-      if (dwellSec < 4.5) {
+      if (dwellSec < minDwell) {
         if (doubleBox) {
           const stepNum = viralShareStep + 1;
-          const target = viralShareStep === 0 ? 'a WhatsApp friend' : 'a WhatsApp group';
+          const isGroupStep = (viralShareStep === 1);
+          const errorTitle = isGroupStep ? "⚠️ WhatsApp Group Not Detected!" : "⚠️ Invite Not Sent! (Returned too quickly)";
+          const errorMsg = isGroupStep 
+            ? "You returned in " + dwellSec.toFixed(1) + "s. Selecting a WhatsApp Group takes a few seconds. Sending to a single contact does not qualify for the 2X Group multiplier."
+            : "You returned before selecting a friend and tapping Send. Please send the invite to complete Step " + stepNum + "!";
+
           doubleBox.innerHTML = `
             <div class="p-2.5 bg-rose-950/90 border border-rose-500/60 rounded-xl space-y-2 text-center text-white animate-in shake">
               <div class="flex items-center justify-center gap-1.5 text-xs font-bold text-rose-300">
                 <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400"></i>
-                <span>⚠️ Invite Not Sent! (Returned too quickly)</span>
+                <span>${errorTitle}</span>
               </div>
-              <p class="text-[10px] text-rose-100 leading-tight">
-                You returned before selecting ${target} and tapping Send. Please send the invite to complete Step ${stepNum}!
-              </p>
+              <p class="text-[10px] text-rose-100 leading-tight">${errorMsg}</p>
               <button onclick="shareSpinOnWhatsApp()" type="button"
                 class="w-full py-2 px-3 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
                 <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                <span>Retry Step ${stepNum}: Select ${viralShareStep === 0 ? 'Friend' : 'Group'} and Send →</span>
+                <span>Retry Step ${stepNum}: Select a WhatsApp Group and Send →</span>
               </button>
             </div>
           `;
@@ -6872,35 +6878,70 @@
         return;
       }
 
-      // LEGITIMATE DWELL: Advance step!
+      // Step 1 (Friend) verified -> advance to Step 2
       if (viralShareStep === 0) {
         viralShareStep = 1;
         renderViralDoubleBox();
       } else if (viralShareStep === 1) {
-        viralShareStep = 2;
-        hasSharedSpin = true;
-
-        if (currentSpinWin.type === 'cash') {
-          const bonusAmount = currentSpinWin.amount; // Doubles the cash!
-          addWalletCash(bonusAmount);
-          const newTotal = currentSpinWin.amount * 2;
-          localStorage.setItem('srr_festive_cash', newTotal.toString());
-          const desc = document.getElementById('wheelResultDesc');
-          if (desc) desc.textContent = `₹${newTotal} cash (Doubled via WhatsApp Festive Invite!) is active in your Gold Wallet for 24 hours.`;
-          localStorage.setItem('srr_last_prize_name', `₹${newTotal} (Doubled) Cash`);
-          initFestiveTimer();
-        } else if (currentSpinWin.type === 'gift') {
-          addWalletCash(50);
-        } else if (currentSpinWin.type === 'vip') {
-          const btn = document.getElementById('spinWheelBtn');
-          if (btn) {
-            btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            btn.textContent = "🎡 Spin Your Bonus Round!";
-          }
+        // Step 2 Group Checkpoint: Show explicit group confirmation to prevent single contact cheating
+        if (doubleBox) {
+          doubleBox.innerHTML = `
+            <div class="p-2.5 bg-stone-900/95 border border-amber-400/60 rounded-xl space-y-2 text-center text-white animate-in zoom-in-95">
+              <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-amber-300">
+                <i data-lucide="users" class="w-4 h-4 text-amber-400"></i>
+                <span>Step 2 Verification: Group Confirmation</span>
+              </div>
+              <p class="text-[10px] text-stone-200 leading-snug">
+                Did you send the invite into a <strong>WhatsApp Group</strong> (Family, Friends, or Festival Group)?
+              </p>
+              <div class="space-y-1.5 pt-0.5">
+                <button onclick="confirmViralGroupShare(true)" type="button"
+                  class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
+                  <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                  <span>✅ Yes, Sent to WhatsApp Group (Unlock 2X) →</span>
+                </button>
+                <button onclick="confirmViralGroupShare(false)" type="button"
+                  class="w-full py-1.5 px-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 text-[10px] transition flex items-center justify-center gap-1 cursor-pointer">
+                  <i data-lucide="refresh-cw" class="w-3 h-3 text-stone-400"></i>
+                  <span>Sent to 1 person by mistake? Re-open to pick Group</span>
+                </button>
+              </div>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
         }
-        renderViralDoubleBox();
       }
+    }
+
+    function confirmViralGroupShare(isConfirmed) {
+      if (!isConfirmed) {
+        shareSpinOnWhatsApp();
+        return;
+      }
+
+      viralShareStep = 2;
+      hasSharedSpin = true;
+
+      if (currentSpinWin.type === 'cash') {
+        const bonusAmount = currentSpinWin.amount; // Doubles the cash!
+        addWalletCash(bonusAmount);
+        const newTotal = currentSpinWin.amount * 2;
+        localStorage.setItem('srr_festive_cash', newTotal.toString());
+        const desc = document.getElementById('wheelResultDesc');
+        if (desc) desc.textContent = `₹${newTotal} cash (Doubled via WhatsApp Festive Invite!) is active in your Gold Wallet for 24 hours.`;
+        localStorage.setItem('srr_last_prize_name', `₹${newTotal} (Doubled) Cash`);
+        initFestiveTimer();
+      } else if (currentSpinWin.type === 'gift') {
+        addWalletCash(50);
+      } else if (currentSpinWin.type === 'vip') {
+        const btn = document.getElementById('spinWheelBtn');
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          btn.textContent = "🎡 Spin Your Bonus Round!";
+        }
+      }
+      renderViralDoubleBox();
     }
 
     // Attach listeners for app return detection

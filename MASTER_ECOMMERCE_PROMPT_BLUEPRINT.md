@@ -910,5 +910,26 @@ ef) as it is strictly reserved for new buyer acquisition.
   4. **Post-Checkout Retirement**:
      - When a customer checks out and redeems their wallet cash or free surprise gift, immediately retire `srr_festive_cash` and `srr_festive_expiry` so used rewards do not trigger false countdowns or double deductions.
 
+### 32. Multi-Tier Dwell Verification & WhatsApp Group Checkpoint (Preventing Single-Contact Cheating on Step 2)
+- **What Happened**:
+  - In a 2-share viral multiplier loop, users could attempt to cheat Step 2 (Group Share) by simply sending the link to the same individual contact as Step 1 or to their own second phone number.
+- **Why It Happened**:
+  - WhatsApp's URL scheme (`whatsapp://send` / `api.whatsapp.com/send`) opens the universal contact picker displaying both individuals and groups, without sending back metadata specifying what chat type was selected.
+- **How to Avoid**:
+  1. **Tiered Dwell Time Calibration (4.5s vs 6.0s)**:
+     - Step 1 (Friend): 4.5 seconds minimum dwell threshold.
+     - Step 2 (Group): **6.0 seconds minimum dwell threshold**. Finding and selecting a WhatsApp group requires typing in the search bar or scrolling down past recent personal chats. Quick returns (<6.0s) trigger a dedicated alert:
+       `⚠️ WhatsApp Group Not Detected! Selecting a WhatsApp Group takes a few seconds. Sending to a single contact does not qualify for the 2X Group multiplier.`
+  2. **Group-Specific Psychological Greeting**:
+     - Pre-fill Step 2 WhatsApp copy with: `"👨‍👩‍👧‍👦 Namaste Everyone in this group! 🪔 Check out SRR Bazaar Armoor today!..."`
+     - Senders will not send this copy to an individual because addressing a single friend as "Everyone in this group" is awkward and out of context.
+  3. **Group Confirmation Checkpoint Modal**:
+     - Upon returning after 6.0+ seconds, display an explicit checkpoint asking:
+       `Did you send the invite into a WhatsApp Group (Family, Friends, or Festival Group)?`
+     - Provides two clear actions:
+       - `[✅ Yes, Sent to WhatsApp Group (Unlock 2X)]`: Finalizes multiplier and credits cash.
+       - `[🔄 Sent to 1 person by mistake? Re-open to pick Group]`: Relaunches WhatsApp so the user can complete the group dispatch properly.
+
+
 
 
