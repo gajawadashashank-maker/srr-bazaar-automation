@@ -888,4 +888,27 @@ ef) as it is strictly reserved for new buyer acquisition.
        - **Share 2 (Group - 100%)**: Tailored multi-person group broadcast copy. Progress bar fills to 100% and unlocks the full 2X prize.
      - Exponentially expands viral reach: each sharing participant now reaches an individual plus an entire group (20–100 potential buyers) per spin.
 
+### 31. Strict 24-Hour Ephemeral Festive Expiry vs Permanent Earnings & Anti-Stacking Engine
+- **What Happened**:
+  - The festive countdown banner showed a 24-hour expiration countdown ("Expires in 23:59:59"), but when the timer reached 00:00:00, the code simply hid the banner element (`banner.classList.add('hidden')`).
+  - The festive cash credited to the user's wallet (`srr_wallet_balance`) was NEVER deducted or expired! Customers could still spend the "expired" cash weeks later.
+  - Furthermore, on page reload, `initFestiveTimer()` was never called in `DOMContentLoaded`, causing the countdown banner to disappear whenever users refreshed or reopened the tab.
+  - Without separate tracking, spinning daily without ordering would stack free cash indefinitely (e.g. ₹50 + ₹75 + ₹100 = ₹225+).
+- **Why It Happened**:
+  - Temporary promotional spin rewards were merged directly into the unified `srr_wallet_balance` without tracking a distinct `srr_festive_cash` ephemeral sub-balance.
+- **How to Avoid**:
+  1. **Strict Ephemeral Sub-Balance Tracking**:
+     - Store temporary spin cash separately in `srr_festive_cash` and its deadline in `srr_festive_expiry`.
+     - Implement `checkAndExpireFestiveRewards()`:
+       When `Date.now() >= expiry`, strictly deduct `srr_festive_cash` from `srr_wallet_balance` via `deductWalletCash(festiveCash)`, clear `srr_festive_cash`, `srr_free_gift`, and hide `#festiveRewardBanner`.
+     - Preserves real, permanent user earnings (e.g. permanent friend referral credits, 8% VIP prepaid cashback).
+  2. **Page-Load Restoration & Immediate Expiry Check**:
+     - Call both `checkAndExpireFestiveRewards()` and `initFestiveTimer()` on `DOMContentLoaded`.
+     - If the user re-opens the website within the 24 hours, the countdown banner immediately resumes ticking. If 24 hours have passed while offline, expired cash is instantly revoked before cart calculation.
+  3. **Anti-Stacking Daily Spin Guard**:
+     - When spinning on Day 2, any prior unspent `srr_festive_cash` is replaced, never accumulated.
+  4. **Post-Checkout Retirement**:
+     - When a customer checks out and redeems their wallet cash or free surprise gift, immediately retire `srr_festive_cash` and `srr_festive_expiry` so used rewards do not trigger false countdowns or double deductions.
+
+
 

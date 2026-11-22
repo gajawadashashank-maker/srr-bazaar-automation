@@ -456,7 +456,12 @@
     <!-- Sticky Festive 24-Hour Reward Countdown Banner -->
   <div id="festiveRewardBanner"
     class="hidden bg-gradient-to-r from-amber-600 via-rose-600 to-amber-700 text-white py-1.5 px-3 text-center text-xs font-bold shadow-sm flex items-center justify-center gap-2 z-40 relative">
-    <span>🎉 Festive Reward: <strong id="festivePrizeText">₹50 Wallet Cash</strong> expires in <span id="festiveTimerText" class="font-mono bg-black/30 px-2 py-0.5 rounded text-amber-200 tracking-wider">23:59:59</span></span>
+    <span class="flex items-center gap-1.5 flex-wrap justify-center">
+      <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
+      <span>⚡ Festive Reward: <strong id="festivePrizeText">₹50 Wallet Cash</strong></span>
+      <span class="opacity-90">• Expires in <span id="festiveTimerText" class="font-mono bg-black/40 px-2 py-0.5 rounded text-amber-200 tracking-wider font-extrabold">23:59:59</span></span>
+      <span class="hidden md:inline opacity-80">(Non-stackable • Resets daily)</span>
+    </span>
     <button onclick="toggleCartDrawer(true)" class="underline text-amber-100 hover:text-white font-extrabold ml-1 cursor-pointer">Shop Now →</button>
   </div>
 
@@ -4027,6 +4032,8 @@
         })
         .catch(() => { });
 
+      checkAndExpireFestiveRewards();
+      initFestiveTimer();
       checkIncomingReferral();
       updateWalletUI();
       renderProducts();
@@ -6663,7 +6670,13 @@
         localStorage.setItem('srr_last_prize_name', win.name);
 
         if (win.type === 'cash') {
+          // Prevent daily stacking: if prior festive cash exists, deduct it first
+          const prevFestive = parseInt(localStorage.getItem('srr_festive_cash') || '0', 10);
+          if (prevFestive > 0) {
+            deductWalletCash(prevFestive);
+          }
           addWalletCash(win.amount);
+          localStorage.setItem('srr_festive_cash', win.amount.toString());
         } else if (win.type === 'gift') {
           localStorage.setItem('srr_free_gift', 'true');
         } else if (win.type === 'vip') {
@@ -6871,6 +6884,7 @@
           const bonusAmount = currentSpinWin.amount; // Doubles the cash!
           addWalletCash(bonusAmount);
           const newTotal = currentSpinWin.amount * 2;
+          localStorage.setItem('srr_festive_cash', newTotal.toString());
           const desc = document.getElementById('wheelResultDesc');
           if (desc) desc.textContent = `₹${newTotal} cash (Doubled via 2-Share WhatsApp Chain!) is active in your Gold Wallet for 24 hours.`;
           localStorage.setItem('srr_last_prize_name', `₹${newTotal} (Doubled) Cash`);
@@ -6899,7 +6913,42 @@
       setTimeout(handleViralReturnVerification, 400);
     });
 
+    function checkAndExpireFestiveRewards() {
+      const expiry = parseInt(localStorage.getItem('srr_festive_expiry') || '0', 10);
+      if (!expiry) return;
+
+      const now = Date.now();
+      if (now >= expiry) {
+        // 24-Hour window has expired! Expire temporary festive spin cash & gifts
+        const festiveCash = parseInt(localStorage.getItem('srr_festive_cash') || '0', 10);
+        if (festiveCash > 0) {
+          deductWalletCash(festiveCash);
+          localStorage.removeItem('srr_festive_cash');
+        }
+        localStorage.removeItem('srr_festive_expiry');
+        localStorage.removeItem('srr_free_gift');
+        localStorage.removeItem('srr_last_prize_name');
+
+        const banner = document.getElementById('festiveRewardBanner');
+        if (banner) banner.classList.add('hidden');
+
+        // Update wheel modal button if open
+        const btn = document.getElementById('spinWheelBtn');
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          btn.textContent = "🎡 Spin Today's Lucky Wheel!";
+        }
+        const resBox = document.getElementById('wheelResultBox');
+        if (resBox) resBox.classList.add('hidden');
+
+        updateWalletUI();
+        updateCartUI();
+      }
+    }
+
     function initFestiveTimer() {
+      checkAndExpireFestiveRewards();
       const banner = document.getElementById('festiveRewardBanner');
       const expiry = parseInt(localStorage.getItem('srr_festive_expiry') || '0', 10);
       const prizeName = localStorage.getItem('srr_last_prize_name') || '₹50 Wallet Cash';
@@ -6917,7 +6966,7 @@
       function updateClock() {
         const diff = expiry - Date.now();
         if (diff <= 0) {
-          if (banner) banner.classList.add('hidden');
+          checkAndExpireFestiveRewards();
           return;
         }
         const h = Math.floor(diff / (1000 * 60 * 60));
@@ -6928,7 +6977,8 @@
         }
       }
       updateClock();
-      setInterval(updateClock, 1000);
+      if (window.festiveClockInterval) clearInterval(window.festiveClockInterval);
+      window.festiveClockInterval = setInterval(updateClock, 1000);
     }
 
     // =========================================================================
@@ -7969,6 +8019,15 @@
         walletWaDetails += `\n*🎁 Festive Wheel Winner:* Miniature Brass Pooja Bell / Kundan Bindi (Packed Free in Box!)`;
         newOrder.freeGift = "Miniature Brass Pooja Bell / Kundan Bindi (Wheel Winner)";
         localStorage.removeItem('srr_free_gift');
+      }
+
+      // If user redeemed wallet cash or free gift, retire the 24h festive reward timer
+      if (usedWallet > 0 || hasFreeGift) {
+        localStorage.removeItem('srr_festive_cash');
+        localStorage.removeItem('srr_festive_expiry');
+        localStorage.removeItem('srr_last_prize_name');
+        const festBanner = document.getElementById('festiveRewardBanner');
+        if (festBanner) festBanner.classList.add('hidden');
       }
       if (usedWallet > 0) {
         walletWaDetails += `\n*🪙 Wallet Cash Redeemed:* -₹${usedWallet}`;
