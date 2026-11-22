@@ -6018,6 +6018,7 @@
         }
       }
       checkoutOpenedFrom = null;
+      resetOrderButtonState();
     }
 
     function calculateAdvanceAmount(total) {
@@ -6328,7 +6329,22 @@
       }
     }
 
+    let isSubmittingOrder = false;
+
+    function resetOrderButtonState() {
+      isSubmittingOrder = false;
+      const placeBtn = document.getElementById('placeOrderBtn');
+      if (placeBtn) {
+        placeBtn.disabled = false;
+        placeBtn.innerHTML = `<i data-lucide="lock" class="w-4 h-4"></i><span>Confirm Order & Send to WhatsApp</span>`;
+        placeBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
     function submitFinalOrder() {
+      if (isSubmittingOrder) return;
+
       if (!cart || cart.length === 0) {
         alert("Your cart is empty! Please add products before checking out.");
         closeCheckout();
@@ -6345,28 +6361,38 @@
 
       if (!name || !phone || !address || !pincode || !city || !state) {
         alert("Please fill in all shipping details (Name, Phone, Address, Pincode, City, State) so we can dispatch your parcel!");
+        resetOrderButtonState();
         return;
       }
 
-      const cleanPhone = phone.replace(/[^0-9]/g, '');
-      if (cleanPhone.length < 10) {
+      // Robust Phone Validation: Handles +91 / leading 0, enforces 10 digits starting with 6-9, rejects all-same digits
+      const rawPhone = phone.replace(/[^0-9]/g, '');
+      const cleanPhone = (rawPhone.length > 10 && (rawPhone.startsWith('91') || rawPhone.startsWith('0')))
+        ? rawPhone.slice(-10)
+        : rawPhone;
+      const isRepeatedPhone = /^(\d)\1{9}$/.test(cleanPhone);
+
+      if (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone) || isRepeatedPhone) {
         const phoneInput = document.getElementById('custPhone');
         if (phoneInput) {
           phoneInput.focus();
           phoneInput.classList.add('border-red-500', 'ring-2', 'ring-red-200');
         }
-        alert("⚠️ Please enter a valid 10-digit mobile number for courier dispatch!");
+        alert("⚠️ Please enter a valid 10-digit Indian mobile number (starting with 6, 7, 8, or 9) for courier delivery!");
+        resetOrderButtonState();
         return;
       }
 
+      // Robust Pincode Validation: Exactly 6 digits, must start with 1-9 (never 000000)
       const cleanPincode = pincode.replace(/[^0-9]/g, '');
-      if (cleanPincode.length !== 6) {
+      if (cleanPincode.length !== 6 || !/^[1-9][0-9]{5}$/.test(cleanPincode)) {
         const pinInput = document.getElementById('custPincode');
         if (pinInput) {
           pinInput.focus();
           pinInput.classList.add('border-red-500', 'ring-2', 'ring-red-200');
         }
         alert("⚠️ Please enter a valid 6-digit postal pincode!");
+        resetOrderButtonState();
         return;
       }
 
@@ -6377,7 +6403,9 @@
       // STRICT VALIDATION: If paying via UPI QR or Partial COD, UTR/Ref number is mandatory!
       if (currentSelectedPayment === 'upi' || currentSelectedPayment === 'partial_cod') {
         const cleanUpiRef = upiRef.replace(/[^0-9]/g, '');
-        if (!cleanUpiRef || cleanUpiRef.length < 10) {
+        const isAllSameDigits = /^(\d)\1{9,11}$/.test(cleanUpiRef);
+
+        if (!cleanUpiRef || cleanUpiRef.length < 10 || cleanUpiRef.length > 12 || isAllSameDigits) {
           const upiInput = document.getElementById('upiRefNumber');
           if (upiInput) {
             upiInput.focus();
@@ -6388,12 +6416,22 @@
           const isPartial = (currentSelectedPayment === 'partial_cod');
           const advPromptAmt = isPartial ? calculateAdvanceAmount(total) : 0;
           alert(isPartial
-            ? `⚠️ 12-Digit UPI Transaction ID / UTR is Required for Partial COD!\n\nPlease complete your ₹${advPromptAmt} (20%) booking advance payment in your UPI app (GPay / PhonePe / Paytm) and enter the 12-digit UTR/Ref number from your payment receipt before submitting your order.`
-            : "⚠️ 12-Digit UPI Transaction ID / UTR is Required!\n\nPlease complete your payment in your UPI app (GPay / PhonePe / Paytm) and enter the 12-digit UTR/Ref number from your payment receipt before submitting your order."
+            ? `⚠️ Valid 10-12 Digit UPI Transaction ID / UTR is Required for Partial COD!\n\nPlease complete your ₹${advPromptAmt} (20%) booking advance payment in your UPI app (GPay / PhonePe / Paytm) and enter the real 12-digit UTR/Ref number from your payment receipt before submitting your order.`
+            : "⚠️ Valid 10-12 Digit UPI Transaction ID / UTR is Required!\n\nPlease complete your payment in your UPI app (GPay / PhonePe / Paytm) and enter the real 12-digit UTR/Ref number from your payment receipt before submitting your order."
           );
+          resetOrderButtonState();
           return;
         }
       }
+
+      // Lock button to prevent double-submissions or duplicate order spams
+      const placeBtn = document.getElementById('placeOrderBtn');
+      if (placeBtn) {
+        placeBtn.disabled = true;
+        placeBtn.innerHTML = `<span>Processing Order...</span>`;
+        placeBtn.classList.add('opacity-75', 'cursor-not-allowed');
+      }
+      isSubmittingOrder = true;
 
       // Handle Razorpay checkout if selected
       if (currentSelectedPayment === 'razorpay') {
@@ -6402,6 +6440,7 @@
         if (!rzpKey || rzpKey.includes("placeholder")) {
           alert("Card & Netbanking gateway is currently being verified.\n\nPlease choose 'Partial COD' or 'Instant UPI' to place your order directly!");
           handlePaymentMethodChange('partial_cod');
+          resetOrderButtonState();
           return;
         }
 
@@ -6419,6 +6458,7 @@
           modal: {
             ondismiss: function () {
               // Customer closed or cancelled payment: NO ORDER IS PLACED!
+              resetOrderButtonState();
               alert("Payment was not completed. Your order has not been placed.");
             }
           },
@@ -6431,10 +6471,12 @@
         try {
           const rzp = new Razorpay(options);
           rzp.on('payment.failed', function (resp) {
+            resetOrderButtonState();
             alert("Payment failed: " + (resp.error?.description || "Transaction declined") + ".\nNo order was placed.");
           });
           rzp.open();
         } catch (e) {
+          resetOrderButtonState();
           alert("Error opening Razorpay checkout: " + e.message);
         }
         return;
@@ -6570,7 +6612,15 @@ Please pack and dispatch! ✨`
       document.getElementById('orderSuccessModal').classList.remove('hidden');
       pushModalHistory('orderSuccessModal');
       renderMerchantOrders();
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
+      resetOrderButtonState();
+
+      // Clear UTR field so future transactions must enter a fresh UTR
+      const upiField = document.getElementById('upiRefNumber');
+      if (upiField) {
+        upiField.value = '';
+        upiField.classList.remove('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-200');
+      }
       return orderId;
     }
 
