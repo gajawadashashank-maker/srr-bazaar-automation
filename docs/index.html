@@ -6833,8 +6833,8 @@
       const doubleBox = document.getElementById('viralDoubleBox');
 
       // ANTI-CHEAT DWELL CHECK:
-      // If user returned in less than 2.5 seconds, they canceled or closed WhatsApp without choosing contact/sending!
-      if (dwellSec < 2.5) {
+      // If user returned in less than 4.5 seconds, they canceled or closed WhatsApp without choosing contact/sending!
+      if (dwellSec < 4.5) {
         if (doubleBox) {
           const stepNum = viralShareStep + 1;
           const target = viralShareStep === 0 ? 'a WhatsApp friend' : 'a WhatsApp group';

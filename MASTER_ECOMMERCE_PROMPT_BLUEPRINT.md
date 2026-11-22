@@ -879,9 +879,9 @@ ef) as it is strictly reserved for new buyer acquisition.
 - **How to Avoid**:
   1. **Anti-Cheat App-Switch & Dwell Time Guard**:
      - When user triggers a share, record `viralShareTimestamp = Date.now()` and track browser visibility (`visibilitychange` / `window.onfocus`).
-     - If the user returns to the store in **under 2.5 seconds**, detect the premature cancellation and trigger an alert:
+     - If the user returns to the store in **under 4.5 seconds**, detect the premature cancellation and trigger an alert:
        `⚠️ Invite Not Sent! You returned before selecting a contact and tapping Send in WhatsApp. Please send the invite to complete Step X!`
-     - Prevents instant button-click exploitation and requires genuine user engagement.
+     - Prevents instant button-click exploitation and requires genuine user engagement (4.5s sweet spot prevents quick swipe-backs while accommodating fast real senders).
   2. **2-Share Milestone Progress Bar (0/2 → 1/2 → 2/2)**:
      - Require two distinct verified shares:
        - **Share 1 (Friend - 50%)**: Tailored 1-on-1 personal recommendation copy. Progress bar fills to 50%.
