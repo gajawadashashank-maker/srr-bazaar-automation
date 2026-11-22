@@ -930,6 +930,20 @@ ef) as it is strictly reserved for new buyer acquisition.
        - `[✅ Yes, Sent to WhatsApp Group (Unlock 2X)]`: Finalizes multiplier and credits cash.
        - `[🔄 Sent to 1 person by mistake? Re-open to pick Group]`: Relaunches WhatsApp so the user can complete the group dispatch properly.
 
+### 33. Universal Mobile Back-Gesture & Hardware Key Routing (Preventing Accidental Site Exits on Overlay Modals)
+- **What Happened**:
+  - When the Spin & Win wheel modal (`#spinWheelModal`) or Refer modal (`#referModal`) was open, swiping back from the screen edge on mobile (or clicking browser back) exited the site entirely back to Google or the phone home screen instead of simply dismissing the open modal.
+- **Why It Happened**:
+  - `openSpinWheelModal()` pushed a state to `window.history` (`pushModalHistory('spinWheelModal')`), but in the global `window.addEventListener('popstate', ...)` interceptor, `spinWheelModal` and `referModal` were omitted from the active `modalPriority` list.
+  - When `popstate` fired, none of the listed modals matched, so the modal remained open while the browser's history entry was popped. A subsequent swipe immediately navigated away from the website.
+- **How to Avoid**:
+  1. **Exhaustive Modal Priority List**:
+     - Ensure every modal that calls `pushModalHistory(modalId)` is registered in `modalPriority` inside both `window.addEventListener('popstate')` and `document.addEventListener('keydown')` (Escape key):
+       `['spinWheelModal', 'referModal', 'aiStylistModal', 'orderSuccessModal', 'merchantModal', 'merchantPinModal', 'checkoutModal', 'trackingModal', 'policyModal', 'cartDrawer', 'quickViewModal']`.
+  2. **Seamless Single-Layer Dismissal**:
+     - Swiping back dismisses the topmost visible overlay and executes `syncBodyScrollLock()`, keeping the user on the store catalogue.
+
+
 
 
 

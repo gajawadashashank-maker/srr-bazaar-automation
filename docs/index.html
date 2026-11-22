@@ -6273,6 +6273,8 @@
       }
 
       const modalPriority = [
+        'spinWheelModal',
+        'referModal',
         'aiStylistModal',
         'orderSuccessModal',
         'merchantModal',
@@ -6300,6 +6302,8 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' || e.keyCode === 27) {
         const modalPriority = [
+          'spinWheelModal',
+          'referModal',
           'aiStylistModal',
           'orderSuccessModal',
           'merchantModal',
@@ -6313,7 +6317,9 @@
         for (const mId of modalPriority) {
           const el = document.getElementById(mId);
           if (el && !el.classList.contains('hidden')) {
-            if (mId === 'aiStylistModal') closeAiStylistModal();
+            if (mId === 'spinWheelModal') closeSpinWheelModal();
+            else if (mId === 'referModal') closeReferModal();
+            else if (mId === 'aiStylistModal') closeAiStylistModal();
             else if (mId === 'cartDrawer') toggleCartDrawer(false);
             else if (mId === 'quickViewModal') closeQuickView();
             else if (mId === 'checkoutModal') closeCheckout();
