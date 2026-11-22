@@ -389,6 +389,60 @@ def _verify_meta_signature(raw_body: bytes, signature_header: str | None) -> Non
         raise HTTPException(status_code=401, detail="Invalid Meta webhook signature")
 
 
+def regenerate_google_merchant_feed() -> None:
+    """Regenerate docs/google_merchant_feed.xml from docs/products.json for Google Shopping."""
+    try:
+        import xml.etree.ElementTree as ET
+        from xml.dom import minidom
+        docs_dir = Path("docs")
+        products_file = docs_dir / "products.json"
+        if not products_file.exists():
+            return
+        products_data = json.loads(products_file.read_text(encoding="utf-8"))
+
+        def get_g_category(cat: str, title: str) -> str:
+            t = title.lower()
+            if "saree" in t or cat == "saree":
+                return "Apparel & Accessories > Clothing > Traditional & Cultural Wear > Sarees"
+            if any(k in t for k in ["diya", "tray", "plate", "pooja", "bowl", "lotus flower", "nomu", "shatanamavali", "kadapalu", "wooden steps", "decor"]):
+                return "Home & Garden > Religious & Ceremonial"
+            return "Apparel & Accessories > Jewelry"
+
+        rss = ET.Element("rss", {"version": "2.0", "xmlns:g": "http://base.google.com/ns/1.0"})
+        channel = ET.SubElement(rss, "channel")
+        ET.SubElement(channel, "title").text = "SRR Bazaar — Sujatha Collections Product Feed"
+        ET.SubElement(channel, "link").text = "https://srrbazaar.com"
+        ET.SubElement(channel, "description").text = "Authentic Sarees, Handcrafted Bridal Jewellery, Jadau Kundan, and Home Decor"
+
+        for p in products_data:
+            item = ET.SubElement(channel, "item")
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}id").text = str(p["id"])
+            clean_title = p.get("title", "").strip()
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}title").text = clean_title
+            clean_desc = (p.get("description") or f"Exclusive {clean_title} with premium finish.").strip()
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}description").text = clean_desc
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}link").text = f"https://srrbazaar.com/#prod-{p['id']}"
+            img_path = p.get("image", "").lstrip("/")
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}image_link").text = f"https://srrbazaar.com/{img_path}"
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}condition").text = "new"
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}availability").text = "in_stock"
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}price").text = f"{p['price']} INR"
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}brand").text = "SRR Bazaar"
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}identifier_exists").text = "no"
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}google_product_category").text = get_g_category(p.get("category", ""), clean_title)
+            shipping = ET.SubElement(item, "{http://base.google.com/ns/1.0}shipping")
+            ET.SubElement(shipping, "{http://base.google.com/ns/1.0}country").text = "IN"
+            ET.SubElement(shipping, "{http://base.google.com/ns/1.0}price").text = "0 INR"
+
+        xml_str = ET.tostring(rss, encoding="utf-8")
+        dom = minidom.parseString(xml_str)
+        pretty_xml = dom.toprettyxml(indent="  ")
+        (docs_dir / "google_merchant_feed.xml").write_text(pretty_xml, encoding="utf-8")
+        logger.info("Auto-regenerated docs/google_merchant_feed.xml with %d products", len(products_data))
+    except Exception as e:
+        logger.warning("Could not regenerate google_merchant_feed.xml: %s", e)
+
+
 def sync_product_to_website_catalogue(
     image_path: Path,
     product_name: str,
@@ -548,6 +602,12 @@ def sync_product_to_website_catalogue(
             generate_all_product_pages()
         except Exception as gen_err:
             logger.warning("Could not generate individual product page: %s", gen_err)
+
+        # Auto-regenerate Google Merchant Feed XML so new product appears in Google Shopping
+        try:
+            regenerate_google_merchant_feed()
+        except Exception as feed_err:
+            logger.warning("Could not auto-regenerate google_merchant_feed.xml: %s", feed_err)
 
         # Deploy live to GitHub Pages and main
         try:
