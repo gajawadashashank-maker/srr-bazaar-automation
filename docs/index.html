@@ -1975,7 +1975,8 @@
             <label onclick="handlePaymentMethodChange('partial_cod')"
               class="payment-option cursor-pointer border-2 border-royal-500 bg-amber-50/50 rounded-xl p-3 flex flex-col justify-between space-y-2 transition relative overflow-hidden shadow-2xs">
               <div class="flex items-start justify-between">
-                <input type="radio" name="paymentMethod" value="partial_cod" checked onchange="handlePaymentMethodChange('partial_cod')"
+                <input type="radio" name="paymentMethod" value="partial_cod" checked
+                  onchange="handlePaymentMethodChange('partial_cod')"
                   class="text-royal-600 focus:ring-royal-500 mt-0.5">
                 <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded font-extrabold uppercase tracking-wide">Popular</span>
               </div>
@@ -2019,7 +2020,8 @@
           <div id="upiPaymentBox" class="bg-stone-50 border border-amber-300 rounded-xl p-4 space-y-3">
 
             <!-- Partial COD Explanation Banner (Shown when partial_cod is active) -->
-            <div id="partialCodBanner" class="bg-gradient-to-r from-amber-500/15 via-amber-500/10 to-amber-600/15 border-2 border-amber-500/50 rounded-xl p-3 text-left space-y-1 shadow-2xs">
+            <div id="partialCodBanner"
+              class="bg-gradient-to-r from-amber-500/15 via-amber-500/10 to-amber-600/15 border-2 border-amber-500/50 rounded-xl p-3 text-left space-y-1 shadow-2xs">
               <div class="flex items-center justify-between">
                 <span class="inline-flex items-center gap-1.5 font-bold text-xs text-amber-950">
                   <span class="w-2 h-2 rounded-full bg-amber-600 animate-ping"></span>
@@ -2031,7 +2033,8 @@
                 Pay a 20% booking advance (<strong id="partialCodAdvanceDisplay" class="text-amber-950 font-bold">₹150</strong>) now via UPI to lock your parcel for dispatch. The remaining balance of <strong id="partialCodBalanceDisplay" class="text-stone-950 font-extrabold text-xs">₹0</strong> will be collected in <strong>Cash on Delivery</strong> upon arrival!
               </p>
               <div class="flex items-center gap-2 pt-1 text-[10px] text-stone-600">
-                <span class="flex items-center gap-1 text-emerald-700 font-semibold"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> 100% Safe</span>
+                <span class="flex items-center gap-1 text-emerald-700 font-semibold"><i data-lucide="shield-check"
+                    class="w-3.5 h-3.5"></i> 100% Safe</span>
                 <span>•</span>
                 <span>Min ₹150 (covers courier dispatch)</span>
                 <span>•</span>
@@ -2145,14 +2148,16 @@
                 <label id="upiRefNumberLabel" class="block text-xs font-bold text-stone-800">
                   Enter 12-Digit UPI Ref / UTR for ₹150 Advance <span class="text-rose-600 font-black">*</span>
                 </label>
-                <span class="text-[10px] text-amber-800 bg-amber-100 font-semibold px-2 py-0.5 rounded">Mandatory to Confirm</span>
+                <span class="text-[10px] text-amber-800 bg-amber-100 font-semibold px-2 py-0.5 rounded">Mandatory to
+                  Confirm</span>
               </div>
               <input type="text" id="upiRefNumber" maxlength="12" placeholder="e.g. 432109876543 (from payment receipt)"
                 class="w-full px-3 py-2 text-xs font-mono font-bold tracking-wider bg-white border-2 border-amber-400 rounded-lg focus:border-emerald-600 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
                 oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.classList.remove('border-red-500', 'bg-red-50');">
               <p class="text-[11px] text-stone-500 mt-1 flex items-start gap-1">
                 <i data-lucide="info" class="w-3.5 h-3.5 text-royal-600 flex-shrink-0 mt-0.5"></i>
-                <span id="upiRefHelpText">Pay ₹150 advance in your UPI app ➔ Copy the <strong>12-digit UPI UTR</strong> to confirm your booking.</span>
+                <span id="upiRefHelpText">Pay ₹150 advance in your UPI app ➔ Copy the <strong>12-digit UPI UTR</strong>
+                  to confirm your booking.</span>
               </p>
             </div>
           </div>
@@ -2251,7 +2256,8 @@
           <span id="successPaymentMethod" class="font-medium text-stone-800 uppercase"></span>
         </div>
         <!-- Partial COD breakdown -->
-        <div id="successPartialCodBox" class="hidden border-t border-amber-200/80 pt-2 pb-1 space-y-1 bg-amber-50/70 -mx-4 px-4 py-2 rounded-lg">
+        <div id="successPartialCodBox"
+          class="hidden border-t border-amber-200/80 pt-2 pb-1 space-y-1 bg-amber-50/70 -mx-4 px-4 py-2 rounded-lg">
           <div class="flex justify-between text-amber-950 font-bold">
             <span>⚡ Booking Advance Paid:</span>
             <span id="successAdvancePaid" class="text-emerald-700">₹150</span>
@@ -5882,7 +5888,7 @@
         document.getElementById('checkoutButton').classList.remove('opacity-50', 'cursor-not-allowed');
         list.innerHTML = cart.map(item => `
           <div class="flex items-center gap-3 p-2.5 rounded-xl border border-stone-200 bg-white shadow-xs">
-            <img src="${item.image}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+            <img src="${item.image || 'images/jadau_kundan_necklace.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg'">
             <div class="flex-1 min-w-0">
               <h4 class="text-xs font-bold text-stone-900 truncate">${item.title}</h4>
               <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
@@ -6356,6 +6362,10 @@
         return;
       }
 
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      let discount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
+      const total = Math.max(0, subtotal - discount);
+
       // STRICT VALIDATION: If paying via UPI QR or Partial COD, UTR/Ref number is mandatory!
       if (currentSelectedPayment === 'upi' || currentSelectedPayment === 'partial_cod') {
         const cleanUpiRef = upiRef.replace(/[^0-9]/g, '');
@@ -6376,10 +6386,6 @@
           return;
         }
       }
-
-      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      let discount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
-      const total = Math.max(0, subtotal - discount);
 
       // Handle Razorpay checkout if selected
       if (currentSelectedPayment === 'razorpay') {
