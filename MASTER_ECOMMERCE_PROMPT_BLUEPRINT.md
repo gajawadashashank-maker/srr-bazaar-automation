@@ -486,6 +486,17 @@ This log documents every architectural pitfall discovered and resolved during re
   3. When an image is picked, immediately read it via `FileReader.readAsDataURL` and open the AI chat with the customer's actual photo thumbnail (`<img>`) and an animated analyzing indicator so the customer gets immediate visual confirmation.
   4. Detect `isLocalHost`: only probe `/api/visual-search` when running on a local development server. On production static hosts (GitHub Pages), immediately run an in-browser HTML5 canvas color & pattern classifier (`analyzeImageClient`) to match against the catalog in under 100 ms with zero network latency.
 
+### 13. Amazon Lens Visual Search Dual-Mode Architecture (Search Bar vs. Chatbot Modal)
+- **What Happened**: When shoppers tapped the 📷 camera icon on the top search bar, the UI unexpectedly popped open the full-screen AI Stylist chatbot window over their screen. Shoppers expected the camera on the search bar to filter the catalog grid directly on the page (like Amazon / Google Lens) rather than interrupting their shopping flow with a chatbot modal.
+- **Why It Happened**: The image selection handler routed all camera uploads uniformly to `openAiStylistModal(true)`, regardless of where the camera trigger was clicked.
+- **How to Avoid**:
+  1. **Dual-Mode Context Routing** (`visualSearchTarget`):
+     - If triggered from **Search Bar** (`desktop` or `mobile`): Keep the chatbot modal CLOSED. Auto-fill the search input with detected keywords, smoothly scroll down to `#catalogue`, and display an Amazon-style `#visualLensBanner` showing the uploaded photo thumbnail, detected keywords, and a 1-tap "✕ Clear" button.
+     - If triggered from **AI Stylist Modal** (`chat`): Keep the flow inside the chat stream, rendering the uploaded photo bubble, analyzing indicator, and interactive recommendation cards.
+  2. **Fail-Safe Network Timeout**:
+     - Constrain backend visual search network fetches to a maximum 4-second timeout (`AbortController`). If the backend tunnel is offline or sleeping, fail over immediately to the local in-browser visual classifier (`analyzeImageClient`) so mobile shoppers never encounter hanging requests.
+
+
 
 
 
