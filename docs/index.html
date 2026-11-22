@@ -337,6 +337,15 @@
       -webkit-text-fill-color: transparent;
     }
 
+    @keyframes laserScanAnim {
+      0% { top: 0%; opacity: 0.8; }
+      50% { top: 96%; opacity: 1; }
+      100% { top: 0%; opacity: 0.8; }
+    }
+    .animate-scan {
+      animation: laserScanAnim 1.6s ease-in-out infinite;
+    }
+
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
     }
@@ -1016,27 +1025,61 @@
       </div>
     </div>
 
-    <!-- Amazon-Style Visual Lens Banner -->
-    <div id="visualLensBanner"
-      class="hidden mb-4 p-3 bg-amber-50/90 border border-amber-200 rounded-2xl flex items-center justify-between gap-3 shadow-xs animate-in fade-in duration-200">
-      <div class="flex items-center gap-2.5 min-w-0">
-        <img id="visualLensThumb" src=""
-          class="w-10 h-10 object-cover rounded-xl border border-amber-300 shadow-2xs flex-shrink-0"
-          alt="Visual Search Query">
-        <div class="min-w-0">
-          <div class="flex items-center gap-1.5 text-xs font-bold text-amber-950">
-            <i data-lucide="camera" class="w-3.5 h-3.5 text-amber-700"></i>
-            <span>Visual Lens Matches</span>
+    <!-- Dedicated Visual Search Active Scanning Overlay -->
+    <div id="visualScanningModal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+      <div class="bg-white rounded-3xl p-6 max-w-xs w-full shadow-2xl border border-amber-300 text-center space-y-4">
+        <div class="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden border-2 border-amber-400 shadow-md bg-stone-900">
+          <img id="scanningThumbPreview" src="" class="w-full h-full object-cover opacity-90" alt="Scanning Photo">
+          <div class="absolute inset-x-0 h-1.5 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 shadow-[0_0_15px_#f59e0b] animate-scan"></div>
+        </div>
+        <div class="space-y-1">
+          <div class="flex items-center justify-center gap-2 text-stone-900 font-bold text-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+            <span>AI Lens Searching...</span>
           </div>
-          <p class="text-[11px] text-stone-600 truncate" id="visualLensQueryText">Showing closest matching items for
-            your photo</p>
+          <p id="scanningStatusText" class="text-[11px] text-stone-500 leading-snug">
+            Scanning photo & matching items in SRR Bazaar catalogue...
+          </p>
+        </div>
+        <div class="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
+          <div class="bg-amber-500 h-full w-2/3 animate-pulse rounded-full"></div>
         </div>
       </div>
-      <button onclick="clearVisualLensFilter()"
-        class="px-2.5 py-1 text-[11px] font-semibold text-stone-600 hover:text-stone-900 bg-white hover:bg-stone-100 border border-stone-200 rounded-full transition flex items-center gap-1 flex-shrink-0 cursor-pointer shadow-2xs">
-        <i data-lucide="x" class="w-3 h-3"></i>
-        <span>Clear</span>
-      </button>
+    </div>
+
+    <!-- Amazon-Style Visual Lens Banner -->
+    <div id="visualLensBanner"
+      class="hidden mb-4 p-3 bg-amber-50/95 border border-amber-300 rounded-2xl shadow-xs space-y-2 animate-in fade-in duration-200">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <img id="visualLensThumb" src=""
+            class="w-11 h-11 object-cover rounded-xl border-2 border-amber-400 shadow-2xs flex-shrink-0"
+            alt="Visual Search Query">
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-amber-950">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span>AI Visual Lens Match</span>
+            </div>
+            <p class="text-xs font-semibold text-stone-800 truncate" id="visualLensQueryText">Showing closest matching items for your photo</p>
+          </div>
+        </div>
+        <button onclick="clearVisualLensFilter()"
+          class="px-2.5 py-1 text-[11px] font-bold text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-100 border border-stone-300 rounded-full transition flex items-center gap-1 flex-shrink-0 cursor-pointer shadow-2xs">
+          <i data-lucide="x" class="w-3 h-3"></i>
+          <span>Clear Filter</span>
+        </button>
+      </div>
+
+      <!-- Quick Category Refinement Pills -->
+      <div class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-amber-200/60">
+        <span class="text-[10px] text-stone-500 font-bold uppercase tracking-wider">Refine:</span>
+        <button onclick="applyVisualRefine('leaf buffet plates')" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-emerald-800 border border-emerald-300 hover:bg-emerald-50 transition cursor-pointer">🍃 Buffet Plates</button>
+        <button onclick="applyVisualRefine('33 diya stand pooja')" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-amber-900 border border-amber-300 hover:bg-amber-50 transition cursor-pointer">🪔 Diya Stands</button>
+        <button onclick="applyVisualRefine('swan decorative tray')" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-stone-800 border border-stone-300 hover:bg-stone-50 transition cursor-pointer">🦢 Swan Trays</button>
+        <button onclick="applyVisualRefine('pure jadau kundan necklace')" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-purple-900 border border-purple-300 hover:bg-purple-50 transition cursor-pointer">👑 Kundan Sets</button>
+        <button onclick="applyVisualRefine('pure khadhi cotton saree')" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-rose-900 border border-rose-300 hover:bg-rose-50 transition cursor-pointer">🥻 Sarees</button>
+      </div>
     </div>
 
     <!-- Products Container -->
@@ -3581,21 +3624,23 @@
 
         let tokenHit = false;
 
-        // A. Direct & stem/synonym check in title, category, tag, desc
+        // A. Direct & stem/synonym check in title, category, tag, desc with whole-word boundary
         for (const variant of allVariants) {
-          if (titleNorm.includes(variant)) {
+          const escaped = variant.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const varRegex = new RegExp(`(^|[^a-zA-Z0-9])${escaped}([^a-zA-Z0-9]|$)`, 'i');
+          if (varRegex.test(titleNorm)) {
             tokenHit = true;
             score += 35;
             break;
-          } else if (titleCondensed.includes(variant)) {
+          } else if (titleCondensed.includes(variant) && variant.length > 4) {
             tokenHit = true;
             score += 30;
             break;
-          } else if (catNorm.includes(variant) || tagNorm.includes(variant)) {
+          } else if (varRegex.test(catNorm) || varRegex.test(tagNorm)) {
             tokenHit = true;
             score += 25;
             break;
-          } else if (descNorm.includes(variant)) {
+          } else if (varRegex.test(descNorm)) {
             tokenHit = true;
             score += 15;
             break;
@@ -3606,14 +3651,11 @@
           }
         }
 
-        // B. Fuzzy match raw query token against title tokens
+        // B. Fuzzy match raw query token against title tokens only
         if (!tokenHit) {
           if (tTokens.some(tTok => isFuzzyMatch(token, tTok))) {
             tokenHit = true;
             score += 28;
-          } else if (descNorm.split(' ').slice(0, 20).some(dTok => isFuzzyMatch(token, dTok))) {
-            tokenHit = true;
-            score += 15;
           }
         }
 
@@ -4378,17 +4420,16 @@
       if (!file) return;
 
       const isChatMode = (visualSearchTarget === 'chat');
-      showToastNotification(isChatMode ? "📷 Photo selected! Analyzing image with AI..." : "📷 AI Lens analyzing your photo...", 3500);
 
       // Read image as Data URL for instant user visual preview
       const reader = new FileReader();
       reader.onload = async function (e) {
         const dataUrl = e.target.result;
 
-        // If triggered inside AI Stylist chat, show live chat interaction
-        const chatContainer = document.getElementById('aiChatMessages');
+        // Pattern A: Chat Mode (inside AI Stylist modal)
         if (isChatMode) {
           openAiStylistModal(true);
+          const chatContainer = document.getElementById('aiChatMessages');
           if (chatContainer) {
             // 1. Render User Message with uploaded image thumbnail
             const userMsg = document.createElement('div');
@@ -4402,12 +4443,11 @@
                 <div class="relative rounded-xl overflow-hidden border border-white/20 bg-black/20">
                   <img src="${dataUrl}" class="w-full max-h-48 object-cover rounded-xl" alt="Uploaded Search Photo">
                 </div>
-                <p class="text-[11px] text-amber-100/90 pt-1">Inspecting design, gemstone & metalwork...</p>
+                <p class="text-[11px] text-amber-100/90 pt-1">Inspecting design, category & materials...</p>
               </div>
             `;
             chatContainer.appendChild(userMsg);
             if (window.lucide) lucide.createIcons();
-            chatContainer.scrollTop = chatContainer.scrollHeight;
 
             // 2. Render Animated AI Analyzing Indicator
             const indicator = document.createElement('div');
@@ -4417,11 +4457,19 @@
               <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 mt-0.5">SR</div>
               <div class="bg-white rounded-2xl rounded-tl-xs p-3.5 border border-stone-200 shadow-2xs text-xs text-stone-600 flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping flex-shrink-0"></span>
-                <span>Matching against SRR Bazaar jewellery & festive collections...</span>
+                <span>Matching against SRR Bazaar catalogue...</span>
               </div>
             `;
             chatContainer.appendChild(indicator);
             chatContainer.scrollTop = chatContainer.scrollHeight;
+          }
+        } else {
+          // Pattern B: Search Bar Mode -> Show Dedicated Active Scanning Modal until search finishes!
+          const scanModal = document.getElementById('visualScanningModal');
+          const scanThumb = document.getElementById('scanningThumbPreview');
+          if (scanModal && scanThumb) {
+            scanThumb.src = dataUrl;
+            scanModal.classList.remove('hidden');
           }
         }
 
@@ -4429,16 +4477,24 @@
         let matchedProductIds = [];
         let queryKeywords = '';
 
-        // Step A: Attempt backend /api/visual-search (Live Ngrok Tunnel or Localhost)
+        // Step A: Attempt backend /api/visual-search (Localhost or live Ngrok public tunnel)
         try {
           const formData = new FormData();
           formData.append('file', file);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 4000);
+          const timeoutId = setTimeout(() => controller.abort(), 2000);
 
-          const res = await fetch('/api/visual-search', {
+          const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+          const backendUrl = isLocal
+            ? '/api/visual-search'
+            : 'https://squander-gristle-panhandle.ngrok-free.dev/api/visual-search';
+
+          const res = await fetch(backendUrl, {
             method: 'POST',
             body: formData,
+            headers: {
+              'ngrok-skip-browser-warning': 'true'
+            },
             signal: controller.signal
           });
           clearTimeout(timeoutId);
@@ -4457,99 +4513,107 @@
             }
           }
         } catch (backendErr) {
-          console.log("[VisualSearch] Backend API unreachable; switching to client visual analyzer:", backendErr);
-      }
+          console.log("[VisualSearch] Backend API unreachable or timed out; switching to smart client analyzer:", backendErr);
+        }
 
-      // Step B: Smart Client-Side Image Classifier Fallback
-      if (!queryKeywords || matchedProductIds.length === 0) {
-        const clientAnalysis = await analyzeImageClient(dataUrl, file.name);
-        queryKeywords = clientAnalysis.keywords;
-        detectedDesc = clientAnalysis.summary;
-        matchedProductIds = clientAnalysis.productIds;
-      }
+        // Step B: Smart Client-Side Classifier Fallback
+        if (!queryKeywords || matchedProductIds.length === 0) {
+          const clientAnalysis = await analyzeImageClient(dataUrl, file.name);
+          queryKeywords = clientAnalysis.keywords;
+          detectedDesc = clientAnalysis.summary;
+          matchedProductIds = clientAnalysis.productIds;
+        }
 
-      // Remove analyzing indicator if in chat mode
-      const ind = document.getElementById('aiVisionAnalyzingIndicator');
-      if (ind) ind.remove();
+        // Hide scanning indicators
+        const ind = document.getElementById('aiVisionAnalyzingIndicator');
+        if (ind) ind.remove();
+        const scanModal = document.getElementById('visualScanningModal');
+        if (scanModal) scanModal.classList.add('hidden');
 
-      const matchedProds = (matchedProductIds || [])
-        .map(id => products.find(p => p.id === id))
-        .filter(Boolean);
-      const displayProds = matchedProds.length > 0 ? matchedProds.slice(0, 4) : products.slice(0, 3);
+        const matchedProds = (matchedProductIds || [])
+          .map(id => products.find(p => p.id === id))
+          .filter(Boolean);
+        const displayProds = matchedProds.length > 0 ? matchedProds.slice(0, 4) : products.slice(0, 3);
 
-      if (isChatMode && chatContainer) {
-        // --- Pattern A: Chatbot Stream Bubble ---
-        const aiBubble = document.createElement('div');
-        aiBubble.className = "flex items-start gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-200";
-        aiBubble.innerHTML = `
-            <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 mt-0.5">SR</div>
-            <div class="bg-white rounded-2xl rounded-tl-xs p-3.5 border border-stone-200/80 shadow-2xs max-w-[88%] space-y-2.5">
-              <div class="flex items-center gap-1.5 text-xs font-bold text-amber-900 border-b border-amber-100 pb-1.5">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
-                <span>Visual Match Found!</span>
-              </div>
-              <p class="text-xs text-stone-700 leading-relaxed">${detectedDesc}</p>
-              
-              <!-- Quick Filter Chips -->
-              <div class="flex flex-wrap gap-1.5 pt-1">
-                <button onclick="sendAiQuickPrompt('Show me Kundan chokers')" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full font-medium hover:bg-amber-100 transition cursor-pointer">👑 Kundan Sets</button>
-                <button onclick="sendAiQuickPrompt('Show me Diya Stands & Pooja items')" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full font-medium hover:bg-amber-100 transition cursor-pointer">🪔 Pooja Brass</button>
-                <button onclick="sendAiQuickPrompt('Show me Swan trays and organizers')" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full font-medium hover:bg-amber-100 transition cursor-pointer">🦢 Swan Trays</button>
-                <button onclick="sendAiQuickPrompt('Show me Leaf Buffet Plates')" class="text-[10px] px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full font-medium hover:bg-emerald-100 transition cursor-pointer">🍃 Leaf Plates</button>
-              </div>
+        if (isChatMode && chatContainer) {
+          // --- Pattern A: Chatbot Stream Bubble ---
+          const aiBubble = document.createElement('div');
+          aiBubble.className = "flex items-start gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-200";
+          aiBubble.innerHTML = `
+              <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-extrabold flex-shrink-0 mt-0.5">SR</div>
+              <div class="bg-white rounded-2xl rounded-tl-xs p-3.5 border border-stone-200/80 shadow-2xs max-w-[88%] space-y-2.5">
+                <div class="flex items-center gap-1.5 text-xs font-bold text-amber-900 border-b border-amber-100 pb-1.5">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
+                  <span>Visual Match Found!</span>
+                </div>
+                <p class="text-xs text-stone-700 leading-relaxed">${detectedDesc}</p>
+                
+                <!-- Quick Filter Chips -->
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  <button onclick="sendAiQuickPrompt('Show me Kundan chokers')" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full font-medium hover:bg-amber-100 transition cursor-pointer">👑 Kundan Sets</button>
+                  <button onclick="sendAiQuickPrompt('Show me Diya Stands & Pooja items')" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full font-medium hover:bg-amber-100 transition cursor-pointer">🪔 Pooja Brass</button>
+                  <button onclick="sendAiQuickPrompt('Show me Swan trays and organizers')" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full font-medium hover:bg-amber-100 transition cursor-pointer">🦢 Swan Trays</button>
+                  <button onclick="sendAiQuickPrompt('Show me Leaf Buffet Plates')" class="text-[10px] px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full font-medium hover:bg-emerald-100 transition cursor-pointer">🍃 Leaf Plates</button>
+                </div>
 
-              <!-- Recommended Product Cards -->
-              <div class="space-y-2 pt-2 border-t border-stone-100">
-                <p class="text-[10px] font-bold text-stone-500 uppercase tracking-wider">Closest Catalog Matches:</p>
-                ${displayProds.map(p => `
-                  <div class="flex items-center gap-2.5 p-2 rounded-xl bg-stone-50 hover:bg-stone-100/80 border border-stone-200 transition">
-                    <img src="${p.image}" class="w-12 h-12 object-cover rounded-lg border border-stone-200 flex-shrink-0" alt="${p.title}">
-                    <div class="flex-1 min-w-0">
-                      <h4 class="text-xs font-bold text-stone-900 truncate">${p.title}</h4>
-                      <p class="text-[11px] text-amber-800 font-extrabold">₹${p.price} <span class="text-[9px] text-emerald-700 font-normal">FREE Delivery</span></p>
+                <!-- Recommended Product Cards -->
+                <div class="space-y-2 pt-2 border-t border-stone-100">
+                  <p class="text-[10px] font-bold text-stone-500 uppercase tracking-wider">Closest Catalog Matches:</p>
+                  ${displayProds.map(p => `
+                    <div class="flex items-center gap-2.5 p-2 rounded-xl bg-stone-50 hover:bg-stone-100/80 border border-stone-200 transition">
+                      <img src="${p.image}" class="w-12 h-12 object-cover rounded-lg border border-stone-200 flex-shrink-0" alt="${p.title}">
+                      <div class="flex-1 min-w-0">
+                        <h4 class="text-xs font-bold text-stone-900 truncate">${p.title}</h4>
+                        <p class="text-[11px] text-amber-800 font-extrabold">₹${p.price} <span class="text-[9px] text-emerald-700 font-normal">FREE Delivery</span></p>
+                      </div>
+                      <div class="flex flex-col gap-1 flex-shrink-0">
+                        <button onclick="openProductQuickView(${p.id})" class="px-2 py-1 bg-white hover:bg-stone-50 text-stone-700 border border-stone-300 rounded text-[10px] font-bold shadow-2xs">View</button>
+                        <button onclick="addToCart(${p.id}, {openDrawer: true})" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-stone-950 rounded text-[10px] font-extrabold shadow-2xs">Buy</button>
+                      </div>
                     </div>
-                    <div class="flex flex-col gap-1 flex-shrink-0">
-                      <button onclick="openProductQuickView(${p.id})" class="px-2 py-1 bg-white hover:bg-stone-50 text-stone-700 border border-stone-300 rounded text-[10px] font-bold shadow-2xs">View</button>
-                      <button onclick="addToCart(${p.id}, {openDrawer: true})" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-stone-950 rounded text-[10px] font-extrabold shadow-2xs">Buy</button>
-                    </div>
-                  </div>
-                `).join('')}
+                  `).join('')}
+                </div>
               </div>
-            </div>
-          `;
-        chatContainer.appendChild(aiBubble);
-        if (window.lucide) lucide.createIcons();
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-      } else {
-        // --- Pattern B: Amazon Lens Pattern (Search Bar Triggered) ---
-        // Show visual lens banner above catalog
-        const banner = document.getElementById('visualLensBanner');
-        const thumb = document.getElementById('visualLensThumb');
-        const queryEl = document.getElementById('visualLensQueryText');
-        if (banner && thumb && queryEl) {
-          thumb.src = dataUrl;
-          queryEl.textContent = `Matching: "${queryKeywords}"`;
-          banner.classList.remove('hidden');
+            `;
+          chatContainer.appendChild(aiBubble);
           if (window.lucide) lucide.createIcons();
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        } else {
+          // --- Pattern B: Amazon Lens Pattern (Search Bar Triggered) ---
+          const banner = document.getElementById('visualLensBanner');
+          const thumb = document.getElementById('visualLensThumb');
+          const queryEl = document.getElementById('visualLensQueryText');
+          if (banner && thumb && queryEl) {
+            thumb.src = dataUrl;
+            queryEl.textContent = `Showing matches for: "${queryKeywords}"`;
+            banner.classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+          }
+
+          // Filter main storefront catalog grid
+          const dInput = document.getElementById('searchInput');
+          const mInput = document.getElementById('mobileSearchInput');
+          if (dInput) dInput.value = queryKeywords;
+          if (mInput) mInput.value = queryKeywords;
+          handleSearch(queryKeywords);
+
+          // COMPLETE AUTO-SCROLL TO VISUAL LENS BANNER & PRODUCTS
+          setTimeout(() => {
+            const targetEl = document.getElementById('visualLensBanner') || document.getElementById('productGrid');
+            if (targetEl) {
+              const rect = targetEl.getBoundingClientRect();
+              const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+              window.scrollTo({
+                top: Math.max(0, rect.top + scrollTop - 75),
+                behavior: 'smooth'
+              });
+            }
+          }, 150);
+
+          showToastNotification(`✨ Found matches for your photo!`, 3000);
         }
-
-        // Filter main storefront catalog grid
-        const dInput = document.getElementById('searchInput');
-        const mInput = document.getElementById('mobileSearchInput');
-        if (dInput) dInput.value = queryKeywords;
-        if (mInput) mInput.value = queryKeywords;
-        handleSearch(queryKeywords);
-
-        // Scroll smoothly to catalog section
-        const catSection = document.getElementById('catalogue');
-        if (catSection) {
-          catSection.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        showToastNotification(`✨ Found matches for your photo!`, 3000);
-      }
-    };
-    reader.readAsDataURL(file);
+      };
+      reader.readAsDataURL(file);
     }
 
     function clearVisualLensFilter() {
@@ -4559,11 +4623,33 @@
       showToastNotification("✨ Showing all catalog items", 2000);
     }
 
+    function applyVisualRefine(keywords) {
+      const dInput = document.getElementById('searchInput');
+      const mInput = document.getElementById('mobileSearchInput');
+      if (dInput) dInput.value = keywords;
+      if (mInput) mInput.value = keywords;
+      handleSearch(keywords);
+      const queryEl = document.getElementById('visualLensQueryText');
+      if (queryEl) queryEl.textContent = `Showing: "${keywords}"`;
+      showToastNotification(`✨ Showing ${keywords}`, 2000);
+      setTimeout(() => {
+        const targetEl = document.getElementById('visualLensBanner') || document.getElementById('productGrid');
+        if (targetEl) {
+          const rect = targetEl.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          window.scrollTo({
+            top: Math.max(0, rect.top + scrollTop - 75),
+            behavior: 'smooth'
+          });
+        }
+      }, 80);
+    }
+
     async function analyzeImageClient(dataUrl, fileName) {
       return new Promise((resolve) => {
         const cleanName = (fileName || '').toLowerCase().replace(/[-_.]/g, ' ');
         const nameKeywords = [];
-        const checkWords = ['kundan', 'choker', 'earring', 'saree', 'nomu', 'kadapalu', 'diya', 'tray', 'swan', 'plate', 'leaf', 'buffet', 'bridal', 'diamond', 'necklace', 'bangle', 'mangalsutra'];
+        const checkWords = ['buffet', 'plate', 'leaf', 'disposable', 'nomu', 'kadapalu', 'diya', 'tray', 'swan', 'kundan', 'choker', 'earring', 'saree', 'bridal', 'diamond', 'necklace', 'bangle', 'mangalsutra'];
         for (const w of checkWords) {
           if (cleanName.includes(w)) nameKeywords.push(w);
         }
@@ -4590,66 +4676,75 @@
             const gAvg = gSum / totalPixels;
             const bAvg = bSum / totalPixels;
 
-            let summaryText = 'I inspected your photo and detected traditional handcrafted ethnic design.';
-            let keywords = 'handcrafted jewellery';
-            let matchingIds = [536087643, 879604252, 383681891, 378586240];
+            let summaryText = 'I inspected your photo and matched items in SRR Bazaar catalogue.';
+            let keywords = 'leaf buffet plates';
+            let matchingIds = [928103031, 16088680];
 
-            // If name has explicit keywords, prioritize name
+            // 1. If filename has keywords, prioritize
             if (nameKeywords.length > 0) {
               keywords = nameKeywords.join(' ');
               const searchResults = searchProducts(keywords);
               if (searchResults.length > 0) {
                 matchingIds = searchResults.slice(0, 4).map(p => p.id);
-                summaryText = `Identified matching traditional collection for "${keywords}".`;
+                summaryText = `Identified matching collection for "${keywords}".`;
                 return resolve({ keywords, summary: summaryText, productIds: matchingIds });
               }
             }
 
-            // Visual Color Heuristics:
-            // 1. Green tones -> Leaf Buffet Plates
-            if (gAvg > rAvg + 15 && gAvg > bAvg + 15) {
-              keywords = 'biodegradable leaf buffet plates';
-              summaryText = 'Detected green biodegradable dining ware & eco-friendly leaf plates in your photo.';
-              const leafProds = products.filter(p => p.title.toLowerCase().includes('leaf') || p.category === 'pooja');
-              matchingIds = leafProds.map(p => p.id);
+            // 2. Buffet & Eco-Friendly Dining Ware / Leaf Plates:
+            // Earthy tan/kraft/leaf tone (R: 140-220, G: 130-210, B: 110-190) or green tint
+            const isTanOrEarthy = (rAvg > 140 && gAvg > 130 && bAvg > 105 && Math.abs(rAvg - gAvg) < 30);
+            const isGreenish = (gAvg > bAvg + 8 && gAvg > rAvg - 12);
+            if (isTanOrEarthy || isGreenish) {
+              keywords = 'leaf buffet plates';
+              summaryText = 'Detected eco-friendly dining ware & biodegradable leaf buffet plates in your photo.';
+              matchingIds = [928103031, 16088680];
+              return resolve({ keywords, summary: summaryText, productIds: matchingIds });
             }
-            // 2. High brightness & low saturation / silver -> Swan Tray & CZ Diamond Replica
-            else if (rAvg > 160 && gAvg > 160 && bAvg > 160 && Math.abs(rAvg - gAvg) < 20 && Math.abs(gAvg - bAvg) < 20) {
-              keywords = 'swan decorative tray silver cz diamond';
-              summaryText = 'Detected silver finish & sparkling diamond / metalwork motifs in your photo.';
-              matchingIds = [592133224, 536087643, 879604252, 383681891];
+
+            // 3. Silver Swan Tray / Cool metallic organizer:
+            if (rAvg > 165 && gAvg > 165 && bAvg > 165 && Math.abs(rAvg - gAvg) < 20 && Math.abs(gAvg - bAvg) < 20) {
+              keywords = 'swan decorative tray';
+              summaryText = 'Detected silver finish & handcrafted decorative organizer tray in your photo.';
+              matchingIds = [2, 247403588, 674255422];
+              return resolve({ keywords, summary: summaryText, productIds: matchingIds });
             }
-            // 3. Golden / Warm Brass / Yellow tones -> Diya Stands & Kundan Jewellery
-            else if (rAvg > 140 && gAvg > 110 && bAvg < 110) {
-              keywords = 'pure jadau kundan necklace brass diya stand';
-              summaryText = 'Detected warm gold / brass finish and traditional temple artisan styling in your photo.';
-              matchingIds = [703481457, 482910492, 342025745, 378586240];
+
+            // 4. Golden / Warm Brass / Yellow tones -> Diya Stands & Pooja Brassware
+            if (rAvg > 130 && gAvg > 100 && (rAvg - bAvg) > 35) {
+              keywords = '33 diya stand brass pooja';
+              summaryText = 'Detected warm brass finish and traditional temple pooja brassware in your photo.';
+              matchingIds = [703481457, 544617468, 749296149, 115033516];
+              return resolve({ keywords, summary: summaryText, productIds: matchingIds });
             }
-            // 4. Red / Maroon tones -> Bridal Combo & Sankranti Nomu
-            else if (rAvg > 130 && gAvg < 100 && bAvg < 100) {
-              keywords = 'bridal combo sankranti nomu';
-              summaryText = 'Detected vibrant festive maroon / auspicious ceremony tones in your photo.';
-              matchingIds = [378586240, 250107691, 703481457, 654912212];
-            } else {
-              keywords = 'kundan jewellery pooja collections';
-              summaryText = 'Detected handcrafted artisanal ornament design in your photo.';
-              matchingIds = [703481457, 592133224, 536087643, 482910492];
+
+            // 5. Red / Maroon / Saree Fabrics
+            if (rAvg > 130 && gAvg < 100 && bAvg < 100) {
+              keywords = 'pure khadhi cotton saree';
+              summaryText = 'Detected vibrant festive handloom fabric & saree weaves in your photo.';
+              matchingIds = [338044272, 592133224];
+              return resolve({ keywords, summary: summaryText, productIds: matchingIds });
             }
+
+            // 6. Default to Bridal & Kundan Jewellery
+            keywords = 'pure jadau kundan necklace';
+            summaryText = 'Detected handcrafted bridal necklace and designer jewellery in your photo.';
+            matchingIds = [857117252, 536087643, 879604252, 383681891, 378586240];
 
             resolve({ keywords, summary: summaryText, productIds: matchingIds });
           } catch (err) {
             resolve({
-              keywords: 'handcrafted jewellery',
-              summary: 'Detected handcrafted festive collection in your photo.',
-              productIds: [703481457, 592133224, 536087643, 482910492]
+              keywords: 'leaf buffet plates',
+              summary: 'Detected items in your photo.',
+              productIds: [928103031, 16088680]
             });
           }
         };
         img.onerror = function () {
           resolve({
-            keywords: 'handcrafted jewellery',
-            summary: 'Detected handcrafted festive collection in your photo.',
-            productIds: [703481457, 592133224, 536087643, 482910492]
+            keywords: 'leaf buffet plates',
+            summary: 'Detected items in your photo.',
+            productIds: [928103031, 16088680]
           });
         };
         img.src = dataUrl;
@@ -5086,9 +5181,14 @@
       let recommendedIds = [];
 
       try {
-        const res = await fetch('/api/ai-stylist', {
+        const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+        const stylistUrl = isLocal ? '/api/ai-stylist' : 'https://squander-gristle-panhandle.ngrok-free.dev/api/ai-stylist';
+        const res = await fetch(stylistUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          },
           body: JSON.stringify({ message: userText })
         });
         if (res.ok) {

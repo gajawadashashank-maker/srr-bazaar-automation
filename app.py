@@ -833,7 +833,8 @@ def _filter_relevant_catalog(query: str, products_list: list[dict], max_items: i
             # Fallback: return cheapest items if no items meet extreme low budget
             candidate_pool = sorted(products_list, key=lambda x: float(x.get('price', 999999)))[:max_items]
 
-    tokens = [t.lower() for t in re.findall(r'[a-zA-Z0-9]+', cleaned_text) if len(t) > 2]
+    stop_words = {"with", "this", "that", "from", "have", "image", "picture", "photo", "item", "items", "looks", "like", "also", "some", "only", "just", "show", "give", "here", "appears", "seems"}
+    tokens = [t.lower() for t in re.findall(r'[a-zA-Z0-9]+', cleaned_text) if len(t) > 2 and t.lower() not in stop_words]
     if not tokens:
         # If pure budget query (e.g. "under 500"), sort by price ascending
         return sorted(candidate_pool, key=lambda x: float(x.get('price', 999999)))[:max_items]
@@ -841,10 +842,21 @@ def _filter_relevant_catalog(query: str, products_list: list[dict], max_items: i
     scored = []
     for p in candidate_pool:
         score = 0
-        text = f"{p.get('title', '')} {p.get('category', '')} {p.get('description', '')}".lower()
+        title_tokens = set(re.findall(r'[a-zA-Z0-9]+', p.get('title', '').lower()))
+        desc_tokens = set(re.findall(r'[a-zA-Z0-9]+', f"{p.get('category', '')} {p.get('description', '')}".lower()))
+
         for t in tokens:
-            if t in text:
-                score += 2 if t in p.get('title', '').lower() else 1
+            variants = {t}
+            if t.endswith('s') and len(t) > 3:
+                variants.add(t[:-1])
+            elif not t.endswith('s'):
+                variants.add(t + 's')
+
+            if any(v in title_tokens for v in variants):
+                score += 5
+            elif any(v in desc_tokens for v in variants):
+                score += 2
+
         scored.append((score, p))
 
     scored.sort(key=lambda x: x[0], reverse=True)

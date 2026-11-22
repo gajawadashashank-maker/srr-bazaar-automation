@@ -519,6 +519,31 @@ This log documents every architectural pitfall discovered and resolved during re
   5. **Direct Video Reel Playback in Storefront**:
      - Wire the "Video Reel" badge on every product card in `docs/index.html` with an `onclick` handler to open QuickView and instantly switch to the video player, allowing shoppers to view the product sparkle in 1 tap directly from the catalogue.
 
+### 15. Visual Search Fuzzy Substring False Positives ("Plate" vs. "Gold-Plated") & Mobile Viewport Auto-Scroll
+- **What Happened**: When a shopper uploaded a photo of buffet dining plates via Visual Search ("Snap & Shop"), the search returned Kundan chokers and black beads necklaces instead of buffet plates. Additionally, while the search was processing, there was no active scanning feedback, and after completion, the page failed to scroll down to the matched products on mobile.
+- **Why It Happened**:
+  1. **Substring Over-Matching on Descriptions**:
+     - The search engine's scoring function used raw substring matching (`descNorm.includes(variant)`) and fuzzy Levenshtein distance on description tokens (`isFuzzyMatch("plates", "plated") === true`, distance = 1).
+     - Because over 30 jewelry items contained *"with gold-plated finish"* in their descriptions, they all scored false-positive hits for the query *"plate"*, flooding the top results with jewelry.
+  2. **Static Host API Disconnection**:
+     - On static GitHub Pages (`srrbazaar.com`), relative API calls (`fetch('/api/visual-search')`) returned 404 because static hosts cannot execute Python endpoints. The fallback color heuristic checked for bright green (`gAvg > rAvg + 15`), which failed on natural kraft/beige/areca nut buffet plates (`R=178, G=166, B=153`), defaulting to jewelry.
+  3. **High-Level Section Scroll**:
+     - The auto-scroll targeted `<section id="catalogue">`, which stopped at the top of the entire section above the filters, categories, and banners, leaving the actual products below the fold on mobile.
+- **How to Avoid**:
+  1. **Enforce Whole-Word Boundaries & Exclude Description Fuzzy Matching**:
+     - Never use raw substring search (`includes()`) or fuzzy distance matching across descriptions.
+     - Match query tokens against word boundaries `new RegExp(`(^|[^a-zA-Z0-9])${variant}([^a-zA-Z0-9]|$)`, 'i')` so that *"plate"* or *"plates"* never matches *"gold-plated"*.
+     - Restrict fuzzy matching strictly to product titles (`tTokens`), where typographical errors actually occur.
+  2. **Active Laser-Scanning UI Overlay**:
+     - When a photo is selected, immediately display `#visualScanningModal` showing the customer's photo with an animated laser scanning beam (`animate-scan`) and pulsing status text: *"AI Lens Scanning Photo... Matching items in SRR Bazaar catalogue..."*.
+     - Keep this modal visible until search and filtering finish, providing clear, responsive feedback.
+  3. **Pixel-Perfect Auto-Scroll to Results**:
+     - Auto-scroll directly to `#visualLensBanner` / `#productGrid` with a negative offset (`top - 75px`) to accommodate the sticky navigation header, placing the matching products squarely into view on mobile.
+  4. **Dynamic Backend Routing with 1-Tap Category Refinement**:
+     - In production, route `/api/visual-search` and `/api/ai-stylist` to the public backend tunnel (`https://squander-gristle-panhandle.ngrok-free.dev`) with a 2-second timeout and `'ngrok-skip-browser-warning': 'true'`.
+     - Provide 1-tap quick category refine pills (`🍃 Buffet Plates`, `🪔 Diya Stands`, `🦢 Swan Trays`, `👑 Kundan Sets`, `🥻 Sarees`) on `#visualLensBanner` so shoppers can jump to any department in a single tap.
+
+
 
 
 
