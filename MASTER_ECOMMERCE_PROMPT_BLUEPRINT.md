@@ -943,6 +943,33 @@ ef) as it is strictly reserved for new buyer acquisition.
   2. **Seamless Single-Layer Dismissal**:
      - Swiping back dismisses the topmost visible overlay and executes `syncBodyScrollLock()`, keeping the user on the store catalogue.
 
+### 34. Real-Time Unique Referral Link & Multi-Device Verification Engine (Owner Self-Click Fraud Guard, Group Retention & Dual Cloud Transport)
+- **What Happened**:
+  - Users wanted a genuine viral chain reaction where the festive spin reward doubles **only when 2 real, distinct people open the unique link on their phones**, without removing the WhatsApp Group sharing flow.
+- **Why It Happened**:
+  - Purely local-state sharing loops rely solely on WhatsApp dwell timers, meaning a user could return from WhatsApp without any friend actually opening the store link.
+  - Furthermore, static sites hosted on GitHub Pages lack a persistent server database to coordinate real-time click exchanges between two distinct mobile phones on cellular data.
+- **How to Avoid**:
+  1. **Per-Spin Cryptographic Tokenization**:
+     - Generate a unique token per spin session: `srr_spin_{phoneSuffix}_{timestamp}_{randomHex}`.
+     - Embed token in invite URLs: `?spin_ref=${spinToken}&ref=${phone}`.
+     - Tag the initiator's device in local storage: `localStorage.setItem('srr_spin_owner_' + spinToken, 'true')`.
+  2. **Dual-Cloud Click Transport Architecture**:
+     - **Primary (Static-Friendly Serverless)**: Utilise a lightweight pub/sub topic broker (e.g. `https://ntfy.sh/{token}`) where Phone B and Phone C publish their unique persistent `deviceId` without needing backend servers.
+     - **Fallback / Local Host**: Query `/api/spin-ref/click` and `/api/spin-ref/status/{token}` on FastAPI backend when available.
+  3. **Strict Anti-Cheat Engine**:
+     - **Owner Self-Click Guard**: If Phone A (the sharer) clicks their own link, the `srr_spin_owner_{token}` tag flags the action, immediately blocking the self-click from counting towards the unlock.
+     - **Unique Device Deduplication**: Each visiting friend sends a persistent `deviceId` stored in `localStorage.getItem('srr_device_id')`. Multiple taps by the same friend on the same phone count strictly as 1 unique open.
+  4. **Retention of WhatsApp Group Step**:
+     - Maintain the full high-intent dispatch flow: Step 1 (Friend share + 4.5s dwell), followed by Step 2 (Group share + 6.0s dwell + group confirmation modal).
+     - Once both shares are dispatched, smoothly transition into the **Real-Time Live Friend Opens Tracker** (`0/2 Opened` $\rightarrow$ `1/2 Opened` $\rightarrow$ `2/2 Opened`).
+  5. **Live Progress Feedback & Friend Welcome Card**:
+     - Initiator's UI updates dynamically: pulsing status badge, live progress bar ($0\% \rightarrow 50\% \rightarrow 100\%$), and encouraging micro-copy (`"🎉 1 friend opened! 1 more needed..."`).
+     - Friend's device displays a welcoming referral banner upon opening (`"🪔 You Were Invited to SRR Bazaar! Spin the wheel to win up to ₹150..."`), converting the visitor into an active shopper.
+  6. **Automated Multi-Device Test Coverage**:
+     - Validate via Selenium headless browser simulating Phone A (spin & share), Phone A self-click attempt (blocked at 0/2), Phone B visit (advancing to 1/2, 50% bar), and Phone C visit (advancing to 2/2, 100% bar and unlocking 2X bonus).
+
+
 
 
 

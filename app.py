@@ -1465,3 +1465,42 @@ async def receive_whatsapp_webhook(
 
     # Respond immediately. Media processing & AI replies run asynchronously in background.
     return {"status": "received", "queued_tasks": queued, "ignored_events": ignored}
+
+
+# =============================================================================
+# REAL-TIME UNIQUE SPIN REFERRAL & DEVICE CLICK TRACKER
+# =============================================================================
+spin_token_clicks: dict[str, set[str]] = {}
+
+@app.post("/api/spin-ref/click")
+async def register_spin_click(request: Request):
+    try:
+        data = await request.json()
+        token = data.get("token", "").strip()
+        device_id = data.get("deviceId", "").strip()
+        if not token or not device_id:
+            return {"status": "error", "message": "Missing token or deviceId"}
+        if token not in spin_token_clicks:
+            spin_token_clicks[token] = set()
+        spin_token_clicks[token].add(device_id)
+        count = len(spin_token_clicks[token])
+        return {
+            "status": "success",
+            "token": token,
+            "count": count,
+            "unlocked": count >= 2
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@app.get("/api/spin-ref/status/{token}")
+async def get_spin_status(token: str):
+    token = token.strip()
+    devices = spin_token_clicks.get(token, set())
+    count = len(devices)
+    return {
+        "status": "success",
+        "token": token,
+        "count": count,
+        "unlocked": count >= 2
+    }

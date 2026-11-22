@@ -6778,18 +6778,47 @@
           </button>
         `;
       } else if (viralShareStep === 2) {
-        // Step 2: 100% verified & activated!
+        // Step 2 Completed: LIVE FRIEND OPENS TRACKER (Waiting for 2 distinct friends to tap link)
+        doubleBox.innerHTML = `
+          <div class="p-2.5 bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border border-amber-400/60 rounded-xl space-y-2 text-center text-white animate-in zoom-in-95">
+            <div class="flex items-center justify-between text-[11px] font-extrabold text-amber-300">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span>⚡ Real-Time Friend Opens</span>
+              </span>
+              <span id="friendClickCountBadge" class="bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded font-mono font-black text-[10px]">0 / 2 Opened</span>
+            </div>
+            <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-amber-500/30 overflow-hidden">
+              <div id="friendClickProgressBar" class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+            <p id="friendClickStatusText" class="text-[10px] text-stone-200 leading-tight">
+              Waiting for 2 people in your group or contacts to open your invite link. As soon as 2 people open it, your cash <strong>instantly DOUBLES to ₹${doubledAmount}!</strong>
+            </p>
+            <div class="flex items-center justify-center gap-3 pt-1 text-[10px]">
+              <button onclick="shareSpinOnWhatsApp()" type="button" class="text-amber-300 hover:underline font-bold flex items-center gap-1 cursor-pointer">
+                <i data-lucide="share-2" class="w-3 h-3"></i> Resend Link
+              </button>
+              <span class="text-stone-500">•</span>
+              <button onclick="refreshFriendClicksNow()" type="button" class="text-emerald-400 hover:underline font-bold flex items-center gap-1 cursor-pointer">
+                <i data-lucide="refresh-cw" class="w-3 h-3"></i> Check Status Now
+              </button>
+            </div>
+          </div>
+        `;
+        startPollingFriendClicks();
+      } else if (viralShareStep === 3) {
+        // Step 3: Verified 2 Friend Opens -> 100% Unlocked!
         doubleBox.innerHTML = `
           <div class="p-1 space-y-1.5 text-center text-white animate-in zoom-in-95">
             <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
               <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
-              <span>🎉 Festive Reward Unlocked: ${isCash ? `Prize DOUBLED to ₹${doubledAmount}!` : (isGift ? `+₹50 Cash Added!` : `Bonus 2nd Spin Unlocked!`)}</span>
+              <span>🎉 2 Friends Opened: ${isCash ? `Prize DOUBLED to ₹${doubledAmount}!` : (isGift ? `+₹50 Cash Added!` : `Bonus 2nd Spin Unlocked!`)}</span>
             </div>
             <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
               <div class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
             </div>
             <p class="text-[10px] text-emerald-100/90 leading-tight">
-              ${isCash ? `Your <strong>₹${doubledAmount} Wallet Cash</strong> is active for today's order! Plus, whenever friends order via your link, you'll earn another ₹100 per friend!` : (isGift ? `Your <strong>Free Surprise Gift + ₹50 Cash</strong> are both locked in!` : `Your <strong>Bonus 2nd Spin</strong> is unlocked below!`)}
+              ${isCash ? `Verified! 2 friends opened your link. Your <strong>₹${doubledAmount} Wallet Cash</strong> is active for today's order!` : (isGift ? `Your <strong>Free Surprise Gift + ₹50 Cash</strong> are both locked in!` : `Your <strong>Bonus 2nd Spin</strong> is unlocked below!`)}
             </p>
             <button onclick="closeSpinWheelModal(); toggleCartDrawer(true);" class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
               <span>🛒 Apply ₹${doubledAmount} to Cart Now →</span>
@@ -6800,12 +6829,26 @@
       if (window.lucide) lucide.createIcons();
     }
 
+    function getOrCreateSpinToken() {
+      let token = localStorage.getItem('srr_spin_token');
+      if (!token) {
+        const phone = localStorage.getItem('srr_cust_phone') || '';
+        const phoneSuffix = phone ? phone.replace(/[^0-9]/g, '').slice(-4) : 'srr';
+        token = 'srr_spin_' + phoneSuffix + '_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6);
+        localStorage.setItem('srr_spin_token', token);
+      }
+      // Tag current device as owner so owner cannot click own link to cheat
+      localStorage.setItem('srr_spin_owner_' + token, 'true');
+      return token;
+    }
+
     function shareSpinOnWhatsApp() {
       if (!currentSpinWin || hasSharedSpin) return;
 
       const phone = localStorage.getItem('srr_cust_phone') || '';
       const refCode = phone ? phone.replace(/[^0-9]/g, '').slice(-10) : '';
-      const shareUrl = refCode ? `https://srrbazaar.com/?ref=${refCode}` : 'https://srrbazaar.com';
+      const spinToken = getOrCreateSpinToken();
+      const shareUrl = `https://srrbazaar.com/?spin_ref=${spinToken}` + (refCode ? `&ref=${refCode}` : '');
       const prizeText = currentSpinWin.type === 'gift' ? 'a Free Surprise Brass Gift in my parcel' : currentSpinWin.name;
 
       // Differentiate message copy for Friend (Step 1) vs WhatsApp Group (Step 2)
@@ -6925,19 +6968,116 @@
         return;
       }
 
+      // Step 2 Group confirmed! Transition to Real-Time 2-Friend Click Tracker
       viralShareStep = 2;
-      hasSharedSpin = true;
+      localStorage.setItem('srr_awaiting_friend_opens', 'true');
+      renderViralDoubleBox();
+      startPollingFriendClicks();
+    }
 
-      if (currentSpinWin.type === 'cash') {
-        const bonusAmount = currentSpinWin.amount; // Doubles the cash!
-        addWalletCash(bonusAmount);
-        const newTotal = currentSpinWin.amount * 2;
-        localStorage.setItem('srr_festive_cash', newTotal.toString());
+    let friendPollInterval = null;
+
+    function startPollingFriendClicks() {
+      if (friendPollInterval) clearInterval(friendPollInterval);
+      pollFriendClicks();
+      friendPollInterval = setInterval(pollFriendClicks, 4000);
+    }
+
+    async function pollFriendClicks() {
+      const token = localStorage.getItem('srr_spin_token');
+      if (!token || hasSharedSpin) {
+        if (friendPollInterval) clearInterval(friendPollInterval);
+        return;
+      }
+
+      const count = await fetchUniqueSpinClickCount(token);
+      updateFriendClicksUI(count);
+
+      if (count >= 2) {
+        if (friendPollInterval) clearInterval(friendPollInterval);
+        activateDoubledReward(count);
+      }
+    }
+
+    async function fetchUniqueSpinClickCount(token) {
+      // 1. Try local backend first
+      try {
+        const res = await fetch('/api/spin-ref/status/' + encodeURIComponent(token));
+        if (res.ok) {
+          const data = await res.json();
+          if (data && typeof data.count === 'number') {
+            return data.count;
+          }
+        }
+      } catch (e) { }
+
+      // 2. Universal cloud broker fallback (ntfy.sh) for GitHub Pages
+      try {
+        const res = await fetch('https://ntfy.sh/' + encodeURIComponent(token) + '/json?poll=1');
+        if (res.ok) {
+          const text = await res.text();
+          const lines = text.trim().split('\n');
+          const devices = new Set();
+          for (const line of lines) {
+            if (!line) continue;
+            try {
+              const item = JSON.parse(line);
+              if (item.message && item.message.startsWith('click:')) {
+                devices.add(item.message.replace('click:', ''));
+              }
+            } catch (err) { }
+          }
+          return devices.size;
+        }
+      } catch (e) { }
+
+      return 0;
+    }
+
+    function updateFriendClicksUI(count) {
+      const badge = document.getElementById('friendClickCountBadge');
+      const bar = document.getElementById('friendClickProgressBar');
+      const statusText = document.getElementById('friendClickStatusText');
+
+      if (badge) badge.textContent = `${Math.min(count, 2)} / 2 Opened`;
+      if (bar) bar.style.width = `${Math.min(count * 50, 100)}%`;
+
+      if (statusText) {
+        if (count === 0) {
+          statusText.innerHTML = `Waiting for 2 friends or group members to open your link. As soon as 2 people open it, your cash <strong>DOUBLES!</strong>`;
+        } else if (count === 1) {
+          statusText.innerHTML = `🎉 <strong>1 friend opened your link!</strong> Waiting for 1 more person to tap the link and activate your <strong>2X Doubled Cash!</strong>`;
+        }
+      }
+    }
+
+    function refreshFriendClicksNow() {
+      const btn = event?.currentTarget;
+      if (btn) btn.innerHTML = `<svg class="animate-spin h-3 w-3 inline mr-1 text-emerald-400" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Checking...`;
+      pollFriendClicks().finally(() => {
+        if (btn) btn.innerHTML = `<i data-lucide="refresh-cw" class="w-3 h-3 inline mr-1"></i> Check Status Now`;
+        if (window.lucide) lucide.createIcons();
+      });
+    }
+
+    function activateDoubledReward(clickCount) {
+      if (hasSharedSpin || !currentSpinWin) return;
+      hasSharedSpin = true;
+      viralShareStep = 3;
+      localStorage.removeItem('srr_awaiting_friend_opens');
+
+      const isCash = currentSpinWin.type === 'cash';
+      const isGift = currentSpinWin.type === 'gift';
+      const doubledAmount = isCash ? currentSpinWin.amount * 2 : (isGift ? 50 : 0);
+
+      if (isCash) {
+        addWalletCash(currentSpinWin.amount); // Doubles
+        localStorage.setItem('srr_festive_cash', doubledAmount.toString());
         const desc = document.getElementById('wheelResultDesc');
-        if (desc) desc.textContent = `₹${newTotal} cash (Doubled via WhatsApp Festive Invite!) is active in your Gold Wallet for 24 hours.`;
-        localStorage.setItem('srr_last_prize_name', `₹${newTotal} (Doubled) Cash`);
+        if (desc) desc.textContent = `₹${doubledAmount} cash (Doubled via 2 Friend Opens!) is active in your Gold Wallet for 24 hours.`;
+        localStorage.setItem('srr_last_prize_name', `₹${doubledAmount} (Doubled) Cash`);
         initFestiveTimer();
-      } else if (currentSpinWin.type === 'gift') {
+      } else if (isGift) {
         addWalletCash(50);
       } else if (currentSpinWin.type === 'vip') {
         const btn = document.getElementById('spinWheelBtn');
@@ -6947,6 +7087,7 @@
           btn.textContent = "🎡 Spin Your Bonus Round!";
         }
       }
+
       renderViralDoubleBox();
     }
 
@@ -7052,9 +7193,26 @@
       return getCustomerLifetimeSpend(phone) >= 2500;
     }
 
+    function getOrCreateDeviceId() {
+      let id = localStorage.getItem('srr_device_id');
+      if (!id) {
+        id = 'dev_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now().toString(36);
+        localStorage.setItem('srr_device_id', id);
+      }
+      return id;
+    }
+
     function checkIncomingReferral() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
+        
+        // 1. Check for Unique Spin Referral Click (?spin_ref=...)
+        const spinRef = urlParams.get('spin_ref');
+        if (spinRef) {
+          recordFriendSpinClick(spinRef);
+        }
+
+        // 2. Check for standard friend referral (?ref=...)
         const ref = urlParams.get('ref');
         if (ref) {
           const cleanRef = ref.trim().replace(/[^0-9a-zA-Z]/g, '').slice(0, 15);
@@ -7071,6 +7229,67 @@
           }
         }
       } catch (e) { }
+    }
+
+    function recordFriendSpinClick(spinRef) {
+      // ANTI-CHEAT 1: Owner clicking their own link does not count
+      if (localStorage.getItem('srr_spin_owner_' + spinRef) === 'true') {
+        return;
+      }
+
+      // ANTI-CHEAT 2: Same friend clicking multiple times only counts once
+      if (localStorage.getItem('srr_spin_visited_' + spinRef) === 'true') {
+        showFriendWelcomeCard();
+        return;
+      }
+      localStorage.setItem('srr_spin_visited_' + spinRef, 'true');
+
+      const devId = getOrCreateDeviceId();
+
+      // Dispatch click ping to local backend if running
+      try {
+        fetch('/api/spin-ref/click', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: spinRef, deviceId: devId })
+        }).catch(() => {});
+      } catch (e) { }
+
+      // Dispatch click ping to universal cloud broker (ntfy.sh) for GitHub Pages
+      try {
+        fetch('https://ntfy.sh/' + encodeURIComponent(spinRef), {
+          method: 'POST',
+          body: 'click:' + devId,
+          mode: 'no-cors'
+        }).catch(() => {});
+      } catch (e) { }
+
+      showFriendWelcomeCard();
+    }
+
+    function showFriendWelcomeCard() {
+      // Floating Welcome Card for the invited friend
+      if (document.getElementById('friendWelcomeCard')) return;
+      const card = document.createElement('div');
+      card.id = 'friendWelcomeCard';
+      card.className = "fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-sm z-50 p-4 bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border border-amber-400/80 rounded-2xl shadow-2xl text-white space-y-2 animate-in slide-in-from-bottom duration-300";
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-amber-300">
+            <span>🪔</span>
+            <span>You Were Invited to SRR Bazaar!</span>
+          </div>
+          <button onclick="this.closest('#friendWelcomeCard').remove()" class="text-stone-400 hover:text-white p-1 text-xs font-bold cursor-pointer">✕</button>
+        </div>
+        <p class="text-xs text-stone-200 leading-snug">
+          Your friend shared their Festive Lucky Spin with you! Spin the wheel now to claim <strong>up to ₹150 Wallet Cash</strong> & free surprise gifts!
+        </p>
+        <button onclick="this.closest('#friendWelcomeCard').remove(); openSpinWheelModal();" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-black text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>🎡 Spin The Lucky Wheel Now →</span>
+        </button>
+      `;
+      document.body.appendChild(card);
+      if (window.lucide) lucide.createIcons();
     }
 
     function showReferralWelcomeBanner(code) {
