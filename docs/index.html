@@ -6895,7 +6895,17 @@
         }
       }
 
-      let walletDiscount = (isWalletApplied && appliedWalletDiscount > 0) ? appliedWalletDiscount : 0;
+      // WALLET ACCOUNT SECURITY: Wallet cash can only be redeemed if delivery phone matches wallet owner
+      let walletDiscount = 0;
+      if (isWalletApplied && appliedWalletDiscount > 0) {
+        const walletPhone = (localStorage.getItem('srr_cust_phone') || '').replace(/[^0-9]/g, '').slice(-10);
+        if (walletPhone && walletPhone !== cleanPhone) {
+          alert(`⚠️ Wallet Account Mismatch!\n\nThe ₹${appliedWalletDiscount} wallet discount belongs to account +91 ${walletPhone}.\n\nTo redeem this wallet discount, your delivery mobile number must match the wallet account (+91 ${walletPhone}).`);
+          resetOrderButtonState();
+          return;
+        }
+        walletDiscount = appliedWalletDiscount;
+      }
       const total = Math.max(0, subtotal - couponDiscount - referralDiscount - walletDiscount);
 
       // STRICT VALIDATION: If paying via UPI QR or Partial COD, UTR/Ref number is mandatory!
