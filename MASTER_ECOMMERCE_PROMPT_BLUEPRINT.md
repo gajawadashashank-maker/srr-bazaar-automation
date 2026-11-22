@@ -598,3 +598,31 @@ This log documents every architectural pitfall discovered and resolved during re
        - `Remaining Balance Payable on Delivery: ₹[codBalance]`
        - `Order Status: ✅ Confirmed & Locked for Dispatch`
      - Highlight Partial COD orders in the merchant portal with dedicated gold badges and instant WhatsApp chat links so the fulfillment team can verify the UTR in their banking app before parcel handoff to The Professional Couriers.
+
+
+### 18. Checkout Hardening & Loophole Prevention: Double-Click Locks, Dummy UTR Filtering, and Courier Manifest Validation
+- **What Happened**: 
+  1. On mobile network jitter (3G/4G), impatient shoppers frequently tap 'Confirm Order & Send to WhatsApp' multiple times in quick succession. Without an explicit submission lock, this creates duplicate order records in Google Sheets and logs multiple order entries in the merchant portal.
+  2. Buyers attempting to bypass advance payment sometimes enter dummy placeholder numbers (e.g., 000000000000, 111111111111, or 999999999999).
+  3. When an order completes, if the input fields retain the previous transaction's UTR, a customer placing an immediate second order might accidentally submit the old UTR without paying a new advance.
+  4. Customers entering invalid phone numbers (e.g., numbers starting with 12345... or 0000000000) or bogus pincodes (000000) cause booking rejections when generating shipping labels at the courier hub (The Professional Couriers, Armoor Hub).
+- **Why It Happened**:
+  - Simple form submissions lack asynchronous state tracking and submission debounce locks.
+  - Basic character-length checks alone (length >= 10) do not verify pattern authenticity against repeating digit sequences.
+  - Form state caching across modal closures can leak previous inputs into subsequent carts.
+- **How to Avoid**:
+  1. **Atomic Submit Lock (isSubmittingOrder)**:
+     - Maintain an atomic in-memory flag isSubmittingOrder = false.
+     - Upon submitFinalOrder(), immediately check if (isSubmittingOrder) return;.
+     - Set isSubmittingOrder = true and disable #placeOrderBtn while replacing its content with 'Processing Order...' and cursor-not-allowed styling.
+     - Provide a centralized resetOrderButtonState() helper that safely restores the button to its original state on any validation failure, payment dismissal, or modal close.
+  2. **Repeating-Digit Dummy UTR Filter**:
+     - Enforce cleanUpiRef.length >= 10 && cleanUpiRef.length <= 12.
+     - Reject all-identical repeating sequences via /^(\d)\1{9,11}$/. This instantly blocks 000000000000, 111111111111, etc., and prompts the user for a genuine banking transaction reference.
+  3. **Strict Post-Order Input Sanitization**:
+     - Immediately upon order record creation and modal transition, wipe #upiRefNumber to empty string and remove any alert styling so subsequent checkouts mandate a new, unique advance token UTR.
+  4. **Courier Manifest Validation (Mobile & Pincode)**:
+     - Automatically clean +91 or leading 0 from phone inputs, extract the trailing 10 digits, and validate with ^[6-9]\d{9}$ while barring all-identical digits (/^(\d)\1{9}$/).
+     - Enforce strict 6-digit Indian postal codes via ^[1-9][0-9]{5}$ to completely eliminate 000000 or invalid PIN entries before booking with The Professional Couriers.
+  5. **Post-Test Automation Cleanliness**:
+     - Ensure automated test suites and mock checkouts include teardown logic (localStorage.setItem('srr_orders', '[]')) so test runs never pollute the live merchant dashboard.
