@@ -508,41 +508,51 @@ def sync_product_to_website_catalogue(
         numeric_price = int(numeric_match.group(1)) if numeric_match else 999
         original_price = int(numeric_price * 1.5)
 
+        # Detect category based on product title/description with STRICT word boundaries
         text_lower = f"{product_name} {description}".lower()
-        category = "necklace"
-        # 1. Groceries & Staples
-        if any(w in text_lower for w in ["grocery", "groceries", "rice", "dal", "flour", "atta", "wheat", "oil", "cooking oil", "sunflower", "groundnut", "mustard", "ghee", "masala", "spices", "chilli", "mirchi", "turmeric", "salt", "sugar", "jaggery", "bellam", "rava", "suji", "maida", "besan", "pulses", "lentils", "tamarind", "chintapandu"]):
-            category = "groceries"
-        # 2. Dry Fruits & Nuts
-        elif any(w in text_lower for w in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dry fruit", "dryfruit", "dates", "khajoor", "anjeer"]):
-            category = "dryfruits"
-        # 3. Snacks, Biscuits & Tiffins
-        elif any(w in text_lower for w in ["chip", "chips", "biscuit", "biscuits", "snack", "snacks", "namkeen", "mixture", "cookie", "cookies", "tiffin", "upma", "poha", "murukku", "sev", "bhujia", "chivda"]):
-            category = "snacks"
-        # 2. Wholesale Disposables, Packaging & Buffet
-        elif any(w in text_lower for w in ["leaf", "buffet", "disposable", "disposables", "paper cup", "cup", "cups", "paper glass", "glass", "tiffin box", "meal box", "container", "roll", "rolls", "silver foil", "foil", "cling", "bag", "carry bag", "packaging", "parcel", "biodegradable"]):
-            category = "disposables"
-        # 3. Pooja & Temple Essentials
-        elif any(w in text_lower for w in ["wick", "wicks", "batti", "camphor", "karpooram", "kapoor", "dhoop", "agarbatti", "incense", "sambrani", "kumkum", "pasupu", "haldi", "chandan", "gandham", "pooja oil", "deepam oil"]):
-            category = "samagri"
-        # 4. Sarees & Fabrics
-        elif any(w in text_lower for w in ["cotton", "saree", "sarees", "khadi", "dress", "kurti", "silk", "fabric", "dupatta"]):
-            category = "saree"
-        # 5. Pooja Brass & Home Decor Trays
-        elif any(w in text_lower for w in ["tray", "swan", "decor", "pooja", "puja", "gift", "nomu", "nomulu", "diya", "diyas", "deepam", "deepalu", "sankranti", "kartheeka", "vratam", "vratham", "kalash", "lotus plate", "bowl", "lotus", "stand", "ashtothara", "shatanamavali", "kondala", "kondalu", "brass", "idol"]):
-            category = "decor"
-        # 6. Black Beads & Mangalsutras
-        elif any(w in text_lower for w in ["bead", "mangalsutra", "black", "chain", "locket", "nallapusalu"]):
-            category = "mangalsutra"
-        # 7. Earrings & Bangles
-        elif any(w in text_lower for w in ["earring", "earrings", "stud", "studs", "jhumka", "jhumkas", "bangle", "bangles", "bracelet", "kada"]):
-            category = "earrings"
-        # 8. Electricals & Lighting
-        elif any(w in text_lower for w in ["led", "bulb", "bulbs", "light", "lighting", "tubelight", "batten", "lamp", "torch", "socket", "holder", "wire", "switch", "electrical", "extension box"]):
-            category = "electrical"
-        # 9. Cleaning & Hygiene Essentials
-        elif any(w in text_lower for w in ["bleach", "bleaching", "acid", "phenyl", "phenyls", "floor cleaner", "toilet cleaner", "harpic", "lizol", "detergent", "surf", "mop", "broom", "disinfectant", "hygiene", "sanitizer", "handwash"]):
+        words = set(re.findall(r'\b[a-z0-9]+\b', text_lower))
+        
+        def has_phrase(phrase: str) -> bool:
+            return bool(re.search(r'\b' + re.escape(phrase.lower()) + r'\b', text_lower))
+            
+        def has_word(w: str) -> bool:
+            return w.lower() in words
+
+        # 1. Cleaning & Hygiene
+        if any(has_phrase(x) for x in ["bleaching powder", "floor cleaner", "toilet cleaner", "phenyl", "stain remover", "disinfectant"]) or any(has_word(x) for x in ["bleach", "bleaching", "acid", "phenyl", "phenyls", "harpic", "lizol", "detergent", "disinfectant"]):
             category = "cleaning"
+        # 2. Electricals & Lighting
+        elif any(has_word(x) for x in ["led", "bulb", "bulbs", "tubelight", "batten", "lighting", "electrical", "torch", "holder", "socket", "switch"]):
+            category = "electrical"
+        # 3. Disposables & Catering
+        elif any(has_phrase(x) for x in ["buffet plate", "buffet plates", "leaf plate", "leaf plates", "paper cup", "paper cups", "biodegradable plate", "meal box", "tiffin box", "silver foil"]) or (has_word("disposables") and not has_word("necklace")):
+            category = "disposables"
+        # 4. Sarees & Handloom
+        elif any(has_phrase(x) for x in ["khadhi cotton", "khadi cotton", "pure saree", "silk saree"]) or any(has_word(x) for x in ["saree", "sarees", "sari"]):
+            category = "saree"
+        # 5. Pooja Decor & Trays
+        elif any(has_phrase(x) for x in ["swan tray", "diya stand", "lotus flower", "pooja plate", "brass bowl", "swan organizer"]) or any(has_word(x) for x in ["diya", "diyas", "deepam", "deepalu", "kondalu", "nomu", "nomulu", "kalash", "thali"]):
+            category = "decor"
+        # 6. Pooja Samagri & Essentials
+        elif any(has_word(x) for x in ["wick", "wicks", "batti", "camphor", "karpooram", "kapoor", "dhoop", "agarbatti", "incense", "sambrani", "kumkum", "pasupu", "gandham"]):
+            category = "samagri"
+        # 7. Black Beads & Mangalsutras
+        elif any(has_phrase(x) for x in ["black beads", "nallapusalu", "tulip mala", "tulips mala"]) or any(has_word(x) for x in ["mangalsutra", "nallapusalu"]):
+            category = "mangalsutra"
+        # 8. Pure Earrings & Bangles (when not a full necklace/bridal set)
+        elif not any(has_word(x) for x in ["necklace", "haram", "choker", "haar", "kundan", "jadau", "bridal"]) and any(has_word(x) for x in ["earring", "earrings", "jhumka", "jhumkas", "stud", "studs", "bangle", "bangles", "kada"]):
+            category = "earrings"
+        # 9. Dry Fruits & Nuts
+        elif any(has_word(x) for x in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dryfruit", "dryfruits", "dates", "khajoor", "anjeer"]):
+            category = "dryfruits"
+        # 10. Snacks & Namkeen
+        elif any(has_word(x) for x in ["chips", "biscuit", "biscuits", "namkeen", "mixture", "cookie", "cookies", "murukku", "sev", "bhujia"]):
+            category = "snacks"
+        # 11. Groceries & Daily Staples (STRICT WHOLE WORD ONLY)
+        elif any(has_word(x) for x in ["grocery", "groceries", "rice", "dal", "flour", "atta", "wheat", "ghee", "masala", "spices", "chilli", "mirchi", "turmeric", "salt", "sugar", "jaggery", "bellam", "rava", "suji", "maida", "besan", "pulses", "lentils", "tamarind"]):
+            category = "groceries"
+        else:
+            category = "necklace"
 
         new_id = int(uuid.uuid4().int % 1000000000)
 

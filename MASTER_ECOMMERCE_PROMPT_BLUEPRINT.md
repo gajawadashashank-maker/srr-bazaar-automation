@@ -780,3 +780,27 @@ ef) as it is strictly reserved for new buyer acquisition.
      - Added Google Merchant Center XML feed categorization:
        - `electrical` -> `Home & Garden > Lighting > Light Bulbs`
        - `cleaning` -> `Home & Garden > Household Supplies > Household Cleaning Supplies`
+
+
+### 26. Substring False-Positive Auto-Categorization ("BriDAL" matching "dal" in Groceries) & Enforcing Strict Word Boundary Matching
+- **What Happened**:
+  - Multiple handcrafted bridal jewelry products (e.g. `Premium Bridal Pure Jadau Kundan Collection`) were automatically tagged under the `groceries` category instead of `necklace`.
+  - When customers browsed the storefront or opened product landing pages (`docs/p/*.html`), bridal necklace cards displayed `★ 5 (1) • Groceries`, confusing customers and cluttering category filters.
+- **Why It Happened**:
+  - The category auto-detection logic in `app.py` and `process_job.py` used Python raw substring membership:
+    `if any(w in text_lower for w in ["grocery", "groceries", "rice", "dal", ...])`
+  - In English, the word **"Bridal"** contains the consecutive substring **"dal"** (`briDAL`).
+  - As a result, every single product containing the word "Bridal" evaluated `"dal" in text_lower == True`, immediately classifying royal bridal sets as kitchen groceries/pulses.
+  - Furthermore, other words like `"oil"` could match inside `"silver foil"`, or `"rice"` inside `"price"`.
+- **How to Avoid**:
+  1. **Enforce Strict Whole-Word Boundary Regex Matching**:
+     - Never use raw substring membership (`w in text_lower`) for category classification.
+     - Tokenize the text into distinct word tokens: `words = set(re.findall(r'\b[a-z0-9]+\b', text_lower))`.
+     - Match multi-word phrases explicitly with regex boundaries: `re.search(r'\b' + re.escape(phrase) + r'\b', text_lower)`.
+     - Match individual keywords strictly against the token set: `w.lower() in words`.
+  2. **Product Hierarchy Priority Order**:
+     - Evaluate specialized categories (Cleaning, Electrical, Sarees, Pooja Decor, Mangalsutra, Necklaces) with priority over generic grocery staples.
+     - Only assign `groceries` when genuine grocery tokens (`rice`, `dal`, `atta`, `wheat`, `ghee`, `masala`) appear as standalone words.
+  3. **Universal Catalogue Remediation**:
+     - Audited and corrected all existing products in `docs/products.json` and static product landing pages (`docs/p/*.html`).
+     - Reclassified `Premium Bridal Pure Jadau Kundan Collection` back to `necklace` and `Vikram Brand Bleaching Powder` to `cleaning`.
