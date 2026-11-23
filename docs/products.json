@@ -1,5 +1,19 @@
 [
   {
+    "id": 367456992,
+    "title": "Haram",
+    "category": "necklace",
+    "price": 1799,
+    "originalPrice": 2698,
+    "tag": "New Arrival",
+    "image": "images/catalog/5be7243287334da298882edc66c1e7e3.jpg",
+    "video": "videos/reel_367456992.mp4",
+    "description": "Exclusive Haram by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 893744739,
     "title": "Stunning bangles",
     "category": "earrings",
