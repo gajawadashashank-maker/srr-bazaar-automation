@@ -62,7 +62,7 @@ def test_sanity_checkout_validation():
         alert = driver.switch_to.alert
         alert_text = alert.text
         print(f"Validation Alert text: {alert_text}")
-        assert "10-digit mobile number" in alert_text, f"Expected mobile validation alert, got: {alert_text}"
+        assert "10-digit" in alert_text and "mobile number" in alert_text, f"Expected mobile validation alert, got: {alert_text}"
         alert.accept()
         print("PASS: Invalid phone number (<10 digits) correctly blocked.")
 

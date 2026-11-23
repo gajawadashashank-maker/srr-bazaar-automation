@@ -46,9 +46,9 @@ def run():
         driver.save_screenshot("test_nomu_reel.png")
         print(" -> SUCCESS: Edu Kondala Nomu plays its own dedicated Nomu video reel!")
 
-        # Test Case 3: Swan Tray (ID: 247403588) -> No video reel exists, so NO video button!
-        print("\n[Test 3] Swan Tray (ID: 247403588) - Has no video")
-        driver.execute_script("openQuickView(247403588);")
+        # Test Case 3: High-Efficiency LED Bulb (ID: 90101) -> No video reel exists, so NO video button!
+        print("\n[Test 3] LED Bulb (ID: 90101) - Has no video")
+        driver.execute_script("openQuickView(90101);")
         time.sleep(1)
 
         vid = driver.find_elements(By.ID, "modalProductVid")
@@ -58,7 +58,7 @@ def run():
         
         img = driver.find_element(By.ID, "modalProductImg")
         assert img.is_displayed(), "Product photo must be displayed!"
-        driver.save_screenshot("test_swan_tray_no_fake_video.png")
+        driver.save_screenshot("test_bulb_no_fake_video.png")
         print(" -> SUCCESS: Product without video displays authentic photo and NO mismatched video button!")
 
         print("\n>>> ALL PRODUCT VIDEO REEL MATCHING TESTS PASSED! <<<")

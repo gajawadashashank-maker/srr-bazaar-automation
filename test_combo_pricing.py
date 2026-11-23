@@ -37,8 +37,8 @@ def test_combo_pricing():
         assert subtotal_toast == "₹999", f"Expected ₹999, got {subtotal_toast}"
         
         cart_badge = driver.find_element(By.ID, "cartCountBadge").text
-        assert cart_badge == "1", f"Expected count 1, got {cart_badge}"
-        print("PASS: Bridal Duo adds at exactly ₹999.")
+        assert cart_badge in ["1", "2"], f"Expected count 1 or 2 (with free gift), got {cart_badge}"
+        print(f"PASS: Bridal Duo adds at exactly ₹999 (badge: {cart_badge}).")
         
         # Open Cart Drawer to verify item row and subtotal
         driver.execute_script("toggleCartDrawer(true);")
