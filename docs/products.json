@@ -1,5 +1,19 @@
 [
   {
+    "id": 509970487,
+    "title": "Restock alert",
+    "category": "necklace",
+    "price": 2550,
+    "originalPrice": 3825,
+    "tag": "New Arrival",
+    "image": "images/catalog/52ca5e6e089745c1a47f13cbd54fde01.jpg",
+    "video": "videos/reel_509970487.mp4",
+    "description": "Long mango haram",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 411716849,
     "title": "combo",
     "category": "groceries",
@@ -1161,4 +1175,14 @@
   {
     "id": 90203,
     "title": "Heavy-Duty Toilet & Floor Stain Remover Acid (500ml)",
-    "categ
+    "category": "cleaning",
+    "price": 65,
+    "originalPrice": 110,
+    "tag": "Deep Clean",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "Powerful scale and hard-water stain remover acid for bathroom tiles, ceramic sinks, and tough stain sanitization. Free express delivery.",
+    "inStock": true,
+    "rating": 4.8,
+    "reviewsCount": 6
+  }
+]
