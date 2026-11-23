@@ -376,25 +376,45 @@ def sync_product_to_website_catalogue(
         if is_video_input:
             vid_src = str(video_path if (video_path and Path(video_path).exists()) else image_path)
             extracted = False
-            for seek_t in ["00:00:00.800", "00:00:00.300", "00:00:00.000", "00:00:01"]:
-                cmd = [
-                    "ffmpeg", "-y",
-                    "-ss", seek_t,
-                    "-i", vid_src,
-                    "-vframes", "1",
-                    "-q:v", "2",
-                    str(target_img_path)
-                ]
-                try:
-                    res = subprocess.run(cmd, capture_output=True)
-                    if res.returncode == 0 and target_img_path.exists() and target_img_path.stat().st_size > 1000:
-                        with open(target_img_path, "rb") as f_res:
-                            if f_res.read(4).startswith(b"\xff\xd8"):
-                                extracted = True
-                                logger.info("Auto-extracted JPEG cover from video at %s: %s", seek_t, target_img_path)
-                                break
-                except Exception:
-                    pass
+            # 1. Grab 1st frame (no -ss seek, 100% reliable)
+            cmd_frame0 = [
+                "ffmpeg", "-y",
+                "-i", vid_src,
+                "-vframes", "1",
+                "-q:v", "2",
+                str(target_img_path)
+            ]
+            try:
+                res = subprocess.run(cmd_frame0, capture_output=True)
+                if res.returncode == 0 and target_img_path.exists() and target_img_path.stat().st_size > 1000:
+                    with open(target_img_path, "rb") as f_res:
+                        magic = f_res.read(4)
+                    if magic.startswith(b"\xff\xd8"):
+                        extracted = True
+                        logger.info("Auto-extracted 1st frame cover from video: %s", target_img_path)
+            except Exception as e:
+                logger.warning("Frame 0 extraction attempt failed: %s", e)
+
+            if not extracted:
+                for seek_t in ["00:00:00.100", "00:00:00.500", "00:00:01"]:
+                    cmd = [
+                        "ffmpeg", "-y",
+                        "-ss", seek_t,
+                        "-i", vid_src,
+                        "-vframes", "1",
+                        "-q:v", "2",
+                        str(target_img_path)
+                    ]
+                    try:
+                        res = subprocess.run(cmd, capture_output=True)
+                        if res.returncode == 0 and target_img_path.exists() and target_img_path.stat().st_size > 1000:
+                            with open(target_img_path, "rb") as f_res:
+                                if f_res.read(4).startswith(b"\xff\xd8"):
+                                    extracted = True
+                                    logger.info("Auto-extracted JPEG cover from video at %s: %s", seek_t, target_img_path)
+                                    break
+                    except Exception:
+                        pass
             if not extracted:
                 fallback_img = catalog_img_dir / "88846458a4a544eda9c03477c177b77a.jpg"
                 if fallback_img.exists():
@@ -603,26 +623,46 @@ def main() -> int:
         logger.info("Input media is a video (%s). Extracting cover thumbnail...", image_file.name)
         thumbnail_file = job_output_dir / f"{image_file.stem}_thumb.jpg"
         thumb_ok = False
-        for seek_t in ["00:00:00.800", "00:00:00.300", "00:00:00.000", "00:00:01"]:
-            cmd = [
-                "ffmpeg", "-y",
-                "-ss", seek_t,
-                "-i", str(image_file),
-                "-vframes", "1",
-                "-q:v", "2",
-                str(thumbnail_file)
-            ]
-            try:
-                subprocess.run(cmd, check=True, capture_output=True)
-                if thumbnail_file.exists() and thumbnail_file.stat().st_size > 1000:
-                    with open(thumbnail_file, "rb") as f_res:
-                        if f_res.read(4).startswith(b"\xff\xd8"):
-                            catalog_cover_image = thumbnail_file
-                            thumb_ok = True
-                            logger.info("Extracted cover thumbnail at %s: %s (%d bytes)", seek_t, thumbnail_file, thumbnail_file.stat().st_size)
-                            break
-            except Exception as e:
-                logger.warning("Could not extract thumbnail frame at %s via ffmpeg: %s", seek_t, e)
+        # 1. Grab 1st frame (no -ss seek, 100% reliable)
+        cmd_frame0 = [
+            "ffmpeg", "-y",
+            "-i", str(image_file),
+            "-vframes", "1",
+            "-q:v", "2",
+            str(thumbnail_file)
+        ]
+        try:
+            subprocess.run(cmd_frame0, check=True, capture_output=True)
+            if thumbnail_file.exists() and thumbnail_file.stat().st_size > 1000:
+                with open(thumbnail_file, "rb") as f_res:
+                    if f_res.read(4).startswith(b"\xff\xd8"):
+                        catalog_cover_image = thumbnail_file
+                        thumb_ok = True
+                        logger.info("Extracted 1st frame cover thumbnail: %s (%d bytes)", thumbnail_file, thumbnail_file.stat().st_size)
+        except Exception as e:
+            logger.warning("Frame 0 thumbnail extraction attempt failed: %s", e)
+
+        if not thumb_ok:
+            for seek_t in ["00:00:00.100", "00:00:00.500", "00:00:01"]:
+                cmd = [
+                    "ffmpeg", "-y",
+                    "-ss", seek_t,
+                    "-i", str(image_file),
+                    "-vframes", "1",
+                    "-q:v", "2",
+                    str(thumbnail_file)
+                ]
+                try:
+                    subprocess.run(cmd, check=True, capture_output=True)
+                    if thumbnail_file.exists() and thumbnail_file.stat().st_size > 1000:
+                        with open(thumbnail_file, "rb") as f_res:
+                            if f_res.read(4).startswith(b"\xff\xd8"):
+                                catalog_cover_image = thumbnail_file
+                                thumb_ok = True
+                                logger.info("Extracted cover thumbnail at %s: %s (%d bytes)", seek_t, thumbnail_file, thumbnail_file.stat().st_size)
+                                break
+                except Exception as e:
+                    logger.warning("Could not extract thumbnail frame at %s via ffmpeg: %s", seek_t, e)
 
         if not thumb_ok:
             fallback_img = Path("docs/images/catalog/88846458a4a544eda9c03477c177b77a.jpg")
