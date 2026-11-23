@@ -952,7 +952,7 @@
           <div
             class="circle-box w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-amber-500">
             <img src="images/categories/cat_electrical.jpg" alt="Electricals & Lighting"
-              onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg';"
+              onerror="this.onerror=null; this.src='images/categories/cat_electrical.jpg';"
               class="w-full h-full object-cover">
           </div>
           <span
@@ -965,7 +965,7 @@
           <div
             class="circle-box w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-cyan-500">
             <img src="images/categories/cat_cleaning.jpg" alt="Cleaning & Hygiene"
-              onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg';"
+              onerror="this.onerror=null; this.src='images/categories/cat_cleaning.jpg';"
               class="w-full h-full object-cover">
           </div>
           <span
@@ -4713,7 +4713,9 @@
       if (cat === 'saree') return 'images/categories/cat_saree.jpg';
       if (cat === 'samagri' || cat === 'decor') return 'images/categories/cat_samagri.jpg';
       if (cat === 'groceries' || cat === 'dryfruits' || cat === 'snacks') return 'images/categories/cat_groceries.jpg';
-      return 'images/jadau_kundan_necklace.jpg';
+      if (cat === 'earrings') return 'images/cz_bridal_earrings.jpg';
+      if (cat === 'mangalsutra') return 'images/black_beads_mangalsutra.jpg';
+      return 'images/kundan_pearl_haar.jpg';
     }
 
     function renderProductCard(p) {
@@ -4723,7 +4725,7 @@
         
         <!-- Product Image & Deal Badges -->
         <div class="relative aspect-square overflow-hidden bg-stone-50 cursor-pointer p-2" onclick="openQuickView(${p.id})">
-          <img src="${p.image}?v=3" alt="${p.title}" onerror="this.onerror=null; this.src=getCategoryFallbackImg(p.category);" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-300" loading="lazy">
+          <img src="${p.image}?v=4" alt="${p.title}" onerror="this.onerror=null; this.src=getCategoryFallbackImg(p.category);" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-300" loading="lazy">
           
           <!-- Product Tag Badge -->
           <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
@@ -5958,7 +5960,7 @@
                   <p class="text-[10px] font-bold text-stone-500 uppercase tracking-wider">Closest Catalog Matches:</p>
                   ${displayProds.map(p => `
                     <div class="flex items-center gap-2.5 p-2 rounded-xl bg-stone-50 hover:bg-stone-100/80 border border-stone-200 transition">
-                      <img src="${p.image}" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg';" class="w-12 h-12 object-cover rounded-lg border border-stone-200 flex-shrink-0" alt="${p.title}">
+                      <img src="${p.image}?v=4" onerror="this.onerror=null; this.src=getCategoryFallbackImg(p.category);" class="w-12 h-12 object-cover rounded-lg border border-stone-200 flex-shrink-0" alt="${p.title}">
                       <div class="flex-1 min-w-0">
                         <h4 class="text-xs font-bold text-stone-900 truncate">${p.title}</h4>
                         <p class="text-[11px] text-amber-800 font-extrabold">₹${p.price} <span class="text-[9px] text-emerald-700 font-normal">FREE Delivery</span></p>
@@ -6207,7 +6209,7 @@
 
       const mediaHtml = `
         <div class="relative rounded-xl overflow-hidden bg-stone-900 flex items-center justify-center min-h-[300px]">
-          <img id="modalProductImg" src="${p.image}?v=3" alt="${p.title}" onerror="this.onerror=null; this.src=getCategoryFallbackImg(p.category);" class="w-full h-80 object-cover transition-opacity duration-300">
+          <img id="modalProductImg" src="${p.image}?v=4" alt="${p.title}" onerror="this.onerror=null; this.src=getCategoryFallbackImg(p.category);" class="w-full h-80 object-cover transition-opacity duration-300">
           ${hasMatchingVideo ? `
             <video id="modalProductVid" src="${p.video}" loop muted playsinline class="w-full h-80 object-cover hidden transition-opacity duration-300"></video>
             
@@ -8210,7 +8212,7 @@
                 <div class="absolute top-0 right-0 bg-gradient-to-l from-amber-500 to-amber-600 text-white text-[9px] font-black px-2 py-0.5 rounded-bl-lg shadow-2xs tracking-wide uppercase">
                   🎁 100% FREE GIFT
                 </div>
-                <img src="${item.image || 'images/categories/cat_samagri.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0 border border-amber-300 shadow-2xs" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg'">
+                <img src="${item.image || 'images/categories/cat_samagri.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0 border border-amber-300 shadow-2xs" onerror="this.onerror=null; this.src='images/categories/cat_samagri.jpg'">
                 <div class="flex-1 min-w-0 pr-8">
                   <div class="flex items-center gap-1.5 flex-wrap">
                     <span class="text-[9px] font-black text-amber-900 bg-amber-200 px-1.5 py-0.5 rounded uppercase">Launch Offer</span>
@@ -8235,7 +8237,7 @@
           }
           return `
             <div class="flex items-center gap-3 p-2.5 rounded-xl border border-stone-200 bg-white shadow-xs">
-              <img src="${item.image || 'images/jadau_kundan_necklace.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg'">
+              <img src="${item.image || getCategoryFallbackImg(item.category)}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0" onerror="this.onerror=null; this.src=getCategoryFallbackImg(item.category)">
               <div class="flex-1 min-w-0">
                 <h4 class="text-xs font-bold text-stone-900 truncate">${item.title}</h4>
                 <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">

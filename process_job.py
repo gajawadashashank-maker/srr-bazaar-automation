@@ -377,30 +377,63 @@ def sync_product_to_website_catalogue(
             # When user uploaded a VIDEO: extract genuine frame from video
             vid_src = str(video_path if (video_path and Path(video_path).exists()) else image_path)
             extracted = False
-            # 1. Grab 1st frame (no -ss seek, 100% reliable)
-            cmd_frame0 = [
+            # 1. Determine optimal frame: around 40-50% duration (or 1s) to capture the clear product view
+            seek_t = "00:00:01"
+            try:
+                dur_cmd = ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", vid_src]
+                dur_res = subprocess.run(dur_cmd, capture_output=True, text=True)
+                if dur_res.returncode == 0 and dur_res.stdout.strip():
+                    v_dur = float(dur_res.stdout.strip())
+                    if v_dur > 2.0:
+                        seek_t = f"{min(v_dur * 0.5, 3.0):.2f}"
+                    elif v_dur > 0.5:
+                        seek_t = f"{v_dur * 0.5:.2f}"
+            except Exception:
+                pass
+
+            cmd_sample = [
                 "ffmpeg", "-y",
+                "-ss", seek_t,
                 "-i", vid_src,
                 "-vframes", "1",
                 "-q:v", "2",
                 str(target_img_path)
             ]
             try:
-                res = subprocess.run(cmd_frame0, capture_output=True)
+                res = subprocess.run(cmd_sample, capture_output=True)
                 if res.returncode == 0 and target_img_path.exists() and target_img_path.stat().st_size > 1000:
                     with open(target_img_path, "rb") as f_res:
-                        magic = f_res.read(4)
-                    if magic.startswith(b"\xff\xd8"):
-                        extracted = True
-                        logger.info("Auto-extracted 1st frame cover from video: %s", target_img_path)
+                        if f_res.read(4).startswith(b"\xff\xd8"):
+                            extracted = True
+                            logger.info("Auto-extracted representative cover from video at %s: %s", seek_t, target_img_path)
             except Exception as e:
-                logger.warning("Frame 0 extraction attempt failed: %s", e)
+                logger.warning("Representative frame extraction attempt failed: %s", e)
 
+            # 2. If sample failed, try 1st frame
             if not extracted:
-                for seek_t in ["00:00:00.100", "00:00:00.500", "00:00:01"]:
+                cmd_frame0 = [
+                    "ffmpeg", "-y",
+                    "-i", vid_src,
+                    "-vframes", "1",
+                    "-q:v", "2",
+                    str(target_img_path)
+                ]
+                try:
+                    res = subprocess.run(cmd_frame0, capture_output=True)
+                    if res.returncode == 0 and target_img_path.exists() and target_img_path.stat().st_size > 1000:
+                        with open(target_img_path, "rb") as f_res:
+                            if f_res.read(4).startswith(b"\xff\xd8"):
+                                extracted = True
+                                logger.info("Auto-extracted 1st frame cover from video: %s", target_img_path)
+                except Exception as e:
+                    logger.warning("Frame 0 extraction attempt failed: %s", e)
+
+            # 3. If still not extracted, try quick seek fallbacks
+            if not extracted:
+                for fallback_t in ["00:00:00.100", "00:00:00.500"]:
                     cmd = [
                         "ffmpeg", "-y",
-                        "-ss", seek_t,
+                        "-ss", fallback_t,
                         "-i", vid_src,
                         "-vframes", "1",
                         "-q:v", "2",
@@ -412,7 +445,7 @@ def sync_product_to_website_catalogue(
                             with open(target_img_path, "rb") as f_res:
                                 if f_res.read(4).startswith(b"\xff\xd8"):
                                     extracted = True
-                                    logger.info("Auto-extracted JPEG cover from video at %s: %s", seek_t, target_img_path)
+                                    logger.info("Auto-extracted JPEG cover from video at %s: %s", fallback_t, target_img_path)
                                     break
                     except Exception:
                         pass
@@ -422,7 +455,7 @@ def sync_product_to_website_catalogue(
                     target_img_path.write_bytes(cat_cover.read_bytes())
                     logger.warning("Video thumbnail extraction failed; fell back to category cover: %s", cat_cover)
                 else:
-                    fallback_img = docs_dir / "images" / "jadau_kundan_necklace.jpg"
+                    fallback_img = docs_dir / "images" / "kundan_pearl_haar.jpg"
                     if fallback_img.exists():
                         target_img_path.write_bytes(fallback_img.read_bytes())
         elif image_path.exists():
