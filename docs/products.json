@@ -1,5 +1,33 @@
 [
   {
+    "id": 411716849,
+    "title": "combo",
+    "category": "groceries",
+    "price": 1650,
+    "originalPrice": 2475,
+    "tag": "New Arrival",
+    "image": "images/catalog/e7749ec27f8146388647698778866ff7.jpg",
+    "video": "videos/reel_411716849.mp4",
+    "description": "Offer price",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 818742370,
+    "title": "bangles",
+    "category": "earrings",
+    "price": 599,
+    "originalPrice": 898,
+    "tag": "New Arrival",
+    "image": "images/catalog/3310983d8dd14762a21869d85ed58b65.jpg",
+    "video": "videos/reel_818742370.mp4",
+    "description": "Exclusive bangles by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 302459337,
     "title": "Hair Accessories",
     "category": "necklace",
@@ -1133,14 +1161,4 @@
   {
     "id": 90203,
     "title": "Heavy-Duty Toilet & Floor Stain Remover Acid (500ml)",
-    "category": "cleaning",
-    "price": 65,
-    "originalPrice": 110,
-    "tag": "Deep Clean",
-    "image": "images/categories/cat_cleaning.jpg",
-    "description": "Powerful scale and hard-water stain remover acid for bathroom tiles, ceramic sinks, and tough stain sanitization. Free express delivery.",
-    "inStock": true,
-    "rating": 4.8,
-    "reviewsCount": 6
-  }
-]
+    "categ
