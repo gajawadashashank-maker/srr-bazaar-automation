@@ -365,7 +365,6 @@ def sync_product_to_website_catalogue(
         target_img_path = catalog_img_dir / target_img_name
 
         # Ensure target_img_path receives a real JPEG image, NEVER an MP4 video file
-        has_video = bool(video_path and Path(video_path).exists())
         is_video_input = False
         if image_path.exists():
             header = b""
@@ -374,8 +373,9 @@ def sync_product_to_website_catalogue(
             if b"ftyp" in header or b"moov" in header or image_path.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}:
                 is_video_input = True
 
-        if is_video_input or has_video:
-            vid_src = str(video_path if has_video else image_path)
+        if is_video_input:
+            # When user uploaded a VIDEO: extract genuine frame from video
+            vid_src = str(video_path if (video_path and Path(video_path).exists()) else image_path)
             extracted = False
             # 1. Grab 1st frame (no -ss seek, 100% reliable)
             cmd_frame0 = [
@@ -426,7 +426,21 @@ def sync_product_to_website_catalogue(
                     if fallback_img.exists():
                         target_img_path.write_bytes(fallback_img.read_bytes())
         elif image_path.exists():
-            target_img_path.write_bytes(image_path.read_bytes())
+            # When user uploaded a DIRECT PHOTO: Polish direct photo (EXIF orientation, vivid contrast & sharpness)
+            try:
+                from PIL import Image, ImageEnhance, ImageOps
+                with Image.open(image_path) as im:
+                    im = ImageOps.exif_transpose(im)
+                    im = im.convert("RGB")
+                    # Subtle direct enhancement: crisp, rich colors for jewellery & products
+                    enh_c = ImageEnhance.Contrast(im).enhance(1.04)
+                    enh_col = ImageEnhance.Color(enh_c).enhance(1.05)
+                    enh_s = ImageEnhance.Sharpness(enh_col).enhance(1.10)
+                    enh_s.save(target_img_path, "JPEG", quality=95, optimize=True)
+                    logger.info("Polished and saved direct product photo: %s", target_img_path)
+            except Exception as pe:
+                logger.warning("PIL enhancement skipped, using direct image copy: %s", pe)
+                target_img_path.write_bytes(image_path.read_bytes())
 
         # Extract numeric price
         numeric_match = re.search(r"([0-9][0-9,]*)", price_str.replace(",", ""))
