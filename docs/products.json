@@ -1,5 +1,19 @@
 [
   {
+    "id": 812432180,
+    "title": "Different piece",
+    "category": "necklace",
+    "price": 550,
+    "originalPrice": 825,
+    "tag": "New Arrival",
+    "image": "images/catalog/2542f16d26464dc2a37036e0ad725309.jpg",
+    "video": "videos/reel_812432180.mp4",
+    "description": "Exclusive Different piece by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 981201033,
     "title": "SRR Bazaar Curated Collection",
     "category": "necklace",
