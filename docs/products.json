@@ -1,5 +1,19 @@
 [
   {
+    "id": 580004261,
+    "title": "free shipping",
+    "category": "necklace",
+    "price": 1350,
+    "originalPrice": 2025,
+    "tag": "New Arrival",
+    "image": "images/catalog/19724377743a4a8e81b76e8b36d00d3e.jpg",
+    "video": "videos/reel_580004261.mp4",
+    "description": "Exclusive free shipping by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 330606361,
     "title": "Unique piece",
     "category": "necklace",
