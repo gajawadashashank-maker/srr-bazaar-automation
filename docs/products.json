@@ -1215,44 +1215,5 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 8
-  },
-  {
-    "id": 90201,
-    "title": "Super Disinfectant Bleaching Powder Grade-A (1 Kg Pack)",
-    "category": "cleaning",
-    "price": 89,
-    "originalPrice": 150,
-    "tag": "Hygiene Essential",
-    "image": "images/categories/cat_cleaning.jpg",
-    "description": "High-grade chlorine bleaching powder for sanitation, drain disinfection, water tank sanitization, and hospital-grade hygiene. Free delivery across India.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 12
-  },
-  {
-    "id": 90202,
-    "title": "Concentrated Herbal White Pine Phenyl Floor Cleaner (5 Litre Can)",
-    "category": "cleaning",
-    "price": 249,
-    "originalPrice": 420,
-    "tag": "Wholesale Value",
-    "image": "images/categories/cat_cleaning.jpg",
-    "description": "Strong fragrance germ-killing white pine phenyl. Repels insects and flies, leaves floors fresh and sparkling. Ideal for homes, wedding halls, and daily poojas.",
-    "inStock": true,
-    "rating": 4.9,
-    "reviewsCount": 19
-  },
-  {
-    "id": 90203,
-    "title": "Heavy-Duty Toilet & Floor Stain Remover Acid (500ml)",
-    "category": "cleaning",
-    "price": 65,
-    "originalPrice": 110,
-    "tag": "Deep Clean",
-    "image": "images/categories/cat_cleaning.jpg",
-    "description": "Powerful scale and hard-water stain remover acid for bathroom tiles, ceramic sinks, and tough stain sanitization. Free express delivery.",
-    "inStock": true,
-    "rating": 4.8,
-    "reviewsCount": 6
   }
 ]
