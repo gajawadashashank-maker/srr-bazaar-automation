@@ -7454,9 +7454,9 @@
       // Differentiate message copy for Friend (Step 1) vs WhatsApp Group (Step 2)
       let msg = '';
       if (viralShareStep === 0) {
-        msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and claim up to ₹150 Wallet Cash & free gifts:\n${shareUrl}`;
+        msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and claim up to ₹150 Wallet Cash & free gifts:\n${shareUrl}\n\n📸 Follow us on Instagram: https://www.instagram.com/sujatha60861/`;
       } else {
-        msg = `👨‍👩‍👧‍👦 Namaste Everyone in this group! 🪔\n\nCheck out SRR Bazaar Armoor today! 🎡🎁 Spin their festive lucky wheel to claim free surprise gifts & up to ₹150 Wallet Cash with free delivery across India:\n${shareUrl}`;
+        msg = `👨‍👩‍👧‍👦 Namaste Everyone in this group! 🪔\n\nCheck out SRR Bazaar Armoor today! 🎡🎁 Spin their festive lucky wheel to claim free surprise gifts & up to ₹150 Wallet Cash with free delivery across India:\n${shareUrl}\n\n📸 Follow us on Instagram: https://www.instagram.com/sujatha60861/`;
       }
 
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
@@ -8056,7 +8056,12 @@
 
     function shareReferralLinkWhatsApp() {
       const phoneInput = document.getElementById('referralPhoneInput');
-      const val = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
+      const savedPhone = localStorage.getItem('srr_cust_phone') || '';
+      let val = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
+      if (!val && savedPhone) {
+        val = savedPhone.replace(/[^0-9]/g, '');
+        if (phoneInput) phoneInput.value = val;
+      }
       if (val.length < 10) {
         if (phoneInput) {
           phoneInput.focus();
@@ -8067,8 +8072,14 @@
       }
       const code = val.slice(-10);
       const link = `https://srrbazaar.com/?ref=${code}`;
+      const instaLink = "https://www.instagram.com/sujatha60861/";
       const msg = encodeURIComponent(
-        `✨ Hey! Look at these exquisite collections on *SRR Bazaar*! 🛍️👑\n\nUse my invite link to get an *INSTANT ₹100 DISCOUNT* on your order:\n👉 ${link}\n\nThey have authentic temple harams & pure kundan sets, brass diya stands, biodegradable leaf buffet plates for pooja & catering, and free express delivery across India via Armoor Professional Courier! 🪔🍃`
+        `✨ Hey! Look at these exquisite collections on *SRR Bazaar*! 🛍️👑\n\n` +
+        `Use my invite link to get an *INSTANT ₹100 DISCOUNT* on your order:\n` +
+        `👉 ${link}\n\n` +
+        `📸 *Follow on Instagram for daily new arrivals, video reels & bridal designs:*\n` +
+        `👉 ${instaLink}\n\n` +
+        `They have authentic temple harams & pure kundan sets, brass diya stands, biodegradable leaf buffet plates for pooja & catering, and free express delivery across India via Armoor Professional Courier! 🪔🍃`
       );
       window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
     }
