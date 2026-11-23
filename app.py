@@ -469,6 +469,7 @@ def sync_product_to_website_catalogue(
         target_img_path = catalog_img_dir / target_img_name
 
         # Ensure target_img_path receives a real JPEG image, NEVER an MP4 video file
+        has_video = bool(video_path and Path(video_path).exists())
         is_video_input = False
         if image_path.exists():
             header = b""
@@ -477,8 +478,8 @@ def sync_product_to_website_catalogue(
             if b"ftyp" in header or b"moov" in header or image_path.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}:
                 is_video_input = True
 
-        if is_video_input:
-            vid_src = str(video_path if (video_path and Path(video_path).exists()) else image_path)
+        if is_video_input or has_video:
+            vid_src = str(video_path if has_video else image_path)
             extracted = False
             # 1. First try grabbing the exact 1st frame (no -ss seek, 100% reliable across any video duration)
             cmd_frame0 = [
@@ -522,10 +523,14 @@ def sync_product_to_website_catalogue(
                     except Exception:
                         pass
             if not extracted:
-                fallback_img = catalog_img_dir / "88846458a4a544eda9c03477c177b77a.jpg"
-                if fallback_img.exists():
-                    target_img_path.write_bytes(fallback_img.read_bytes())
-                    logger.warning("Video thumbnail extraction failed; fell back to default catalog image: %s", fallback_img)
+                cat_cover = docs_dir / "images" / "categories" / f"cat_{category}.jpg"
+                if cat_cover.exists():
+                    target_img_path.write_bytes(cat_cover.read_bytes())
+                    logger.warning("Video thumbnail extraction failed; fell back to category cover: %s", cat_cover)
+                else:
+                    fallback_img = docs_dir / "images" / "jadau_kundan_necklace.jpg"
+                    if fallback_img.exists():
+                        target_img_path.write_bytes(fallback_img.read_bytes())
         elif image_path.exists():
             target_img_path.write_bytes(image_path.read_bytes())
 
@@ -692,10 +697,23 @@ def sync_product_to_website_catalogue(
             subprocess.run(["git", "add", "docs/"], check=False)
             subprocess.run(["git", "commit", "-m", f"Auto-add {product_name} to website catalogue"], check=False)
             subprocess.run(["git", "push", "origin", "main"], check=False)
-            subprocess.run(["git", "subtree", "split", "--prefix", "docs", "-b", "temp-gh-pages"], check=False)
-            subprocess.run(["git", "push", "origin", "temp-gh-pages:gh-pages", "--force"], check=False)
-            subprocess.run(["git", "branch", "-D", "temp-gh-pages"], check=False)
-            logger.info("Auto-deployed new product '%s' to live website (gh-pages)", product_name)
+            
+            # Robust, instant tree commit to gh-pages branch (no subtree split failures)
+            tree_res = subprocess.run(["git", "rev-parse", "HEAD:docs"], capture_output=True, text=True)
+            tree_hash = tree_res.stdout.strip()
+            if tree_hash and len(tree_hash) == 40:
+                commit_res = subprocess.run(
+                    ["git", "commit-tree", tree_hash, "-m", f"Auto-deploy: {product_name}"],
+                    capture_output=True, text=True
+                )
+                commit_hash = commit_res.stdout.strip()
+                if commit_hash and len(commit_hash) == 40:
+                    push_res = subprocess.run(
+                        ["git", "push", "origin", f"{commit_hash}:refs/heads/gh-pages", "--force"],
+                        capture_output=True
+                    )
+                    if push_res.returncode == 0:
+                        logger.info("Auto-deployed new product '%s' to live website (gh-pages tree %s)", product_name, commit_hash[:8])
         except Exception as git_err:
             logger.warning("Git deploy skipped or failed: %s", git_err)
     except Exception as e:
@@ -840,7 +858,7 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
                         logger.warning("Could not extract frame at %s via ffmpeg: %s", seek_t, e)
 
             if not thumb_ok:
-                fallback_img = Path("docs/images/catalog/88846458a4a544eda9c03477c177b77a.jpg")
+                fallback_img = Path("docs/images/jadau_kundan_necklace.jpg")
                 if fallback_img.exists():
                     cover_image_path = fallback_img
                     logger.warning("Fell back to default catalog cover: %s", fallback_img)

@@ -365,6 +365,7 @@ def sync_product_to_website_catalogue(
         target_img_path = catalog_img_dir / target_img_name
 
         # Ensure target_img_path receives a real JPEG image, NEVER an MP4 video file
+        has_video = bool(video_path and Path(video_path).exists())
         is_video_input = False
         if image_path.exists():
             header = b""
@@ -373,8 +374,8 @@ def sync_product_to_website_catalogue(
             if b"ftyp" in header or b"moov" in header or image_path.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}:
                 is_video_input = True
 
-        if is_video_input:
-            vid_src = str(video_path if (video_path and Path(video_path).exists()) else image_path)
+        if is_video_input or has_video:
+            vid_src = str(video_path if has_video else image_path)
             extracted = False
             # 1. Grab 1st frame (no -ss seek, 100% reliable)
             cmd_frame0 = [
@@ -416,10 +417,14 @@ def sync_product_to_website_catalogue(
                     except Exception:
                         pass
             if not extracted:
-                fallback_img = catalog_img_dir / "88846458a4a544eda9c03477c177b77a.jpg"
-                if fallback_img.exists():
-                    target_img_path.write_bytes(fallback_img.read_bytes())
-                    logger.warning("Video thumbnail extraction failed; fell back to default catalog image: %s", fallback_img)
+                cat_cover = docs_dir / "images" / "categories" / f"cat_{category}.jpg"
+                if cat_cover.exists():
+                    target_img_path.write_bytes(cat_cover.read_bytes())
+                    logger.warning("Video thumbnail extraction failed; fell back to category cover: %s", cat_cover)
+                else:
+                    fallback_img = docs_dir / "images" / "jadau_kundan_necklace.jpg"
+                    if fallback_img.exists():
+                        target_img_path.write_bytes(fallback_img.read_bytes())
         elif image_path.exists():
             target_img_path.write_bytes(image_path.read_bytes())
 

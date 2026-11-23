@@ -952,7 +952,7 @@
           <div
             class="circle-box w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-amber-500">
             <img src="images/categories/cat_electrical.jpg" alt="Electricals & Lighting"
-              onerror="this.onerror=null; this.src='images/catalog/88846458a4a544eda9c03477c177b77a.jpg';"
+              onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg';"
               class="w-full h-full object-cover">
           </div>
           <span
@@ -965,7 +965,7 @@
           <div
             class="circle-box w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-stone-50 border border-stone-200 overflow-hidden shadow-2xs transition group-hover:scale-105 group-hover:border-cyan-500">
             <img src="images/categories/cat_cleaning.jpg" alt="Cleaning & Hygiene"
-              onerror="this.onerror=null; this.src='images/catalog/88846458a4a544eda9c03477c177b77a.jpg';"
+              onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg';"
               class="w-full h-full object-cover">
           </div>
           <span
@@ -3236,6 +3236,20 @@
     // Initial Default Catalogue (extracted from Sujatha Collections WhatsApp feed & Instagram)
     const DEFAULT_PRODUCTS = [
   {
+    "id": 514024987,
+    "title": "SRR Bazaar Curated Collection",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/428ede7f9e9048a980b847b48838eb3a.jpg",
+    "video": "videos/reel_514024987.mp4",
+    "description": "Exclusive SRR Bazaar Curated Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 483489891,
     "title": "Combo offer today",
     "category": "necklace",
@@ -4644,6 +4658,17 @@
     // =========================================================================
     // PRODUCT RENDERING & FILTERING
     // =========================================================================
+    
+    function getCategoryFallbackImg(category) {
+      const cat = String(category || '').toLowerCase();
+      if (cat === 'cleaning') return 'images/categories/cat_cleaning.jpg';
+      if (cat === 'electrical') return 'images/categories/cat_electrical.jpg';
+      if (cat === 'saree') return 'images/categories/cat_saree.jpg';
+      if (cat === 'samagri' || cat === 'decor') return 'images/categories/cat_samagri.jpg';
+      if (cat === 'groceries' || cat === 'dryfruits' || cat === 'snacks') return 'images/categories/cat_groceries.jpg';
+      return 'images/jadau_kundan_necklace.jpg';
+    }
+
     function renderProductCard(p) {
       const discountPercent = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
       return `
@@ -4651,7 +4676,7 @@
         
         <!-- Product Image & Deal Badges -->
         <div class="relative aspect-square overflow-hidden bg-stone-50 cursor-pointer p-2" onclick="openQuickView(${p.id})">
-          <img src="${p.image}" alt="${p.title}" onerror="this.onerror=null; this.src='images/catalog/88846458a4a544eda9c03477c177b77a.jpg';" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-300" loading="lazy">
+          <img src="${p.image}?v=3" alt="${p.title}" onerror="this.onerror=null; this.src=getCategoryFallbackImg(p.category);" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-300" loading="lazy">
           
           <!-- Product Tag Badge -->
           <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
@@ -5886,7 +5911,7 @@
                   <p class="text-[10px] font-bold text-stone-500 uppercase tracking-wider">Closest Catalog Matches:</p>
                   ${displayProds.map(p => `
                     <div class="flex items-center gap-2.5 p-2 rounded-xl bg-stone-50 hover:bg-stone-100/80 border border-stone-200 transition">
-                      <img src="${p.image}" onerror="this.onerror=null; this.src='images/catalog/88846458a4a544eda9c03477c177b77a.jpg';" class="w-12 h-12 object-cover rounded-lg border border-stone-200 flex-shrink-0" alt="${p.title}">
+                      <img src="${p.image}" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg';" class="w-12 h-12 object-cover rounded-lg border border-stone-200 flex-shrink-0" alt="${p.title}">
                       <div class="flex-1 min-w-0">
                         <h4 class="text-xs font-bold text-stone-900 truncate">${p.title}</h4>
                         <p class="text-[11px] text-amber-800 font-extrabold">₹${p.price} <span class="text-[9px] text-emerald-700 font-normal">FREE Delivery</span></p>
@@ -6135,7 +6160,7 @@
 
       const mediaHtml = `
         <div class="relative rounded-xl overflow-hidden bg-stone-900 flex items-center justify-center min-h-[300px]">
-          <img id="modalProductImg" src="${p.image}" alt="${p.title}" onerror="this.onerror=null; this.src='images/catalog/88846458a4a544eda9c03477c177b77a.jpg';" class="w-full h-80 object-cover transition-opacity duration-300">
+          <img id="modalProductImg" src="${p.image}?v=3" alt="${p.title}" onerror="this.onerror=null; this.src=getCategoryFallbackImg(p.category);" class="w-full h-80 object-cover transition-opacity duration-300">
           ${hasMatchingVideo ? `
             <video id="modalProductVid" src="${p.video}" loop muted playsinline class="w-full h-80 object-cover hidden transition-opacity duration-300"></video>
             
@@ -8225,6 +8250,19 @@
     let currentSelectedPayment = 'partial_cod';
 
     function proceedToCheckout(triggerHistory = true) {
+      // Anti-Tampering: Enforce authentic catalogue prices against tampering
+      for (const item of cart) {
+        if (item.isFreeGift) {
+          item.price = 0;
+        } else {
+          const authenticProd = products.find(p => String(p.id) === String(item.id));
+          if (authenticProd && item.price !== authenticProd.price) {
+            console.warn(`[Anti-Tampering] Cart item ${item.id} price reset from ₹${item.price} to authentic ₹${authenticProd.price}`);
+            item.price = authenticProd.price;
+          }
+        }
+      }
+
       const cartDrawerEl = document.getElementById('cartDrawer');
       const quickViewEl = document.getElementById('quickViewModal');
 
@@ -8635,6 +8673,19 @@
     }
 
     function submitFinalOrder() {
+      // Anti-Tampering: Enforce authentic catalogue prices against tampering
+      for (const item of cart) {
+        if (item.isFreeGift) {
+          item.price = 0;
+        } else {
+          const authenticProd = products.find(p => String(p.id) === String(item.id));
+          if (authenticProd && item.price !== authenticProd.price) {
+            console.warn(`[Anti-Tampering] Cart item ${item.id} price reset from ₹${item.price} to authentic ₹${authenticProd.price}`);
+            item.price = authenticProd.price;
+          }
+        }
+      }
+
       if (isSubmittingOrder) return;
 
       // Re-verify festive rewards validity immediately at order submission
