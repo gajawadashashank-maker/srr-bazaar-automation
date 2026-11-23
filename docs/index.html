@@ -2050,7 +2050,7 @@
               <span class="text-[10px] text-amber-800 font-semibold">• Valid till 30 Nov</span>
             </div>
             <div class="text-[11px] text-amber-800 leading-tight mt-0.5">
-              Handcrafted Brass Pooja Bell & Festive Kumkum Box is packed free with your order from Armoor Hub!
+              Auspicious Haldi-Kumkum & Designer Kundan Bindi Set is packed free with your order from Armoor Hub!
             </div>
           </div>
         </div>
@@ -2484,7 +2484,7 @@
           <span class="text-xs font-bold text-amber-950">Free Launch Gift Included in Your Parcel!</span>
         </div>
         <p class="text-[11px] text-stone-700 leading-tight">
-          Your order qualifies for the special launch offer! A <strong class="text-amber-950 font-bold">Handcrafted Brass Pooja Bell & Festive Kumkum Set</strong> is packed completely FREE in your box.
+          Your order qualifies for the special launch offer! An <strong class="text-amber-950 font-bold">Auspicious Haldi-Kumkum & Designer Kundan Bindi Set</strong> is packed completely FREE in your box.
         </p>
       </div>
 
@@ -6665,10 +6665,10 @@
     // =========================================================================
     const LAUNCH_FREE_GIFT_CONFIG = {
       id: 'gift_launch_special_nov2026',
-      title: 'Handcrafted Brass Pooja Bell & Festive Kumkum Box',
+      title: 'Auspicious Haldi-Kumkum & Designer Kundan Bindi Set',
       price: 0,
-      originalPrice: 120,
-      savings: 120,
+      originalPrice: 49,
+      savings: 49,
       image: 'images/categories/cat_samagri.jpg',
       qty: 1,
       isFreeGift: true,
@@ -6814,7 +6814,7 @@
     function removeCartItem(id) {
       const item = cart.find(i => String(i.id) === String(id));
       if (item && item.isFreeGift) {
-        alert("🎁 This Handcrafted Brass Pooja Bell & Festive Kumkum Box is completely FREE with your order (Launch Special until 30 Nov 2026)!");
+        alert("🎁 This Auspicious Haldi-Kumkum & Designer Kundan Bindi Set is completely FREE with your order (Launch Special until 30 Nov 2026)!");
         return;
       }
       cart = cart.filter(i => String(i.id) !== String(id));
@@ -8683,8 +8683,8 @@
       let launchGiftWaDetails = '';
       const hasLaunchFreeGift = cart.some(i => i.isFreeGift);
       if (hasLaunchFreeGift) {
-        launchGiftWaDetails = `\n*🎁 Special Launch Offer:* Handcrafted Brass Pooja Bell & Festive Kumkum Box (Auto-Added FREE - Valid until 30 Nov 2026)`;
-        newOrder.launchFreeGift = "Handcrafted Brass Pooja Bell & Festive Kumkum Box (Auto-Added Launch Gift)";
+        launchGiftWaDetails = `\n*🎁 Special Launch Offer:* Auspicious Haldi-Kumkum & Designer Kundan Bindi Set (Auto-Added FREE - Valid until 30 Nov 2026)`;
+        newOrder.launchFreeGift = "Auspicious Haldi-Kumkum & Designer Kundan Bindi Set (Auto-Added Launch Gift)";
       }
 
       // If user redeemed wallet cash or free gift, retire the 24h festive reward timer

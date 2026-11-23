@@ -979,19 +979,19 @@ ef) as it is strictly reserved for new buyer acquisition.
 - **How to Avoid**:
   1. **Strict Synchronous Gift Reconciler (`syncFreeGiftToCart`)**:
      - Checks validity window (`Date.now() <= LAUNCH_FREE_GIFT_CONFIG.validUntil` e.g. 30 Nov 2026 23:59:59).
-     - If paid items exist in cart (`cart.some(i => !i.isFreeGift)`), auto-injects the gift with `price: 0`, `qty: 1`, `originalPrice: 120`, and `isFreeGift: true`.
+     - If paid items exist in cart (`cart.some(i => !i.isFreeGift)`), auto-injects the gift with `price: 0`, `qty: 1`, `originalPrice: 49`, and `isFreeGift: true`.
      - **Anti-Orphan Cleanup**: If the customer removes all regular products, the reconciler automatically removes the free gift so empty carts never retain a lonely ₹0 item.
   2. **Quantity Anti-Tamper & Locked Controls**:
      - Lock free gift quantity strictly to 1 in `updateCartQty`.
      - In `removeCartItem`, clicking remove on the gift triggers an informative alert informing the user it is a complimentary gift included free of charge.
   3. **Visual Distinction in Cart Drawer**:
-     - Golden-bordered card with `🎁 100% FREE GIFT` badge, `FREE` price, `Saved ₹120`, and `Auto-packed in parcel (Qty: 1)`.
+     - Golden-bordered card with `🎁 100% FREE GIFT` badge, `FREE` price, `Saved ₹49`, and `Auto-packed in parcel (Qty: 1)`.
      - Cart Drawer top announcement banner: `Special Launch Gift Included! (Till 30 Nov)`.
      - Bill summary line: `🎁 Launch Special Gift: FREE`.
   4. **Checkout & Order Dispatch Itemization**:
      - Checkout summary shows `${regularCount} item(s) + 🎁 1 Free Gift`.
      - WhatsApp order dispatch text explicitly lists the gift:
-       `*🎁 FREE GIFT: Handcrafted Brass Pooja Bell & Festive Kumkum Box* x 1 = ₹0 (Complimentary Launch Offer)`.
+       `*🎁 FREE GIFT: Auspicious Haldi-Kumkum & Designer Kundan Bindi Set* x 1 = ₹0 (Complimentary Launch Offer)`.
      - Order Success modal displays `#successFreeGiftBox` confirming the gift is packed in the customer's parcel.
 
 
