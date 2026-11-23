@@ -2894,10 +2894,6 @@
           class="px-5 py-3 border-b-2 border-royal-600 text-royal-700 bg-white flex items-center gap-2 whitespace-nowrap">
           <i data-lucide="shopping-cart" class="w-4 h-4"></i> Customer Orders (<span id="merchantOrderCount">0</span>)
         </button>
-        <button onclick="switchMerchantTab('referrals')" id="tabBtnReferrals"
-          class="px-5 py-3 border-b-2 border-transparent text-stone-600 hover:text-stone-900 flex items-center gap-2 whitespace-nowrap">
-          <i data-lucide="gift" class="w-4 h-4 text-pink-600"></i> Referrals & Viral Shares (<span id="merchantReferralCount">0</span>)
-        </button>
         <button onclick="switchMerchantTab('add-product')" id="tabBtnAddProduct"
           class="px-5 py-3 border-b-2 border-transparent text-stone-600 hover:text-stone-900 flex items-center gap-2 whitespace-nowrap">
           <i data-lucide="plus-circle" class="w-4 h-4"></i> Add New Product
@@ -2949,98 +2945,6 @@
               <!-- Orders injected here -->
             </tbody>
           </table>
-        </div>
-      </div>
-
-      <!-- Tab Content: Referrals & Viral Shares Management -->
-      <div id="merchantTabReferrals" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <h4 class="font-bold text-base text-stone-900 flex items-center gap-2">
-              <i data-lucide="gift" class="w-5 h-5 text-pink-600"></i>
-              <span>Refer & Earn & Viral Doubling Dashboard</span>
-            </h4>
-            <p class="text-xs text-stone-500">Track all customer referral invites, ₹100 wallet rewards, and festive spin wheel doubling shares</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="exportReferralsCSV()"
-              class="px-3 py-1.5 bg-pink-700 hover:bg-pink-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-xs transition">
-              <i data-lucide="download" class="w-3.5 h-3.5"></i> Export Referrals CSV
-            </button>
-          </div>
-        </div>
-
-        <!-- Metric KPI Cards -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="p-3 bg-pink-50 border border-pink-200 rounded-xl">
-            <div class="text-[11px] font-bold text-pink-700 uppercase">Referral Orders</div>
-            <div class="text-xl font-extrabold text-pink-950 mt-0.5" id="metricRefOrders">0</div>
-            <div class="text-[10px] text-pink-600">Orders via invite links</div>
-          </div>
-          <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
-            <div class="text-[11px] font-bold text-amber-700 uppercase">Rewards Distributed</div>
-            <div class="text-xl font-extrabold text-amber-950 mt-0.5" id="metricRefRewards">₹0</div>
-            <div class="text-[10px] text-amber-600">₹100 per verified order</div>
-          </div>
-          <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
-            <div class="text-[11px] font-bold text-emerald-700 uppercase">Viral Doublings</div>
-            <div class="text-xl font-extrabold text-emerald-950 mt-0.5" id="metricSpinDoublings">0</div>
-            <div class="text-[10px] text-emerald-600">Shared to Friend + Group</div>
-          </div>
-          <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-xl">
-            <div class="text-[11px] font-bold text-indigo-700 uppercase">Active Referrers</div>
-            <div class="text-xl font-extrabold text-indigo-950 mt-0.5" id="metricActiveReferrers">0</div>
-            <div class="text-[10px] text-indigo-600">Customers sharing links</div>
-          </div>
-        </div>
-
-        <!-- Section 1: Referral Orders Breakdown Table -->
-        <div class="space-y-2">
-          <h5 class="text-xs font-bold text-stone-800 uppercase tracking-wide flex items-center gap-1.5">
-            <i data-lucide="users" class="w-4 h-4 text-pink-600"></i>
-            <span>Completed Referral Orders & Wallet Earnings</span>
-          </h5>
-          <div class="overflow-x-auto border border-stone-200 rounded-xl shadow-xs">
-            <table class="w-full text-left text-xs border-collapse">
-              <thead class="bg-stone-100 text-stone-700 font-semibold border-b border-stone-200">
-                <tr>
-                  <th class="p-3">Referrer Phone (Earned ₹100)</th>
-                  <th class="p-3">Buyer Name & Phone</th>
-                  <th class="p-3">Order ID</th>
-                  <th class="p-3">Order Value</th>
-                  <th class="p-3">Buyer Discount</th>
-                  <th class="p-3">Date</th>
-                  <th class="p-3">Status</th>
-                </tr>
-              </thead>
-              <tbody id="merchantReferralsTableBody" class="divide-y divide-stone-200 bg-white">
-                <!-- Referral rows injected here -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Section 2: Recent Viral Shares & Doublings Log -->
-        <div class="space-y-2 pt-2">
-          <h5 class="text-xs font-bold text-stone-800 uppercase tracking-wide flex items-center gap-1.5">
-            <i data-lucide="share-2" class="w-4 h-4 text-emerald-600"></i>
-            <span>Real-Time Viral Spin Wheel & WhatsApp Shares Log</span>
-          </h5>
-          <div class="overflow-x-auto border border-stone-200 rounded-xl shadow-xs">
-            <table class="w-full text-left text-xs border-collapse">
-              <thead class="bg-stone-100 text-stone-700 font-semibold border-b border-stone-200">
-                <tr>
-                  <th class="p-3">Share Action</th>
-                  <th class="p-3">Target Details</th>
-                  <th class="p-3">Prize / Outcome</th>
-                  <th class="p-3">Time</th>
-                </tr>
-              </thead>
-              <tbody id="merchantSharesLogTableBody" class="divide-y divide-stone-200 bg-white">
-                <!-- Share logs injected here -->
-              </tbody>
-            </table>
-          </div>
         </div>
       </div>
 
@@ -3333,6 +3237,20 @@
 
     // Initial Default Catalogue (extracted from Sujatha Collections WhatsApp feed & Instagram)
     const DEFAULT_PRODUCTS = [
+  {
+    "id": 474346933,
+    "title": "Pure Cotton Handmade 1000 Wicks Vattulu, 5 Pogulu price",
+    "category": "samagri",
+    "price": 139,
+    "originalPrice": 208,
+    "tag": "New Arrival",
+    "image": "images/catalog/7f3533fd1a574d0fb333f736c854a71b.jpg",
+    "video": "videos/reel_474346933.mp4",
+    "description": "Exclusive Pure Cotton Handmade 1000 Wicks Vattulu, 5 Pogulu price by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
   {
     "id": 514024987,
     "title": "SRR Bazaar Curated Collection",
@@ -4549,6 +4467,45 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 8
+  },
+  {
+    "id": 90201,
+    "title": "Super Disinfectant Bleaching Powder Grade-A (1 Kg Pack)",
+    "category": "cleaning",
+    "price": 89,
+    "originalPrice": 150,
+    "tag": "Hygiene Essential",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "High-grade chlorine bleaching powder for sanitation, drain disinfection, water tank sanitization, and hospital-grade hygiene. Free delivery across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 12
+  },
+  {
+    "id": 90202,
+    "title": "Concentrated Herbal White Pine Phenyl Floor Cleaner (5 Litre Can)",
+    "category": "cleaning",
+    "price": 249,
+    "originalPrice": 420,
+    "tag": "Wholesale Value",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "Strong fragrance germ-killing white pine phenyl. Repels insects and flies, leaves floors fresh and sparkling. Ideal for homes, wedding halls, and daily poojas.",
+    "inStock": true,
+    "rating": 4.9,
+    "reviewsCount": 19
+  },
+  {
+    "id": 90203,
+    "title": "Heavy-Duty Toilet & Floor Stain Remover Acid (500ml)",
+    "category": "cleaning",
+    "price": 65,
+    "originalPrice": 110,
+    "tag": "Deep Clean",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "Powerful scale and hard-water stain remover acid for bathroom tiles, ceramic sinks, and tough stain sanitization. Free express delivery.",
+    "inStock": true,
+    "rating": 4.8,
+    "reviewsCount": 6
   }
 ];
     let products = [...DEFAULT_PRODUCTS];
@@ -7511,9 +7468,9 @@
       // Differentiate message copy for Friend (Step 1) vs WhatsApp Group (Step 2)
       let msg = '';
       if (viralShareStep === 0) {
-        msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and claim up to ₹150 Wallet Cash & free gifts:\n${shareUrl}\n\n📸 Follow us on Instagram: https://www.instagram.com/sujatha60861/`;
+        msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and claim up to ₹150 Wallet Cash & free gifts:\n${shareUrl}`;
       } else {
-        msg = `👨‍👩‍👧‍👦 Namaste Everyone in this group! 🪔\n\nCheck out SRR Bazaar Armoor today! 🎡🎁 Spin their festive lucky wheel to claim free surprise gifts & up to ₹150 Wallet Cash with free delivery across India:\n${shareUrl}\n\n📸 Follow us on Instagram: https://www.instagram.com/sujatha60861/`;
+        msg = `👨‍👩‍👧‍👦 Namaste Everyone in this group! 🪔\n\nCheck out SRR Bazaar Armoor today! 🎡🎁 Spin their festive lucky wheel to claim free surprise gifts & up to ₹150 Wallet Cash with free delivery across India:\n${shareUrl}`;
       }
 
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
@@ -8113,12 +8070,7 @@
 
     function shareReferralLinkWhatsApp() {
       const phoneInput = document.getElementById('referralPhoneInput');
-      const savedPhone = localStorage.getItem('srr_cust_phone') || '';
-      let val = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
-      if (!val && savedPhone) {
-        val = savedPhone.replace(/[^0-9]/g, '');
-        if (phoneInput) phoneInput.value = val;
-      }
+      const val = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
       if (val.length < 10) {
         if (phoneInput) {
           phoneInput.focus();
@@ -8129,14 +8081,8 @@
       }
       const code = val.slice(-10);
       const link = `https://srrbazaar.com/?ref=${code}`;
-      const instaLink = "https://www.instagram.com/sujatha60861/";
       const msg = encodeURIComponent(
-        `✨ Hey! Look at these exquisite collections on *SRR Bazaar*! 🛍️👑\n\n` +
-        `Use my invite link to get an *INSTANT ₹100 DISCOUNT* on your order:\n` +
-        `👉 ${link}\n\n` +
-        `📸 *Follow on Instagram for daily new arrivals, video reels & bridal designs:*\n` +
-        `👉 ${instaLink}\n\n` +
-        `They have authentic temple harams & pure kundan sets, brass diya stands, biodegradable leaf buffet plates for pooja & catering, and free express delivery across India via Armoor Professional Courier! 🪔🍃`
+        `✨ Hey! Look at these exquisite collections on *SRR Bazaar*! 🛍️👑\n\nUse my invite link to get an *INSTANT ₹100 DISCOUNT* on your order:\n👉 ${link}\n\nThey have authentic temple harams & pure kundan sets, brass diya stands, biodegradable leaf buffet plates for pooja & catering, and free express delivery across India via Armoor Professional Courier! 🪔🍃`
       );
       window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
     }
@@ -9358,25 +9304,15 @@ Please pack and dispatch! ✨`
       const btnAddProd = document.getElementById('tabBtnAddProduct');
       const btnSettings = document.getElementById('tabBtnSettings');
 
-      const refSec = document.getElementById('merchantTabReferrals');
-      const btnRef = document.getElementById('tabBtnReferrals');
-
-      [ordersSec, refSec, addProdSec, settingsSec].forEach(s => s && s.classList.add('hidden'));
-      [btnOrders, btnRef, btnAddProd, btnSettings].forEach(b => {
+      [ordersSec, addProdSec, settingsSec].forEach(s => s && s.classList.add('hidden'));
+      [btnOrders, btnAddProd, btnSettings].forEach(b => {
         if (b) {
           b.classList.remove('border-royal-600', 'text-royal-700', 'bg-white');
           b.classList.add('border-transparent', 'text-stone-600');
         }
       });
 
-      if (tab === 'referrals') {
-        if (refSec) refSec.classList.remove('hidden');
-        if (btnRef) {
-          btnRef.classList.add('border-royal-600', 'text-royal-700', 'bg-white');
-          btnRef.classList.remove('border-transparent', 'text-stone-600');
-        }
-        renderMerchantReferrals();
-      } else if (tab === 'orders') {
+      if (tab === 'orders') {
         ordersSec.classList.remove('hidden');
         btnOrders.classList.add('border-royal-600', 'text-royal-700', 'bg-white');
         btnOrders.classList.remove('border-transparent', 'text-stone-600');
@@ -9404,108 +9340,6 @@ Please pack and dispatch! ✨`
         document.getElementById('configDefaultQrMode').value = STORE_CONFIG.defaultQrMode || 'dynamic';
       }
       lucide.createIcons();
-    }
-
-    
-    function exportReferralsCSV() {
-      const refOrders = (orders || []).filter(o => o && o.referredBy);
-      if (refOrders.length === 0) {
-        alert("No referral orders recorded yet to export.");
-        return;
-      }
-      let csv = "Referrer Phone,Buyer Name,Buyer Phone,Order ID,Order Total,Referral Discount Given,Referrer Reward,Date,Status\n";
-      refOrders.forEach(o => {
-        const cust = o.customer || {};
-        csv += `"${o.referredBy}","${cust.name || o.name || ''}","${cust.phone || o.phone || ''}","${o.orderId}","₹${o.total}","₹100","₹100","${o.date}","${o.status}"\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `srr_referrals_${Date.now()}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
-    function renderMerchantReferrals() {
-      const refOrders = (orders || []).filter(o => o && o.referredBy);
-      const tbody = document.getElementById('merchantReferralsTableBody');
-      const countEl = document.getElementById('merchantReferralCount');
-      if (countEl) countEl.textContent = refOrders.length;
-
-      const metricOrders = document.getElementById('metricRefOrders');
-      if (metricOrders) metricOrders.textContent = refOrders.length;
-
-      const metricRewards = document.getElementById('metricRefRewards');
-      if (metricRewards) metricRewards.textContent = `₹${refOrders.length * 100}`;
-
-      const referrersSet = new Set(refOrders.map(o => o.referredBy));
-      const metricActive = document.getElementById('metricActiveReferrers');
-      if (metricActive) metricActive.textContent = referrersSet.size;
-
-      const logs = JSON.parse(localStorage.getItem('srr_viral_share_logs')) || [];
-      const doublings = logs.filter(l => l.type && l.type.includes('Doubled')).length;
-      const metricSpin = document.getElementById('metricSpinDoublings');
-      if (metricSpin) metricSpin.textContent = doublings || 0;
-
-      if (tbody) {
-        if (refOrders.length === 0) {
-          tbody.innerHTML = `
-            <tr>
-              <td colspan="7" class="p-6 text-center text-stone-500">
-                <div class="w-8 h-8 bg-pink-50 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-1.5">
-                  <i data-lucide="gift" class="w-4 h-4"></i>
-                </div>
-                <p class="font-bold text-stone-700 text-xs">No referral purchases placed yet</p>
-                <p class="text-[11px] text-stone-400 mt-0.5">When customers share their link and friends purchase, they will appear here with referrer numbers & wallet rewards.</p>
-              </td>
-            </tr>
-          `;
-        } else {
-          tbody.innerHTML = refOrders.map(o => {
-            const cust = o.customer || {};
-            return `
-              <tr class="hover:bg-pink-50/40 transition border-b border-stone-100">
-                <td class="p-3 font-mono font-bold text-pink-700">${o.referredBy}</td>
-                <td class="p-3">
-                  <span class="font-bold text-stone-900 block">${cust.name || o.name || 'Customer'}</span>
-                  <span class="text-stone-500 text-[11px] font-mono">${cust.phone || o.phone || ''}</span>
-                </td>
-                <td class="p-3 font-mono text-stone-700 font-semibold">${o.orderId}</td>
-                <td class="p-3 font-bold text-stone-900">₹${o.total}</td>
-                <td class="p-3 font-semibold text-emerald-700">-₹100</td>
-                <td class="p-3 text-stone-500 text-[11px]">${o.date || 'Recent'}</td>
-                <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">${o.status}</span></td>
-              </tr>
-            `;
-          }).join('');
-        }
-      }
-
-      const sharesTbody = document.getElementById('merchantSharesLogTableBody');
-      if (sharesTbody) {
-        if (logs.length === 0) {
-          sharesTbody.innerHTML = `
-            <tr>
-              <td colspan="4" class="p-4 text-center text-stone-400 text-xs">
-                No viral share events recorded on this device yet.
-              </td>
-            </tr>
-          `;
-        } else {
-          sharesTbody.innerHTML = logs.map(l => `
-            <tr class="hover:bg-stone-50 transition border-b border-stone-100">
-              <td class="p-3 font-semibold text-stone-800">${l.type || 'Share'}</td>
-              <td class="p-3 font-mono text-stone-600">${l.referrerPhone || l.token || 'WhatsApp Chat'}</td>
-              <td class="p-3 font-bold text-emerald-700">${l.prize || 'Shared Link'}</td>
-              <td class="p-3 text-stone-500 text-[11px]">${l.time || 'Recent'}</td>
-            </tr>
-          `).join('');
-        }
-      }
-
-      if (window.lucide) lucide.createIcons();
     }
 
     function renderMerchantOrders() {
@@ -9636,7 +9470,6 @@ Please pack and dispatch! ✨`
         `;
       }
 
-      if (typeof renderMerchantReferrals === 'function') renderMerchantReferrals();
       lucide.createIcons();
     }
 
