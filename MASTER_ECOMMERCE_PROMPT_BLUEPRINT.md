@@ -969,6 +969,32 @@ ef) as it is strictly reserved for new buyer acquisition.
   6. **Automated Multi-Device Test Coverage**:
      - Validate via Selenium headless browser simulating Phone A (spin & share), Phone A self-click attempt (blocked at 0/2), Phone B visit (advancing to 1/2, 50% bar), and Phone C visit (advancing to 2/2, 100% bar and unlocking 2X bonus).
 
+### 35. Auto-Included Free Launch Gift Engine (Anti-Orphan Cleanup, Expiry Boundaries & WhatsApp Itemization)
+- **What Happened**:
+  - Store wanted a celebratory promotional free gift auto-added to the customer's cart for all orders placed during the initial launch phase (until 30 Nov 2026), without corrupting cart subtotal or causing orphaned ₹0 items.
+- **Why It Happened**:
+  - Simple cart injections can cause the free gift to remain in the cart even when a customer removes all paid products, allowing checkout for ₹0.
+  - Decrementing or deleting the free gift by mistake can lead to customer confusion or negative quantities.
+  - Free gifts must be clearly displayed in the Cart Drawer, Checkout Summary, WhatsApp order dispatch text, and Order Success confirmation.
+- **How to Avoid**:
+  1. **Strict Synchronous Gift Reconciler (`syncFreeGiftToCart`)**:
+     - Checks validity window (`Date.now() <= LAUNCH_FREE_GIFT_CONFIG.validUntil` e.g. 30 Nov 2026 23:59:59).
+     - If paid items exist in cart (`cart.some(i => !i.isFreeGift)`), auto-injects the gift with `price: 0`, `qty: 1`, `originalPrice: 120`, and `isFreeGift: true`.
+     - **Anti-Orphan Cleanup**: If the customer removes all regular products, the reconciler automatically removes the free gift so empty carts never retain a lonely ₹0 item.
+  2. **Quantity Anti-Tamper & Locked Controls**:
+     - Lock free gift quantity strictly to 1 in `updateCartQty`.
+     - In `removeCartItem`, clicking remove on the gift triggers an informative alert informing the user it is a complimentary gift included free of charge.
+  3. **Visual Distinction in Cart Drawer**:
+     - Golden-bordered card with `🎁 100% FREE GIFT` badge, `FREE` price, `Saved ₹120`, and `Auto-packed in parcel (Qty: 1)`.
+     - Cart Drawer top announcement banner: `Special Launch Gift Included! (Till 30 Nov)`.
+     - Bill summary line: `🎁 Launch Special Gift: FREE`.
+  4. **Checkout & Order Dispatch Itemization**:
+     - Checkout summary shows `${regularCount} item(s) + 🎁 1 Free Gift`.
+     - WhatsApp order dispatch text explicitly lists the gift:
+       `*🎁 FREE GIFT: Handcrafted Brass Pooja Bell & Festive Kumkum Box* x 1 = ₹0 (Complimentary Launch Offer)`.
+     - Order Success modal displays `#successFreeGiftBox` confirming the gift is packed in the customer's parcel.
+
+
 
 
 

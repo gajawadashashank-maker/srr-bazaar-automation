@@ -1846,6 +1846,10 @@
             id="toastSubtotal">₹0</strong></span>
       </div>
       <div class="text-[11px] text-stone-500 truncate" id="toastItemTitle">Product Title</div>
+      <div id="toastFreeGiftNotice" class="text-[10px] text-amber-800 font-bold flex items-center gap-1 mt-0.5 hidden">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0 animate-ping"></span>
+        <span>🎁 Free Launch Gift auto-added to your parcel!</span>
+      </div>
     </div>
     <div class="flex items-center gap-1.5 flex-shrink-0">
       <button onclick="proceedToCheckout(); hideAmazonToast();"
@@ -1897,6 +1901,19 @@
         class="bg-emerald-50 px-4 py-2 border-b border-emerald-100 flex items-center justify-center gap-1.5 text-xs text-emerald-800 font-medium">
         <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
         <span>Congratulations! You get <strong>FREE Express Delivery</strong></span>
+      </div>
+
+      <!-- Launch Free Gift Announcement Banner (Valid until 30 Nov 2026) -->
+      <div id="cartLaunchGiftBanner"
+        class="bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2 border-b border-amber-200 flex items-center gap-2 text-xs text-amber-950">
+        <span class="text-base flex-shrink-0">🎁</span>
+        <div class="flex-1 min-w-0">
+          <div class="font-bold flex items-center gap-1.5 flex-wrap">
+            <span>Special Launch Gift Included!</span>
+            <span class="text-[9px] bg-red-600 text-white font-extrabold px-1.5 py-0.2 rounded-full uppercase tracking-wider">Till 30 Nov</span>
+          </div>
+          <div class="text-[11px] text-amber-800 truncate">Handcrafted Brass Pooja Bell & Kumkum Set auto-packed free in parcel!</div>
+        </div>
       </div>
 
       <!-- Cart Items List -->
@@ -1954,6 +1971,10 @@
           <div class="flex justify-between" id="walletDiscountRow" style="display: none;">
             <span class="text-amber-800 font-medium">🪙 SRR Wallet Cash Used</span>
             <span id="cartWalletDiscount" class="font-bold text-amber-800">-₹0</span>
+          </div>
+          <div class="flex justify-between" id="freeGiftBillRow">
+            <span class="text-amber-900 font-medium flex items-center gap-1">🎁 Launch Special Gift</span>
+            <span class="font-extrabold text-emerald-700 uppercase text-[11px] bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">FREE</span>
           </div>
           <div class="flex justify-between">
             <span>Shipping Charge</span>
@@ -2017,6 +2038,21 @@
           </div>
           <span class="px-2 py-0.5 rounded bg-amber-200/60 text-amber-900 font-medium text-[11px]"
             id="checkoutItemsCountPreview">0 Items</span>
+        </div>
+
+        <!-- Launch Free Gift Checkout Notice -->
+        <div id="checkoutFreeGiftNotice" class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 rounded-xl p-3 flex items-center gap-2.5 text-xs text-amber-950 shadow-2xs">
+          <div class="w-8 h-8 rounded-full bg-amber-400 flex items-center justify-center text-base shadow-xs flex-shrink-0">🎁</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-amber-950 flex items-center gap-1.5 flex-wrap">
+              <span>Free Launch Gift Auto-Included</span>
+              <span class="text-[9px] bg-emerald-700 text-white font-extrabold px-1.5 py-0.2 rounded uppercase">FREE (₹0)</span>
+              <span class="text-[10px] text-amber-800 font-semibold">• Valid till 30 Nov</span>
+            </div>
+            <div class="text-[11px] text-amber-800 leading-tight mt-0.5">
+              Handcrafted Brass Pooja Bell & Festive Kumkum Box is packed free with your order from Armoor Hub!
+            </div>
+          </div>
         </div>
 
         <!-- Section 1: Customer Details -->
@@ -2438,6 +2474,18 @@
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Confirmed & Ready to Pack
           </span>
         </div>
+      </div>
+
+      <!-- Launch Free Gift Success Callout Box -->
+      <div id="successFreeGiftBox"
+        class="hidden p-3.5 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-300 text-left space-y-1 shadow-2xs">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🎁</span>
+          <span class="text-xs font-bold text-amber-950">Free Launch Gift Included in Your Parcel!</span>
+        </div>
+        <p class="text-[11px] text-stone-700 leading-tight">
+          Your order qualifies for the special launch offer! A <strong class="text-amber-950 font-bold">Handcrafted Brass Pooja Bell & Festive Kumkum Set</strong> is packed completely FREE in your box.
+        </p>
       </div>
 
       <!-- 5% Prepaid Cashback Earned Notification Box -->
@@ -4037,6 +4085,9 @@
       checkIncomingReferral();
       updateWalletUI();
       renderProducts();
+      if (typeof syncFreeGiftToCart === 'function') {
+        syncFreeGiftToCart();
+      }
       updateCartUI();
       renderMerchantOrders();
       syncGoogleSheetOrders();
@@ -5828,6 +5879,9 @@
         cart.push(comboItem);
       }
 
+      if (typeof syncFreeGiftToCart === 'function') {
+        syncFreeGiftToCart();
+      }
       saveCart();
       updateCartUI();
       pulseCartBadge();
@@ -6375,6 +6429,12 @@
       if (subtotalEl) subtotalEl.textContent = `₹${subtotal}`;
       if (titleEl) titleEl.textContent = product ? product.title : 'Item added';
 
+      const giftNotice = document.getElementById('toastFreeGiftNotice');
+      if (giftNotice) {
+        const hasGift = isLaunchFreeGiftActive() && cart.some(i => i.isFreeGift);
+        giftNotice.classList.toggle('hidden', !hasGift);
+      }
+
       toast.classList.remove('hidden');
       toast.classList.add('flex');
       lucide.createIcons();
@@ -6405,6 +6465,63 @@
     }
 
     // =========================================================================
+    // SPECIAL LAUNCH FREE GIFT ENGINE (AUTO-ADDED TO CART UNTIL 30 NOV 2026)
+    // =========================================================================
+    const LAUNCH_FREE_GIFT_CONFIG = {
+      id: 'gift_launch_special_nov2026',
+      title: 'Handcrafted Brass Pooja Bell & Festive Kumkum Box',
+      price: 0,
+      originalPrice: 120,
+      savings: 120,
+      image: 'images/categories/cat_samagri.jpg',
+      qty: 1,
+      isFreeGift: true,
+      promoTag: 'Launch Free Gift',
+      validUntil: new Date('2026-11-30T23:59:59+05:30').getTime(),
+      maxOrders: 100,
+      description: 'Special complimentary launch gift automatically packed free with your order until 30 Nov 2026!'
+    };
+
+    function isLaunchFreeGiftActive() {
+      const now = Date.now();
+      if (now > LAUNCH_FREE_GIFT_CONFIG.validUntil) return false;
+      const currentOrders = Array.isArray(orders) ? orders.length : 0;
+      if (currentOrders >= LAUNCH_FREE_GIFT_CONFIG.maxOrders) return false;
+      return true;
+    }
+
+    function syncFreeGiftToCart() {
+      const active = isLaunchFreeGiftActive();
+      const regularItems = cart.filter(item => !item.isFreeGift);
+      const giftIndex = cart.findIndex(item => item.isFreeGift);
+
+      if (active && regularItems.length > 0) {
+        if (giftIndex === -1) {
+          cart.push({
+            id: LAUNCH_FREE_GIFT_CONFIG.id,
+            title: LAUNCH_FREE_GIFT_CONFIG.title,
+            price: 0,
+            originalPrice: LAUNCH_FREE_GIFT_CONFIG.originalPrice,
+            savings: LAUNCH_FREE_GIFT_CONFIG.savings,
+            image: LAUNCH_FREE_GIFT_CONFIG.image,
+            qty: 1,
+            isFreeGift: true,
+            promoTag: LAUNCH_FREE_GIFT_CONFIG.promoTag
+          });
+        } else {
+          // Keep quantity locked to 1 and price to 0
+          cart[giftIndex].qty = 1;
+          cart[giftIndex].price = 0;
+        }
+      } else {
+        // If no regular items or promo expired, cleanly remove the free gift
+        if (giftIndex !== -1) {
+          cart.splice(giftIndex, 1);
+        }
+      }
+    }
+
+    // =========================================================================
     // CART MANAGEMENT
     // =========================================================================
     function addToCart(id, { openDrawer = false, showToast = true } = {}) {
@@ -6415,6 +6532,7 @@
       } else if (p) {
         cart.push({ id: p.id, title: p.title, price: p.price, image: p.image, qty: 1 });
       }
+      syncFreeGiftToCart();
       saveCart();
       updateCartUI();
       pulseCartBadge();
@@ -6475,25 +6593,36 @@
       if (p) {
         cart.push({ id: p.id, title: p.title, price: p.price, image: p.image, qty: 1 });
       }
+      syncFreeGiftToCart();
       saveCart();
       updateCartUI();
       proceedToCheckout();
     }
 
     function updateCartQty(id, delta) {
-      const item = cart.find(i => i.id === id);
+      const item = cart.find(i => String(i.id) === String(id));
       if (item) {
+        if (item.isFreeGift) {
+          return; // Complimentary gift quantity is fixed at 1 per order
+        }
         item.qty += delta;
         if (item.qty <= 0) {
-          cart = cart.filter(i => i.id !== id);
+          cart = cart.filter(i => String(i.id) !== String(id));
         }
       }
+      syncFreeGiftToCart();
       saveCart();
       updateCartUI();
     }
 
     function removeCartItem(id) {
-      cart = cart.filter(i => i.id !== id);
+      const item = cart.find(i => String(i.id) === String(id));
+      if (item && item.isFreeGift) {
+        alert("🎁 This Handcrafted Brass Pooja Bell & Festive Kumkum Box is completely FREE with your order (Launch Special until 30 Nov 2026)!");
+        return;
+      }
+      cart = cart.filter(i => String(i.id) !== String(id));
+      syncFreeGiftToCart();
       saveCart();
       updateCartUI();
     }
@@ -7474,9 +7603,26 @@
     }
 
     function updateCartUI() {
-      const count = cart.reduce((sum, item) => sum + item.qty, 0);
-      document.getElementById('cartCountBadge').textContent = count;
-      document.getElementById('cartItemCount').textContent = count;
+      const regularItems = cart.filter(item => !item.isFreeGift);
+      const hasFreeGift = cart.some(item => item.isFreeGift);
+      const regularCount = regularItems.reduce((sum, item) => sum + item.qty, 0);
+      const totalCount = regularCount + (hasFreeGift ? 1 : 0);
+
+      document.getElementById('cartCountBadge').textContent = totalCount;
+      document.getElementById('cartItemCount').textContent = hasFreeGift 
+        ? `${regularCount} + 1 Free Gift` 
+        : `${totalCount}`;
+
+      // Toggle launch gift banner in cart
+      const giftBanner = document.getElementById('cartLaunchGiftBanner');
+      if (giftBanner) {
+        giftBanner.classList.toggle('hidden', !(isLaunchFreeGiftActive() && regularCount > 0));
+      }
+
+      const freeGiftRow = document.getElementById('freeGiftBillRow');
+      if (freeGiftRow) {
+        freeGiftRow.style.display = hasFreeGift ? 'flex' : 'none';
+      }
 
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       let couponDiscount = 0;
@@ -7526,7 +7672,7 @@
       updateWalletUI();
 
       const list = document.getElementById('cartItemsList');
-      if (cart.length === 0) {
+      if (cart.length === 0 || regularCount === 0) {
         list.innerHTML = `
           <div class="text-center py-12 space-y-3">
             <div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center mx-auto text-stone-400">
@@ -7541,27 +7687,58 @@
       } else {
         document.getElementById('checkoutButton').disabled = false;
         document.getElementById('checkoutButton').classList.remove('opacity-50', 'cursor-not-allowed');
-        list.innerHTML = cart.map(item => `
-          <div class="flex items-center gap-3 p-2.5 rounded-xl border border-stone-200 bg-white shadow-xs">
-            <img src="${item.image || 'images/jadau_kundan_necklace.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg'">
-            <div class="flex-1 min-w-0">
-              <h4 class="text-xs font-bold text-stone-900 truncate">${item.title}</h4>
-              <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
-                <span class="text-xs font-extrabold text-maroon-950">₹${item.price}</span>
-                ${item.originalPrice ? `<span class="text-[10px] text-stone-400 line-through">₹${item.originalPrice}</span>` : ''}
-                ${item.savings ? `<span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded">Saved ₹${item.savings}</span>` : ''}
+        list.innerHTML = cart.map(item => {
+          if (item.isFreeGift) {
+            return `
+              <div class="flex items-center gap-3 p-3 rounded-xl border-2 border-amber-300 bg-gradient-to-r from-amber-50/90 via-orange-50/60 to-amber-50/90 shadow-xs relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-gradient-to-l from-amber-500 to-amber-600 text-white text-[9px] font-black px-2 py-0.5 rounded-bl-lg shadow-2xs tracking-wide uppercase">
+                  🎁 100% FREE GIFT
+                </div>
+                <img src="${item.image || 'images/categories/cat_samagri.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0 border border-amber-300 shadow-2xs" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg'">
+                <div class="flex-1 min-w-0 pr-8">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-[9px] font-black text-amber-900 bg-amber-200 px-1.5 py-0.5 rounded uppercase">Launch Offer</span>
+                    <span class="text-[10px] text-amber-800 font-bold">• Till 30 Nov</span>
+                  </div>
+                  <h4 class="text-xs font-bold text-stone-900 truncate mt-0.5">${item.title}</h4>
+                  <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
+                    <span class="text-xs font-black text-emerald-700">FREE</span>
+                    <span class="text-[10px] text-stone-400 line-through">₹${item.originalPrice || 120}</span>
+                    <span class="text-[9px] font-bold text-emerald-800 bg-emerald-100 px-1 rounded">Saved ₹${item.savings || 120}</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 mt-1 text-[11px] text-amber-900 font-semibold">
+                    <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                    <span>Auto-packed in parcel (Qty: 1)</span>
+                  </div>
+                </div>
+                <button onclick="removeCartItem('${item.id}')" title="Complimentary Launch Gift" class="text-amber-600 hover:text-amber-800 p-1">
+                  <i data-lucide="gift" class="w-4 h-4"></i>
+                </button>
               </div>
-              <div class="flex items-center gap-2 mt-2">
-                <button onclick="updateCartQty(${item.id}, -1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">-</button>
-                <span class="text-xs font-semibold px-1">${item.qty}</span>
-                <button onclick="updateCartQty(${item.id}, 1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">+</button>
+            `;
+          }
+          return `
+            <div class="flex items-center gap-3 p-2.5 rounded-xl border border-stone-200 bg-white shadow-xs">
+              <img src="${item.image || 'images/jadau_kundan_necklace.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg'">
+              <div class="flex-1 min-w-0">
+                <h4 class="text-xs font-bold text-stone-900 truncate">${item.title}</h4>
+                <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
+                  <span class="text-xs font-extrabold text-maroon-950">₹${item.price}</span>
+                  ${item.originalPrice ? `<span class="text-[10px] text-stone-400 line-through">₹${item.originalPrice}</span>` : ''}
+                  ${item.savings ? `<span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded">Saved ₹${item.savings}</span>` : ''}
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                  <button onclick="updateCartQty('${item.id}', -1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">-</button>
+                  <span class="text-xs font-semibold px-1">${item.qty}</span>
+                  <button onclick="updateCartQty('${item.id}', 1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">+</button>
+                </div>
               </div>
+              <button onclick="removeCartItem('${item.id}')" class="text-stone-400 hover:text-red-600 p-1">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
             </div>
-            <button onclick="removeCartItem(${item.id})" class="text-stone-400 hover:text-red-600 p-1">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       }
 
       lucide.createIcons();
@@ -7619,8 +7796,13 @@
       toggleCartDrawer(false, false);
       closeQuickView(false);
       hideAmazonToast();
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
+
+      if (typeof syncFreeGiftToCart === 'function') {
+        syncFreeGiftToCart();
+      }
+      const regularItems = cart.filter(i => !i.isFreeGift);
+      if (regularItems.length === 0) {
+        alert("Your cart is empty! Please add products before checking out.");
         return;
       }
 
@@ -7633,8 +7815,18 @@
       const total = Math.max(0, subtotal - couponDiscount - referralDiscount - walletDiscount);
       currentCheckoutTotal = total;
 
+      const hasFreeGift = cart.some(i => i.isFreeGift);
+      const countPreview = hasFreeGift 
+        ? `${regularItems.length} item(s) + 🎁 1 Free Gift` 
+        : `${regularItems.length} item(s)`;
+
       document.getElementById('checkoutTotalDisplay').textContent = `₹${total}`;
-      document.getElementById('checkoutItemsCountPreview').textContent = `${cart.length} item(s)`;
+      document.getElementById('checkoutItemsCountPreview').textContent = countPreview;
+
+      const checkoutGiftNotice = document.getElementById('checkoutFreeGiftNotice');
+      if (checkoutGiftNotice) {
+        checkoutGiftNotice.classList.toggle('hidden', !(isLaunchFreeGiftActive() && hasFreeGift));
+      }
 
       // Setup Payment Mode (Default: Partial COD with ₹150 booking token)
       handlePaymentMethodChange(currentSelectedPayment || 'partial_cod');
@@ -8257,7 +8449,12 @@
       }
 
       // Construct Itemized WhatsApp Message for Merchant & Customer
-      const itemLines = cart.map((i, idx) => `${idx + 1}. *${i.title}* x ${i.qty} = ₹${i.price * i.qty}`).join('\n');
+      const itemLines = cart.map((i, idx) => {
+        if (i.isFreeGift) {
+          return `${idx + 1}. *🎁 FREE GIFT: ${i.title}* x ${i.qty} = ₹0 (Complimentary Launch Offer)`;
+        }
+        return `${idx + 1}. *${i.title}* x ${i.qty} = ₹${i.price * i.qty}`;
+      }).join('\n');
 
       let paymentWaDetails = '';
       if (isPartial) {
@@ -8285,6 +8482,13 @@
         walletWaDetails += `\n*🎁 Festive Wheel Winner:* Miniature Brass Pooja Bell / Kundan Bindi (Packed Free in Box!)`;
         newOrder.freeGift = "Miniature Brass Pooja Bell / Kundan Bindi (Wheel Winner)";
         localStorage.removeItem('srr_free_gift');
+      }
+
+      let launchGiftWaDetails = '';
+      const hasLaunchFreeGift = cart.some(i => i.isFreeGift);
+      if (hasLaunchFreeGift) {
+        launchGiftWaDetails = `\n*🎁 Special Launch Offer:* Handcrafted Brass Pooja Bell & Festive Kumkum Box (Auto-Added FREE - Valid until 30 Nov 2026)`;
+        newOrder.launchFreeGift = "Handcrafted Brass Pooja Bell & Festive Kumkum Box (Auto-Added Launch Gift)";
       }
 
       // If user redeemed wallet cash or free gift, retire the 24h festive reward timer
@@ -8318,7 +8522,7 @@ ${address}, ${city}, ${state} - ${pincode}
 ${itemLines}
 
 *Total Order Value:* ₹${total} (Free Express Shipping)
-${paymentWaDetails}${walletWaDetails}
+${paymentWaDetails}${walletWaDetails}${launchGiftWaDetails}
 *Logistics Hub:* The Professional Couriers (Armoor Hub)
 *Instagram Store:* @${STORE_CONFIG.instagramHandle}
 ----------------------------------------
@@ -8354,6 +8558,11 @@ Please pack and dispatch! ✨`
         } else {
           cbBox.classList.add('hidden');
         }
+      }
+
+      const freeGiftBoxEl = document.getElementById('successFreeGiftBox');
+      if (freeGiftBoxEl) {
+        freeGiftBoxEl.classList.toggle('hidden', !hasLaunchFreeGift);
       }
 
       // Clear Cart
