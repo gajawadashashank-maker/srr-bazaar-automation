@@ -1,5 +1,19 @@
 [
   {
+    "id": 187415145,
+    "title": "Ear rings",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/f35577aa28314adcbd745a2c0a2e5b6b.jpg",
+    "video": "videos/reel_187415145.mp4",
+    "description": "Exclusive Ear rings by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 509970487,
     "title": "Restock alert",
     "category": "necklace",
