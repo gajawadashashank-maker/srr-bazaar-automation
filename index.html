@@ -453,18 +453,27 @@
   </div>
 
   <!-- Referral Welcome Sticky Notification Banner (shown if visited via ?ref=...) -->
-    <!-- Sticky Festive 24-Hour Reward Countdown Banner -->
+  <!-- Sticky Festive 24-Hour Reward Countdown Banner -->
   <div id="festiveRewardBanner"
     class="hidden bg-gradient-to-r from-amber-600 via-rose-600 to-amber-700 text-white py-1.5 px-3 text-center text-xs font-bold shadow-sm flex items-center justify-center gap-2 z-40 relative">
-    <span>🎉 Festive Reward: <strong id="festivePrizeText">₹50 Wallet Cash</strong> expires in <span id="festiveTimerText" class="font-mono bg-black/30 px-2 py-0.5 rounded text-amber-200 tracking-wider">23:59:59</span></span>
-    <button onclick="toggleCartDrawer(true)" class="underline text-amber-100 hover:text-white font-extrabold ml-1 cursor-pointer">Shop Now →</button>
+    <span class="flex items-center gap-1.5 flex-wrap justify-center">
+      <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
+      <span>⚡ Festive Reward: <strong id="festivePrizeText">₹50 Wallet Cash</strong></span>
+      <span class="opacity-90">• Expires in <span id="festiveTimerText"
+          class="font-mono bg-black/40 px-2 py-0.5 rounded text-amber-200 tracking-wider font-extrabold">23:59:59</span></span>
+      <span class="hidden md:inline opacity-80">(Non-stackable • Resets daily)</span>
+    </span>
+    <button onclick="toggleCartDrawer(true)"
+      class="underline text-amber-100 hover:text-white font-extrabold ml-1 cursor-pointer">Shop Now →</button>
   </div>
 
   <div id="referralWelcomeBanner"
     class="hidden bg-gradient-to-r from-rose-700 via-pink-600 to-amber-600 text-white py-2 px-3 sm:px-4 text-center text-xs font-semibold shadow-md flex items-center justify-center gap-2 animate-in fade-in duration-300">
     <span class="text-sm">🎁</span>
-    <span>You were invited by a friend! <strong>₹100 Welcome Discount</strong> applied on your cart! (Invite: <span id="referralBannerCodeText" class="font-mono underline"></span>)</span>
-    <button onclick="this.parentElement.remove()" class="text-white/80 hover:text-white p-0.5 ml-2 text-xs font-bold" title="Dismiss">✕</button>
+    <span>You were invited by a friend! <strong>₹100 Welcome Discount</strong> applied on your cart! (Invite: <span
+        id="referralBannerCodeText" class="font-mono underline"></span>)</span>
+    <button onclick="this.parentElement.remove()" class="text-white/80 hover:text-white p-0.5 ml-2 text-xs font-bold"
+      title="Dismiss">✕</button>
   </div>
 
   <!-- Header Navigation (Fixed Sticky at Top) -->
@@ -539,7 +548,7 @@
           <!-- Festive Spin & Win Trigger (Desktop) -->
           <button onclick="openSpinWheelModal()"
             class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white text-xs font-black rounded-full hover:scale-105 transition shadow-sm animate-pulse cursor-pointer"
-            title="Spin the Festive Wheel to Win ₹50-₹100 Wallet Cash!">
+            title="Spin the Festive Wheel to Win Up to ₹150 Wallet Cash & Free Gifts!">
             <span>🎡</span>
             <span>Spin & Win</span>
           </button>
@@ -620,7 +629,8 @@
         </div>
 
         <!-- Mobile Quick Action Chips (Sleek 1-Tap Utility Row) -->
-        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-2 pb-0.5 md:hidden text-[11px] font-medium whitespace-nowrap">
+        <div
+          class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-2 pb-0.5 md:hidden text-[11px] font-medium whitespace-nowrap">
           <button onclick="toggleAiStylistModal(true)"
             class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-950 border border-amber-300/80 shadow-2xs flex-shrink-0 font-bold active:scale-95 transition">
             <i data-lucide="sparkles" class="w-3 h-3 text-amber-600"></i> AI Stylist
@@ -1227,12 +1237,14 @@
       </div>
     </div>
 
-        <!-- Function & Return-Gift Bulk Inquiry Banner (Catering & Weddings) -->
-    <div id="bulkInquiryBanner" class="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white shadow-md border border-emerald-700/60 relative overflow-hidden">
+    <!-- Function & Return-Gift Bulk Inquiry Banner (Catering & Weddings) -->
+    <div id="bulkInquiryBanner"
+      class="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white shadow-md border border-emerald-700/60 relative overflow-hidden">
       <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
         <div class="space-y-1">
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-800/80 text-[10px] font-bold uppercase tracking-wider text-emerald-200 border border-emerald-600/60">
+          <div
+            class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-800/80 text-[10px] font-bold uppercase tracking-wider text-emerald-200 border border-emerald-600/60">
             <span>🍃</span>
             <span>Wholesale & Function Orders</span>
           </div>
@@ -1240,7 +1252,8 @@
             <span>Organizing a Pooja, Wedding, or Family Function? 🪔</span>
           </h4>
           <p class="text-xs text-emerald-200/90 leading-relaxed max-w-xl">
-            Get wholesale slab discounts on <strong>200+ Biodegradable Leaf Buffet Plates & Handcrafted Return Gifts</strong> with express dispatch via The Professional Couriers (Armoor Hub)!
+            Get wholesale slab discounts on <strong>200+ Biodegradable Leaf Buffet Plates & Handcrafted Return
+              Gifts</strong> with express dispatch via The Professional Couriers (Armoor Hub)!
           </p>
         </div>
         <a href="https://api.whatsapp.com/send?phone=917013416296&text=Namaste%20SRR%20Bazaar!%20%F0%9F%AA%94%20I%20am%20planning%20a%20family%20function/wedding%20and%20need%20a%20bulk%20wholesale%20quote%20for%20Biodegradable%20Leaf%20Buffet%20Plates%20&%20Return%20Gifts.%20Please%20share%20slab%20pricing%20and%20express%20dispatch%20details%20from%20Armoor."
@@ -1532,9 +1545,11 @@
                 Studs & Bangles</a></li>
             <li><a href="#catalogue" onclick="filterCategory('decor')" class="hover:text-amber-300 transition">Trays &
                 Home Decor</a></li>
-            <li><a href="#catalogue" onclick="filterCategory('electrical')" class="hover:text-amber-300 transition">Electricals &
+            <li><a href="#catalogue" onclick="filterCategory('electrical')"
+                class="hover:text-amber-300 transition">Electricals &
                 LED Bulbs</a></li>
-            <li><a href="#catalogue" onclick="filterCategory('cleaning')" class="hover:text-amber-300 transition">Cleaning &
+            <li><a href="#catalogue" onclick="filterCategory('cleaning')"
+                class="hover:text-amber-300 transition">Cleaning &
                 Hygiene</a></li>
           </ul>
         </div>
@@ -1841,6 +1856,10 @@
             id="toastSubtotal">₹0</strong></span>
       </div>
       <div class="text-[11px] text-stone-500 truncate" id="toastItemTitle">Product Title</div>
+      <div id="toastFreeGiftNotice" class="text-[10px] text-amber-800 font-bold flex items-center gap-1 mt-0.5 hidden">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0 animate-ping"></span>
+        <span>🎁 Free Launch Gift auto-added to your parcel!</span>
+      </div>
     </div>
     <div class="flex items-center gap-1.5 flex-shrink-0">
       <button onclick="proceedToCheckout(); hideAmazonToast();"
@@ -1894,6 +1913,21 @@
         <span>Congratulations! You get <strong>FREE Express Delivery</strong></span>
       </div>
 
+      <!-- Launch Free Gift Announcement Banner (Valid until 30 Nov 2026) -->
+      <div id="cartLaunchGiftBanner"
+        class="bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2 border-b border-amber-200 flex items-center gap-2 text-xs text-amber-950">
+        <span class="text-base flex-shrink-0">🎁</span>
+        <div class="flex-1 min-w-0">
+          <div class="font-bold flex items-center gap-1.5 flex-wrap">
+            <span>Special Launch Gift Included!</span>
+            <span
+              class="text-[9px] bg-red-600 text-white font-extrabold px-1.5 py-0.2 rounded-full uppercase tracking-wider">Till
+              30 Nov</span>
+          </div>
+          <div class="text-[11px] text-amber-800 truncate">Auspicious Haldi-Kumkum & Designer Kundan Bindi Set auto-packed free in parcel!</div>
+        </div>
+      </div>
+
       <!-- Cart Items List -->
       <div id="cartItemsList" class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
         <!-- Rendered items -->
@@ -1903,22 +1937,29 @@
       <div class="p-4 sm:p-5 border-t border-stone-200 bg-stone-50 space-y-3">
 
         <!-- SRR Gold Wallet Redemption Box (Dynamic) -->
-        <div id="cartWalletBox" class="hidden p-2.5 bg-gradient-to-r from-amber-50 to-amber-100/70 rounded-xl border border-amber-300 flex items-center justify-between shadow-2xs">
+        <div id="cartWalletBox"
+          class="hidden p-2.5 bg-gradient-to-r from-amber-50 to-amber-100/70 rounded-xl border border-amber-300 flex items-center justify-between shadow-2xs">
           <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-full bg-amber-400 flex items-center justify-center text-amber-950 font-bold text-xs shadow-xs">🪙</div>
+            <div
+              class="w-7 h-7 rounded-full bg-amber-400 flex items-center justify-center text-amber-950 font-bold text-xs shadow-xs">
+              🪙</div>
             <div>
               <div class="text-xs font-bold text-amber-950">SRR Gold Wallet</div>
-              <div class="text-[10px] text-amber-800">Cash Available: <strong id="walletBalanceDisplay">₹0</strong></div>
+              <div class="text-[10px] text-amber-800">Cash Available: <strong id="walletBalanceDisplay">₹0</strong>
+              </div>
             </div>
           </div>
-          <label class="flex items-center gap-1.5 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-amber-300 text-xs font-bold text-amber-900 hover:bg-amber-50 shadow-2xs">
-            <input type="checkbox" id="useWalletCheckbox" onchange="toggleWalletRedemption(this.checked)" class="accent-amber-600 rounded">
+          <label
+            class="flex items-center gap-1.5 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-amber-300 text-xs font-bold text-amber-900 hover:bg-amber-50 shadow-2xs">
+            <input type="checkbox" id="useWalletCheckbox" onchange="toggleWalletRedemption(this.checked)"
+              class="accent-amber-600 rounded">
             <span>Apply</span>
           </label>
         </div>
 
         <!-- Referral Bonus Banner in Cart (if visited with ?ref=...) -->
-        <div id="cartReferralNotice" class="hidden p-2 bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg border border-rose-200 text-rose-900 text-[11px] font-semibold flex items-center gap-1.5">
+        <div id="cartReferralNotice"
+          class="hidden p-2 bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg border border-rose-200 text-rose-900 text-[11px] font-semibold flex items-center gap-1.5">
           <span>🎁</span>
           <span>Friend Invite Active: <strong>₹100 Bonus</strong> applied!</span>
         </div>
@@ -1949,6 +1990,11 @@
           <div class="flex justify-between" id="walletDiscountRow" style="display: none;">
             <span class="text-amber-800 font-medium">🪙 SRR Wallet Cash Used</span>
             <span id="cartWalletDiscount" class="font-bold text-amber-800">-₹0</span>
+          </div>
+          <div class="flex justify-between" id="freeGiftBillRow">
+            <span class="text-amber-900 font-medium flex items-center gap-1">🎁 Launch Special Gift</span>
+            <span
+              class="font-extrabold text-emerald-700 uppercase text-[11px] bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">FREE</span>
           </div>
           <div class="flex justify-between">
             <span>Shipping Charge</span>
@@ -2012,6 +2058,25 @@
           </div>
           <span class="px-2 py-0.5 rounded bg-amber-200/60 text-amber-900 font-medium text-[11px]"
             id="checkoutItemsCountPreview">0 Items</span>
+        </div>
+
+        <!-- Launch Free Gift Checkout Notice -->
+        <div id="checkoutFreeGiftNotice"
+          class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 rounded-xl p-3 flex items-center gap-2.5 text-xs text-amber-950 shadow-2xs">
+          <div
+            class="w-8 h-8 rounded-full bg-amber-400 flex items-center justify-center text-base shadow-xs flex-shrink-0">
+            🎁</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-amber-950 flex items-center gap-1.5 flex-wrap">
+              <span>Free Launch Gift Auto-Included</span>
+              <span class="text-[9px] bg-emerald-700 text-white font-extrabold px-1.5 py-0.2 rounded uppercase">FREE
+                (₹0)</span>
+              <span class="text-[10px] text-amber-800 font-semibold">• Valid till 30 Nov</span>
+            </div>
+            <div class="text-[11px] text-amber-800 leading-tight mt-0.5">
+              Auspicious Haldi-Kumkum & Designer Kundan Bindi Set is packed free with your order from Armoor Hub!
+            </div>
+          </div>
         </div>
 
         <!-- Section 1: Customer Details -->
@@ -2142,11 +2207,13 @@
               <div class="flex items-start justify-between">
                 <input type="radio" name="paymentMethod" value="upi" onchange="handlePaymentMethodChange('upi')"
                   class="text-royal-600 focus:ring-royal-500 mt-0.5">
-                <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold">100% Prepaid • 5% Cashback</span>
+                <span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold">100% Prepaid • 5%
+                  Cashback</span>
               </div>
               <div>
                 <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">Instant UPI QR</span>
-                <span class="block text-[11px] text-stone-500 mt-0.5">Pay full bill • <strong class="text-emerald-700">Get 5% Wallet Cash</strong></span>
+                <span class="block text-[11px] text-stone-500 mt-0.5">Pay full bill • <strong
+                    class="text-emerald-700">Get 5% Wallet Cash</strong></span>
               </div>
             </label>
 
@@ -2160,7 +2227,8 @@
               </div>
               <div>
                 <span class="block font-bold text-xs sm:text-sm text-stone-900 leading-tight">Cards & Netbanking</span>
-                <span class="block text-[11px] text-stone-500 mt-0.5">Online gateway • <strong class="text-emerald-700">Get 5% Wallet Cash</strong></span>
+                <span class="block text-[11px] text-stone-500 mt-0.5">Online gateway • <strong
+                    class="text-emerald-700">Get 5% Wallet Cash</strong></span>
               </div>
             </label>
 
@@ -2435,6 +2503,18 @@
         </div>
       </div>
 
+      <!-- Launch Free Gift Success Callout Box -->
+      <div id="successFreeGiftBox"
+        class="hidden p-3.5 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-300 text-left space-y-1 shadow-2xs">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🎁</span>
+          <span class="text-xs font-bold text-amber-950">Free Launch Gift Included in Your Parcel!</span>
+        </div>
+        <p class="text-[11px] text-stone-700 leading-tight">
+          Your order qualifies for the special launch offer! An <strong class="text-amber-950 font-bold">Auspicious Haldi-Kumkum & Designer Kundan Bindi Set</strong> is packed completely FREE in your box.
+        </p>
+      </div>
+
       <!-- 5% Prepaid Cashback Earned Notification Box -->
       <div id="successCashbackBox"
         class="hidden p-3.5 bg-gradient-to-r from-amber-50 to-amber-100/80 rounded-xl border border-amber-300 text-left space-y-1 shadow-2xs">
@@ -2443,21 +2523,27 @@
           <span class="text-xs font-bold text-amber-950">5% Prepaid Cashback Added to Your Wallet!</span>
         </div>
         <p class="text-[11px] text-stone-700 leading-tight">
-          You earned <strong id="successCashbackAmt" class="text-emerald-700 font-extrabold text-xs">₹0</strong> into your <strong>SRR Gold Wallet</strong>! It is securely saved in your browser and will automatically be available for your next order.
+          You earned <strong id="successCashbackAmt" class="text-emerald-700 font-extrabold text-xs">₹0</strong> into
+          your <strong>SRR Gold Wallet</strong>! It is securely saved in your browser and will automatically be
+          available for your next order.
         </p>
       </div>
 
       <!-- Viral Refer & Earn Share Card on WhatsApp -->
-      <div class="p-3.5 bg-gradient-to-r from-rose-50 via-pink-50 to-amber-50 rounded-xl border border-rose-200 text-left space-y-2 shadow-2xs">
+      <div
+        class="p-3.5 bg-gradient-to-r from-rose-50 via-pink-50 to-amber-50 rounded-xl border border-rose-200 text-left space-y-2 shadow-2xs">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-1.5 text-xs font-bold text-rose-950">
             <span>🎁</span>
             <span>Refer a Friend & Earn ₹100 Cash!</span>
           </div>
-          <span class="text-[9px] font-extrabold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-full uppercase tracking-wider">Viral Offer</span>
+          <span
+            class="text-[9px] font-extrabold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-full uppercase tracking-wider">Viral
+            Offer</span>
         </div>
         <p class="text-[11px] text-stone-600 leading-tight">
-          Share your personal invite link with friends on WhatsApp. When they order, they get <strong>₹100 OFF</strong> and you get <strong>₹100 Wallet Cash</strong>!
+          Share your personal invite link with friends on WhatsApp. When they order, they get <strong>₹100 OFF</strong>
+          and you get <strong>₹100 Wallet Cash</strong>!
         </p>
         <button type="button" onclick="shareReferralLinkWhatsApp()"
           class="w-full py-2 bg-gradient-to-r from-emerald-600 to-teal-700 hover:opacity-95 text-white rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition">
@@ -2484,27 +2570,30 @@
   </div>
 
   <!-- ========================================================================= -->
-    <!-- ========================================================================= -->
+  <!-- ========================================================================= -->
   <!-- MODAL: Festive Spin & Win (Daily Wheel / 24-Hour Expiry)                   -->
   <!-- ========================================================================= -->
   <div id="spinWheelModal"
     class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
     onclick="if(event.target === this) closeSpinWheelModal()">
-    <div class="bg-gradient-to-b from-stone-900 to-stone-950 text-white rounded-3xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl relative border border-amber-500/30 animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
+    <div
+      class="bg-gradient-to-b from-stone-900 to-stone-950 text-white rounded-3xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl relative border border-amber-500/30 animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
       <button onclick="closeSpinWheelModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white z-20">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
       <!-- Glow background -->
       <div class="absolute -top-20 -left-20 w-44 h-44 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-20 -right-20 w-44 h-44 bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -right-20 w-44 h-44 bg-rose-500/15 rounded-full blur-3xl pointer-events-none">
+      </div>
 
       <div class="space-y-1">
-        <div class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold uppercase tracking-wider border border-amber-500/30">
+        <div
+          class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold uppercase tracking-wider border border-amber-500/30">
           <span>🪔</span>
           <span>Daily Festive Reward</span>
         </div>
-        <h3 class="font-serif text-xl sm:text-2xl font-bold text-amber-100">Spin & Win ₹50-₹100!</h3>
+        <h3 class="font-serif text-xl sm:text-2xl font-bold text-amber-100">Spin & Win Up to ₹150!</h3>
         <p class="text-xs text-stone-300">Spin the festive wheel daily to win instant wallet cash for your order</p>
       </div>
 
@@ -2512,39 +2601,57 @@
       <div class="relative w-64 h-64 mx-auto my-2 flex items-center justify-center">
         <!-- Center Pointer -->
         <div class="absolute -top-2 z-30 transform -translate-x-1/2 left-1/2 filter drop-shadow">
-          <div class="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[20px] border-t-amber-400"></div>
-        </div>
-
-        <!-- The Spinning Wheel -->
-        <div id="wheelCanvasWrapper" class="w-60 h-60 rounded-full border-4 border-amber-400 shadow-xl overflow-hidden relative transition-transform duration-4000 ease-out" style="transform: rotate(0deg);">
-          <svg viewBox="0 0 100 100" class="w-full h-full transform -rotate-30">
-            <!-- Slice 1: ₹50 Cash -->
-            <path d="M50 50 L50 0 A50 50 0 0 1 93.3 25 Z" fill="#b45309" />
-            <!-- Slice 2: Free Gift -->
-            <path d="M50 50 L93.3 25 A50 50 0 0 1 93.3 75 Z" fill="#e11d48" />
-            <!-- Slice 3: ₹100 Cash -->
-            <path d="M50 50 L93.3 75 A50 50 0 0 1 50 100 Z" fill="#d97706" />
-            <!-- Slice 4: Free Express Courier -->
-            <path d="M50 50 L50 100 A50 50 0 0 1 6.7 75 Z" fill="#047857" />
-            <!-- Slice 5: ₹75 Cash -->
-            <path d="M50 50 L6.7 75 A50 50 0 0 1 6.7 25 Z" fill="#be123c" />
-            <!-- Slice 6: 8% VIP Bonus -->
-            <path d="M50 50 L6.7 25 A50 50 0 0 1 50 0 Z" fill="#92400e" />
-          </svg>
-
-          <!-- Labels overlay inside 6 slices -->
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-[8px] sm:text-[9px] font-black text-amber-100">
-            <span class="absolute top-5 font-bold">₹50 Cash</span>
-            <span class="absolute top-14 right-4 font-bold">🎁 Free Gift</span>
-            <span class="absolute bottom-14 right-4 font-bold">₹75 Cash</span>
-            <span class="absolute bottom-5 font-bold">₹100 Off</span>
-            <span class="absolute bottom-14 left-4 font-bold">👑 VIP 8%</span>
-            <span class="absolute top-14 left-4 font-bold">🔥 ₹150</span>
+          <div
+            class="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[20px] border-t-amber-400">
           </div>
         </div>
 
+        <!-- The Spinning Wheel (Mathematically Aligned Radial Slices & Labels) -->
+        <div id="wheelCanvasWrapper"
+          class="w-60 h-60 rounded-full border-4 border-amber-400 shadow-xl overflow-hidden relative"
+          style="transform: rotate(0deg); transition: transform 9.5s cubic-bezier(0.12, 0.95, 0.32, 1);">
+          <svg viewBox="0 0 100 100" class="w-full h-full select-none">
+            <!-- 6 Equal 60-degree Radial Slices (Center: 50,50, Radius: 50) -->
+            <!-- Slice 0: ₹50 Cash (Center at 0 deg / 12 o'clock) -->
+            <path d="M 50 50 L 25 6.7 A 50 50 0 0 1 75 6.7 Z" fill="#b45309" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 1: Free Gift (Center at 60 deg) -->
+            <path d="M 50 50 L 75 6.7 A 50 50 0 0 1 100 50 Z" fill="#e11d48" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 2: ₹75 Cash (Center at 120 deg) -->
+            <path d="M 50 50 L 100 50 A 50 50 0 0 1 75 93.3 Z" fill="#d97706" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 3: ₹100 Off (Center at 180 deg / 6 o'clock) -->
+            <path d="M 50 50 L 75 93.3 A 50 50 0 0 1 25 93.3 Z" fill="#047857" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 4: VIP 8% (Center at 240 deg) -->
+            <path d="M 50 50 L 25 93.3 A 50 50 0 0 1 0 50 Z" fill="#be123c" stroke="#fef3c7" stroke-width="0.6" />
+            <!-- Slice 5: ₹150 Mega Cash (Center at 300 deg) -->
+            <path d="M 50 50 L 0 50 A 50 50 0 0 1 25 6.7 Z" fill="#92400e" stroke="#fef3c7" stroke-width="0.6" />
+
+            <!-- Mathematically Centered Radial SVG Text (Never overlaps dividing lines) -->
+            <g transform="rotate(0 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.5" font-weight="900"
+                letter-spacing="0.2">₹50 Cash</text>
+            </g>
+            <g transform="rotate(60 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.2" font-weight="900">🎁 Free
+                Gift</text>
+            </g>
+            <g transform="rotate(120 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.5" font-weight="900">₹75 Cash</text>
+            </g>
+            <g transform="rotate(180 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.5" font-weight="900">₹100 Off</text>
+            </g>
+            <g transform="rotate(240 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.2" font-weight="900">👑 VIP 8%</text>
+            </g>
+            <g transform="rotate(300 50 50)">
+              <text x="50" y="21" text-anchor="middle" fill="#ffffff" font-size="4.2" font-weight="900">🔥 ₹150</text>
+            </g>
+          </svg>
+        </div>
+
         <!-- Wheel Center Hub -->
-        <div class="absolute w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 to-amber-300 border-2 border-white shadow-md flex items-center justify-center z-20 pointer-events-none text-xs font-black text-stone-900">
+        <div
+          class="absolute w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 to-amber-300 border-2 border-white shadow-md flex items-center justify-center z-20 pointer-events-none text-xs font-black text-stone-900">
           SRR
         </div>
       </div>
@@ -2558,31 +2665,47 @@
         <p class="text-[11px] text-amber-200/80 font-medium">1 Free Spin Every 24 Hours • Prizes valid for 24 hours</p>
       </div>
 
-      <div id="wheelResultBox" class="hidden p-3 bg-amber-500/20 border border-amber-400/40 rounded-xl space-y-2 text-left animate-in fade-in">
+      <div id="wheelResultBox"
+        class="hidden p-3 bg-amber-500/20 border border-amber-400/40 rounded-xl space-y-2 text-left animate-in fade-in">
         <div class="flex items-center gap-1.5 text-xs font-bold text-amber-300">
           <span>🎉</span>
           <span id="wheelResultTitle">Congratulations!</span>
         </div>
         <p id="wheelResultDesc" class="text-xs text-stone-200 leading-snug"></p>
 
-        <!-- Viral WhatsApp 2X Double / Extra Spin Trigger -->
-        <div id="viralDoubleBox" class="p-2.5 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-500/50 rounded-xl space-y-1.5 text-center">
-          <div class="flex items-center justify-center gap-1.5 text-[11px] font-extrabold text-emerald-300">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-            <span id="viralDoubleHeading">⚡ Share on WhatsApp to Double Your Prize!</span>
+        <!-- Viral WhatsApp 2-Share Verification & 2X Multiplier Box -->
+        <div id="viralDoubleBox"
+          class="p-3 bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 border border-emerald-500/50 rounded-xl space-y-2 text-center">
+          <div class="flex items-center justify-between text-[11px] font-extrabold text-emerald-300">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span id="viralDoubleHeading">⚡ Festive Share Bonus (0/2 Shared)</span>
+            </span>
+            <span id="viralProgressPercent" class="text-amber-400 text-[10px] font-black">0% Done</span>
           </div>
+
+          <!-- Progress Bar Track -->
+          <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
+            <div id="viralProgressBar"
+              class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500 ease-out"
+              style="width: 0%;"></div>
+          </div>
+
           <p id="viralDoubleDesc" class="text-[10px] text-emerald-100/90 leading-tight">
-            Share your lucky spin on WhatsApp with friends or family to instantly <strong>DOUBLE your reward</strong>!
+            Step 1: Share with <strong>1 Friend</strong> + Step 2: Share to <strong>1 WhatsApp Group</strong> to
+            activate your <strong>2X Doubled Cash</strong>!
           </p>
+
           <button id="wheelShareDoubleBtn" onclick="shareSpinOnWhatsApp()" type="button"
             class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
             <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-            <span id="wheelShareBtnText">Share on WhatsApp to Double Prize →</span>
+            <span id="wheelShareBtnText">Step 1: Share with 1 Friend on WhatsApp →</span>
           </button>
         </div>
 
         <div class="pt-1 flex gap-2">
-          <button onclick="closeSpinWheelModal(); toggleCartDrawer(true);" class="flex-1 py-2.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs transition">
+          <button onclick="closeSpinWheelModal(); toggleCartDrawer(true);"
+            class="flex-1 py-2.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs transition">
             Apply to Cart Now →
           </button>
         </div>
@@ -2602,7 +2725,8 @@
       </button>
 
       <!-- Header Icon -->
-      <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-400 text-white flex items-center justify-center mx-auto shadow-md">
+      <div
+        class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-400 text-white flex items-center justify-center mx-auto shadow-md">
         <i data-lucide="gift" class="w-8 h-8"></i>
       </div>
 
@@ -2626,24 +2750,29 @@
       </div>
 
       <!-- Live Wallet Balance & Earnings Card (Auto-synced by phone) -->
-      <div id="referralStatsBox" class="p-3 bg-gradient-to-r from-amber-50 to-amber-100/90 rounded-xl border border-amber-300 text-left space-y-1.5 shadow-2xs">
+      <div id="referralStatsBox"
+        class="p-3 bg-gradient-to-r from-amber-50 to-amber-100/90 rounded-xl border border-amber-300 text-left space-y-1.5 shadow-2xs">
         <div class="flex items-center justify-between">
           <span class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
             <span>🪙</span>
             <span>Your SRR Gold Wallet</span>
           </span>
-          <span id="referralWalletBalDisplay" class="text-xs font-black text-amber-950 bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-300">₹0</span>
+          <span id="referralWalletBalDisplay"
+            class="text-xs font-black text-amber-950 bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-300">₹0</span>
         </div>
         <div>
-          <div id="walletOwnerBadge" class="text-[10px] text-amber-900 bg-amber-100/90 px-2 py-0.5 rounded-md inline-flex items-center gap-1 border border-amber-300 font-medium">
+          <div id="walletOwnerBadge"
+            class="text-[10px] text-amber-900 bg-amber-100/90 px-2 py-0.5 rounded-md inline-flex items-center gap-1 border border-amber-300 font-medium">
             📱 Private Device Wallet • Enter your number below to link
           </div>
         </div>
         <!-- VIP Tier Progress Badge -->
-        <div id="vipTierStatusBox" class="p-2 bg-gradient-to-r from-amber-100 to-amber-200/80 rounded-lg border border-amber-300 text-left text-[11px] space-y-0.5">
+        <div id="vipTierStatusBox"
+          class="p-2 bg-gradient-to-r from-amber-100 to-amber-200/80 rounded-lg border border-amber-300 text-left text-[11px] space-y-0.5">
           <div class="flex items-center justify-between font-bold text-amber-950">
             <span class="flex items-center gap-1">👑 <span id="vipTierTitle">Silver Member (5% Cashback)</span></span>
-            <span id="vipTierSpendDisplay" class="font-mono text-[10px] bg-amber-300/80 px-1.5 py-0.2 rounded">₹0 / ₹2,500</span>
+            <span id="vipTierSpendDisplay" class="font-mono text-[10px] bg-amber-300/80 px-1.5 py-0.2 rounded">₹0 /
+              ₹2,500</span>
           </div>
           <p id="vipTierDesc" class="text-[10px] text-stone-600 leading-snug">
             Spend ₹2,500+ across orders to unlock <strong>VIP Gold (8% Cashback + Free Surprise Gifts)</strong>!
@@ -2674,7 +2803,8 @@
         <div id="referralPhoneStatus" class="text-[11px] font-semibold text-amber-800">
           👉 Type your 10-digit number above to create your personal link
         </div>
-        <p class="text-[10px] text-stone-500 truncate font-mono bg-stone-50 p-2 rounded-lg border border-stone-200" id="referralLinkPreviewText">
+        <p class="text-[10px] text-stone-500 truncate font-mono bg-stone-50 p-2 rounded-lg border border-stone-200"
+          id="referralLinkPreviewText">
           Link: https://srrbazaar.com/?ref=YOUR_NUMBER
         </p>
       </div>
@@ -3106,13 +3236,223 @@
     // Initial Default Catalogue (extracted from Sujatha Collections WhatsApp feed & Instagram)
     const DEFAULT_PRODUCTS = [
   {
+    "id": 483489891,
+    "title": "Combo offer today",
+    "category": "necklace",
+    "price": 1199,
+    "originalPrice": 1798,
+    "tag": "New Arrival",
+    "image": "images/catalog/044277d6cc3e4dc2ab267ce825414ba5.jpg",
+    "video": "videos/reel_483489891.mp4",
+    "description": "Exclusive Combo offer today by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 121871459,
+    "title": "Today special offer combo only for free shipping offer valid for tomorrow evening pm only",
+    "category": "necklace",
+    "price": 1699,
+    "originalPrice": 2548,
+    "tag": "New Arrival",
+    "image": "images/catalog/f1d89f697b42423bbd8d1eb23707ca3d.jpg",
+    "video": "videos/reel_121871459.mp4",
+    "description": "Exclusive Today special offer combo only for free shipping offer valid for tomorrow evening pm only by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 285965574,
+    "title": "long haram lakshmi billalu",
+    "category": "necklace",
+    "price": 2699,
+    "originalPrice": 4048,
+    "tag": "New Arrival",
+    "image": "images/catalog/aef3793004db42a190b1f03e27d353b2.jpg",
+    "video": "videos/reel_285965574.mp4",
+    "description": "Old tradition",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 187415145,
+    "title": "Ear rings",
+    "category": "necklace",
+    "price": 999,
+    "originalPrice": 1498,
+    "tag": "New Arrival",
+    "image": "images/catalog/f35577aa28314adcbd745a2c0a2e5b6b.jpg",
+    "video": "videos/reel_187415145.mp4",
+    "description": "Exclusive Ear rings by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 509970487,
+    "title": "Restock alert",
+    "category": "necklace",
+    "price": 2550,
+    "originalPrice": 3825,
+    "tag": "New Arrival",
+    "image": "images/catalog/52ca5e6e089745c1a47f13cbd54fde01.jpg",
+    "video": "videos/reel_509970487.mp4",
+    "description": "Long mango haram",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 411716849,
+    "title": "combo",
+    "category": "groceries",
+    "price": 1650,
+    "originalPrice": 2475,
+    "tag": "New Arrival",
+    "image": "images/catalog/e7749ec27f8146388647698778866ff7.jpg",
+    "video": "videos/reel_411716849.mp4",
+    "description": "Offer price",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 818742370,
+    "title": "bangles",
+    "category": "earrings",
+    "price": 599,
+    "originalPrice": 898,
+    "tag": "New Arrival",
+    "image": "images/catalog/3310983d8dd14762a21869d85ed58b65.jpg",
+    "video": "videos/reel_818742370.mp4",
+    "description": "Exclusive bangles by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 302459337,
+    "title": "Hair Accessories",
+    "category": "necklace",
+    "price": 640,
+    "originalPrice": 960,
+    "tag": "New Arrival",
+    "image": "images/catalog/97af7b97b892468f86ea778cb30f02a4.jpg",
+    "video": "videos/reel_302459337.mp4",
+    "description": "Exclusive Hair Accessories by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 75867203,
+    "title": "Short chain",
+    "category": "mangalsutra",
+    "price": 950,
+    "originalPrice": 1425,
+    "tag": "New Arrival",
+    "image": "images/catalog/93ed0e2ae5094498a62016948be07c85.jpg",
+    "video": "videos/reel_75867203.mp4",
+    "description": "Exclusive Short chain by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 974861755,
+    "title": "short chain",
+    "category": "mangalsutra",
+    "price": 730,
+    "originalPrice": 1095,
+    "tag": "New Arrival",
+    "image": "images/catalog/c16465d341414b8486611d7d73e31fab.jpg",
+    "video": "videos/reel_974861755.mp4",
+    "description": "White and green stones",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 813343022,
+    "title": "Short necklace",
+    "category": "necklace",
+    "price": 1420,
+    "originalPrice": 2130,
+    "tag": "New Arrival",
+    "image": "images/catalog/55768ead144e4e6fbac83baf2c68d9d5.jpg",
+    "video": "videos/reel_813343022.mp4",
+    "description": "Exclusive Short necklace by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 367456992,
+    "title": "Haram",
+    "category": "necklace",
+    "price": 1799,
+    "originalPrice": 2698,
+    "tag": "New Arrival",
+    "image": "images/catalog/5be7243287334da298882edc66c1e7e3.jpg",
+    "video": "videos/reel_367456992.mp4",
+    "description": "Exclusive Haram by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 893744739,
+    "title": "Stunning bangles",
+    "category": "earrings",
+    "price": 899,
+    "originalPrice": 1348,
+    "tag": "New Arrival",
+    "image": "images/catalog/2770341bc9c34f20bd1767067609fc5f.jpg",
+    "video": "videos/reel_893744739.mp4",
+    "description": "Exclusive Stunning bangles by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 720162553,
+    "title": "special offer",
+    "category": "necklace",
+    "price": 2399,
+    "originalPrice": 3598,
+    "tag": "New Arrival",
+    "image": "images/catalog/41f0397caa4a4bb1bbf11871192c0da7.jpg",
+    "video": "videos/reel_720162553.mp4",
+    "description": "Limited stock",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 861819026,
+    "title": "Festive Handcrafted Traditional Collection",
+    "category": "necklace",
+    "price": 750,
+    "originalPrice": 1125,
+    "tag": "New Arrival",
+    "image": "images/catalog/7328acced2c940e790be13ae1d80f8e5.jpg",
+    "video": "videos/reel_861819026.mp4",
+    "description": "Exclusive Festive Handcrafted Traditional Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 797919421,
     "title": "Premium Bridal Pure Jadau Kundan Collection",
-    "category": "groceries",
+    "category": "necklace",
     "price": 1280,
     "originalPrice": 1920,
     "tag": "New Arrival",
-    "image": "images/catalog/88846458a4a544eda9c03477c177b77a.jpg",
+    "image": "images/catalog/cover_797919421.jpg",
     "video": "videos/reel_797919421.mp4",
     "description": "Exclusive Premium Bridal Pure Jadau Kundan Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
@@ -3150,7 +3490,7 @@
   {
     "id": 471620299,
     "title": "Premium Bridal Pure Jadau Kundan Collection",
-    "category": "groceries",
+    "category": "necklace",
     "price": 1599,
     "originalPrice": 2398,
     "tag": "New Arrival",
@@ -3192,7 +3532,7 @@
   {
     "id": 542645689,
     "title": "Premium Bridal Pure Jadau Kundan Collection",
-    "category": "groceries",
+    "category": "necklace",
     "price": 1499,
     "originalPrice": 2248,
     "tag": "New Arrival",
@@ -3206,7 +3546,7 @@
   {
     "id": 101506626,
     "title": "Premium Bridal Pure Jadau Kundan Collection",
-    "category": "groceries",
+    "category": "necklace",
     "price": 1599,
     "originalPrice": 2398,
     "tag": "New Arrival",
@@ -3220,7 +3560,7 @@
   {
     "id": 275371778,
     "title": "Premium Bridal Pure Jadau Kundan Collection",
-    "category": "groceries",
+    "category": "necklace",
     "price": 1899,
     "originalPrice": 2848,
     "tag": "New Arrival",
@@ -3234,7 +3574,7 @@
   {
     "id": 877411116,
     "title": "Premium Bridal Pure Jadau Kundan Collection",
-    "category": "groceries",
+    "category": "necklace",
     "price": 1599,
     "originalPrice": 2398,
     "tag": "New Arrival",
@@ -3248,7 +3588,7 @@
   {
     "id": 479785382,
     "title": "Premium Bridal Pure Jadau Kundan Collection",
-    "category": "groceries",
+    "category": "necklace",
     "price": 1399,
     "originalPrice": 2098,
     "tag": "New Arrival",
@@ -3276,13 +3616,13 @@
   {
     "id": 733424884,
     "title": "Vikram Brand Bleaching Powder",
-    "category": "disposables",
+    "category": "cleaning",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
     "image": "images/catalog/739379860a5540299bb2f4832b718971.jpg",
     "video": "videos/reel_733424884.mp4",
-    "description": "25kg bag\nonly @ Rs: 999/-\nshipping may charge based on location",
+    "description": "25kg bag only @ Rs: 999/- shipping may charge based on location",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
@@ -3290,7 +3630,7 @@
   {
     "id": 118930100,
     "title": "Pure jadau kundhan neckset with beautiful earrings",
-    "category": "earrings",
+    "category": "necklace",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
@@ -3302,14 +3642,140 @@
     "reviewsCount": 1
   },
   {
+    "id": 857117252,
+    "title": "Premium Pure Jadav Kundhan Nec Set With 2 Changeable lockets",
+    "category": "necklace",
+    "price": 1999,
+    "originalPrice": 2998,
+    "tag": "New Arrival",
+    "image": "images/catalog/4eccf4c3e34cfbcfde7dbe23.jpg",
+    "video": "videos/reel_857117252.mp4",
+    "description": "Full stones and jadau kundhan neck set",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 841979572,
+    "title": "Sparkling Emerald Teardrop Pendant American Diamond Necklace Set",
+    "category": "necklace",
+    "price": 699,
+    "originalPrice": 1048,
+    "tag": "New Arrival",
+    "image": "images/catalog/6b8805468f8afbfb20a0821d.jpg",
+    "video": "videos/reel_841979572.mp4",
+    "description": "Stunning high-grade CZ diamond necklace featuring a rich green emerald teardrop centerpiece with matching teardrop earrings.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
+    "id": 536087643,
+    "title": "Ruby Floral Center American Diamond Choker Necklace Set",
+    "category": "necklace",
+    "price": 599,
+    "originalPrice": 898,
+    "tag": "New Arrival",
+    "image": "images/catalog/5f704001669a40a18e73c56473ef6ed6.jpg",
+    "description": "Graceful American Diamond choker necklace with a striking oval ruby floral centerpiece and matching floral drop earrings.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_536087643.mp4"
+  },
+  {
+    "id": 879604252,
+    "title": "Floral Link American Diamond Long Haram Necklace with Pearl Drops",
+    "category": "necklace",
+    "price": 699,
+    "originalPrice": 1048,
+    "tag": "New Arrival",
+    "image": "images/catalog/91996d74530b4197a58e342e6fc4b623.jpg",
+    "description": "Classic multi-gem American Diamond long necklace with pearl accents and matching statement earrings.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_879604252.mp4"
+  },
+  {
+    "id": 383681891,
+    "title": "Princess Cut Ruby Center American Diamond Necklace Set",
+    "category": "necklace",
+    "price": 699,
+    "originalPrice": 1048,
+    "tag": "New Arrival",
+    "image": "images/catalog/4a20ef2d1a27412f8b954f4f0c8578ec.jpg",
+    "description": "Modern American Diamond necklace with a radiant princess-cut ruby centerpiece and matching square stud earrings.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_383681891.mp4"
+  },
+  {
+    "id": 342025745,
+    "title": "Lord Shiva Parvathi Antique Temple Necklace Set with Earrings",
+    "category": "necklace",
+    "price": 1599,
+    "originalPrice": 2398,
+    "tag": "New Arrival",
+    "image": "images/catalog/c3de3d5a78e24ee087643fafe3f593f5.jpg",
+    "description": "Sacred Lord Shiva Parvathi Kalyanam antique matte gold finish necklace adorned with green bead drops and matching temple earrings.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_342025745.mp4"
+  },
+  {
+    "id": 654912212,
+    "title": "Handcrafted Pink Metal Lotus Flowers for Pooja (Set of 21)",
+    "category": "decor",
+    "price": 2399,
+    "originalPrice": 3598,
+    "tag": "New Arrival",
+    "image": "images/catalog/c22d413dd09c4de6ac6915a976228571.jpg",
+    "description": "Exquisite metallic pink lotus flower buds with golden leaf accents for Varalakshmi Vratham, Diwali pooja, and temple decor. Pack of 21 pieces.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_654912212.mp4"
+  },
+  {
+    "id": 378586240,
+    "title": "Luxury Bridal CZ American Diamond Choker & Long Haram Set",
+    "category": "necklace",
+    "price": 2099,
+    "originalPrice": 3148,
+    "tag": "New Arrival",
+    "image": "images/catalog/af7d247dcb3d4567b1158f210806adb6.jpg",
+    "description": "Grand complete bridal combo set featuring sparkling CZ diamond choker, matching long haram, and statement earrings with premium rhodium/gold finish.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_378586240.mp4"
+  },
+  {
+    "id": 250107691,
+    "title": "Traditional Wooden Pasupu Kadapalu Set for Sankranti Pooja",
+    "category": "decor",
+    "price": 250,
+    "originalPrice": 375,
+    "tag": "New Arrival",
+    "image": "images/catalog/51ef8f6d269a4604ba4dd954a5e05c30.jpg",
+    "description": "Authentic handcrafted yellow turmeric-coated wooden threshold planks (Kadapalu) with sacred kumkum motifs for Makar Sankranti nomulu and festive Hindu rituals.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1,
+    "video": "videos/reel_250107691.mp4"
+  },
+  {
     "id": 286241428,
-    "title": "Handcrafted Designer Jewellery Collection",
+    "title": "Traditional Multi-Pendant Pearl Cluster Choker Necklace Set",
     "category": "necklace",
     "price": 520,
     "originalPrice": 780,
     "tag": "New Arrival",
     "image": "images/catalog/56bb18119e8d45f4a84b6fb01cb5d214.jpg",
-    "description": "Exclusive Handcrafted Designer Jewellery Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "description": "Royal gold-plated choker necklace with multiple dangling floral motifs and delicate pearl bunches, paired with matching drop earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -3331,13 +3797,13 @@
   },
   {
     "id": 338044272,
-    "title": "Edu Kondala Nomu (Sankranti Special)",
+    "title": "Edu Kondala Nomu Seven Sacred Hills Wooden Steps for Sankranti Pooja",
     "category": "decor",
     "price": 550,
     "originalPrice": 825,
     "tag": "New Arrival",
     "image": "images/catalog/70000aa227c843088c6c564e4251b225.jpg",
-    "description": "Traditional Edu Kondala Nomu festive set for Sankranti pooja. Free express shipping across India.",
+    "description": "Handcrafted 7-step wooden sacred Tirumala Edu Kondalu steps with holy inscriptions (Venkatadri, Narayanadri, Garudadri, Seshadri, Neeladri, Vrishabhadri, Anjanadri) for Sankranti Nomu ritual.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -3345,13 +3811,13 @@
   },
   {
     "id": 592133224,
-    "title": "Edu Kondala Nomu (Sankranti Special)",
+    "title": "Edu Kondala Nomu Seven Sacred Hills Wooden Steps for Sankranti Pooja",
     "category": "decor",
     "price": 550,
     "originalPrice": 825,
     "tag": "New Arrival",
     "image": "images/catalog/0bb6251c30a74343942e815fba2c1f79.jpg",
-    "description": "Traditional Edu Kondala Nomu festive set for Sankranti pooja. Free express shipping across India.",
+    "description": "Handcrafted 7-step wooden sacred Tirumala Edu Kondalu steps with holy inscriptions (Venkatadri, Narayanadri, Garudadri, Seshadri, Neeladri, Vrishabhadri, Anjanadri) for Sankranti Nomu ritual.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -3359,13 +3825,13 @@
   },
   {
     "id": 659123465,
-    "title": "1190 free ship",
+    "title": "Delicate Lotus Pendant Pearl & Ruby Green Beaded Necklace Set",
     "category": "necklace",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
     "image": "images/catalog/2cb969f5eb3f42f0a8fbb76abdad1094.jpg",
-    "description": "Exclusive 1190 free ship with premium finish. Free express shipping across India.",
+    "description": "Handcrafted gold-finish delicate necklace featuring an auspicious lotus pendant with ruby-green stones, pearl clusters, and matching drop earrings in an elegant gift box.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -3373,13 +3839,13 @@
   },
   {
     "id": 889136348,
-    "title": "plus shipping",
+    "title": "Royal Bridal Jadau Kundan & Pearl Choker Set with Jhumkas",
     "category": "necklace",
     "price": 2999,
     "originalPrice": 4498,
     "tag": "New Arrival",
     "image": "images/catalog/a9279d6b7912450692272550ceec5600.jpg",
-    "description": "Exclusive plus shipping with premium finish. Free express shipping across India.",
+    "description": "Grand bridal heritage Jadau Kundan necklace adorned with lustrous pearls, ruby-green cabochons, and exquisite matching heavy jhumka earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -3387,13 +3853,13 @@
   },
   {
     "id": 823822680,
-    "title": "Pure AD and Jadau Kundhan Stone",
-    "category": "necklace",
+    "title": "Grand Bridal Ruby and American Diamond Long Jhumka Earrings",
+    "category": "earrings",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
     "image": "images/catalog/0e895d5a9c50420899f9126cc34a63ef.jpg",
-    "description": "Exclusive Pure AD and Jadau Kundhan Stone with premium finish. Free express shipping across India.",
+    "description": "Stunning long bridal chandelier jhumkas studded with radiant ruby pink stones, micro CZ American diamonds, and dangling pearl drops.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -3457,13 +3923,13 @@
   },
   {
     "id": 229307292,
-    "title": "Pooja set",
+    "title": "German Silver Carved Pooja Thali Set with 5 Bowls",
     "category": "decor",
     "price": 2399,
     "originalPrice": 3598,
     "tag": "New Arrival",
     "image": "images/catalog/25a44f15b17c4fd3a0d679f1c117afc8.jpg",
-    "description": "8 inches tray with Products .",
+    "description": "Premium embossed German Silver decorative pooja plate with 5 auspicious bowls for kumkum, turmeric, and prasadam. Ideal for rituals and housewarming gifts.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -3472,7 +3938,7 @@
   {
     "id": 972028016,
     "title": "Pure Semi Jadau Kundhan earrings",
-    "category": "earrings",
+    "category": "necklace",
     "price": 699,
     "originalPrice": 1048,
     "tag": "New Arrival",
@@ -3485,13 +3951,13 @@
   },
   {
     "id": 103076108,
-    "title": "fs",
-    "category": "necklace",
+    "title": "Traditional Ruby & Emerald Floral Kada Bangles (Set of 4)",
+    "category": "earrings",
     "price": 620,
     "originalPrice": 930,
     "tag": "New Arrival",
     "image": "images/catalog/dd6011ad4f4c4c64aa9c72b9aa5ff668.jpg",
-    "description": "Exclusive fs with premium finish. Free express shipping across India.",
+    "description": "Exquisite gold-plated traditional Kada bangles with floral ruby-emerald stone centerpiece and micro-cz detailing. Set of 4 openable bangles.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -3509,12 +3975,12 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_773703568.mp4"
   },
   {
     "id": 255146495,
     "title": "Premium Black Diamonds Tulips Multi Layered Mala",
-    "category": "mangalsutra",
+    "category": "necklace",
     "price": 777,
     "originalPrice": 1165,
     "tag": "New Arrival",
@@ -3523,35 +3989,35 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_255146495.mp4"
   },
   {
     "id": 829002473,
-    "title": "Pure Jadau Kundhan Item",
+    "title": "Grand Temple Goddess Lakshmi Matte Gold Necklace Set",
     "category": "necklace",
     "price": 2099,
     "originalPrice": 3148,
     "tag": "New Arrival",
     "image": "images/catalog/5218caf3f048.jpg",
-    "description": "Offer",
+    "description": "Sacred temple jewellery necklace handcrafted with Goddess Lakshmi motif, ruby-emerald stones, golden bead hangings, and matching jhumka earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_829002473.mp4"
   },
   {
     "id": 869632963,
-    "title": "/+ freeshipping",
+    "title": "Traditional Temple Kasu Mala Haram & Short Necklace Combo Set",
     "category": "necklace",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
     "image": "images/catalog/8c2d57f8180f.jpg",
-    "description": "Exclusive /+ freeshipping with premium finish. Free express shipping across India.",
+    "description": "Majestic South Indian antique gold Kasu Mala bridal combo set featuring long haram, short necklace with Lakshmi pendant, and matching temple jhumkas.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_869632963.mp4"
   },
   {
     "id": 128844229,
@@ -3565,7 +4031,7 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_128844229.mp4"
   },
   {
     "id": 959992377,
@@ -3579,54 +4045,54 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_959992377.mp4"
   },
   {
     "id": 604740379,
-    "title": "Exclusive Handcrafted Collection",
+    "title": "Antique Peacock Motif Ruby & Emerald Stone Necklace Set",
     "category": "necklace",
     "price": 699,
     "originalPrice": 1048,
     "tag": "New Arrival",
     "image": "images/catalog/efb5e9ddda8d.jpg",
-    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "description": "Stunning antique matte gold necklace adorned with intricate dancing peacock motifs, ruby and emerald stones, paired with matching peacock stud earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_604740379.mp4"
   },
   {
     "id": 657117075,
-    "title": "Today special offer",
+    "title": "Grand Ramayana Temple Haram Necklace Set with Jhumkas",
     "category": "necklace",
     "price": 1555,
     "originalPrice": 2332,
     "tag": "New Arrival",
     "image": "images/catalog/8831ae91363d.jpg",
-    "description": "Exclusive Today special offer with premium finish. Free express shipping across India.",
+    "description": "Masterpiece Ramayana Pattabhishekam long haram depicting Lord Rama, Sita, Lakshmana and Hanuman with temple carvings and grand jhumka earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_657117075.mp4"
   },
   {
     "id": 183685021,
-    "title": "Exclusive Handcrafted Collection",
+    "title": "Temple Goddess Lakshmi Dual Layer Haram & Necklace Set",
     "category": "necklace",
     "price": 2200,
     "originalPrice": 3300,
     "tag": "New Arrival",
     "image": "images/catalog/ccd9f2a6b95b.jpg",
-    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "description": "Magnificent 2-piece temple bridal jewellery set with dual-layer Lakshmi haram, sparkling CZ and ruby stones, and matching chandbali earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_183685021.mp4"
   },
   {
     "id": 189373322,
     "title": "Lord venkateswara locket with short chain",
-    "category": "mangalsutra",
+    "category": "necklace",
     "price": 799,
     "originalPrice": 1198,
     "tag": "New Arrival",
@@ -3635,21 +4101,21 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_189373322.mp4"
   },
   {
     "id": 831671068,
-    "title": "Premium pure jadav kundhan",
+    "title": "Traditional Paisley Motif Jadau Kundan & Ruby Necklace Set",
     "category": "necklace",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
     "image": "images/catalog/918bdefd20f1.jpg",
-    "description": "Heavy quality...",
+    "description": "Authentic Jadau Kundan choker necklace featuring paisley mango motifs with ruby-emerald stone accents, pearl drops, and matching earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_831671068.mp4"
   },
   {
     "id": 247403588,
@@ -3663,77 +4129,77 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_247403588.mp4"
   },
   {
     "id": 612760543,
-    "title": "Exclusive Handcrafted Collection",
+    "title": "Floral CZ & Ruby Stone Choker Necklace Set",
     "category": "necklace",
     "price": 799,
     "originalPrice": 1198,
     "tag": "New Arrival",
     "image": "images/catalog/87a1d90c6e5c.jpg",
-    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "description": "Contemporary festive floral choker necklace studded with sparkling white American diamonds and rich ruby stones with matching floral drop earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_612760543.mp4"
   },
   {
     "id": 265629242,
-    "title": "Single",
+    "title": "Double Line Pearl & Crystal Beaded Mala Necklace",
     "category": "necklace",
     "price": 550,
     "originalPrice": 825,
     "tag": "New Arrival",
     "image": "images/catalog/a3ff884a7b2a.jpg",
-    "description": "Exclusive Single with premium finish. Free express shipping across India.",
+    "description": "Elegant handcrafted two-line pearl and faceted crystal bead mala necklace with intricate gold-finish spacers. Perfect for festive and traditional wear.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_265629242.mp4"
   },
   {
     "id": 200245808,
-    "title": "Exclusive Handcrafted Collection",
+    "title": "Modern Floral CZ Diamond Replica Necklace Set",
     "category": "necklace",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
     "image": "images/catalog/1cd41b563a84.jpg",
-    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "description": "Ultra-sparkling American Diamond replica necklace in rhodium/gold finish with delicate floral motifs and matching diamond studs.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_200245808.mp4"
   },
   {
     "id": 75640739,
-    "title": "fs",
+    "title": "Sparkling American Diamond Leaf Vine Necklace Set",
     "category": "necklace",
     "price": 550,
     "originalPrice": 825,
     "tag": "New Arrival",
     "image": "images/catalog/7d69a95dcfee.jpg",
-    "description": "Exclusive fs with premium finish. Free express shipping across India.",
+    "description": "Dazzling CZ crystal leaf-vine tennis style necklace with radiant marquise stones and matching teardrop leaf earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_75640739.mp4"
   },
   {
     "id": 749296149,
-    "title": "Sanku chara diyas",
+    "title": "Traditional Brass Shankh Chakra Namam Diyas Set",
     "category": "decor",
     "price": 3200,
     "originalPrice": 4800,
     "tag": "New Arrival",
     "image": "images/catalog/5c8833e6c0cb.jpg",
-    "description": ".",
+    "description": "Auspicious Shankh Chakra Namam brass deepam diyas for daily pooja, Karthika Masam, and festive home mandir.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_749296149.mp4"
   },
   {
     "id": 64841853,
@@ -3747,35 +4213,35 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_64841853.mp4"
   },
   {
     "id": 398961370,
-    "title": "Exclusive Handcrafted Collection",
-    "category": "necklace",
+    "title": "Antique Gold Royal Elephant Stud Earrings with Pearl Drops",
+    "category": "earrings",
     "price": 380,
     "originalPrice": 570,
     "tag": "New Arrival",
     "image": "images/catalog/0d7ad213f457.jpg",
-    "description": "Exclusive Exclusive Handcrafted Collection with premium finish. Free express shipping across India.",
+    "description": "Traditional South Indian antique matte gold circular stud earrings featuring an embossed royal elephant motif and dangling lustrous pearl drops.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_398961370.mp4"
   },
   {
     "id": 602963368,
-    "title": "fs",
+    "title": "Temple Goddess Lakshmi Ruby & Emerald Pendant Necklace Set",
     "category": "necklace",
     "price": 450,
     "originalPrice": 675,
     "tag": "New Arrival",
     "image": "images/catalog/051a1de4a7f5.jpg",
-    "description": "Exclusive fs with premium finish. Free express shipping across India.",
+    "description": "Auspicious temple Goddess Lakshmi pendant short necklace studded with ruby-emerald stones and gold bead drops, complete with matching earrings.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_602963368.mp4"
   },
   {
     "id": 266442417,
@@ -3789,7 +4255,7 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_266442417.mp4"
   },
   {
     "id": 674255422,
@@ -3803,26 +4269,26 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_674255422.mp4"
   },
   {
     "id": 115033516,
-    "title": "Sanku chara diyas",
+    "title": "Traditional Brass Shankh Chakra Namam Diyas Set",
     "category": "decor",
     "price": 3200,
     "originalPrice": 4800,
     "tag": "New Arrival",
     "image": "images/catalog/564e5776a7b5.jpg",
-    "description": ".",
+    "description": "Auspicious Shankh Chakra Namam brass deepam diyas for daily pooja, Karthika Masam, and festive home mandir.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_115033516.mp4"
   },
   {
     "id": 733581582,
     "title": "Premium Pure Jadav Kundhan Nec Set With 2 Changeable lockets",
-    "category": "mangalsutra",
+    "category": "necklace",
     "price": 1999,
     "originalPrice": 2998,
     "tag": "New Arrival",
@@ -3831,7 +4297,7 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_733581582.mp4"
   },
   {
     "id": 987154951,
@@ -3845,7 +4311,7 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
-    "video": null
+    "video": "videos/reel_987154951.mp4"
   },
   {
     "id": 1,
@@ -3859,7 +4325,7 @@
     "inStock": true,
     "rating": 4.9,
     "reviewsCount": 142,
-    "video": null
+    "video": "videos/reel_1.mp4"
   },
   {
     "id": 2,
@@ -3873,12 +4339,12 @@
     "inStock": true,
     "rating": 4.8,
     "reviewsCount": 88,
-    "video": null
+    "video": "videos/reel_2.mp4"
   },
   {
     "id": 3,
     "title": "Handcrafted Floral Choker Set with Pearls",
-    "category": "necklace",
+    "category": "saree",
     "price": 799,
     "originalPrice": 1499,
     "tag": "Free Shipping",
@@ -3887,7 +4353,7 @@
     "inStock": true,
     "rating": 4.9,
     "reviewsCount": 65,
-    "video": null
+    "video": "videos/reel_3.mp4"
   },
   {
     "id": 4,
@@ -3901,7 +4367,7 @@
     "inStock": true,
     "rating": 4.9,
     "reviewsCount": 110,
-    "video": null
+    "video": "videos/reel_4.mp4"
   },
   {
     "id": 5,
@@ -3915,7 +4381,7 @@
     "inStock": true,
     "rating": 4.7,
     "reviewsCount": 52,
-    "video": null
+    "video": "videos/reel_5.mp4"
   },
   {
     "id": 6,
@@ -3929,7 +4395,7 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 94,
-    "video": null
+    "video": "videos/reel_6.mp4"
   },
   {
     "id": 7,
@@ -3943,7 +4409,7 @@
     "inStock": true,
     "rating": 4.8,
     "reviewsCount": 43,
-    "video": null
+    "video": "videos/reel_7.mp4"
   },
   {
     "id": 8,
@@ -3957,7 +4423,59 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 178,
-    "video": null
+    "video": "videos/reel_8.mp4"
+  },
+  {
+    "id": 90101,
+    "title": "High-Efficiency 9W B22 Cool Daylight LED Bulb (Pack of 2)",
+    "category": "electrical",
+    "price": 199,
+    "originalPrice": 349,
+    "tag": "Best Seller",
+    "image": "images/categories/cat_electrical.jpg",
+    "description": "Long-lasting high-lumen 9W B22 LED bulbs with surge protection. Saves up to 85% electricity, ideal for homes, shops, and pooja rooms. Free express shipping across India from Armoor Hub.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 8
+  },
+  {
+    "id": 90201,
+    "title": "Super Disinfectant Bleaching Powder Grade-A (1 Kg Pack)",
+    "category": "cleaning",
+    "price": 89,
+    "originalPrice": 150,
+    "tag": "Hygiene Essential",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "High-grade chlorine bleaching powder for sanitation, drain disinfection, water tank sanitization, and hospital-grade hygiene. Free delivery across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 12
+  },
+  {
+    "id": 90202,
+    "title": "Concentrated Herbal White Pine Phenyl Floor Cleaner (5 Litre Can)",
+    "category": "cleaning",
+    "price": 249,
+    "originalPrice": 420,
+    "tag": "Wholesale Value",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "Strong fragrance germ-killing white pine phenyl. Repels insects and flies, leaves floors fresh and sparkling. Ideal for homes, wedding halls, and daily poojas.",
+    "inStock": true,
+    "rating": 4.9,
+    "reviewsCount": 19
+  },
+  {
+    "id": 90203,
+    "title": "Heavy-Duty Toilet & Floor Stain Remover Acid (500ml)",
+    "category": "cleaning",
+    "price": 65,
+    "originalPrice": 110,
+    "tag": "Deep Clean",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "Powerful scale and hard-water stain remover acid for bathroom tiles, ceramic sinks, and tough stain sanitization. Free express delivery.",
+    "inStock": true,
+    "rating": 4.8,
+    "reviewsCount": 6
   }
 ];
     let products = [...DEFAULT_PRODUCTS];
@@ -4006,9 +4524,14 @@
         })
         .catch(() => { });
 
+      checkAndExpireFestiveRewards();
+      initFestiveTimer();
       checkIncomingReferral();
       updateWalletUI();
       renderProducts();
+      if (typeof syncFreeGiftToCart === 'function') {
+        syncFreeGiftToCart();
+      }
       updateCartUI();
       renderMerchantOrders();
       syncGoogleSheetOrders();
@@ -5800,6 +6323,9 @@
         cart.push(comboItem);
       }
 
+      if (typeof syncFreeGiftToCart === 'function') {
+        syncFreeGiftToCart();
+      }
       saveCart();
       updateCartUI();
       pulseCartBadge();
@@ -6245,6 +6771,8 @@
       }
 
       const modalPriority = [
+        'spinWheelModal',
+        'referModal',
         'aiStylistModal',
         'orderSuccessModal',
         'merchantModal',
@@ -6272,6 +6800,8 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' || e.keyCode === 27) {
         const modalPriority = [
+          'spinWheelModal',
+          'referModal',
           'aiStylistModal',
           'orderSuccessModal',
           'merchantModal',
@@ -6285,7 +6815,9 @@
         for (const mId of modalPriority) {
           const el = document.getElementById(mId);
           if (el && !el.classList.contains('hidden')) {
-            if (mId === 'aiStylistModal') closeAiStylistModal();
+            if (mId === 'spinWheelModal') closeSpinWheelModal();
+            else if (mId === 'referModal') closeReferModal();
+            else if (mId === 'aiStylistModal') closeAiStylistModal();
             else if (mId === 'cartDrawer') toggleCartDrawer(false);
             else if (mId === 'quickViewModal') closeQuickView();
             else if (mId === 'checkoutModal') closeCheckout();
@@ -6341,6 +6873,12 @@
       if (subtotalEl) subtotalEl.textContent = `₹${subtotal}`;
       if (titleEl) titleEl.textContent = product ? product.title : 'Item added';
 
+      const giftNotice = document.getElementById('toastFreeGiftNotice');
+      if (giftNotice) {
+        const hasGift = isLaunchFreeGiftActive() && cart.some(i => i.isFreeGift);
+        giftNotice.classList.toggle('hidden', !hasGift);
+      }
+
       toast.classList.remove('hidden');
       toast.classList.add('flex');
       lucide.createIcons();
@@ -6371,6 +6909,63 @@
     }
 
     // =========================================================================
+    // SPECIAL LAUNCH FREE GIFT ENGINE (AUTO-ADDED TO CART UNTIL 30 NOV 2026)
+    // =========================================================================
+    const LAUNCH_FREE_GIFT_CONFIG = {
+      id: 'gift_launch_special_nov2026',
+      title: 'Auspicious Haldi-Kumkum & Designer Kundan Bindi Set',
+      price: 0,
+      originalPrice: 49,
+      savings: 49,
+      image: 'images/categories/cat_samagri.jpg',
+      qty: 1,
+      isFreeGift: true,
+      promoTag: 'Launch Free Gift',
+      validUntil: new Date('2026-11-30T23:59:59+05:30').getTime(),
+      maxOrders: 100,
+      description: 'Special complimentary launch gift automatically packed free with your order until 30 Nov 2026!'
+    };
+
+    function isLaunchFreeGiftActive() {
+      const now = Date.now();
+      if (now > LAUNCH_FREE_GIFT_CONFIG.validUntil) return false;
+      const currentOrders = Array.isArray(orders) ? orders.length : 0;
+      if (currentOrders >= LAUNCH_FREE_GIFT_CONFIG.maxOrders) return false;
+      return true;
+    }
+
+    function syncFreeGiftToCart() {
+      const active = isLaunchFreeGiftActive();
+      const regularItems = cart.filter(item => !item.isFreeGift);
+      const giftIndex = cart.findIndex(item => item.isFreeGift);
+
+      if (active && regularItems.length > 0) {
+        if (giftIndex === -1) {
+          cart.push({
+            id: LAUNCH_FREE_GIFT_CONFIG.id,
+            title: LAUNCH_FREE_GIFT_CONFIG.title,
+            price: 0,
+            originalPrice: LAUNCH_FREE_GIFT_CONFIG.originalPrice,
+            savings: LAUNCH_FREE_GIFT_CONFIG.savings,
+            image: LAUNCH_FREE_GIFT_CONFIG.image,
+            qty: 1,
+            isFreeGift: true,
+            promoTag: LAUNCH_FREE_GIFT_CONFIG.promoTag
+          });
+        } else {
+          // Keep quantity locked to 1 and price to 0
+          cart[giftIndex].qty = 1;
+          cart[giftIndex].price = 0;
+        }
+      } else {
+        // If no regular items or promo expired, cleanly remove the free gift
+        if (giftIndex !== -1) {
+          cart.splice(giftIndex, 1);
+        }
+      }
+    }
+
+    // =========================================================================
     // CART MANAGEMENT
     // =========================================================================
     function addToCart(id, { openDrawer = false, showToast = true } = {}) {
@@ -6381,6 +6976,7 @@
       } else if (p) {
         cart.push({ id: p.id, title: p.title, price: p.price, image: p.image, qty: 1 });
       }
+      syncFreeGiftToCart();
       saveCart();
       updateCartUI();
       pulseCartBadge();
@@ -6441,25 +7037,36 @@
       if (p) {
         cart.push({ id: p.id, title: p.title, price: p.price, image: p.image, qty: 1 });
       }
+      syncFreeGiftToCart();
       saveCart();
       updateCartUI();
       proceedToCheckout();
     }
 
     function updateCartQty(id, delta) {
-      const item = cart.find(i => i.id === id);
+      const item = cart.find(i => String(i.id) === String(id));
       if (item) {
+        if (item.isFreeGift) {
+          return; // Complimentary gift quantity is fixed at 1 per order
+        }
         item.qty += delta;
         if (item.qty <= 0) {
-          cart = cart.filter(i => i.id !== id);
+          cart = cart.filter(i => String(i.id) !== String(id));
         }
       }
+      syncFreeGiftToCart();
       saveCart();
       updateCartUI();
     }
 
     function removeCartItem(id) {
-      cart = cart.filter(i => i.id !== id);
+      const item = cart.find(i => String(i.id) === String(id));
+      if (item && item.isFreeGift) {
+        alert("🎁 This Auspicious Haldi-Kumkum & Designer Kundan Bindi Set is completely FREE with your order (Launch Special until 30 Nov 2026)!");
+        return;
+      }
+      cart = cart.filter(i => String(i.id) !== String(id));
+      syncFreeGiftToCart();
       saveCart();
       updateCartUI();
     }
@@ -6533,7 +7140,7 @@
       }
     }
 
-    
+
     // =========================================================================
     // GROWTH FEATURE: Festive Spin & Win (Daily Wheel / 24-Hour Timer)
     // =========================================================================
@@ -6586,6 +7193,9 @@
 
     let currentSpinWin = null;
     let hasSharedSpin = false;
+    let viralShareStep = 0; // 0: unshared (0/2), 1: friend shared (1/2), 2: group shared (2/2 verified)
+    let viralShareTimestamp = 0;
+    let isAwaitingViralReturn = false;
 
     function spinTheWheel() {
       if (isSpinning) return;
@@ -6599,16 +7209,15 @@
         btn.textContent = "Spinning...";
       }
 
-      // Slices: 0: 50 cash (rot 330), 1: Free Gift (rot 270), 2: 75 cash (rot 90), 3: 100 cash (rot 210), 4: VIP 8% (rot 30), 5: 150 Mega cash (rot 150)
-      // HIGH-RETENTION WEIGHTED PROBABILITIES:
-      // Over 80% concentrated in safe low-value / non-cash surprise physical gifts!
+      // Slices: 0: 50 cash (0 deg), 1: Free Gift (300 deg), 2: 75 cash (240 deg), 3: 100 cash (180 deg), 4: VIP 8% (120 deg), 5: 150 Mega cash (60 deg)
+      // AUTHENTIC 10-SECOND HIGH-SUSPENSE CARNIVAL WHEEL (12 Full Rotations = 4320 deg)
       const prizes = [
-        { id: 'cash50', name: "₹50 Wallet Cash", amount: 50, weight: 53, rot: 1800 + 330, type: 'cash' },
-        { id: 'gift', name: "🎁 Free Surprise Gift in Box", amount: 0, weight: 27, rot: 1800 + 270, type: 'gift', giftName: "Miniature Brass Pooja Bell / Kundan Bindi" },
-        { id: 'cash75', name: "₹75 Wallet Cash", amount: 75, weight: 12, rot: 1800 + 90, type: 'cash' },
-        { id: 'cash100', name: "₹100 Wallet Cash", amount: 100, weight: 4, rot: 1800 + 210, type: 'cash' },
-        { id: 'vip', name: "👑 VIP Gold Tier (8% Cashback)", amount: 0, weight: 2, rot: 1800 + 30, type: 'vip' },
-        { id: 'cash150', name: "🔥 ₹150 Mega Wallet Cash", amount: 150, weight: 2, rot: 1800 + 150, type: 'cash' }
+        { id: 'cash50', name: "₹50 Wallet Cash", amount: 50, weight: 53, rot: 4320 + 0, type: 'cash' },
+        { id: 'gift', name: "🎁 Free Surprise Gift in Box", amount: 0, weight: 27, rot: 4320 + 300, type: 'gift', giftName: "Auspicious Haldi-Kumkum & Designer Kundan Bindi Set" },
+        { id: 'cash75', name: "₹75 Wallet Cash", amount: 75, weight: 12, rot: 4320 + 240, type: 'cash' },
+        { id: 'cash100', name: "₹100 Wallet Cash", amount: 100, weight: 4, rot: 4320 + 180, type: 'cash' },
+        { id: 'vip', name: "👑 VIP Gold Tier (8% Cashback)", amount: 0, weight: 2, rot: 4320 + 120, type: 'vip' },
+        { id: 'cash150', name: "🔥 ₹150 Mega Wallet Cash", amount: 150, weight: 2, rot: 4320 + 60, type: 'cash' }
       ];
 
       const rand = Math.random() * 100;
@@ -6624,6 +7233,12 @@
       currentSpinWin = win;
       hasSharedSpin = false;
 
+      // Update button text with suspense
+      if (btn) {
+        btn.innerHTML = `<span class="inline-flex items-center gap-1.5"><svg class="animate-spin h-4 w-4 text-stone-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> 🎡 Spinning Lucky Wheel... (Suspense building!)</span>`;
+      }
+
+      // Execute 9.5-second spin
       wheel.style.transform = `rotate(${win.rot}deg)`;
 
       setTimeout(() => {
@@ -6634,7 +7249,13 @@
         localStorage.setItem('srr_last_prize_name', win.name);
 
         if (win.type === 'cash') {
+          // Prevent daily stacking: if prior festive cash exists, deduct it first
+          const prevFestive = parseInt(localStorage.getItem('srr_festive_cash') || '0', 10);
+          if (prevFestive > 0) {
+            deductWalletCash(prevFestive);
+          }
           addWalletCash(win.amount);
+          localStorage.setItem('srr_festive_cash', win.amount.toString());
         } else if (win.type === 'gift') {
           localStorage.setItem('srr_free_gift', 'true');
         } else if (win.type === 'vip') {
@@ -6650,28 +7271,21 @@
           resBox.classList.remove('hidden');
           const title = document.getElementById('wheelResultTitle');
           const desc = document.getElementById('wheelResultDesc');
-          const shareBtnText = document.getElementById('wheelShareBtnText');
-          const viralHeading = document.getElementById('viralDoubleHeading');
-          const viralDesc = document.getElementById('viralDoubleDesc');
 
           if (title) title.textContent = `🎉 You Won ${win.name}!`;
 
           if (win.type === 'cash') {
             if (desc) desc.textContent = `₹${win.amount} cash has been credited directly to your SRR Gold Wallet! Valid for 24 hours.`;
-            if (shareBtnText) shareBtnText.textContent = `Share on WhatsApp to Double to ₹${win.amount * 2} →`;
-            if (viralHeading) viralHeading.textContent = `⚡ Share on WhatsApp to Double to ₹${win.amount * 2}!`;
-            if (viralDesc) viralDesc.textContent = `Share this lucky spin with 1 friend or group to instantly double your cash to ₹${win.amount * 2}!`;
           } else if (win.type === 'gift') {
             if (desc) desc.textContent = `A special ${win.giftName} will be packed completely FREE with your order from Armoor Hub!`;
-            if (shareBtnText) shareBtnText.textContent = `Share on WhatsApp to Add ₹50 Cash Too →`;
-            if (viralHeading) viralHeading.textContent = `⚡ Add ₹50 Bonus Cash on Top!`;
-            if (viralDesc) viralDesc.textContent = `Share with friends to claim ₹50 Wallet Cash on top of your Free Surprise Gift!`;
           } else if (win.type === 'vip') {
             if (desc) desc.textContent = `You have been instantly upgraded to 👑 VIP Gold Tier! Enjoy 8% Lifetime Prepaid Cashback and Priority Dispatch.`;
-            if (shareBtnText) shareBtnText.textContent = `Share Lucky VIP Status on WhatsApp →`;
-            if (viralHeading) viralHeading.textContent = `⚡ Unlock a Bonus 2nd Spin!`;
-            if (viralDesc) viralDesc.textContent = `Share your VIP luck with friends to unlock an immediate Bonus 2nd Spin!`;
           }
+
+          // Reset viral steps for this new win
+          viralShareStep = 0;
+          isAwaitingViralReturn = false;
+          renderViralDoubleBox();
         }
 
         if (btn) {
@@ -6681,70 +7295,421 @@
         }
 
         if (window.lucide) lucide.createIcons();
-      }, 4200);
+      }, 9800);
+    }
+
+    function renderViralDoubleBox() {
+      const doubleBox = document.getElementById('viralDoubleBox');
+      if (!doubleBox || !currentSpinWin) return;
+
+      const isCash = currentSpinWin.type === 'cash';
+      const isGift = currentSpinWin.type === 'gift';
+      const doubledAmount = isCash ? currentSpinWin.amount * 2 : (isGift ? 50 : 0);
+
+      if (viralShareStep === 0) {
+        // Step 0: Initial state (0/2 shares)
+        doubleBox.innerHTML = `
+          <div class="flex items-center justify-between text-[11px] font-extrabold text-emerald-300">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              <span>⚡ Festive Unlock: Step 1 of 2</span>
+            </span>
+            <span class="text-amber-400 text-[10px] font-black">0/2 (0%)</span>
+          </div>
+          <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
+            <div class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+          </div>
+          <p class="text-[10px] text-emerald-100/90 leading-tight">
+            ${isCash ? `Share with <strong>1 Friend</strong> + <strong>1 WhatsApp Group</strong> to DOUBLE your cash to <strong>₹${doubledAmount}</strong>!` : (isGift ? `Share with <strong>1 Friend</strong> + <strong>1 WhatsApp Group</strong> to add <strong>₹50 Cash</strong> with your gift!` : `Share with <strong>1 Friend</strong> + <strong>1 WhatsApp Group</strong> to unlock a <strong>Bonus 2nd Spin</strong>!`)}
+          </p>
+          <button id="wheelShareDoubleBtn" onclick="shareSpinOnWhatsApp()" type="button"
+            class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+            <span>Step 1: Send Invite to 1 Friend on WhatsApp →</span>
+          </button>
+        `;
+      } else if (viralShareStep === 1) {
+        // Step 1: 1 share verified (1/2 shares = 50%)
+        doubleBox.innerHTML = `
+          <div class="flex items-center justify-between text-[11px] font-extrabold text-emerald-300">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+              <span>⚡ Festive Unlock: Step 2 of 2</span>
+            </span>
+            <span class="text-amber-300 text-[10px] font-black">1/2 (50%)</span>
+          </div>
+          <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
+            <div class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 50%;"></div>
+          </div>
+          <p class="text-[10px] text-amber-200 leading-tight">
+            🎉 <strong>Step 1 Verified!</strong> Now share to <strong>1 WhatsApp Group</strong> (Family or Friends) to activate your 2X Doubled Cash!
+          </p>
+          <button id="wheelShareDoubleBtn" onclick="shareSpinOnWhatsApp()" type="button"
+            class="w-full py-2 px-3 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer animate-bounce">
+            <i data-lucide="users" class="w-3.5 h-3.5"></i>
+            <span>Step 2: Share to 1 WhatsApp Group (Final Step) →</span>
+          </button>
+        `;
+      } else if (viralShareStep === 2) {
+        // Step 2 Completed: LIVE FRIEND OPENS TRACKER (Waiting for 2 distinct friends to tap link)
+        doubleBox.innerHTML = `
+          <div class="p-2.5 bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border border-amber-400/60 rounded-xl space-y-2 text-center text-white animate-in zoom-in-95">
+            <div class="flex items-center justify-between text-[11px] font-extrabold text-amber-300">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span>⚡ Real-Time Friend Opens</span>
+              </span>
+              <span id="friendClickCountBadge" class="bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded font-mono font-black text-[10px]">0 / 2 Opened</span>
+            </div>
+            <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-amber-500/30 overflow-hidden">
+              <div id="friendClickProgressBar" class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+            <p id="friendClickStatusText" class="text-[10px] text-stone-200 leading-tight">
+              Waiting for 2 people in your group or contacts to open your invite link. As soon as 2 people open it, your cash <strong>instantly DOUBLES to ₹${doubledAmount}!</strong>
+            </p>
+            <div class="flex items-center justify-center gap-3 pt-1 text-[10px]">
+              <button onclick="shareSpinOnWhatsApp()" type="button" class="text-amber-300 hover:underline font-bold flex items-center gap-1 cursor-pointer">
+                <i data-lucide="share-2" class="w-3 h-3"></i> Resend Link
+              </button>
+              <span class="text-stone-500">•</span>
+              <button onclick="refreshFriendClicksNow()" type="button" class="text-emerald-400 hover:underline font-bold flex items-center gap-1 cursor-pointer">
+                <i data-lucide="refresh-cw" class="w-3 h-3"></i> Check Status Now
+              </button>
+            </div>
+          </div>
+        `;
+        startPollingFriendClicks();
+      } else if (viralShareStep === 3) {
+        // Step 3: Verified 2 Friend Opens -> 100% Unlocked!
+        doubleBox.innerHTML = `
+          <div class="p-1 space-y-1.5 text-center text-white animate-in zoom-in-95">
+            <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-emerald-300">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+              <span>🎉 2 Friends Opened: ${isCash ? `Prize DOUBLED to ₹${doubledAmount}!` : (isGift ? `+₹50 Cash Added!` : `Bonus 2nd Spin Unlocked!`)}</span>
+            </div>
+            <div class="w-full bg-stone-950/80 rounded-full h-2 p-0.5 border border-emerald-500/30 overflow-hidden">
+              <div class="bg-emerald-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+            </div>
+            <p class="text-[10px] text-emerald-100/90 leading-tight">
+              ${isCash ? `Verified! 2 friends opened your link. Your <strong>₹${doubledAmount} Wallet Cash</strong> is active for today's order!` : (isGift ? `Your <strong>Free Surprise Gift + ₹50 Cash</strong> are both locked in!` : `Your <strong>Bonus 2nd Spin</strong> is unlocked below!`)}
+            </p>
+            <button onclick="closeSpinWheelModal(); toggleCartDrawer(true);" class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <span>🛒 Apply ₹${doubledAmount} to Cart Now →</span>
+            </button>
+          </div>
+        `;
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function getOrCreateSpinToken() {
+      let token = localStorage.getItem('srr_spin_token');
+      if (!token) {
+        const phone = localStorage.getItem('srr_cust_phone') || '';
+        const phoneSuffix = phone ? phone.replace(/[^0-9]/g, '').slice(-4) : 'srr';
+        token = 'srr_spin_' + phoneSuffix + '_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6);
+        localStorage.setItem('srr_spin_token', token);
+      }
+      // Tag current device as owner so owner cannot click own link to cheat
+      localStorage.setItem('srr_spin_owner_' + token, 'true');
+      return token;
     }
 
     function shareSpinOnWhatsApp() {
-      if (!currentSpinWin) return;
-      hasSharedSpin = true;
+      if (!currentSpinWin || hasSharedSpin) return;
+
       const phone = localStorage.getItem('srr_cust_phone') || '';
       const refCode = phone ? phone.replace(/[^0-9]/g, '').slice(-10) : '';
-      const shareUrl = refCode ? `https://srrbazaar.com/?ref=${refCode}` : 'https://srrbazaar.com';
-      
-      const prizeText = currentSpinWin.type === 'gift' ? 'a Free Surprise Brass Gift in my parcel' : currentSpinWin.name;
-      const msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and win up to ₹150 Wallet Cash & free gifts:\n${shareUrl}`;
-      
+      const spinToken = getOrCreateSpinToken();
+      const shareUrl = `https://srrbazaar.com/?spin_ref=${spinToken}` + (refCode ? `&ref=${refCode}` : '');
+      const prizeText = currentSpinWin.type === 'gift' ? 'a Free Auspicious Haldi-Kumkum & Kundan Bindi Gift Set in my parcel' : currentSpinWin.name;
+
+      // Differentiate message copy for Friend (Step 1) vs WhatsApp Group (Step 2)
+      let msg = '';
+      if (viralShareStep === 0) {
+        msg = `🪔 Namaste! I just spun the SRR Bazaar Festive Wheel and won ${prizeText}! 🎡🎁\n\nTap here to spin the lucky wheel and claim up to ₹150 Wallet Cash & free gifts:\n${shareUrl}`;
+      } else {
+        msg = `👨‍👩‍👧‍👦 Namaste Everyone in this group! 🪔\n\nCheck out SRR Bazaar Armoor today! 🎡🎁 Spin their festive lucky wheel to claim free surprise gifts & up to ₹150 Wallet Cash with free delivery across India:\n${shareUrl}`;
+      }
+
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+
+      // Record dispatch timestamp and set waiting flag
+      viralShareTimestamp = Date.now();
+      isAwaitingViralReturn = true;
+
+      // Open WhatsApp
       window.open(waUrl, '_blank');
 
-      // Award the Viral Bonus
-      setTimeout(() => {
-        const doubleBox = document.getElementById('viralDoubleBox');
-        if (currentSpinWin.type === 'cash') {
-          const bonusAmount = currentSpinWin.amount; // Doubles the cash!
-          addWalletCash(bonusAmount);
-          const newTotal = currentSpinWin.amount * 2;
-          if (doubleBox) {
-            doubleBox.innerHTML = `
-              <div class="p-2.5 bg-emerald-500/20 border border-emerald-400 rounded-lg text-emerald-300 font-bold text-xs space-y-1">
-                <div>🎉 Awesome! Your reward has DOUBLED to <strong>₹${newTotal} Wallet Cash</strong>!</div>
-                <div class="text-[10px] text-emerald-200">Credited to your SRR Gold Wallet for your order today.</div>
+      // Show waiting & anti-cheat instruction state
+      const doubleBox = document.getElementById('viralDoubleBox');
+      if (doubleBox) {
+        const targetLabel = viralShareStep === 0 ? '1 Friend' : '1 WhatsApp Group';
+        doubleBox.innerHTML = `
+          <div class="p-2.5 bg-stone-900/95 border border-amber-500/50 rounded-xl space-y-2 text-center text-white animate-in fade-in">
+            <div class="flex items-center justify-center gap-2 text-xs font-bold text-amber-300">
+              <svg class="animate-spin h-3.5 w-3.5 text-amber-400" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+              <span>Opening WhatsApp (${targetLabel})...</span>
+            </div>
+            <p class="text-[10px] text-amber-100 leading-snug">
+              Please select <strong>${targetLabel}</strong> and tap <strong>Send</strong> in WhatsApp. Return here after sending to verify!
+            </p>
+            <div class="text-[9px] text-stone-400 italic">Anti-cheat active: Quick cancellations without sending will not unlock reward.</div>
+          </div>
+        `;
+      }
+    }
+
+    function handleViralReturnVerification() {
+      if (!isAwaitingViralReturn || !currentSpinWin) return;
+      isAwaitingViralReturn = false;
+
+      const dwellSec = (Date.now() - viralShareTimestamp) / 1000;
+      const doubleBox = document.getElementById('viralDoubleBox');
+
+      // Step-specific minimum dwell thresholds:
+      // Step 1 (Friend): minimum 4.5s
+      // Step 2 (Group): minimum 6.0s (selecting a group takes longer than single contact)
+      const minDwell = (viralShareStep === 1) ? 6.0 : 4.5;
+
+      if (dwellSec < minDwell) {
+        if (doubleBox) {
+          const stepNum = viralShareStep + 1;
+          const isGroupStep = (viralShareStep === 1);
+          const errorTitle = isGroupStep ? "⚠️ WhatsApp Group Not Detected!" : "⚠️ Invite Not Sent! (Returned too quickly)";
+          const errorMsg = isGroupStep
+            ? "You returned in " + dwellSec.toFixed(1) + "s. Selecting a WhatsApp Group takes a few seconds. Sending to a single contact does not qualify for the 2X Group multiplier."
+            : "You returned before selecting a friend and tapping Send. Please send the invite to complete Step " + stepNum + "!";
+
+          doubleBox.innerHTML = `
+            <div class="p-2.5 bg-rose-950/90 border border-rose-500/60 rounded-xl space-y-2 text-center text-white animate-in shake">
+              <div class="flex items-center justify-center gap-1.5 text-xs font-bold text-rose-300">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400"></i>
+                <span>${errorTitle}</span>
               </div>
-            `;
-          }
-          const desc = document.getElementById('wheelResultDesc');
-          if (desc) desc.textContent = `₹${newTotal} cash (Doubled via WhatsApp Share!) is active in your Gold Wallet for 24 hours.`;
-          localStorage.setItem('srr_last_prize_name', `₹${newTotal} (Doubled) Cash`);
-          initFestiveTimer();
-        } else if (currentSpinWin.type === 'gift') {
-          addWalletCash(50);
-          if (doubleBox) {
-            doubleBox.innerHTML = `
-              <div class="p-2.5 bg-emerald-500/20 border border-emerald-400 rounded-lg text-emerald-300 font-bold text-xs space-y-1">
-                <div>🎉 Bonus Claimed! <strong>₹50 Wallet Cash</strong> added to your Gold Wallet alongside your Free Gift!</div>
+              <p class="text-[10px] text-rose-100 leading-tight">${errorMsg}</p>
+              <button onclick="shareSpinOnWhatsApp()" type="button"
+                class="w-full py-2 px-3 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>Retry Step ${stepNum}: Select a WhatsApp Group and Send →</span>
+              </button>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+        }
+        return;
+      }
+
+      // Step 1 (Friend) verified -> advance to Step 2
+      if (viralShareStep === 0) {
+        viralShareStep = 1;
+        renderViralDoubleBox();
+      } else if (viralShareStep === 1) {
+        // Step 2 Group Checkpoint: Show explicit group confirmation to prevent single contact cheating
+        if (doubleBox) {
+          doubleBox.innerHTML = `
+            <div class="p-2.5 bg-stone-900/95 border border-amber-400/60 rounded-xl space-y-2 text-center text-white animate-in zoom-in-95">
+              <div class="flex items-center justify-center gap-1.5 text-xs font-extrabold text-amber-300">
+                <i data-lucide="users" class="w-4 h-4 text-amber-400"></i>
+                <span>Step 2 Verification: Group Confirmation</span>
               </div>
-            `;
-          }
-        } else {
-          if (doubleBox) {
-            doubleBox.innerHTML = `
-              <div class="p-2.5 bg-emerald-500/20 border border-emerald-400 rounded-lg text-emerald-300 font-bold text-xs space-y-1">
-                <div>🎉 Bonus 2nd Spin Unlocked! Spin again below.</div>
+              <p class="text-[10px] text-stone-200 leading-snug">
+                Did you send the invite into a <strong>WhatsApp Group</strong> (Family, Friends, or Festival Group)?
+              </p>
+              <div class="space-y-1.5 pt-0.5">
+                <button onclick="confirmViralGroupShare(true)" type="button"
+                  class="w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-black text-xs shadow transition flex items-center justify-center gap-1.5 cursor-pointer">
+                  <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                  <span>✅ Yes, Sent to WhatsApp Group (Unlock 2X) →</span>
+                </button>
+                <button onclick="confirmViralGroupShare(false)" type="button"
+                  class="w-full py-1.5 px-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 text-[10px] transition flex items-center justify-center gap-1 cursor-pointer">
+                  <i data-lucide="refresh-cw" class="w-3 h-3 text-stone-400"></i>
+                  <span>Sent to 1 person by mistake? Re-open to pick Group</span>
+                </button>
               </div>
-            `;
-          }
-          const btn = document.getElementById('spinWheelBtn');
-          if (btn) {
-            btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            btn.textContent = "🎡 Spin Your Bonus Round!";
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    }
+
+    function confirmViralGroupShare(isConfirmed) {
+      if (!isConfirmed) {
+        shareSpinOnWhatsApp();
+        return;
+      }
+
+      // Step 2 Group confirmed! Transition to Real-Time 2-Friend Click Tracker
+      viralShareStep = 2;
+      localStorage.setItem('srr_awaiting_friend_opens', 'true');
+      renderViralDoubleBox();
+      startPollingFriendClicks();
+    }
+
+    let friendPollInterval = null;
+
+    function startPollingFriendClicks() {
+      if (friendPollInterval) clearInterval(friendPollInterval);
+      pollFriendClicks();
+      friendPollInterval = setInterval(pollFriendClicks, 4000);
+    }
+
+    async function pollFriendClicks() {
+      const token = localStorage.getItem('srr_spin_token');
+      if (!token || hasSharedSpin) {
+        if (friendPollInterval) clearInterval(friendPollInterval);
+        return;
+      }
+
+      const count = await fetchUniqueSpinClickCount(token);
+      updateFriendClicksUI(count);
+
+      if (count >= 2) {
+        if (friendPollInterval) clearInterval(friendPollInterval);
+        activateDoubledReward(count);
+      }
+    }
+
+    async function fetchUniqueSpinClickCount(token) {
+      // 1. Try local backend first
+      try {
+        const res = await fetch('/api/spin-ref/status/' + encodeURIComponent(token));
+        if (res.ok) {
+          const data = await res.json();
+          if (data && typeof data.count === 'number') {
+            return data.count;
           }
         }
+      } catch (e) { }
+
+      // 2. Universal cloud broker fallback (ntfy.sh) for GitHub Pages
+      try {
+        const res = await fetch('https://ntfy.sh/' + encodeURIComponent(token) + '/json?poll=1');
+        if (res.ok) {
+          const text = await res.text();
+          const lines = text.trim().split('\n');
+          const devices = new Set();
+          for (const line of lines) {
+            if (!line) continue;
+            try {
+              const item = JSON.parse(line);
+              if (item.message && item.message.startsWith('click:')) {
+                devices.add(item.message.replace('click:', ''));
+              }
+            } catch (err) { }
+          }
+          return devices.size;
+        }
+      } catch (e) { }
+
+      return 0;
+    }
+
+    function updateFriendClicksUI(count) {
+      const badge = document.getElementById('friendClickCountBadge');
+      const bar = document.getElementById('friendClickProgressBar');
+      const statusText = document.getElementById('friendClickStatusText');
+
+      if (badge) badge.textContent = `${Math.min(count, 2)} / 2 Opened`;
+      if (bar) bar.style.width = `${Math.min(count * 50, 100)}%`;
+
+      if (statusText) {
+        if (count === 0) {
+          statusText.innerHTML = `Waiting for 2 friends or group members to open your link. As soon as 2 people open it, your cash <strong>DOUBLES!</strong>`;
+        } else if (count === 1) {
+          statusText.innerHTML = `🎉 <strong>1 friend opened your link!</strong> Waiting for 1 more person to tap the link and activate your <strong>2X Doubled Cash!</strong>`;
+        }
+      }
+    }
+
+    function refreshFriendClicksNow() {
+      const btn = event?.currentTarget;
+      if (btn) btn.innerHTML = `<svg class="animate-spin h-3 w-3 inline mr-1 text-emerald-400" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Checking...`;
+      pollFriendClicks().finally(() => {
+        if (btn) btn.innerHTML = `<i data-lucide="refresh-cw" class="w-3 h-3 inline mr-1"></i> Check Status Now`;
         if (window.lucide) lucide.createIcons();
-      }, 800);
+      });
+    }
+
+    function activateDoubledReward(clickCount) {
+      if (hasSharedSpin || !currentSpinWin) return;
+      hasSharedSpin = true;
+      viralShareStep = 3;
+      localStorage.removeItem('srr_awaiting_friend_opens');
+
+      const isCash = currentSpinWin.type === 'cash';
+      const isGift = currentSpinWin.type === 'gift';
+      const doubledAmount = isCash ? currentSpinWin.amount * 2 : (isGift ? 50 : 0);
+
+      if (isCash) {
+        addWalletCash(currentSpinWin.amount); // Doubles
+        localStorage.setItem('srr_festive_cash', doubledAmount.toString());
+        const desc = document.getElementById('wheelResultDesc');
+        if (desc) desc.textContent = `₹${doubledAmount} cash (Doubled via 2 Friend Opens!) is active in your Gold Wallet for 24 hours.`;
+        localStorage.setItem('srr_last_prize_name', `₹${doubledAmount} (Doubled) Cash`);
+        initFestiveTimer();
+      } else if (isGift) {
+        addWalletCash(50);
+      } else if (currentSpinWin.type === 'vip') {
+        const btn = document.getElementById('spinWheelBtn');
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          btn.textContent = "🎡 Spin Your Bonus Round!";
+        }
+      }
+
+      renderViralDoubleBox();
+    }
+
+    // Attach listeners for app return detection
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        setTimeout(handleViralReturnVerification, 400);
+      }
+    });
+    window.addEventListener('focus', () => {
+      setTimeout(handleViralReturnVerification, 400);
+    });
+
+    function checkAndExpireFestiveRewards() {
+      const expiry = parseInt(localStorage.getItem('srr_festive_expiry') || '0', 10);
+      if (!expiry) return;
+
+      const now = Date.now();
+      if (now >= expiry) {
+        // 24-Hour window has expired! Expire temporary festive spin cash & gifts
+        const festiveCash = parseInt(localStorage.getItem('srr_festive_cash') || '0', 10);
+        if (festiveCash > 0) {
+          deductWalletCash(festiveCash);
+          localStorage.removeItem('srr_festive_cash');
+        }
+        localStorage.removeItem('srr_festive_expiry');
+        localStorage.removeItem('srr_free_gift');
+        localStorage.removeItem('srr_last_prize_name');
+
+        const banner = document.getElementById('festiveRewardBanner');
+        if (banner) banner.classList.add('hidden');
+
+        // Update wheel modal button if open
+        const btn = document.getElementById('spinWheelBtn');
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          btn.textContent = "🎡 Spin Today's Lucky Wheel!";
+        }
+        const resBox = document.getElementById('wheelResultBox');
+        if (resBox) resBox.classList.add('hidden');
+
+        updateWalletUI();
+        updateCartUI();
+      }
     }
 
     function initFestiveTimer() {
+      checkAndExpireFestiveRewards();
       const banner = document.getElementById('festiveRewardBanner');
       const expiry = parseInt(localStorage.getItem('srr_festive_expiry') || '0', 10);
       const prizeName = localStorage.getItem('srr_last_prize_name') || '₹50 Wallet Cash';
@@ -6762,7 +7727,7 @@
       function updateClock() {
         const diff = expiry - Date.now();
         if (diff <= 0) {
-          if (banner) banner.classList.add('hidden');
+          checkAndExpireFestiveRewards();
           return;
         }
         const h = Math.floor(diff / (1000 * 60 * 60));
@@ -6773,7 +7738,8 @@
         }
       }
       updateClock();
-      setInterval(updateClock, 1000);
+      if (window.festiveClockInterval) clearInterval(window.festiveClockInterval);
+      window.festiveClockInterval = setInterval(updateClock, 1000);
     }
 
     // =========================================================================
@@ -6800,9 +7766,26 @@
       return getCustomerLifetimeSpend(phone) >= 2500;
     }
 
+    function getOrCreateDeviceId() {
+      let id = localStorage.getItem('srr_device_id');
+      if (!id) {
+        id = 'dev_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now().toString(36);
+        localStorage.setItem('srr_device_id', id);
+      }
+      return id;
+    }
+
     function checkIncomingReferral() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
+
+        // 1. Check for Unique Spin Referral Click (?spin_ref=...)
+        const spinRef = urlParams.get('spin_ref');
+        if (spinRef) {
+          recordFriendSpinClick(spinRef);
+        }
+
+        // 2. Check for standard friend referral (?ref=...)
         const ref = urlParams.get('ref');
         if (ref) {
           const cleanRef = ref.trim().replace(/[^0-9a-zA-Z]/g, '').slice(0, 15);
@@ -6819,6 +7802,67 @@
           }
         }
       } catch (e) { }
+    }
+
+    function recordFriendSpinClick(spinRef) {
+      // ANTI-CHEAT 1: Owner clicking their own link does not count
+      if (localStorage.getItem('srr_spin_owner_' + spinRef) === 'true') {
+        return;
+      }
+
+      // ANTI-CHEAT 2: Same friend clicking multiple times only counts once
+      if (localStorage.getItem('srr_spin_visited_' + spinRef) === 'true') {
+        showFriendWelcomeCard();
+        return;
+      }
+      localStorage.setItem('srr_spin_visited_' + spinRef, 'true');
+
+      const devId = getOrCreateDeviceId();
+
+      // Dispatch click ping to local backend if running
+      try {
+        fetch('/api/spin-ref/click', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: spinRef, deviceId: devId })
+        }).catch(() => { });
+      } catch (e) { }
+
+      // Dispatch click ping to universal cloud broker (ntfy.sh) for GitHub Pages
+      try {
+        fetch('https://ntfy.sh/' + encodeURIComponent(spinRef), {
+          method: 'POST',
+          body: 'click:' + devId,
+          mode: 'no-cors'
+        }).catch(() => { });
+      } catch (e) { }
+
+      showFriendWelcomeCard();
+    }
+
+    function showFriendWelcomeCard() {
+      // Floating Welcome Card for the invited friend
+      if (document.getElementById('friendWelcomeCard')) return;
+      const card = document.createElement('div');
+      card.id = 'friendWelcomeCard';
+      card.className = "fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-sm z-50 p-4 bg-gradient-to-r from-stone-900 via-stone-950 to-stone-900 border border-amber-400/80 rounded-2xl shadow-2xl text-white space-y-2 animate-in slide-in-from-bottom duration-300";
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-amber-300">
+            <span>🪔</span>
+            <span>You Were Invited to SRR Bazaar!</span>
+          </div>
+          <button onclick="this.closest('#friendWelcomeCard').remove()" class="text-stone-400 hover:text-white p-1 text-xs font-bold cursor-pointer">✕</button>
+        </div>
+        <p class="text-xs text-stone-200 leading-snug">
+          Your friend shared their Festive Lucky Spin with you! Spin the wheel now to claim <strong>up to ₹150 Wallet Cash</strong> & free surprise gifts!
+        </p>
+        <button onclick="this.closest('#friendWelcomeCard').remove(); openSpinWheelModal();" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-black text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>🎡 Spin The Lucky Wheel Now →</span>
+        </button>
+      `;
+      document.body.appendChild(card);
+      if (window.lucide) lucide.createIcons();
     }
 
     function showReferralWelcomeBanner(code) {
@@ -6896,7 +7940,7 @@
         if (balEl) balEl.textContent = `₹${effectiveBal}`;
         if (countEl) countEl.textContent = `${referralCount} Friends`;
         if (earnedEl) earnedEl.textContent = `₹${totalReferralEarned}`;
-        
+
         // Update VIP Gold Tier status
         const lifetimeSpend = getCustomerLifetimeSpend(cleanPhone);
         const vipBox = document.getElementById('vipTierStatusBox');
@@ -7003,9 +8047,26 @@
     }
 
     function updateCartUI() {
-      const count = cart.reduce((sum, item) => sum + item.qty, 0);
-      document.getElementById('cartCountBadge').textContent = count;
-      document.getElementById('cartItemCount').textContent = count;
+      const regularItems = cart.filter(item => !item.isFreeGift);
+      const hasFreeGift = cart.some(item => item.isFreeGift);
+      const regularCount = regularItems.reduce((sum, item) => sum + item.qty, 0);
+      const totalCount = regularCount + (hasFreeGift ? 1 : 0);
+
+      document.getElementById('cartCountBadge').textContent = totalCount;
+      document.getElementById('cartItemCount').textContent = hasFreeGift
+        ? `${regularCount} + 1 Free Gift`
+        : `${totalCount}`;
+
+      // Toggle launch gift banner in cart
+      const giftBanner = document.getElementById('cartLaunchGiftBanner');
+      if (giftBanner) {
+        giftBanner.classList.toggle('hidden', !(isLaunchFreeGiftActive() && regularCount > 0));
+      }
+
+      const freeGiftRow = document.getElementById('freeGiftBillRow');
+      if (freeGiftRow) {
+        freeGiftRow.style.display = hasFreeGift ? 'flex' : 'none';
+      }
 
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       let couponDiscount = 0;
@@ -7055,7 +8116,7 @@
       updateWalletUI();
 
       const list = document.getElementById('cartItemsList');
-      if (cart.length === 0) {
+      if (cart.length === 0 || regularCount === 0) {
         list.innerHTML = `
           <div class="text-center py-12 space-y-3">
             <div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center mx-auto text-stone-400">
@@ -7070,27 +8131,58 @@
       } else {
         document.getElementById('checkoutButton').disabled = false;
         document.getElementById('checkoutButton').classList.remove('opacity-50', 'cursor-not-allowed');
-        list.innerHTML = cart.map(item => `
-          <div class="flex items-center gap-3 p-2.5 rounded-xl border border-stone-200 bg-white shadow-xs">
-            <img src="${item.image || 'images/jadau_kundan_necklace.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg'">
-            <div class="flex-1 min-w-0">
-              <h4 class="text-xs font-bold text-stone-900 truncate">${item.title}</h4>
-              <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
-                <span class="text-xs font-extrabold text-maroon-950">₹${item.price}</span>
-                ${item.originalPrice ? `<span class="text-[10px] text-stone-400 line-through">₹${item.originalPrice}</span>` : ''}
-                ${item.savings ? `<span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded">Saved ₹${item.savings}</span>` : ''}
+        list.innerHTML = cart.map(item => {
+          if (item.isFreeGift) {
+            return `
+              <div class="flex items-center gap-3 p-3 rounded-xl border-2 border-amber-300 bg-gradient-to-r from-amber-50/90 via-orange-50/60 to-amber-50/90 shadow-xs relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-gradient-to-l from-amber-500 to-amber-600 text-white text-[9px] font-black px-2 py-0.5 rounded-bl-lg shadow-2xs tracking-wide uppercase">
+                  🎁 100% FREE GIFT
+                </div>
+                <img src="${item.image || 'images/categories/cat_samagri.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0 border border-amber-300 shadow-2xs" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg'">
+                <div class="flex-1 min-w-0 pr-8">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-[9px] font-black text-amber-900 bg-amber-200 px-1.5 py-0.5 rounded uppercase">Launch Offer</span>
+                    <span class="text-[10px] text-amber-800 font-bold">• Till 30 Nov</span>
+                  </div>
+                  <h4 class="text-xs font-bold text-stone-900 truncate mt-0.5">${item.title}</h4>
+                  <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
+                    <span class="text-xs font-black text-emerald-700">FREE</span>
+                    <span class="text-[10px] text-stone-400 line-through">₹${item.originalPrice || 49}</span>
+                    <span class="text-[9px] font-bold text-emerald-800 bg-emerald-100 px-1 rounded">Saved ₹${item.savings || 49}</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 mt-1 text-[11px] text-amber-900 font-semibold">
+                    <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                    <span>Auto-packed in parcel (Qty: 1)</span>
+                  </div>
+                </div>
+                <button onclick="removeCartItem('${item.id}')" title="Complimentary Launch Gift" class="text-amber-600 hover:text-amber-800 p-1">
+                  <i data-lucide="gift" class="w-4 h-4"></i>
+                </button>
               </div>
-              <div class="flex items-center gap-2 mt-2">
-                <button onclick="updateCartQty(${item.id}, -1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">-</button>
-                <span class="text-xs font-semibold px-1">${item.qty}</span>
-                <button onclick="updateCartQty(${item.id}, 1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">+</button>
+            `;
+          }
+          return `
+            <div class="flex items-center gap-3 p-2.5 rounded-xl border border-stone-200 bg-white shadow-xs">
+              <img src="${item.image || 'images/jadau_kundan_necklace.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0" onerror="this.onerror=null; this.src='images/jadau_kundan_necklace.jpg'">
+              <div class="flex-1 min-w-0">
+                <h4 class="text-xs font-bold text-stone-900 truncate">${item.title}</h4>
+                <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
+                  <span class="text-xs font-extrabold text-maroon-950">₹${item.price}</span>
+                  ${item.originalPrice ? `<span class="text-[10px] text-stone-400 line-through">₹${item.originalPrice}</span>` : ''}
+                  ${item.savings ? `<span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded">Saved ₹${item.savings}</span>` : ''}
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                  <button onclick="updateCartQty('${item.id}', -1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">-</button>
+                  <span class="text-xs font-semibold px-1">${item.qty}</span>
+                  <button onclick="updateCartQty('${item.id}', 1)" class="w-6 h-6 rounded bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-xs font-bold">+</button>
+                </div>
               </div>
+              <button onclick="removeCartItem('${item.id}')" class="text-stone-400 hover:text-red-600 p-1">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
             </div>
-            <button onclick="removeCartItem(${item.id})" class="text-stone-400 hover:text-red-600 p-1">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       }
 
       lucide.createIcons();
@@ -7148,22 +8240,42 @@
       toggleCartDrawer(false, false);
       closeQuickView(false);
       hideAmazonToast();
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
+
+      // Re-verify festive reward expiry on checkout entry to prevent stale/tampered redemptions
+      if (typeof checkAndExpireFestiveRewards === 'function') {
+        checkAndExpireFestiveRewards();
+      }
+
+      if (typeof syncFreeGiftToCart === 'function') {
+        syncFreeGiftToCart();
+      }
+      const regularItems = cart.filter(i => !i.isFreeGift);
+      if (regularItems.length === 0) {
+        alert("Your cart must contain at least one purchased product to qualify for checkout and complimentary launch gifts!");
         return;
       }
 
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       let couponDiscount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
-      
+
       let referralDiscount = (activeReferralCode && subtotal >= 500) ? 100 : 0;
 
       let walletDiscount = (isWalletApplied && appliedWalletDiscount > 0) ? appliedWalletDiscount : 0;
       const total = Math.max(0, subtotal - couponDiscount - referralDiscount - walletDiscount);
       currentCheckoutTotal = total;
 
+      const hasFreeGift = cart.some(i => i.isFreeGift);
+      const countPreview = hasFreeGift
+        ? `${regularItems.length} item(s) + 🎁 1 Free Gift`
+        : `${regularItems.length} item(s)`;
+
       document.getElementById('checkoutTotalDisplay').textContent = `₹${total}`;
-      document.getElementById('checkoutItemsCountPreview').textContent = `${cart.length} item(s)`;
+      document.getElementById('checkoutItemsCountPreview').textContent = countPreview;
+
+      const checkoutGiftNotice = document.getElementById('checkoutFreeGiftNotice');
+      if (checkoutGiftNotice) {
+        checkoutGiftNotice.classList.toggle('hidden', !(isLaunchFreeGiftActive() && hasFreeGift));
+      }
 
       // Setup Payment Mode (Default: Partial COD with ₹150 booking token)
       handlePaymentMethodChange(currentSelectedPayment || 'partial_cod');
@@ -7525,8 +8637,18 @@
     function submitFinalOrder() {
       if (isSubmittingOrder) return;
 
-      if (!cart || cart.length === 0) {
-        alert("Your cart is empty! Please add products before checking out.");
+      // Re-verify festive rewards validity immediately at order submission
+      if (typeof checkAndExpireFestiveRewards === 'function') {
+        checkAndExpireFestiveRewards();
+      }
+
+      if (typeof syncFreeGiftToCart === 'function') {
+        syncFreeGiftToCart();
+      }
+
+      const regularItems = (cart || []).filter(item => !item.isFreeGift);
+      if (regularItems.length === 0) {
+        alert("Your cart must contain at least one purchased product to qualify for checkout and complimentary launch gifts!");
         closeCheckout();
         return;
       }
@@ -7578,7 +8700,7 @@
 
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       let couponDiscount = (activeCoupon === 'WELCOME100' && subtotal >= 500) ? 100 : 0;
-      
+
       // ANTI-ABUSE REFERRAL VALIDATION
       let referralDiscount = 0;
       if (activeReferralCode && subtotal >= 500) {
@@ -7602,8 +8724,8 @@
             referralDiscount = 0;
             console.warn("[Referral Abuse Prevented] Referral discount is only for first-time orders. Phone:", cleanPhone);
             alert("ℹ️ Referral discount (₹100) is valid for first-time orders only. Thank you for shopping with SRR Bazaar again!");
-          resetOrderButtonState();
-          return;
+            resetOrderButtonState();
+            return;
           } else {
             referralDiscount = 100;
           }
@@ -7786,7 +8908,12 @@
       }
 
       // Construct Itemized WhatsApp Message for Merchant & Customer
-      const itemLines = cart.map((i, idx) => `${idx + 1}. *${i.title}* x ${i.qty} = ₹${i.price * i.qty}`).join('\n');
+      const itemLines = cart.map((i, idx) => {
+        if (i.isFreeGift) {
+          return `${idx + 1}. *🎁 FREE GIFT: ${i.title}* x ${i.qty} = ₹0 (Complimentary Launch Offer)`;
+        }
+        return `${idx + 1}. *${i.title}* x ${i.qty} = ₹${i.price * i.qty}`;
+      }).join('\n');
 
       let paymentWaDetails = '';
       if (isPartial) {
@@ -7811,9 +8938,25 @@
       let walletWaDetails = '';
       const hasFreeGift = (localStorage.getItem('srr_free_gift') === 'true');
       if (hasFreeGift) {
-        walletWaDetails += `\n*🎁 Festive Wheel Winner:* Miniature Brass Pooja Bell / Kundan Bindi (Packed Free in Box!)`;
-        newOrder.freeGift = "Miniature Brass Pooja Bell / Kundan Bindi (Wheel Winner)";
+        walletWaDetails += `\n*🎁 Festive Wheel Winner:* Auspicious Haldi-Kumkum & Designer Kundan Bindi Set (Packed Free in Box!)`;
+        newOrder.freeGift = "Auspicious Haldi-Kumkum & Designer Kundan Bindi Set (Wheel Winner)";
         localStorage.removeItem('srr_free_gift');
+      }
+
+      let launchGiftWaDetails = '';
+      const hasLaunchFreeGift = cart.some(i => i.isFreeGift);
+      if (hasLaunchFreeGift) {
+        launchGiftWaDetails = `\n*🎁 Special Launch Offer:* Auspicious Haldi-Kumkum & Designer Kundan Bindi Set (Auto-Added FREE - Valid until 30 Nov 2026)`;
+        newOrder.launchFreeGift = "Auspicious Haldi-Kumkum & Designer Kundan Bindi Set (Auto-Added Launch Gift)";
+      }
+
+      // If user redeemed wallet cash or free gift, retire the 24h festive reward timer
+      if (usedWallet > 0 || hasFreeGift) {
+        localStorage.removeItem('srr_festive_cash');
+        localStorage.removeItem('srr_festive_expiry');
+        localStorage.removeItem('srr_last_prize_name');
+        const festBanner = document.getElementById('festiveRewardBanner');
+        if (festBanner) festBanner.classList.add('hidden');
       }
       if (usedWallet > 0) {
         walletWaDetails += `\n*🪙 Wallet Cash Redeemed:* -₹${usedWallet}`;
@@ -7838,7 +8981,7 @@ ${address}, ${city}, ${state} - ${pincode}
 ${itemLines}
 
 *Total Order Value:* ₹${total} (Free Express Shipping)
-${paymentWaDetails}${walletWaDetails}
+${paymentWaDetails}${walletWaDetails}${launchGiftWaDetails}
 *Logistics Hub:* The Professional Couriers (Armoor Hub)
 *Instagram Store:* @${STORE_CONFIG.instagramHandle}
 ----------------------------------------
@@ -7874,6 +9017,11 @@ Please pack and dispatch! ✨`
         } else {
           cbBox.classList.add('hidden');
         }
+      }
+
+      const freeGiftBoxEl = document.getElementById('successFreeGiftBox');
+      if (freeGiftBoxEl) {
+        freeGiftBoxEl.classList.toggle('hidden', !hasLaunchFreeGift);
       }
 
       // Clear Cart

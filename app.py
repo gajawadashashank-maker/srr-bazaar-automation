@@ -1544,3 +1544,9 @@ async def get_spin_status(token: str):
         "count": count,
         "unlocked": count >= 2
     }
+
+# Mount docs directory so local server can serve storefront, images, and videos
+from fastapi.staticfiles import StaticFiles
+if Path("docs").exists():
+    app.mount("/", StaticFiles(directory="docs", html=True), name="static")
+

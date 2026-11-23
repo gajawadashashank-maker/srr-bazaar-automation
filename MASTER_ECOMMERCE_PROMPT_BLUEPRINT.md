@@ -690,7 +690,7 @@ ef) as it is strictly reserved for new buyer acquisition.
        - Upgrade customer to **👑 VIP Gold Member**.
        - Prepaid Cashback increases from **5% to 8%** on all 100% UPI/Razorpay orders.
        - Priority same-day courier dispatch from Armoor Hub.
-       - Free surprise gift (miniature brass pooja bell or pure kundan bindi set) added to parcel manifest.
+       - Free surprise gift (Auspicious Haldi-Kumkum & Designer Kundan Bindi Set) added to parcel manifest.
   3. **Function & Return-Gift Bulk Inquiry Banner (`#bulkInquiryBanner`)**:
      - Embedded above the product catalogue: *"Organizing a Pooja, Wedding, or Family Function? 🪔🍃 Get wholesale slab discounts on 200+ Biodegradable Leaf Buffet Plates & Handcrafted Return Gifts!"*
      - Direct WhatsApp inquiry deep-link to merchant helpline (`+91 7013416296`) with pre-filled event quotation template.
@@ -817,7 +817,7 @@ ef) as it is strictly reserved for new buyer acquisition.
   1. **Skewed Weighted Probabilities (80% Low-Cost / Zero-Cash Drain Floor)**:
      - Calibrate odds so the vast majority of spins fall into safe, high-perceived-value categories:
        - **₹50 Wallet Cash (53% weight)**: Safe, high-frequency discount that triggers immediate first purchases.
-       - **🎁 Free Surprise Gift in Box (27% weight)**: Packed free inside the parcel (Miniature Brass Pooja Bell or Kundan Bindi Set). High emotional perceived value for festive shoppers, near-zero margin cost (~₹15 wholesale).
+       - **🎁 Free Surprise Gift in Box (27% weight)**: Packed free inside the parcel (Auspicious Haldi-Kumkum & Designer Kundan Bindi Set). High emotional perceived value for festive shoppers, near-zero margin cost (~₹15 wholesale).
        - **₹75 Festive Cash (12% weight)**: Mid-tier cart booster for carts ₹500+.
        - **₹100 Bonus Cash (4% weight)**: Low-frequency reward.
        - **👑 Instant VIP Gold Tier (2% weight)**: Upgrades customer to 8% lifetime prepaid cashback.
