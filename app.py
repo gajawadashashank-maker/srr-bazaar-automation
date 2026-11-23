@@ -474,26 +474,31 @@ def sync_product_to_website_catalogue(
             header = b""
             with open(image_path, "rb") as f_chk:
                 header = f_chk.read(16)
-            if b"ftyp" in header or image_path.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}:
+            if b"ftyp" in header or b"moov" in header or image_path.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}:
                 is_video_input = True
 
         if is_video_input:
             vid_src = str(video_path if (video_path and Path(video_path).exists()) else image_path)
             extracted = False
-            for seek_t in ["00:00:01", "00:00:00.500", "00:00:00"]:
+            for seek_t in ["00:00:00.800", "00:00:00.300", "00:00:00.000", "00:00:01"]:
                 cmd = [
-                    "ffmpeg", "-y", "-i", vid_src,
+                    "ffmpeg", "-y",
                     "-ss", seek_t,
-                    "-vframes", "1", "-q:v", "2",
-                    "-update", "1",
+                    "-i", vid_src,
+                    "-vframes", "1",
+                    "-q:v", "2",
                     str(target_img_path)
                 ]
                 try:
                     res = subprocess.run(cmd, capture_output=True)
                     if res.returncode == 0 and target_img_path.exists() and target_img_path.stat().st_size > 1000:
-                        extracted = True
-                        logger.info("Auto-extracted JPEG cover from video at %s: %s", seek_t, target_img_path)
-                        break
+                        # Double-check it's a valid JPEG, not a copied MP4
+                        with open(target_img_path, "rb") as f_res:
+                            magic = f_res.read(4)
+                        if magic.startswith(b"\xff\xd8"):
+                            extracted = True
+                            logger.info("Auto-extracted JPEG cover from video at %s: %s", seek_t, target_img_path)
+                            break
                 except Exception:
                     pass
             if not extracted:
@@ -542,17 +547,6 @@ def sync_product_to_website_catalogue(
         # 8. Pure Earrings & Bangles (when not a full necklace/bridal set)
         elif not any(has_word(x) for x in ["necklace", "haram", "choker", "haar", "kundan", "jadau", "bridal"]) and any(has_word(x) for x in ["earring", "earrings", "jhumka", "jhumkas", "stud", "studs", "bangle", "bangles", "kada"]):
             category = "earrings"
-        # 9. Dry Fruits & Nuts
-        elif any(has_word(x) for x in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dryfruit", "dryfruits", "dates", "khajoor", "anjeer"]):
-            category = "dryfruits"
-        # 10. Snacks & Namkeen
-        elif any(has_word(x) for x in ["chips", "biscuit", "biscuits", "namkeen", "mixture", "cookie", "cookies", "murukku", "sev", "bhujia"]):
-            category = "snacks"
-        # 11. Groceries & Daily Staples (STRICT WHOLE WORD ONLY)
-        elif any(has_word(x) for x in ["grocery", "groceries", "rice", "dal", "flour", "atta", "wheat", "ghee", "masala", "spices", "chilli", "mirchi", "turmeric", "salt", "sugar", "jaggery", "bellam", "rava", "suji", "maida", "besan", "pulses", "lentils", "tamarind"]):
-            category = "groceries"
-        else:
-            category = "necklace"
         # 9. Dry Fruits & Nuts
         elif any(has_word(x) for x in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dryfruit", "dryfruits", "dates", "khajoor", "anjeer"]):
             category = "dryfruits"
@@ -775,27 +769,34 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
         job_output_dir = WHATSAPP_OUTPUT_DIR / job_id
         instagram_caption = build_instagram_caption(product_name, price, description)
 
-        is_video = extension in {".mp4", ".mov", ".3gp", ".webm", ".avi"}
+        header = b""
+        if image_path.exists():
+            with open(image_path, "rb") as f_chk:
+                header = f_chk.read(16)
+        is_video = (extension in {".mp4", ".mov", ".3gp", ".webm", ".avi"}) or (b"ftyp" in header or b"moov" in header)
         cover_image_path = image_path
 
         if is_video:
             update_whatsapp_job(message_id, status="extracting_frame")
             cover_image_path = WHATSAPP_UPLOAD_DIR / f"{safe_message_key}_thumb.jpg"
             thumb_ok = False
-            for seek_t in ["00:00:01", "00:00:00.500", "00:00:00"]:
+            for seek_t in ["00:00:00.800", "00:00:00.300", "00:00:00.000", "00:00:01"]:
                 cmd = [
-                    "ffmpeg", "-y", "-i", str(image_path),
+                    "ffmpeg", "-y",
                     "-ss", seek_t,
-                    "-vframes", "1", "-q:v", "2",
-                    "-update", "1",
+                    "-i", str(image_path),
+                    "-vframes", "1",
+                    "-q:v", "2",
                     str(cover_image_path)
                 ]
                 try:
                     subprocess.run(cmd, check=True, capture_output=True)
                     if cover_image_path.exists() and cover_image_path.stat().st_size > 1000:
-                        thumb_ok = True
-                        logger.info("Extracted video thumbnail at %s: %s (%d bytes)", seek_t, cover_image_path, cover_image_path.stat().st_size)
-                        break
+                        with open(cover_image_path, "rb") as f_res:
+                            if f_res.read(4).startswith(b"\xff\xd8"):
+                                thumb_ok = True
+                                logger.info("Extracted video thumbnail at %s: %s (%d bytes)", seek_t, cover_image_path, cover_image_path.stat().st_size)
+                                break
                 except Exception as e:
                     logger.warning("Could not extract frame at %s via ffmpeg: %s", seek_t, e)
 

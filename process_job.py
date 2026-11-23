@@ -370,26 +370,29 @@ def sync_product_to_website_catalogue(
             header = b""
             with open(image_path, "rb") as f_chk:
                 header = f_chk.read(16)
-            if b"ftyp" in header or image_path.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}:
+            if b"ftyp" in header or b"moov" in header or image_path.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}:
                 is_video_input = True
 
         if is_video_input:
             vid_src = str(video_path if (video_path and Path(video_path).exists()) else image_path)
             extracted = False
-            for seek_t in ["00:00:01", "00:00:00.500", "00:00:00"]:
+            for seek_t in ["00:00:00.800", "00:00:00.300", "00:00:00.000", "00:00:01"]:
                 cmd = [
-                    "ffmpeg", "-y", "-i", vid_src,
+                    "ffmpeg", "-y",
                     "-ss", seek_t,
-                    "-vframes", "1", "-q:v", "2",
-                    "-update", "1",
+                    "-i", vid_src,
+                    "-vframes", "1",
+                    "-q:v", "2",
                     str(target_img_path)
                 ]
                 try:
                     res = subprocess.run(cmd, capture_output=True)
                     if res.returncode == 0 and target_img_path.exists() and target_img_path.stat().st_size > 1000:
-                        extracted = True
-                        logger.info("Auto-extracted JPEG cover from video at %s: %s", seek_t, target_img_path)
-                        break
+                        with open(target_img_path, "rb") as f_res:
+                            if f_res.read(4).startswith(b"\xff\xd8"):
+                                extracted = True
+                                logger.info("Auto-extracted JPEG cover from video at %s: %s", seek_t, target_img_path)
+                                break
                 except Exception:
                     pass
             if not extracted:
@@ -439,17 +442,6 @@ def sync_product_to_website_catalogue(
         # 8. Pure Earrings & Bangles (when not a full necklace/bridal set)
         elif not any(has_word(x) for x in ["necklace", "haram", "choker", "haar", "kundan", "jadau", "bridal"]) and any(has_word(x) for x in ["earring", "earrings", "jhumka", "jhumkas", "stud", "studs", "bangle", "bangles", "kada"]):
             category = "earrings"
-        # 9. Dry Fruits & Nuts
-        elif any(has_word(x) for x in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dryfruit", "dryfruits", "dates", "khajoor", "anjeer"]):
-            category = "dryfruits"
-        # 10. Snacks & Namkeen
-        elif any(has_word(x) for x in ["chips", "biscuit", "biscuits", "namkeen", "mixture", "cookie", "cookies", "murukku", "sev", "bhujia"]):
-            category = "snacks"
-        # 11. Groceries & Daily Staples (STRICT WHOLE WORD ONLY)
-        elif any(has_word(x) for x in ["grocery", "groceries", "rice", "dal", "flour", "atta", "wheat", "ghee", "masala", "spices", "chilli", "mirchi", "turmeric", "salt", "sugar", "jaggery", "bellam", "rava", "suji", "maida", "besan", "pulses", "lentils", "tamarind"]):
-            category = "groceries"
-        else:
-            category = "necklace"
         # 9. Dry Fruits & Nuts
         elif any(has_word(x) for x in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dryfruit", "dryfruits", "dates", "khajoor", "anjeer"]):
             category = "dryfruits"
@@ -600,28 +592,35 @@ def main() -> int:
     logger.info("Parsed Product: '%s' | Price: '%s'", product_name, price)
 
     # 3. Process Video or Generate all 4 Reel themes from Image
-    is_video = image_file.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}
+    header = b""
+    if image_file.exists():
+        with open(image_file, "rb") as f_chk:
+            header = f_chk.read(16)
+    is_video = (image_file.suffix.lower() in {".mp4", ".mov", ".3gp", ".webm", ".avi"}) or (b"ftyp" in header or b"moov" in header)
     catalog_cover_image = image_file
 
     if is_video:
         logger.info("Input media is a video (%s). Extracting cover thumbnail...", image_file.name)
         thumbnail_file = job_output_dir / f"{image_file.stem}_thumb.jpg"
         thumb_ok = False
-        for seek_t in ["00:00:01", "00:00:00.500", "00:00:00"]:
+        for seek_t in ["00:00:00.800", "00:00:00.300", "00:00:00.000", "00:00:01"]:
             cmd = [
-                "ffmpeg", "-y", "-i", str(image_file),
+                "ffmpeg", "-y",
                 "-ss", seek_t,
-                "-vframes", "1", "-q:v", "2",
-                "-update", "1",
+                "-i", str(image_file),
+                "-vframes", "1",
+                "-q:v", "2",
                 str(thumbnail_file)
             ]
             try:
                 subprocess.run(cmd, check=True, capture_output=True)
                 if thumbnail_file.exists() and thumbnail_file.stat().st_size > 1000:
-                    catalog_cover_image = thumbnail_file
-                    thumb_ok = True
-                    logger.info("Extracted cover thumbnail at %s: %s (%d bytes)", seek_t, thumbnail_file, thumbnail_file.stat().st_size)
-                    break
+                    with open(thumbnail_file, "rb") as f_res:
+                        if f_res.read(4).startswith(b"\xff\xd8"):
+                            catalog_cover_image = thumbnail_file
+                            thumb_ok = True
+                            logger.info("Extracted cover thumbnail at %s: %s (%d bytes)", seek_t, thumbnail_file, thumbnail_file.stat().st_size)
+                            break
             except Exception as e:
                 logger.warning("Could not extract thumbnail frame at %s via ffmpeg: %s", seek_t, e)
 
