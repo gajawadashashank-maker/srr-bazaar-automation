@@ -1500,7 +1500,7 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-maroon-950 text-stone-300 py-12 border-t border-amber-600/30 w-full max-w-full overflow-hidden">
+  <footer class="bg-maroon-950 text-stone-300 pt-12 pb-24 sm:pb-14 border-t border-amber-600/30 w-full max-w-full overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-full">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
 
@@ -1608,9 +1608,14 @@
           <span>•</span>
           <a href="javascript:void(0)" onclick="openPolicyModal('contact')"
             class="hover:text-amber-300 transition">Contact Us</a>
-          <span>•</span>
-          <button onclick="openMerchantLogin()" class="text-amber-400 hover:underline">Merchant Login</button>
         </div>
+      </div>
+      <!-- Merchant Login on next line to prevent overlap with floating buttons on iOS -->
+      <div class="pt-3 text-center">
+        <button onclick="openMerchantLogin()" class="text-amber-400/90 hover:text-amber-300 hover:underline text-xs inline-flex items-center gap-1.5 transition">
+          <i data-lucide="lock" class="w-3 h-3"></i>
+          <span>Merchant Login</span>
+        </button>
       </div>
     </div>
   </footer>
@@ -4691,8 +4696,8 @@
             if (thumb) thumb.src = latest.image;
             if (toastTitle) toastTitle.textContent = latest.title;
             if (toastPrice) toastPrice.textContent = `₹${latest.price.toLocaleString('en-IN')}`;
-            toast.classList.remove('translate-y-32', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
+            toast.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
           }
         }, 1500);
       }
@@ -4702,8 +4707,8 @@
       if (e) e.stopPropagation();
       const toast = document.getElementById('freshDropToast');
       if (toast) {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-32', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        toast.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
       }
       if (products && products[0]) {
         sessionStorage.setItem('srr_drop_dismissed_' + products[0].id, 'true');
@@ -7844,8 +7849,8 @@
       const oneDay = 24 * 60 * 60 * 1000;
 
       const isExpired = (expiry > 0 && now >= expiry) ||
-                        (lastSpin > 0 && (now - lastSpin) >= oneDay) ||
-                        (!expiry && festiveCash > 0);
+        (lastSpin > 0 && (now - lastSpin) >= oneDay) ||
+        (!expiry && festiveCash > 0);
 
       if (isExpired) {
         // 24-Hour window has expired! Expire temporary festive spin cash & gifts
@@ -9929,7 +9934,7 @@ Please pack and dispatch! ✨`
 
   <!-- Floating Fresh Drop Pill Alert (Non-intrusive, 1-tap view) -->
   <div id="freshDropToast"
-    class="fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-500 ease-out max-w-[340px] sm:max-w-sm pointer-events-auto">
+    class="fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-500 ease-out max-w-[340px] sm:max-w-sm pointer-events-none">
     <div
       class="bg-stone-900/95 backdrop-blur-md text-white p-3 rounded-2xl shadow-2xl border border-amber-400/40 flex items-center gap-3">
       <div id="freshDropThumbContainer"
