@@ -192,7 +192,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
               </li>
               <li class="flex items-center gap-1.5">
                 <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i>
-                <span>Live video verification available on WhatsApp prior to shipping</span>
+                <span>Direct WhatsApp assistance & express door delivery across India</span>
               </li>
             </ul>
           </div>

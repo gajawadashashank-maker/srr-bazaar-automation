@@ -232,13 +232,13 @@ def build_instagram_caption(product_name: str, price: str, description: str, pro
             f"🏷️ Launch Price: {price_str} ONLY\n"
             "🚚 FREE Express Shipping Pan-India\n"
             "📦 Cash on Delivery (COD) Available\n"
-            "💯 100% Quality Assurance & Video Call Preview"
+            "💯 100% Quality Assurance & Genuine Products Guaranteed"
         )
     else:
         caption_parts.append(
             "🚚 FREE Express Shipping Pan-India\n"
             "📦 Cash on Delivery (COD) Available\n"
-            "💯 100% Quality Assurance & Video Call Preview"
+            "💯 100% Quality Assurance & Genuine Products Guaranteed"
         )
 
     product_url = f"https://srrbazaar.com/p/{product_id}.html" if product_id else "https://srrbazaar.com"
