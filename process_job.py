@@ -789,7 +789,7 @@ def main() -> int:
                 f"🎉 Your Reel for '{product_name}' has been created and published to Instagram!\n\n"
                 f"Theme: {selected_video.stem}\n"
                 f"Price: {price}\n"
-                f"Status: Live on Instagram Reel, Story & Website Catalogue"
+                f"Status: Live on Instagram Reel, Story, YouTube Shorts & Website Catalogue"
             )
             send_whatsapp_reply(args.sender, notification_text)
 
