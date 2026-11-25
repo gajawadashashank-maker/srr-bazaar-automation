@@ -216,13 +216,13 @@ def parse_product_caption(caption: str) -> tuple[str, str, str]:
     return product_name, description, price_str
 
 
-def build_instagram_caption(product_name: str, price: str, description: str) -> str:
+def build_instagram_caption(product_name: str, price: str, description: str, product_id: str | None = None) -> str:
     caption_parts = []
     clean_name = product_name.strip() if product_name else "Exclusive Collection"
-    caption_parts.append(f"✨ {clean_name} ✨")
+    caption_parts.append(f"✨ {clean_name} — SRR Bazaar Sujatha Collections ✨")
 
     if description.strip():
-        caption_parts.append(description.strip())
+        caption_parts.append(f"📝 Description:\n{description.strip()}")
 
     price_str = price.strip() if price else ""
     if price_str:
@@ -232,29 +232,34 @@ def build_instagram_caption(product_name: str, price: str, description: str) -> 
             f"🏷️ Launch Price: {price_str} ONLY\n"
             "🚚 FREE Express Shipping Pan-India\n"
             "📦 Cash on Delivery (COD) Available\n"
-            "💯 Premium Quality Guaranteed"
+            "💯 100% Quality Assurance & Video Call Preview"
         )
     else:
         caption_parts.append(
             "🚚 FREE Express Shipping Pan-India\n"
             "📦 Cash on Delivery (COD) Available\n"
-            "💯 Premium Quality Guaranteed"
+            "💯 100% Quality Assurance & Video Call Preview"
         )
 
+    product_url = f"https://srrbazaar.com/p/{product_id}.html" if product_id else "https://srrbazaar.com"
+
     caption_parts.append(
-        "👉 HOW TO ORDER:\n"
-        "1️⃣ Tap the link in bio (@sujatha60861) or visit https://srrbazaar.com\n"
-        "2️⃣ WhatsApp / Call to order directly:\n"
-        "   📲 +91 9948633303\n"
-        "   📲 +91 8185012453\n"
-        "3️⃣ Or comment \"PRICE\" / \"BUY\" below and we'll DM you the direct link!"
+        "👉 HOW TO ORDER & EXPLORE:\n"
+        f"🌐 Product Link: {product_url}\n"
+        "🛍️ Official Store: https://srrbazaar.com\n"
+        "📸 Instagram: https://www.instagram.com/sujatha60861/\n"
+        "📺 YouTube Channel & Shorts: https://www.youtube.com/@SRRBazaar\n"
+        "📲 WhatsApp / Call to order directly:\n"
+        "   +91 8185012453\n"
+        "   +91 9948633303\n"
+        "💬 Comment \"BUY\" below and we will DM you the direct purchase link!"
     )
 
     caption_parts.append(
-        "#SRRBazaar #SujathaCollections #Sarees #SareeLove #KhadiCotton #SilkSarees "
-        "#FashionJewellery #KundanJewellery #BridalJewellery #Kurtis #HomeDecor "
-        "#IndianFashion #OnlineShoppingIndia #PanIndiaShipping #COD #HyderabadShopping "
-        "#BestDeals #DesiFashion #FestiveWear"
+        "#SRRBazaar #SujathaCollections #Jewellery #Sarees #PoojaSamagri #HomeSupplies "
+        "#FashionJewellery #KundanJewellery #BridalJewellery #KhadiCotton #SilkSarees "
+        "#IndianFashion #OnlineShoppingIndia #PanIndiaShipping #COD #Shorts #YouTubeShorts "
+        "#TrendingReels #DesiShopping #BestDeals #FestiveShopping"
     )
 
     return "\n\n".join(caption_parts)[:2200]

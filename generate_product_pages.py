@@ -174,9 +174,58 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
             </div>
           </div>
 
-          <p class="text-xs sm:text-sm text-stone-600 leading-relaxed pt-2">
-            {description}
-          </p>
+          <div class="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80 space-y-2">
+            <h3 class="text-xs font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="info" class="w-3.5 h-3.5 text-amber-600"></i> Product Overview & Quality Details
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-700 leading-relaxed">
+              {description}
+            </p>
+            <ul class="text-[11px] sm:text-xs text-stone-600 space-y-1 pt-1 border-t border-stone-200/60">
+              <li class="flex items-center gap-1.5">
+                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>100% genuine quality & carefully inspected before dispatch</span>
+              </li>
+              <li class="flex items-center gap-1.5">
+                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>Safe, secure packaging & pan-India tracked delivery (3-5 business days)</span>
+              </li>
+              <li class="flex items-center gap-1.5">
+                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>Live video verification available on WhatsApp prior to shipping</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Official Social Channels -->
+          <div class="p-3 bg-amber-50/60 rounded-2xl border border-amber-200/70 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-amber-950 uppercase tracking-wider flex items-center gap-1">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i> Official Channels
+              </span>
+              <span class="text-[10px] text-amber-800 font-semibold">@SRRBazaar</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+              <a href="https://www.instagram.com/sujatha60861/" target="_blank"
+                 class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-xs transition">
+                <i data-lucide="instagram" class="w-3.5 h-3.5"></i>
+                <span>@sujatha60861</span>
+              </a>
+              <a href="https://www.youtube.com/@SRRBazaar" target="_blank"
+                 class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-red-600 hover:bg-red-700 text-white shadow-xs transition">
+                <i data-lucide="youtube" class="w-3.5 h-3.5"></i>
+                <span>@SRRBazaar</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Hashtags -->
+          <div class="pt-1">
+            <span class="text-[10px] font-bold text-stone-500 uppercase tracking-wider block mb-1.5">Popular Tags</span>
+            <div class="flex flex-wrap gap-1.5 text-[11px]">
+              {hashtags_html}
+            </div>
+          </div>
         </div>
 
         <!-- Action Buttons -->
@@ -205,12 +254,33 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-stone-900 text-stone-400 py-6 px-4 text-center text-xs space-y-2">
+  <footer class="bg-stone-900 text-stone-400 py-6 px-4 text-center text-xs space-y-3">
     <p>© 2026 SRR Bazaar • Sujatha Collections (@sujatha60861). Free shipping pan-India.</p>
-    <div class="flex items-center justify-center gap-4 text-stone-400">
+    <div class="flex items-center justify-center gap-3 text-white">
+      <a href="https://www.instagram.com/sujatha60861/" target="_blank"
+         class="w-8 h-8 rounded-full bg-white/10 hover:bg-pink-600 flex items-center justify-center transition"
+         title="Instagram @sujatha60861">
+        <i data-lucide="instagram" class="w-4 h-4"></i>
+      </a>
+      <a href="https://www.youtube.com/@SRRBazaar" target="_blank"
+         class="w-8 h-8 rounded-full bg-white/10 hover:bg-red-600 flex items-center justify-center transition"
+         title="YouTube @SRRBazaar">
+        <i data-lucide="youtube" class="w-4 h-4"></i>
+      </a>
+      <a href="https://wa.me/918185012453" target="_blank"
+         class="w-8 h-8 rounded-full bg-white/10 hover:bg-emerald-600 flex items-center justify-center transition"
+         title="WhatsApp Order">
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+      </a>
+    </div>
+    <div class="flex items-center justify-center gap-4 text-stone-400 text-[11px]">
       <a href="/return-policy.html" class="hover:text-amber-300 underline">Cancellation & Refund Policy</a>
       <span>•</span>
       <a href="/" class="hover:text-amber-300 underline">Storefront Home</a>
+      <span>•</span>
+      <a href="https://www.youtube.com/@SRRBazaar" target="_blank" class="hover:text-amber-300 underline">YouTube Channel</a>
+      <span>•</span>
+      <a href="https://www.instagram.com/sujatha60861/" target="_blank" class="hover:text-amber-300 underline">Instagram Profile</a>
     </div>
   </footer>
 
@@ -264,6 +334,28 @@ def generate_all_product_pages() -> int:
         wa_order_msg = f"Hi SRR Bazaar, I would like to order *{p.get('title')}* (Price: ₹{price}). Link: https://srrbazaar.com/p/{p_id}.html"
         wa_text = urllib.parse.quote(wa_order_msg)
 
+        cat_lower = str(p.get("category", "")).lower()
+        t_lower = title.lower()
+        tags_list = ["#SRRBazaar", "#SujathaCollections"]
+        if "saree" in cat_lower or "saree" in t_lower:
+            tags_list.extend(["#Sarees", "#KhadiCotton", "#SilkSarees", "#EthnicWear"])
+        elif any(k in cat_lower or k in t_lower for k in ["jewel", "necklace", "earring", "mangalsutra", "haram", "chain", "bangle"]):
+            tags_list.extend(["#FashionJewellery", "#KundanJewellery", "#BridalJewellery", "#TraditionalJewellery"])
+        elif any(k in cat_lower or k in t_lower for k in ["cleaning", "bleach", "acid", "phenyl"]):
+            tags_list.extend(["#HouseholdSupplies", "#CleaningEssentials", "#BazaarDeals"])
+        elif any(k in cat_lower or k in t_lower for k in ["samagri", "decor", "pooja", "wick", "vattulu", "diya"]):
+            tags_list.extend(["#PoojaSamagri", "#HomeDecor", "#FestiveEssentials"])
+        elif any(k in cat_lower or k in t_lower for k in ["disposable", "plate", "cup", "buffet"]):
+            tags_list.extend(["#BuffetPlates", "#EcoFriendly", "#PartySupplies"])
+        else:
+            tags_list.extend(["#ShoppingIndia", "#TrendingDeals", "#PanIndiaShipping"])
+        tags_list.extend(["#COD", "#FreeShipping", "#OnlineShoppingIndia"])
+
+        hashtags_html = "".join(
+            f'<span class="bg-stone-100 text-stone-700 px-2 py-0.5 rounded-md border border-stone-200/60 font-medium">{t}</span>'
+            for t in tags_list
+        )
+
         page_content = PAGE_TEMPLATE.format(
             id=p_id,
             title=title,
@@ -278,6 +370,7 @@ def generate_all_product_pages() -> int:
             relative_image=relative_image,
             absolute_image=absolute_image,
             wa_text=wa_text,
+            hashtags_html=hashtags_html,
         )
 
         out_file = PAGES_DIR / f"{p_id}.html"
