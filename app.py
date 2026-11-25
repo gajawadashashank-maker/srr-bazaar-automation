@@ -399,6 +399,7 @@ def regenerate_google_merchant_feed() -> None:
         if not products_file.exists():
             return
         products_data = json.loads(products_file.read_text(encoding="utf-8"))
+        ET.register_namespace("g", "http://base.google.com/ns/1.0")
 
         def get_g_category(cat: str, title: str) -> str:
             t = title.lower()
@@ -406,17 +407,21 @@ def regenerate_google_merchant_feed() -> None:
                 return "Home & Garden > Lighting > Light Bulbs"
             if cat == "cleaning" or any(k in t for k in ["bleach", "acid", "phenyl", "cleaner", "hygiene", "detergent", "disinfectant"]):
                 return "Home & Garden > Household Supplies > Household Cleaning Supplies"
+            if cat == "disposables" or any(k in t for k in ["plate", "cup", "disposable", "buffet", "leaf"]):
+                return "Home & Garden > Kitchen & Dining > Tableware > Disposable Tableware"
+            if cat == "groceries" or any(k in t for k in ["grocery", "grain", "dal", "flour", "oil", "rice", "salt"]):
+                return "Food, Beverages & Tobacco > Food Items"
             if "saree" in t or cat == "saree":
                 return "Apparel & Accessories > Clothing > Traditional & Cultural Wear > Sarees"
-            if any(k in t for k in ["diya", "tray", "plate", "pooja", "bowl", "lotus flower", "nomu", "shatanamavali", "kadapalu", "wooden steps", "decor"]):
+            if cat in ["samagri", "decor"] or any(k in t for k in ["diya", "tray", "plate", "pooja", "bowl", "lotus flower", "nomu", "shatanamavali", "kadapalu", "wooden steps", "decor", "wick", "vattulu", "camphor", "dhoop"]):
                 return "Home & Garden > Religious & Ceremonial"
             return "Apparel & Accessories > Jewelry"
 
-        rss = ET.Element("rss", {"version": "2.0", "xmlns:g": "http://base.google.com/ns/1.0"})
+        rss = ET.Element("rss", {"version": "2.0"})
         channel = ET.SubElement(rss, "channel")
         ET.SubElement(channel, "title").text = "SRR Bazaar — Sujatha Collections Product Feed"
         ET.SubElement(channel, "link").text = "https://srrbazaar.com"
-        ET.SubElement(channel, "description").text = "Authentic Sarees, Handcrafted Bridal Jewellery, Jadau Kundan, and Home Decor"
+        ET.SubElement(channel, "description").text = "Authentic Sarees, Handcrafted Bridal Jewellery, Jadau Kundan, Pooja Essentials, and Home Supplies"
 
         for p in products_data:
             item = ET.SubElement(channel, "item")
@@ -425,7 +430,9 @@ def regenerate_google_merchant_feed() -> None:
             ET.SubElement(item, "{http://base.google.com/ns/1.0}title").text = clean_title
             clean_desc = (p.get("description") or f"Exclusive {clean_title} with premium finish.").strip()
             ET.SubElement(item, "{http://base.google.com/ns/1.0}description").text = clean_desc
-            ET.SubElement(item, "{http://base.google.com/ns/1.0}link").text = f"https://srrbazaar.com/#prod-{p['id']}"
+            canonical_url = f"https://srrbazaar.com/p/{p['id']}.html"
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}link").text = canonical_url
+            ET.SubElement(item, "{http://base.google.com/ns/1.0}canonical_link").text = canonical_url
             img_path = p.get("image", "").lstrip("/")
             ET.SubElement(item, "{http://base.google.com/ns/1.0}image_link").text = f"https://srrbazaar.com/{img_path}"
             ET.SubElement(item, "{http://base.google.com/ns/1.0}condition").text = "new"
