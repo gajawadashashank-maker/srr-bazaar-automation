@@ -272,6 +272,11 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
          title="WhatsApp Order">
         <i data-lucide="message-circle" class="w-4 h-4"></i>
       </a>
+      <a href="tel:+917013416296"
+         class="w-8 h-8 rounded-full bg-white/10 hover:bg-royal-600 flex items-center justify-center transition"
+         title="Helpline +91 70134 16296">
+        <i data-lucide="phone" class="w-4 h-4"></i>
+      </a>
     </div>
     <div class="flex items-center justify-center gap-4 text-stone-400 text-[11px]">
       <a href="/return-policy.html" class="hover:text-amber-300 underline">Cancellation & Refund Policy</a>

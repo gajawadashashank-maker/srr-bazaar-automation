@@ -201,6 +201,7 @@ def build_instagram_caption(product_name: str, price: str, description: str, pro
         "📲 WhatsApp / Call to order directly:\n"
         "   +91 8185012453\n"
         "   +91 9948633303\n"
+        "   +91 7013416296\n"
         "💬 Comment \"BUY\" below and we will DM you the direct purchase link!"
     )
 
