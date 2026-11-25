@@ -8172,10 +8172,15 @@
 
       if (isExpired) {
         // 24-Hour window has expired! Expire temporary festive spin cash & gifts
+        const currentBal = parseInt(localStorage.getItem('srr_wallet_balance') || '0', 10);
         if (festiveCash > 0) {
-          deductWalletCash(festiveCash);
-          localStorage.removeItem('srr_festive_cash');
+          const newBal = Math.max(0, currentBal - festiveCash);
+          localStorage.setItem('srr_wallet_balance', newBal.toString());
+        } else if (currentBal > 0) {
+          // Fallback: If festiveCash was missing but festive timer expired, reset unbacked balance
+          localStorage.setItem('srr_wallet_balance', '0');
         }
+        localStorage.removeItem('srr_festive_cash');
         localStorage.removeItem('srr_festive_expiry');
         localStorage.removeItem('srr_free_gift');
         localStorage.removeItem('srr_last_prize_name');
@@ -8197,6 +8202,16 @@
         updateCartUI();
       }
     }
+
+    // Real-time 24h festive reward heartbeat (checks every 3 seconds)
+    setInterval(() => {
+      const exp = parseInt(localStorage.getItem('srr_festive_expiry') || '0', 10);
+      const spinTime = parseInt(localStorage.getItem('srr_last_spin_time') || '0', 10);
+      const nowTime = Date.now();
+      if ((exp > 0 && nowTime >= exp) || (spinTime > 0 && (nowTime - spinTime) >= 24 * 60 * 60 * 1000)) {
+        checkAndExpireFestiveRewards();
+      }
+    }, 3000);
 
     function initFestiveTimer() {
       checkAndExpireFestiveRewards();
