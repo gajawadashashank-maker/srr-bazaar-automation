@@ -20,7 +20,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 
-from instagram_publisher import publish_reel
+from instagram_publisher import publish_reel, publish_story
 from youtube_publisher import publish_youtube_short
 from reel_generator import generate_all
 
@@ -991,6 +991,13 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
         publish_result = publish_reel(video_url, instagram_caption)
         instagram_media_id = str(publish_result.get("media_id", ""))
 
+        # Auto-publish to Instagram Stories
+        try:
+            story_res = publish_story(video_url, is_video=True)
+            logger.info("SUCCESS: Instagram Story published! Media ID: %s", story_res.get("media_id"))
+        except Exception as story_err:
+            logger.warning("Instagram Story publishing skipped/failed: %s", story_err)
+
         # Auto-publish to YouTube Shorts (if configured)
         try:
             yt_title = f"{product_name} {price} | SRR Bazaar #Shorts"
@@ -1492,6 +1499,12 @@ async def publish_product(
         selected_reel = Path(random.choice(generated_reels))
         video_url = upload_to_cloudinary(selected_reel)
         publish_result = publish_reel(video_url, caption)
+
+        # Auto-publish to Instagram Stories
+        try:
+            publish_story(video_url, is_video=True)
+        except Exception as story_err:
+            logger.warning("Instagram Story publishing skipped/failed: %s", story_err)
 
         return {
             "success": True,

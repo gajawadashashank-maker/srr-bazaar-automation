@@ -23,7 +23,7 @@ import cloudinary.uploader
 import requests
 from dotenv import load_dotenv
 
-from instagram_publisher import publish_reel
+from instagram_publisher import publish_reel, publish_story
 from youtube_publisher import publish_youtube_short
 from reel_generator import THEMES, generate_all, generate_reel
 
@@ -763,6 +763,13 @@ def main() -> int:
         media_id = publish_res.get("media_id", "")
         logger.info("SUCCESS: Instagram Reel published! Media ID: %s", media_id)
 
+        # Auto-publish to Instagram Stories
+        try:
+            story_res = publish_story(video_url, is_video=True)
+            logger.info("SUCCESS: Instagram Story published! Media ID: %s", story_res.get("media_id"))
+        except Exception as story_err:
+            logger.warning("Instagram Story publishing skipped/failed: %s", story_err)
+
         # Publish to YouTube Shorts (if configured)
         yt_title = f"{product_name} {price} | SRR Bazaar #Shorts"
         try:
@@ -782,7 +789,7 @@ def main() -> int:
                 f"🎉 Your Reel for '{product_name}' has been created and published to Instagram!\n\n"
                 f"Theme: {selected_video.stem}\n"
                 f"Price: {price}\n"
-                f"Status: Live on Instagram & Website Catalogue"
+                f"Status: Live on Instagram Reel, Story & Website Catalogue"
             )
             send_whatsapp_reply(args.sender, notification_text)
 
