@@ -22,6 +22,7 @@ from fastapi.responses import PlainTextResponse
 
 from instagram_publisher import publish_reel, publish_story
 from youtube_publisher import publish_youtube_short
+from facebook_publisher import publish_facebook_reel
 from reel_generator import generate_all
 
 # Load the project .env once, before reading configuration.
@@ -1052,6 +1053,19 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
                 logger.warning("YouTube Shorts publishing returned: %s", yt_res)
         except Exception as yt_err:
             logger.warning("YouTube Shorts publishing skipped/failed: %s", yt_err)
+
+        # Auto-publish to Facebook Reels (if configured)
+        try:
+            fb_res = publish_facebook_reel(
+                video_source=str(selected_reel),
+                caption=instagram_caption,
+            )
+            if fb_res.get("status") == "published":
+                logger.info("SUCCESS: Facebook Reel published! URL: %s", fb_res.get("url"))
+            else:
+                logger.warning("Facebook Reels publishing returned: %s", fb_res)
+        except Exception as fb_err:
+            logger.warning("Facebook Reels publishing skipped/failed: %s", fb_err)
         update_whatsapp_job(
             message_id,
             status="published",

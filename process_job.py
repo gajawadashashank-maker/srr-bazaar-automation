@@ -25,6 +25,7 @@ from dotenv import load_dotenv
 
 from instagram_publisher import publish_reel, publish_story
 from youtube_publisher import publish_youtube_short
+from facebook_publisher import publish_facebook_reel
 from reel_generator import THEMES, generate_all, generate_reel
 
 load_dotenv(override=True)
@@ -820,6 +821,19 @@ def main() -> int:
                 logger.info("SUCCESS: YouTube Short published! URL: %s", yt_res.get("url"))
         except Exception as yt_err:
             logger.warning("YouTube Shorts publishing skipped/failed: %s", yt_err)
+
+        # Publish to Facebook Reels (if configured)
+        try:
+            fb_res = publish_facebook_reel(
+                video_source=str(selected_video),
+                caption=ig_caption,
+            )
+            if fb_res.get("status") == "published":
+                logger.info("SUCCESS: Facebook Reel published! URL: %s", fb_res.get("url"))
+            else:
+                logger.warning("Facebook Reels publishing returned: %s", fb_res)
+        except Exception as fb_err:
+            logger.warning("Facebook Reels publishing skipped/failed: %s", fb_err)
 
         # Notify sender on WhatsApp
         if args.sender:
