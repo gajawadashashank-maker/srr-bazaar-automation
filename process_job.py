@@ -641,6 +641,28 @@ def sync_product_to_website_catalogue(
             generate_all_product_pages()
         except Exception as gen_err:
             logger.warning("Could not generate individual product page: %s", gen_err)
+
+        # Auto-regenerate Google Merchant Feed XML so new product appears in Google Shopping
+        try:
+            from app import regenerate_google_merchant_feed
+            regenerate_google_merchant_feed()
+        except Exception as feed_err:
+            logger.warning("Could not auto-regenerate google_merchant_feed.xml: %s", feed_err)
+
+        # Auto-publish to Pinterest (if configured)
+        try:
+            from pinterest_publisher import publish_pin
+            pin_res = publish_pin(
+                title=f"{product_name} {price_str} | SRR Bazaar",
+                description=description,
+                product_link=f"https://srrbazaar.com/p/{new_id}.html",
+                image_url=f"images/catalog/{target_img_name}",
+                category=category,
+            )
+            if pin_res.get("status") == "published":
+                logger.info("SUCCESS: Pinterest Pin published! URL: %s", pin_res.get("url"))
+        except Exception as pin_err:
+            logger.warning("Pinterest Pin publishing skipped/failed: %s", pin_err)
     except Exception as e:
         logger.warning("Could not auto-sync product to website catalogue: %s", e)
 
