@@ -23,15 +23,25 @@ YOUTUBE_REFRESH_TOKEN = os.getenv("YOUTUBE_REFRESH_TOKEN")
 
 def get_youtube_access_token() -> Optional[str]:
     """Exchange refresh token for an active Google OAuth2 access token."""
-    if not (YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET and YOUTUBE_REFRESH_TOKEN):
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(override=True)
+    except Exception:
+        pass
+
+    client_id = os.getenv("YOUTUBE_CLIENT_ID") or YOUTUBE_CLIENT_ID
+    client_secret = os.getenv("YOUTUBE_CLIENT_SECRET") or YOUTUBE_CLIENT_SECRET
+    refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN") or YOUTUBE_REFRESH_TOKEN
+
+    if not (client_id and client_secret and refresh_token):
         logger.warning("YouTube credentials (CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN) not configured.")
         return None
 
     token_url = "https://oauth2.googleapis.com/token"
     data = {
-        "client_id": YOUTUBE_CLIENT_ID,
-        "client_secret": YOUTUBE_CLIENT_SECRET,
-        "refresh_token": YOUTUBE_REFRESH_TOKEN,
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "refresh_token": refresh_token,
         "grant_type": "refresh_token",
     }
     try:

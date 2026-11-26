@@ -1007,11 +1007,15 @@ def process_whatsapp_image(message: dict[str, Any]) -> None:
         # Auto-publish to YouTube Shorts (if configured)
         try:
             yt_title = f"{product_name} {price} | SRR Bazaar #Shorts"
-            publish_youtube_short(
+            yt_res = publish_youtube_short(
                 video_source=str(selected_reel),
                 title=yt_title,
                 description=instagram_caption,
             )
+            if yt_res.get("status") == "published":
+                logger.info("SUCCESS: YouTube Short published! URL: %s", yt_res.get("url"))
+            else:
+                logger.warning("YouTube Shorts publishing returned: %s", yt_res)
         except Exception as yt_err:
             logger.warning("YouTube Shorts publishing skipped/failed: %s", yt_err)
         update_whatsapp_job(
