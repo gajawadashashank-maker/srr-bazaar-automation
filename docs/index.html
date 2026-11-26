@@ -3352,13 +3352,13 @@
   {
     "id": 105580357,
     "title": "Vedaka California almonds 500g",
-    "category": "necklace",
+    "category": "dryfruits",
     "price": 602,
     "originalPrice": 903,
     "tag": "New Arrival",
     "image": "images/catalog/497344a5f2134409b449dde615bc7f89.jpg",
     "video": "videos/reel_105580357.mp4",
-    "description": "Exclusive Vedaka California almonds 500g by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "description": "Premium quality California Almonds (Badam) 500g by Vedaka. 100% natural, vacuum-packed to preserve crunch and freshness. Rich in vitamin E, dietary fiber, and healthy proteins. Express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
@@ -6706,16 +6706,20 @@
       let recommendedIds = [];
 
       try {
-        const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-        const stylistUrl = isLocal ? '/api/ai-stylist' : 'https://squander-gristle-panhandle.ngrok-free.dev/api/ai-stylist';
+        const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
+        const stylistUrl = isLocal ? 'http://127.0.0.1:8000/api/ai-stylist' : 'https://squander-gristle-panhandle.ngrok-free.dev/api/ai-stylist';
+        const controller = new AbortController();
+        const fetchTimeout = setTimeout(() => controller.abort(), 3500);
         const res = await fetch(stylistUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'ngrok-skip-browser-warning': 'true'
           },
-          body: JSON.stringify({ message: userText })
+          body: JSON.stringify({ message: userText }),
+          signal: controller.signal
         });
+        clearTimeout(fetchTimeout);
         if (res.ok) {
           const data = await res.json();
           aiReply = data.reply;

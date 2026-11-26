@@ -6973,16 +6973,20 @@
       let recommendedIds = [];
 
       try {
-        const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-        const stylistUrl = isLocal ? '/api/ai-stylist' : 'https://squander-gristle-panhandle.ngrok-free.dev/api/ai-stylist';
+        const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
+        const stylistUrl = isLocal ? 'http://127.0.0.1:8000/api/ai-stylist' : 'https://squander-gristle-panhandle.ngrok-free.dev/api/ai-stylist';
+        const controller = new AbortController();
+        const fetchTimeout = setTimeout(() => controller.abort(), 3500);
         const res = await fetch(stylistUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'ngrok-skip-browser-warning': 'true'
           },
-          body: JSON.stringify({ message: userText })
+          body: JSON.stringify({ message: userText }),
+          signal: controller.signal
         });
+        clearTimeout(fetchTimeout);
         if (res.ok) {
           const data = await res.json();
           aiReply = data.reply;

@@ -206,11 +206,43 @@ def parse_product_caption(caption: str) -> tuple[str, str, str]:
 
     description = "\n".join(description_lines).strip()
     if not description:
-        description = (
-            f"Exclusive {product_name} by SRR Bazaar. "
-            "Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. "
-            "Direct WhatsApp order assist: +91 8185012453."
-        )
+        pn_lower = product_name.lower()
+        if any(k in pn_lower for k in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "walnut", "dryfruit", "date", "khajoor", "anjeer", "makhana", "vedaka", "happilo", "nut"]):
+            description = (
+                f"Premium {product_name} by SRR Bazaar. "
+                "100% natural, vacuum-packed to preserve crunch, nutrition, and natural freshness. "
+                "Express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453."
+            )
+        elif any(k in pn_lower for k in ["bleach", "cleaner", "phenyl", "detergent", "acid", "disinfectant"]):
+            description = (
+                f"High-performance {product_name} by SRR Bazaar. "
+                "Safe, powerful formulation for superior home hygiene and sanitization. "
+                "Express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453."
+            )
+        elif any(k in pn_lower for k in ["bulb", "led", "lighting", "electrical", "torch"]):
+            description = (
+                f"Energy-efficient {product_name} by SRR Bazaar. "
+                "Durable build, bright illumination, and long-lasting performance. "
+                "Express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453."
+            )
+        elif any(k in pn_lower for k in ["saree", "sari", "cotton", "silk", "handloom"]):
+            description = (
+                f"Authentic handcrafted {product_name} by SRR Bazaar Sujatha Collections. "
+                "Breathable premium fabric, elegant drape, and exquisite traditional craftsmanship. "
+                "Express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453."
+            )
+        elif any(k in pn_lower for k in ["plate", "cup", "disposable", "buffet"]):
+            description = (
+                f"Hygienic catering {product_name} by SRR Bazaar. "
+                "Food-grade, sturdy, and eco-friendly disposable supplies. "
+                "Express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453."
+            )
+        else:
+            description = (
+                f"Exclusive {product_name} by SRR Bazaar. "
+                "Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. "
+                "Direct WhatsApp order assist: +91 8185012453."
+            )
 
     price_str = f"₹{chosen_price:,}" if chosen_price else "Special Offer"
     return product_name, description, price_str
@@ -521,13 +553,13 @@ def sync_product_to_website_catalogue(
         elif not any(has_word(x) for x in ["necklace", "haram", "choker", "haar", "kundan", "jadau", "bridal"]) and any(has_word(x) for x in ["earring", "earrings", "jhumka", "jhumkas", "stud", "studs", "bangle", "bangles", "kada"]):
             category = "earrings"
         # 9. Dry Fruits & Nuts
-        elif any(has_word(x) for x in ["almond", "badam", "cashew", "kaju", "pista", "raisin", "kishmish", "walnut", "dryfruit", "dryfruits", "dates", "khajoor", "anjeer"]):
+        elif any(has_word(x) for x in ["almond", "almonds", "badam", "cashew", "cashews", "kaju", "pista", "pistas", "pistachio", "pistachios", "raisin", "raisins", "kishmish", "walnut", "walnuts", "akhrot", "dryfruit", "dryfruits", "date", "dates", "khajoor", "anjeer", "fig", "figs", "apricot", "apricots", "makhana", "foxnuts", "vedaka", "happilo", "farmley", "nutraj", "solimo"]) or any(has_phrase(x) for x in ["dry fruits", "dry fruit", "california almonds"]):
             category = "dryfruits"
         # 10. Snacks & Namkeen
-        elif any(has_word(x) for x in ["chips", "biscuit", "biscuits", "namkeen", "mixture", "cookie", "cookies", "murukku", "sev", "bhujia"]):
+        elif any(has_word(x) for x in ["chips", "biscuit", "biscuits", "namkeen", "mixture", "cookie", "cookies", "murukku", "sev", "bhujia", "snack", "snacks", "wafer", "wafers", "chocolate", "chocolates", "candy", "candies", "noodle", "noodles", "pasta", "maggi"]):
             category = "snacks"
         # 11. Groceries & Daily Staples (STRICT WHOLE WORD ONLY)
-        elif any(has_word(x) for x in ["grocery", "groceries", "rice", "dal", "flour", "atta", "wheat", "ghee", "masala", "spices", "chilli", "mirchi", "turmeric", "salt", "sugar", "jaggery", "bellam", "rava", "suji", "maida", "besan", "pulses", "lentils", "tamarind"]):
+        elif any(has_word(x) for x in ["grocery", "groceries", "rice", "dal", "flour", "atta", "wheat", "ghee", "oil", "sunflower", "masala", "spices", "chilli", "mirchi", "turmeric", "salt", "sugar", "jaggery", "bellam", "rava", "suji", "sooji", "maida", "besan", "pulses", "lentils", "tamarind"]):
             category = "groceries"
         else:
             category = "necklace"

@@ -52,7 +52,9 @@ def main():
         print("\n--- Test 4: Send Quick Prompt (Sankranti Nomu) ---")
         nomu_chip = chat_container.find_element(By.XPATH, ".//button[contains(text(), 'Sankranti Nomu')]")
         driver.execute_script("arguments[0].click();", nomu_chip)
-        time.sleep(2)
+        
+        # Wait for AI thinking to finish (aiTypingIndicator removed)
+        wait.until(lambda d: len(d.find_elements(By.ID, "aiTypingIndicator")) == 0)
 
         updated_chat = chat_container.text
         print(f"Chat response preview:\n{updated_chat[-300:]}...")
@@ -69,7 +71,9 @@ def main():
         chat_input.send_keys("What Kundan choker necklace do you have?")
         send_btn = driver.find_element(By.ID, "aiChatSendBtn")
         driver.execute_script("arguments[0].click();", send_btn)
-        time.sleep(2)
+        
+        # Wait for AI response (aiTypingIndicator removed)
+        wait.until(lambda d: len(d.find_elements(By.ID, "aiTypingIndicator")) == 0)
 
         final_chat = chat_container.text
         assert "Kundan" in final_chat or "Jadau" in final_chat, "AI should recommend Kundan items"
