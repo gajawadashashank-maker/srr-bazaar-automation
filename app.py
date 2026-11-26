@@ -799,6 +799,22 @@ def sync_product_to_website_catalogue(
         except Exception as pin_err:
             logger.warning("Pinterest Pin publishing skipped/failed: %s", pin_err)
 
+        # Auto-publish to Telegram Channel (if configured)
+        try:
+            from telegram_publisher import publish_telegram_product
+            tg_res = publish_telegram_product(
+                product_name=product_name,
+                price=price_str,
+                description=description,
+                product_id=new_id,
+                image_path_or_url=str(dest_path),
+                video_path=str(dest_video_path) if linked_video_rel else None,
+            )
+            if tg_res.get("status") == "published":
+                logger.info("SUCCESS: Telegram product published! Type: %s, Msg ID: %s", tg_res.get("type"), tg_res.get("message_id"))
+        except Exception as tg_err:
+            logger.warning("Telegram publishing skipped/failed: %s", tg_err)
+
         # Deploy live to GitHub Pages and main
         try:
             subprocess.run(["git", "add", "docs/"], check=False)
