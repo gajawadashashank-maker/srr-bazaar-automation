@@ -640,6 +640,10 @@
             class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white font-extrabold shadow-2xs flex-shrink-0 animate-pulse active:scale-95 transition">
             <span>🎡</span> Spin & Win
           </button>
+          <a href="https://t.me/srrbazaardeals" target="_blank" onclick="claimTelegramOffer(event)"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-sky-50 text-sky-900 border border-sky-300 shadow-2xs flex-shrink-0 font-bold active:scale-95 transition">
+            <i data-lucide="send" class="w-3 h-3 text-sky-600"></i> Telegram ₹50 OFF
+          </a>
           <button onclick="openTrackingModal()"
             class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-stone-100 text-stone-800 border border-stone-200 shadow-2xs flex-shrink-0 active:scale-95 transition">
             <i data-lucide="truck" class="w-3 h-3 text-amber-700"></i> Track Order
@@ -749,6 +753,54 @@
             target="_blank"
             class="flex items-center gap-1 font-bold text-emerald-800 hover:text-emerald-950 transition">
             <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-600"></i> VIP WhatsApp Stylist Concierge
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- VIP Telegram Channel & Instant ₹50 Off Banner -->
+  <section class="py-2.5 bg-stone-100/60 border-b border-stone-200/80 w-full max-w-full overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-full">
+      <div
+        class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sky-700 via-sky-600 to-indigo-800 text-white p-3.5 sm:p-4 shadow-sm border border-sky-400/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <!-- Ambient Glow -->
+        <div class="absolute -right-10 -bottom-10 w-36 h-36 rounded-full bg-sky-300/20 blur-xl pointer-events-none"></div>
+        <div class="absolute left-1/4 -top-8 w-28 h-28 rounded-full bg-indigo-300/20 blur-lg pointer-events-none"></div>
+
+        <div class="flex items-center gap-3 min-w-0 z-10 text-center sm:text-left w-full sm:w-auto">
+          <div
+            class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center flex-shrink-0 shadow-inner mx-auto sm:mx-0">
+            <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
+              <path
+                d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.538-.196 1.006.128.832.939z" />
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center justify-center sm:justify-start gap-1.5 flex-wrap">
+              <span
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-400 text-stone-950 font-black text-[10px] tracking-wide uppercase shadow-2xs">
+                ⚡ VIP TELEGRAM PERK
+              </span>
+              <span class="text-[11px] text-sky-200 font-semibold">Secret Flash Deals</span>
+            </div>
+            <h3 class="text-xs sm:text-sm font-extrabold text-white mt-0.5 tracking-tight">
+              Join our VIP Telegram Channel for Secret Flash Deals & ₹50 Extra OFF!
+            </h3>
+            <p class="text-[11px] text-sky-100/90 leading-tight mt-0.5">
+              Get unboxing video reels, daily flash drops, and use code <span
+                class="font-mono font-bold bg-black/30 border border-white/20 px-1.5 py-0.5 rounded text-amber-300">TELE50</span>
+              on your checkout.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 z-10 flex-shrink-0 w-full sm:w-auto justify-center">
+          <a href="https://t.me/srrbazaardeals" target="_blank" onclick="claimTelegramOffer(event)"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 sm:py-2.5 rounded-xl bg-white hover:bg-amber-50 text-sky-950 font-extrabold text-xs shadow-md hover:shadow-lg active:scale-98 transition">
+            <i data-lucide="send" class="w-3.5 h-3.5 text-sky-600"></i>
+            <span>Join & Claim ₹50 OFF →</span>
           </a>
         </div>
       </div>
@@ -8338,6 +8390,10 @@
         couponDiscount = 100;
         document.getElementById('discountRow').style.display = 'flex';
         document.getElementById('cartDiscount').textContent = `-₹${couponDiscount}`;
+      } else if (activeCoupon === 'TELE50' && subtotal >= 299) {
+        couponDiscount = 50;
+        document.getElementById('discountRow').style.display = 'flex';
+        document.getElementById('cartDiscount').textContent = `-₹${couponDiscount}`;
       } else {
         document.getElementById('discountRow').style.display = 'none';
       }
@@ -8479,12 +8535,31 @@
         activeCoupon = 'WELCOME100';
         notice.textContent = '🎉 Coupon WELCOME100 applied! ₹100 discount added.';
         notice.classList.remove('hidden');
+      } else if (code === 'TELE50' || code === 'TELEGRAM50') {
+        activeCoupon = 'TELE50';
+        notice.textContent = '🎉 VIP Telegram Perk applied! ₹50 discount added.';
+        notice.classList.remove('hidden');
       } else {
         activeCoupon = null;
-        notice.textContent = '❌ Invalid coupon code. Try WELCOME100';
+        notice.textContent = '❌ Invalid coupon code. Try WELCOME100 or TELE50';
         notice.classList.remove('hidden');
       }
       updateCartUI();
+    }
+
+    function claimTelegramOffer(event) {
+      activeCoupon = 'TELE50';
+      const input = document.getElementById('couponCodeInput');
+      if (input) input.value = 'TELE50';
+      const notice = document.getElementById('couponNotice');
+      if (notice) {
+        notice.textContent = '🎉 VIP Telegram Perk applied! ₹50 discount added.';
+        notice.classList.remove('hidden');
+      }
+      updateCartUI();
+      if (typeof showToastNotification === 'function') {
+        showToastNotification('🎉 Code TELE50 Applied for ₹50 OFF! Opening Telegram Deals...');
+      }
     }
 
     // =========================================================================
