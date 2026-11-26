@@ -66,6 +66,8 @@ def publish_telegram_product(
         f"📦 <b>Cash on Delivery (COD) Available</b>\n"
         f"💯 <b>100% Genuine Quality Guaranteed</b>\n\n"
         f"📝 <b>Description:</b>\n{description.strip()[:400]}\n\n"
+        f"📌 <b>Pinterest:</b> https://in.pinterest.com/sujathagajawada/\n"
+        f"✈️ <b>Telegram Channel:</b> https://t.me/srrbazaardeals\n"
         f"📲 <b>Direct Helpline:</b> +91 8185012453 / +91 9948633303 / +91 7013416296\n\n"
         f"#SRRBazaar #SujathaCollections #OnlineShoppingIndia #COD #NewArrivals"
     )
@@ -78,7 +80,8 @@ def publish_telegram_product(
                 {"text": "💬 Order via WhatsApp", "url": wa_order_url},
             ],
             [
-                {"text": "🌐 Explore All Deals (srrbazaar.com)", "url": "https://srrbazaar.com"},
+                {"text": "🌐 Visit Website", "url": "https://srrbazaar.com"},
+                {"text": "📌 Pinterest", "url": "https://in.pinterest.com/sujathagajawada/"},
             ]
         ]
     }

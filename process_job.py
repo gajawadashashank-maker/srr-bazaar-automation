@@ -282,6 +282,8 @@ def build_instagram_caption(product_name: str, price: str, description: str, pro
         "🛍️ Official Store: https://srrbazaar.com\n"
         "📸 Instagram: https://www.instagram.com/sujatha60861/\n"
         "📺 YouTube Channel & Shorts: https://www.youtube.com/@SRRBazaar\n"
+        "📌 Pinterest: https://in.pinterest.com/sujathagajawada/\n"
+        "✈️ Telegram Deals: https://t.me/srrbazaardeals\n"
         "📲 WhatsApp / Call to order directly:\n"
         "   +91 8185012453\n"
         "   +91 9948633303\n"
