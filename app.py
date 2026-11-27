@@ -1751,6 +1751,44 @@ async def get_spin_status(token: str):
         "unlocked": count >= 2
     }
 
+@app.post("/api/order-alert")
+async def api_order_alert(request: Request):
+    try:
+        data = await request.json()
+        from telegram_publisher import send_merchant_order_alert
+        # 1. Send instant alert to merchant on Telegram
+        alert_res = send_merchant_order_alert(data)
+        # 2. Persist order into docs/orders.json
+        orders_file = Path("docs/orders.json")
+        existing_orders = []
+        if orders_file.exists():
+            try:
+                with open(orders_file, "r", encoding="utf-8") as f:
+                    existing_orders = json.load(f)
+            except Exception:
+                existing_orders = []
+        existing_orders.insert(0, data)
+        with open(orders_file, "w", encoding="utf-8") as f:
+            json.dump(existing_orders, f, indent=2, ensure_ascii=False)
+        return {"status": "success", "alert": alert_res}
+    except Exception as e:
+        logger.error("api_order_alert error: %s", e)
+        return {"status": "error", "message": str(e)}
+
+@app.post("/api/spin-alert")
+async def api_spin_alert(request: Request):
+    try:
+        data = await request.json()
+        phone = data.get("phone", "")
+        prize = data.get("prize", "")
+        from telegram_publisher import send_merchant_spin_alert
+        alert_res = send_merchant_spin_alert(phone, prize)
+        return {"status": "success", "alert": alert_res}
+    except Exception as e:
+        logger.error("api_spin_alert error: %s", e)
+        return {"status": "error", "message": str(e)}
+
+
 # Mount docs directory so local server can serve storefront, images, and videos
 from fastapi.staticfiles import StaticFiles
 if Path("docs").exists():
