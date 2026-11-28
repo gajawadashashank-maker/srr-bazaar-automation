@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://srrbazaar.com/</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://srrbazaar.com/images/srr_bazaar_logo.png</image:loc>
+      <image:title>SRR Bazaar Official Store Emblem</image:title>
+      <image:caption>SRR Bazaar - Sujatha Collections Handcrafted Jewellery and Festive Decor</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://srrbazaar.com/images/jadau_kundan_necklace.jpg</image:loc>
+      <image:title>Pure Jadau Kundan Necklace Set with Earrings</image:title>
+      <image:caption>Handcrafted bridal Kundan necklace set with emerald, ruby drops and matching earrings</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://srrbazaar.com/images/33_deepalu_diya_stand.jpg</image:loc>
+      <image:title>33 Deepalu Brass Diya Stand</image:title>
+      <image:caption>Traditional brass 33 deepalu tiered diya stand for Kartheeka Masam and festive pooja</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://srrbazaar.com/images/swan_tray.jpg</image:loc>
+      <image:title>Silver Swan Organizer Tray 6.5 Inch</image:title>
+      <image:caption>Embossed German silver plated decorative swan tray for pooja and wedding trousseau</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://srrbazaar.com/images/semi_jadau_earrings.jpg</image:loc>
+      <image:title>Semi-Jadau Ruby and Emerald Studded Jhumkas</image:title>
+      <image:caption>High polish handcrafted bridal semi-jadau jhumkas with ruby and emerald accents</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://srrbazaar.com/images/black_beads_3line.jpg</image:loc>
+      <image:title>Traditional 3-Line Black Beads Mala</image:title>
+      <image:caption>Authentic South Indian 3-line black beads mangalsutra chain with gold polish pendant</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://srrbazaar.com/images/edu_kondala_nomu.jpg</image:loc>
+      <image:title>Sankranti Nomu Special Pooja Kit</image:title>
+      <image:caption>Edu Kondala Nomu and Kadapalu Nomu traditional Sankranti pooja kit</image:caption>
+    </image:image>
+  </url>
+</urlset>
