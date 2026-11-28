@@ -10,7 +10,7 @@
   <meta name="keywords"
     content="SRR Bazaar, Sujatha Collections, bridal jewellery, jadau kundan, 33 deepalu diya stand, swan tray, armoor shopping, sarees, kundan sets, sankranti nomu">
   <meta name="google-site-verification" content="googleecda640497f6ec55" />
-  <meta name="p:domain_verify" content="7ab72505db1f681fb8b272128eddffde"/>
+  <meta name="p:domain_verify" content="7ab72505db1f681fb8b272128eddffde" />
   <link rel="canonical" href="https://srrbazaar.com/">
 
   <!-- Official Brand Favicons for Google Search & Browsers -->
@@ -766,7 +766,8 @@
       <div
         class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sky-700 via-sky-600 to-indigo-800 text-white p-3.5 sm:p-4 shadow-sm border border-sky-400/40 flex flex-col sm:flex-row items-center justify-between gap-3">
         <!-- Ambient Glow -->
-        <div class="absolute -right-10 -bottom-10 w-36 h-36 rounded-full bg-sky-300/20 blur-xl pointer-events-none"></div>
+        <div class="absolute -right-10 -bottom-10 w-36 h-36 rounded-full bg-sky-300/20 blur-xl pointer-events-none">
+        </div>
         <div class="absolute left-1/4 -top-8 w-28 h-28 rounded-full bg-indigo-300/20 blur-lg pointer-events-none"></div>
 
         <div class="flex items-center gap-3 min-w-0 z-10 text-center sm:text-left w-full sm:w-auto">
@@ -796,26 +797,9 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-2.5 z-10 flex-shrink-0 w-full sm:w-auto justify-center">
-          <!-- Desktop / Tablet QR Code Card: Click to enlarge or scan with phone camera -->
-          <button type="button" onclick="openTelegramQRModal()" class="hidden sm:flex items-center gap-2 p-1.5 pr-2.5 bg-white/15 hover:bg-white/25 rounded-xl border border-white/30 backdrop-blur-xs transition text-left cursor-pointer group" title="Click to view QR Code or scan directly">
-            <img src="images/telegram_qr.png" alt="Telegram QR" class="w-10 h-10 object-contain rounded-lg bg-white p-0.5 shadow-2xs group-hover:scale-105 transition" />
-            <div class="text-[10px] leading-tight">
-              <span class="block font-bold text-amber-300 flex items-center gap-1">
-                <i data-lucide="qr-code" class="w-3 h-3"></i> Scan QR
-              </span>
-              <span class="text-white/80 text-[9px]">@srrbazaardeals</span>
-            </div>
-          </button>
-
-          <!-- Mobile QR button trigger -->
-          <button type="button" onclick="openTelegramQRModal()" class="sm:hidden inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs border border-white/30 backdrop-blur-xs transition" title="Show QR Code">
-            <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-300"></i>
-            <span>QR</span>
-          </button>
-
+        <div class="flex items-center gap-2 z-10 flex-shrink-0 w-full sm:w-auto justify-center">
           <a href="https://t.me/srrbazaardeals" target="_blank" onclick="claimTelegramOffer(event)"
-            class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 sm:py-2.5 rounded-xl bg-white hover:bg-amber-50 text-sky-950 font-extrabold text-xs shadow-md hover:shadow-lg active:scale-98 transition">
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 sm:py-2.5 rounded-xl bg-white hover:bg-amber-50 text-sky-950 font-extrabold text-xs shadow-md hover:shadow-lg active:scale-98 transition">
             <i data-lucide="send" class="w-3.5 h-3.5 text-sky-600"></i>
             <span>Join & Claim ₹50 OFF →</span>
           </a>
@@ -1570,7 +1554,8 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-maroon-950 text-stone-300 pt-12 pb-24 sm:pb-14 border-t border-amber-600/30 w-full max-w-full overflow-hidden">
+  <footer
+    class="bg-maroon-950 text-stone-300 pt-12 pb-24 sm:pb-14 border-t border-amber-600/30 w-full max-w-full overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-full">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
 
@@ -1602,7 +1587,10 @@
             <a href="https://in.pinterest.com/sujathagajawada/" target="_blank"
               class="w-9 h-9 rounded-full bg-white/10 hover:bg-red-700 flex items-center justify-center text-white transition"
               title="Pinterest @sujathagajawada">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0a12 12 0 0 0-4.37 23.18c-.06-.97-.1-2.47.02-3.53.11-.97.74-6.3.74-6.3s-.19-.38-.19-.94c0-.88.51-1.54 1.15-1.54.54 0 .8.41.8.9 0 .55-.35 1.36-.53 2.12-.15.64.32 1.16.95 1.16 1.14 0 2.02-1.2 2.02-2.94 0-1.54-1.1-2.61-2.69-2.61-1.97 0-3.13 1.48-3.13 3.01 0 .6.23 1.23.51 1.58.05.07.06.13.04.2-.06.25-.2.8-.23.91-.04.14-.12.18-.28.1-1.04-.48-1.69-2-1.69-3.21 0-2.62 1.9-5.02 5.49-5.02 2.88 0 5.12 2.05 5.12 4.8 0 2.86-1.8 5.17-4.3 5.17-.84 0-1.63-.44-1.9-.95l-.52 1.97c-.19.72-.7 1.62-1.04 2.17A12.01 12.01 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z"/></svg>
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path
+                  d="M12 0a12 12 0 0 0-4.37 23.18c-.06-.97-.1-2.47.02-3.53.11-.97.74-6.3.74-6.3s-.19-.38-.19-.94c0-.88.51-1.54 1.15-1.54.54 0 .8.41.8.9 0 .55-.35 1.36-.53 2.12-.15.64.32 1.16.95 1.16 1.14 0 2.02-1.2 2.02-2.94 0-1.54-1.1-2.61-2.69-2.61-1.97 0-3.13 1.48-3.13 3.01 0 .6.23 1.23.51 1.58.05.07.06.13.04.2-.06.25-.2.8-.23.91-.04.14-.12.18-.28.1-1.04-.48-1.69-2-1.69-3.21 0-2.62 1.9-5.02 5.49-5.02 2.88 0 5.12 2.05 5.12 4.8 0 2.86-1.8 5.17-4.3 5.17-.84 0-1.63-.44-1.9-.95l-.52 1.97c-.19.72-.7 1.62-1.04 2.17A12.01 12.01 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z" />
+              </svg>
             </a>
             <a href="https://wa.me/918185012453" target="_blank"
               class="w-9 h-9 rounded-full bg-white/10 hover:bg-emerald-600 flex items-center justify-center text-white transition"
@@ -1699,7 +1687,8 @@
       </div>
       <!-- Merchant Login on next line to prevent overlap with floating buttons on iOS -->
       <div class="pt-3 text-center">
-        <button onclick="openMerchantLogin()" class="text-amber-400/90 hover:text-amber-300 hover:underline text-xs inline-flex items-center gap-1.5 transition">
+        <button onclick="openMerchantLogin()"
+          class="text-amber-400/90 hover:text-amber-300 hover:underline text-xs inline-flex items-center gap-1.5 transition">
           <i data-lucide="lock" class="w-3 h-3"></i>
           <span>Merchant Login</span>
         </button>
@@ -2646,21 +2635,6 @@
         </button>
       </div>
 
-      <!-- VIP Telegram Channel Order Success Card -->
-      <div class="p-3 bg-gradient-to-r from-sky-50 to-indigo-50 rounded-xl border border-sky-200 text-left flex items-center justify-between gap-3 shadow-2xs">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <img src="images/telegram_qr.png" alt="Telegram QR" class="w-11 h-11 object-contain rounded-lg bg-white p-0.5 border border-sky-200 shadow-2xs flex-shrink-0 cursor-pointer" onclick="openTelegramQRModal()" title="Click to view QR">
-          <div class="min-w-0">
-            <span class="block text-xs font-bold text-sky-950">Join VIP Deals on Telegram</span>
-            <span class="block text-[10px] text-stone-600 truncate">Get daily flash sales & dispatch updates!</span>
-          </div>
-        </div>
-        <a href="https://t.me/srrbazaardeals" target="_blank" onclick="claimTelegramOffer(event)"
-          class="flex-shrink-0 px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-2xs transition">
-          Join →
-        </a>
-      </div>
-
       <!-- Action buttons -->
       <div class="space-y-2">
         <a id="successWhatsAppBtn" href="#" target="_blank"
@@ -3443,407 +3417,113 @@
     // Initial Default Catalogue (extracted from Sujatha Collections WhatsApp feed & Instagram)
     const DEFAULT_PRODUCTS = [
   {
-    "id": 552081911,
-    "title": "Short Chain",
+    "id": 945625104,
+    "title": "combo",
     "category": "necklace",
-    "price": 650,
-    "originalPrice": 975,
+    "price": 799,
+    "originalPrice": 1198,
     "tag": "New Arrival",
-    "image": "images/catalog/a107d7e9eb9440a39b8e0594bc8b9537.jpg",
-    "video": "videos/reel_552081911.mp4",
-    "description": "Exclusive Short Chain by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "image": "images/catalog/9a82f724667c42cc85db7afcc281e450.jpg",
+    "video": "videos/reel_945625104.mp4",
+    "description": "Exclusive combo by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
   },
   {
-    "id": 316342020,
-    "title": "Chandra haram",
-    "category": "necklace",
-    "price": 1199,
-    "originalPrice": 1798,
+    "id": 105580357,
+    "title": "Vedaka California almonds 500g",
+    "category": "dryfruits",
+    "price": 602,
+    "originalPrice": 903,
     "tag": "New Arrival",
-    "image": "images/catalog/33f6e03688774fce9536dc4c420e0744.jpg",
-    "video": "videos/reel_316342020.mp4",
-    "description": "Exclusive Chandra haram by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "image": "images/catalog/497344a5f2134409b449dde615bc7f89.jpg",
+    "video": "videos/reel_105580357.mp4",
+    "description": "Premium quality California Almonds (Badam) 500g by Vedaka. 100% natural, vacuum-packed to preserve crunch and freshness. Rich in vitamin E, dietary fiber, and healthy proteins. Express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
   },
   {
-    "id": 729615558,
-    "title": "Handcrafted Floral Motif Pendant & Chain Set",
-    "category": "necklace",
-    "price": 499,
-    "originalPrice": 748,
-    "tag": "New Arrival",
-    "image": "images/catalog/614dd16073e54b7da7d6e6a3438fe146.jpg",
-    "video": "videos/reel_729615558.mp4",
-    "description": "Exclusive Handcrafted Floral Motif Pendant & Chain Set by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 52430942,
-    "title": "Royal Bridal Choker & Jhumka Jewellery Set",
-    "category": "necklace",
-    "price": 1499,
-    "originalPrice": 2248,
-    "tag": "New Arrival",
-    "image": "images/catalog/4e02cdbe4a5d4177885aa1b7a02d2283.jpg",
-    "video": "videos/reel_52430942.mp4",
-    "description": "Royal Bridal Choker & Jhumka Jewellery Set by SRR Bazaar. Exquisite traditional gold finish with matching jhumkas, express pan-India dispatch and Cash on Delivery available.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 175800095,
+    "id": 435046900,
     "title": "8 inches antique finish",
     "category": "necklace",
     "price": 5500,
     "originalPrice": 8250,
     "tag": "New Arrival",
-    "image": "images/catalog/d0e427b537aa4a2086ea32f925b7dd4b.jpg",
-    "video": "videos/reel_175800095.mp4",
+    "image": "images/catalog/cdb3c812338745f8bdb7f8eb19348177.jpg",
+    "video": "videos/reel_435046900.mp4",
     "description": "Balaji\n5500 rs .",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
   },
   {
-    "id": 844724865,
-    "title": "Traditional Gold Finish Short Necklace Set",
-    "category": "necklace",
-    "price": 666,
-    "originalPrice": 999,
-    "tag": "New Arrival",
-    "image": "images/catalog/142bdc4b55bd4a2b96248210ac56c6de.jpg",
-    "video": "videos/reel_844724865.mp4",
-    "description": "Traditional Gold Finish Short Necklace Set by SRR Bazaar. Premium artisanal finish, skin-safe micro gold-plating, express pan-India dispatch and Cash on Delivery available.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 753061599,
-    "title": "Handcrafted Designer Jewellery Collection",
+    "id": 194151912,
+    "title": "Today special offer only for free shipping offer valid for tomorrow evening 6 pm only",
     "category": "necklace",
     "price": 699,
     "originalPrice": 1048,
     "tag": "New Arrival",
-    "image": "images/catalog/ff361454ce1b47ea8b583716ef570c79.jpg",
-    "video": "videos/reel_753061599.mp4",
-    "description": "Exclusive Handcrafted Designer Jewellery Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 657569884,
-    "title": "Festive Handcrafted Traditional Collection",
-    "category": "necklace",
-    "price": 999,
-    "originalPrice": 1498,
-    "tag": "New Arrival",
-    "image": "images/catalog/cf02b1e4ff554fbd94807f6add706b87.jpg",
-    "video": "videos/reel_657569884.mp4",
-    "description": "Exclusive Festive Handcrafted Traditional Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 22905377,
-    "title": "Pure Cotton Handmade 1000 Wicks Vattulu (5 Pogulu)",
-    "category": "samagri",
-    "price": 139,
-    "originalPrice": 208,
-    "tag": "New Arrival",
-    "image": "images/catalog/9c7a1b489c9344868be5bd48e0f9e23a.jpg",
-    "video": "videos/reel_22905377.mp4",
-    "description": "Pure Cotton Handmade 1000 Wicks Vattulu (5 Pogulu) for Pooja. Authentic handmade cotton deepam wicks for auspicious festivals and daily pooja.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 260472999,
-    "title": "Grand Bridal Jadau Kundan Necklace & Earrings Set",
-    "category": "necklace",
-    "price": 1899,
-    "originalPrice": 2848,
-    "tag": "New Arrival",
-    "image": "images/catalog/16b7e07f2d83425192500f25c250112d.jpg",
-    "video": "videos/reel_260472999.mp4",
-    "description": "Grand Bridal Jadau Kundan Necklace & Earrings Set by SRR Bazaar. Exquisite artisanal craftsmanship for weddings and festive celebrations.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 950111382,
-    "title": "SRR Bazaar Curated Collection",
-    "category": "necklace",
-    "price": 999,
-    "originalPrice": 1498,
-    "tag": "New Arrival",
-    "image": "images/catalog/b54dc3f770c3475eb50a70a519a75b23.jpg",
-    "video": "videos/reel_950111382.mp4",
-    "description": "Exclusive SRR Bazaar Curated Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 182757648,
-    "title": "Traditional South Indian Matte Gold Haram Necklace Set",
-    "category": "necklace",
-    "price": 1260,
-    "originalPrice": 1890,
-    "tag": "New Arrival",
-    "image": "images/catalog/87856617905b47bb850dd56eb0ba8893.jpg",
-    "video": "videos/reel_182757648.mp4",
-    "description": "Traditional South Indian Matte Gold Haram Necklace Set by SRR Bazaar. Premium temple finish with matching earrings, express pan-India dispatch.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 324194470,
-    "title": "3 inches cow and calf",
-    "category": "necklace",
-    "price": 1799,
-    "originalPrice": 2698,
-    "tag": "New Arrival",
-    "image": "images/catalog/81fb5d1ce476471eb6730e781d18bb2d.jpg",
-    "video": "videos/reel_324194470.mp4",
-    "description": "Exclusive 3 inches cow and calf by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 73054761,
-    "title": "SRR Bazaar Curated Collection",
-    "category": "necklace",
-    "price": 999,
-    "originalPrice": 1498,
-    "tag": "New Arrival",
-    "image": "images/catalog/919829c006a5431c9f2e22772b17d71b.jpg",
-    "video": "videos/reel_73054761.mp4",
-    "description": "Exclusive SRR Bazaar Curated Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 580004261,
-    "title": "Exquisite Jadau Kundan Choker Necklace Set",
-    "category": "necklace",
-    "price": 1350,
-    "originalPrice": 2025,
-    "tag": "New Arrival",
-    "image": "images/catalog/19724377743a4a8e81b76e8b36d00d3e.jpg",
-    "video": "videos/reel_580004261.mp4",
-    "description": "Exquisite Jadau Kundan Choker Necklace Set by SRR Bazaar. Artisanal Kundan craftsmanship, skin-safe micro-plating, and complimentary gift included.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 330606361,
-    "title": "Artisanal Ruby & Emerald Studded Necklace Set",
-    "category": "necklace",
-    "price": 950,
-    "originalPrice": 1425,
-    "tag": "New Arrival",
-    "image": "images/catalog/939489b4477741eb8d7fe7b287ec6471.jpg",
-    "video": "videos/reel_330606361.mp4",
-    "description": "Artisanal Ruby & Emerald Studded Necklace Set by SRR Bazaar. Classic South Indian bridal design with matching earrings and express delivery.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 812432180,
-    "title": "Classic Temple Design Short Necklace with Earrings",
-    "category": "necklace",
-    "price": 550,
-    "originalPrice": 825,
-    "tag": "New Arrival",
-    "image": "images/catalog/2542f16d26464dc2a37036e0ad725309.jpg",
-    "video": "videos/reel_812432180.mp4",
-    "description": "Classic Temple Design Short Necklace with Earrings by SRR Bazaar. Detailed micro-gold motifs, express dispatch and Cash on Delivery available.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 981201033,
-    "title": "SRR Bazaar Curated Collection",
-    "category": "necklace",
-    "price": 999,
-    "originalPrice": 1498,
-    "tag": "New Arrival",
-    "image": "images/catalog/66d34d192f564662b8b6ae26f65db7ad.jpg",
-    "video": "videos/reel_981201033.mp4",
-    "description": "Exclusive SRR Bazaar Curated Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 455984595,
-    "title": "Delicate Floral CZ Pendant & Chain Set",
-    "category": "necklace",
-    "price": 480,
-    "originalPrice": 720,
-    "tag": "New Arrival",
-    "image": "images/catalog/facddb5eb6ff468ba36c574c909d7b83.jpg",
-    "video": "videos/reel_455984595.mp4",
-    "description": "Delicate Floral CZ Pendant & Chain Set by SRR Bazaar. Sparkling American Diamond stones with lightweight daily wear chain.",
+    "image": "images/catalog/476fdef1380e46aab92afb34526f975e.jpg",
+    "video": "videos/reel_194151912.mp4",
+    "description": "Exclusive Today special offer only for free shipping offer valid for tomorrow evening 6 pm only by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
   },
   {
     "id": 662030785,
-    "title": "Minimalist Everyday Pendant & Chain Set",
+    "title": "Free",
     "category": "necklace",
     "price": 370,
     "originalPrice": 555,
     "tag": "New Arrival",
     "image": "images/catalog/46a4366ddb6349a09346003fcfcdfcd2.jpg",
     "video": "videos/reel_662030785.mp4",
-    "description": "Minimalist Everyday Pendant & Chain Set by SRR Bazaar. Elegant lightweight daily wear design with durable micro-gold polish.",
+    "description": "Exclusive Free by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
   },
   {
-    "id": 576669286,
-    "title": "Handcrafted Designer Jewellery Collection",
-    "category": "necklace",
-    "price": 499,
-    "originalPrice": 748,
-    "tag": "New Arrival",
-    "image": "images/catalog/3c804cae2e6d4ef5b8ba932a3078aa05.jpg",
-    "video": "videos/reel_576669286.mp4",
-    "description": "Exclusive Handcrafted Designer Jewellery Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 714607689,
-    "title": "Beautiful Branded Short Black beads",
-    "category": "mangalsutra",
-    "price": 399,
-    "originalPrice": 598,
-    "tag": "New Arrival",
-    "image": "images/catalog/7acb0e0fb4de442ba10c55d38fa0874c.jpg",
-    "video": "videos/reel_714607689.mp4",
-    "description": "Exclusive Beautiful Branded Short Black beads by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 51195209,
-    "title": "Heavy bridal",
-    "category": "necklace",
-    "price": 1199,
-    "originalPrice": 1798,
-    "tag": "New Arrival",
-    "image": "images/catalog/bc8499d634e548f7bcd98c5a07a99ff5.jpg",
-    "video": "videos/reel_51195209.mp4",
-    "description": "Exclusive Heavy bridal by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 171705372,
-    "title": "Traditional Ruby & Emerald Necklace with Earrings",
-    "category": "necklace",
-    "price": 850,
-    "originalPrice": 1275,
-    "tag": "New Arrival",
-    "image": "images/catalog/debde0a8a23441ea8734b8cb54eb4f9f.jpg",
-    "video": "videos/reel_171705372.mp4",
-    "description": "Traditional Ruby & Emerald Necklace with Earrings by SRR Bazaar. Authentic South Indian festive design, express pan-India dispatch.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 307187399,
-    "title": "Handcrafted Bridal Kundan Haar Necklace Set",
-    "category": "necklace",
-    "price": 1350,
-    "originalPrice": 2025,
-    "tag": "New Arrival",
-    "image": "images/catalog/58eb724dd535417e988b6ce3ff4d4b09.jpg",
-    "video": "videos/reel_307187399.mp4",
-    "description": "Handcrafted Bridal Kundan Haar Necklace Set by SRR Bazaar. Multi-layered royal Kundan work with matching earrings for weddings and receptions.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 212910835,
-    "title": "Pure Cotton Handmade 1000 Wicks Vattulu for Pooja (5 Pogulu)",
-    "category": "samagri",
-    "price": 139,
-    "originalPrice": 208,
-    "tag": "New Arrival",
-    "image": "images/catalog/c7a91ffc893e41ab97cf4543ee292d5e.jpg",
-    "video": "videos/reel_212910835.mp4",
-    "description": "Pure Cotton Handmade 1000 Wicks Vattulu for Pooja (5 Pogulu). Traditional pure cotton deepam wicks prepared for Kartheeka Masam and festive rituals.",
-    "inStock": true,
-    "rating": 5.0,
-    "reviewsCount": 1
-  },
-  {
-    "id": 912092318,
-    "title": "Handcrafted Designer Peacock Motif Necklace Set",
+    "id": 514024987,
+    "title": "SRR Bazaar Curated Collection",
     "category": "necklace",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
-    "image": "images/catalog/fde83270252b475293a611a7b8b84b29.jpg",
-    "video": "videos/reel_912092318.mp4",
-    "description": "Handcrafted Designer Peacock Motif Necklace Set by SRR Bazaar. Antique gold polish with intricate peacock carving and matching earrings.",
+    "image": "images/catalog/428ede7f9e9048a980b847b48838eb3a.jpg",
+    "video": "videos/reel_514024987.mp4",
+    "description": "Exclusive SRR Bazaar Curated Collection by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
   },
   {
     "id": 483489891,
-    "title": "Traditional Temple Jewellery Choker & Haram Set",
+    "title": "Combo offer today",
     "category": "necklace",
     "price": 1199,
     "originalPrice": 1798,
     "tag": "New Arrival",
     "image": "images/catalog/044277d6cc3e4dc2ab267ce825414ba5.jpg",
     "video": "videos/reel_483489891.mp4",
-    "description": "Traditional Temple Jewellery Choker & Haram Set by SRR Bazaar. Complete bridal temple set featuring Goddess Lakshmi motifs and pearls.",
+    "description": "Exclusive Combo offer today by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
   },
   {
     "id": 121871459,
-    "title": "Grand Bridal Matte Finish Haram & Choker Set",
+    "title": "Today special offer combo only for free shipping offer valid for tomorrow evening pm only",
     "category": "necklace",
     "price": 1699,
     "originalPrice": 2548,
     "tag": "New Arrival",
     "image": "images/catalog/f1d89f697b42423bbd8d1eb23707ca3d.jpg",
     "video": "videos/reel_121871459.mp4",
-    "description": "Grand Bridal Matte Finish Haram & Choker Set by SRR Bazaar. Majestic double-necklace bridal ensemble with earrings, express dispatch.",
+    "description": "Exclusive Today special offer combo only for free shipping offer valid for tomorrow evening pm only by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
@@ -3878,42 +3558,42 @@
   },
   {
     "id": 509970487,
-    "title": "Royal Mango Motif Long Temple Haram Necklace Set",
+    "title": "Restock alert",
     "category": "necklace",
     "price": 2550,
     "originalPrice": 3825,
     "tag": "New Arrival",
     "image": "images/catalog/52ca5e6e089745c1a47f13cbd54fde01.jpg",
     "video": "videos/reel_509970487.mp4",
-    "description": "Royal Mango Motif Long Temple Haram Necklace Set by SRR Bazaar. Classic South Indian Mamidi Pinde / Mango design with Kemp ruby stones.",
+    "description": "Long mango haram",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
   },
   {
     "id": 411716849,
-    "title": "Premium Traditional Grocery Assortment Pack",
+    "title": "combo",
     "category": "groceries",
     "price": 1650,
     "originalPrice": 2475,
     "tag": "New Arrival",
     "image": "images/catalog/e7749ec27f8146388647698778866ff7.jpg",
     "video": "videos/reel_411716849.mp4",
-    "description": "Premium Traditional Grocery Assortment Pack by SRR Bazaar. Fresh authentic pantry essentials packed with quality assurance and free express shipping.",
+    "description": "Offer price",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
   },
   {
     "id": 818742370,
-    "title": "Classic Micro Gold-Plated Designer Bangles Set",
+    "title": "bangles",
     "category": "earrings",
     "price": 599,
     "originalPrice": 898,
     "tag": "New Arrival",
     "image": "images/catalog/3310983d8dd14762a21869d85ed58b65.jpg",
     "video": "videos/reel_818742370.mp4",
-    "description": "Classic Micro Gold-Plated Designer Bangles Set by SRR Bazaar. Durable micro-plated daily wear bangles with skin-safe finish.",
+    "description": "Exclusive bangles by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
@@ -3976,14 +3656,14 @@
   },
   {
     "id": 367456992,
-    "title": "Grand Traditional Long Temple Haram Necklace",
+    "title": "Haram",
     "category": "necklace",
     "price": 1799,
     "originalPrice": 2698,
     "tag": "New Arrival",
     "image": "images/catalog/5be7243287334da298882edc66c1e7e3.jpg",
     "video": "videos/reel_367456992.mp4",
-    "description": "Grand Traditional Long Temple Haram Necklace by SRR Bazaar. Artisanal antique gold finish with intricate deity carvings and pearls.",
+    "description": "Exclusive Haram by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
@@ -4004,14 +3684,14 @@
   },
   {
     "id": 720162553,
-    "title": "Royal Heritage Kundan & Pearl Long Haram Set",
+    "title": "special offer",
     "category": "necklace",
     "price": 2399,
     "originalPrice": 3598,
     "tag": "New Arrival",
     "image": "images/catalog/41f0397caa4a4bb1bbf11871192c0da7.jpg",
     "video": "videos/reel_720162553.mp4",
-    "description": "Royal Heritage Kundan & Pearl Long Haram Set by SRR Bazaar. Exclusive festive collection with genuine pearls and uncut Kundan stones.",
+    "description": "Limited stock",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
@@ -4102,14 +3782,14 @@
   },
   {
     "id": 93341018,
-    "title": "Premium Bridal Kundan & Ruby Necklace Set",
+    "title": "1599 free shiping",
     "category": "necklace",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
     "image": "images/catalog/35931a3ea5f4482590d26934c1fb8ce7.jpg",
     "video": "videos/reel_93341018.mp4",
-    "description": "Premium Bridal Kundan & Ruby Necklace Set by SRR Bazaar. Rich crimson ruby stones set in micro gold-plated Kundan framing.",
+    "description": "Exclusive 1599 free shiping by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
@@ -4200,14 +3880,14 @@
   },
   {
     "id": 733424884,
-    "title": "Vikram Brand Bleaching Powder (25kg Bag)",
+    "title": "Vikram Brand Bleaching Powder",
     "category": "cleaning",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
     "image": "images/catalog/739379860a5540299bb2f4832b718971.jpg",
     "video": "videos/reel_733424884.mp4",
-    "description": "Vikram Brand Bleaching Powder (25kg Bag). High-grade disinfectant and cleaning powder for household and institutional sanitation. Free express delivery across India.",
+    "description": "25kg bag only @ Rs: 999/- shipping may charge based on location",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1
@@ -4592,13 +4272,13 @@
   },
   {
     "id": 869632963,
-    "title": "Traditional Temple Kasu Mala Haram & Short Necklace Set",
+    "title": "Traditional Temple Kasu Mala Haram & Short Necklace Combo Set",
     "category": "necklace",
     "price": 999,
     "originalPrice": 1498,
     "tag": "New Arrival",
     "image": "images/catalog/8c2d57f8180f.jpg",
-    "description": "Majestic South Indian antique gold Kasu Mala bridal set featuring Lakshmi coins, kemp stones, pearls, and matching earrings.",
+    "description": "Majestic South Indian antique gold Kasu Mala bridal combo set featuring long haram, short necklace with Lakshmi pendant, and matching temple jhumkas.",
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -5022,6 +4702,45 @@
     "inStock": true,
     "rating": 5.0,
     "reviewsCount": 8
+  },
+  {
+    "id": 90201,
+    "title": "Super Disinfectant Bleaching Powder Grade-A (1 Kg Pack)",
+    "category": "cleaning",
+    "price": 89,
+    "originalPrice": 150,
+    "tag": "Hygiene Essential",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "High-grade chlorine bleaching powder for sanitation, drain disinfection, water tank sanitization, and hospital-grade hygiene. Free delivery across India.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 12
+  },
+  {
+    "id": 90202,
+    "title": "Concentrated Herbal White Pine Phenyl Floor Cleaner (5 Litre Can)",
+    "category": "cleaning",
+    "price": 249,
+    "originalPrice": 420,
+    "tag": "Wholesale Value",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "Strong fragrance germ-killing white pine phenyl. Repels insects and flies, leaves floors fresh and sparkling. Ideal for homes, wedding halls, and daily poojas.",
+    "inStock": true,
+    "rating": 4.9,
+    "reviewsCount": 19
+  },
+  {
+    "id": 90203,
+    "title": "Heavy-Duty Toilet & Floor Stain Remover Acid (500ml)",
+    "category": "cleaning",
+    "price": 65,
+    "originalPrice": 110,
+    "tag": "Deep Clean",
+    "image": "images/categories/cat_cleaning.jpg",
+    "description": "Powerful scale and hard-water stain remover acid for bathroom tiles, ceramic sinks, and tough stain sanitization. Free express delivery.",
+    "inStock": true,
+    "rating": 4.8,
+    "reviewsCount": 6
   }
 ];
     let products = [...DEFAULT_PRODUCTS];
@@ -8272,8 +7991,8 @@
       const oneDay = 24 * 60 * 60 * 1000;
 
       const isExpired = (expiry > 0 && now >= expiry) ||
-                        (lastSpin > 0 && (now - lastSpin) >= oneDay) ||
-                        (!expiry && festiveCash > 0);
+        (lastSpin > 0 && (now - lastSpin) >= oneDay) ||
+        (!expiry && festiveCash > 0);
 
       if (isExpired) {
         // 24-Hour window has expired! Expire temporary festive spin cash & gifts
@@ -8850,36 +8569,6 @@
         notice.classList.remove('hidden');
       }
       updateCartUI();
-    }
-
-    
-    function openTelegramQRModal() {
-      const modal = document.getElementById('telegramQRModal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-      }
-    }
-
-    function closeTelegramQRModal() {
-      const modal = document.getElementById('telegramQRModal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function copyTelegramCoupon(btn) {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText('TELE50');
-      }
-      if (btn) {
-        const orig = btn.textContent;
-        btn.textContent = 'Copied! ✓';
-        btn.classList.add('bg-emerald-400');
-        setTimeout(() => {
-          btn.textContent = orig;
-          btn.classList.remove('bg-emerald-400');
-        }, 2000);
-      }
-      claimTelegramOffer();
     }
 
     function claimTelegramOffer(event) {
@@ -10368,214 +10057,4 @@ Please pack and dispatch! ✨`
           });
         }
         if (items.length === 0) {
-          items.push({ title: "Product Order", qty: 1, price: total });
-        }
-
-        const newOrder = {
-          orderId,
-          date: new Date().toLocaleString(),
-          customer: { name: custName, phone, address, pincode, city, state },
-          items,
-          paymentMethod,
-          refNumber,
-          total,
-          status: 'Processing'
-        };
-
-        if (!Array.isArray(orders)) orders = [];
-        // Check duplicate
-        const exists = orders.some(o => o && o.orderId === orderId);
-        if (exists) {
-          alert(`Order ${orderId} is already in your dashboard!`);
-          return;
-        }
-
-        orders.unshift(newOrder);
-        localStorage.setItem('srr_orders', JSON.stringify(orders));
-        renderMerchantOrders();
-        alert(`✅ Order ${orderId} for ${custName} (₹${total}) added successfully to your Merchant Dashboard!`);
-      } catch (err) {
-        alert("Could not parse order: " + err.message);
-      }
-    }
-
-    function clearDemoOrders() {
-      if (confirm("Are you sure you want to clear all order logs?")) {
-        orders = [];
-        localStorage.removeItem('srr_orders');
-        renderMerchantOrders();
-      }
-    }
-
-    function exportOrdersCSV() {
-      if (!orders || orders.length === 0) {
-        alert("No orders to export!");
-        return;
-      }
-      let csv = "Order ID,Date,Customer Name,Phone,Address,City,State,Pincode,Items,Total,Payment Method,Status\n";
-      orders.forEach((o, idx) => {
-        if (!o) return;
-        const cust = o.customer || {};
-        const name = (cust.name || o.name || "Customer").replace(/"/g, '""');
-        const phone = (cust.phone || o.phone || "").replace(/"/g, '""');
-        const address = (cust.address || o.address || "").replace(/"/g, '""');
-        const city = (cust.city || o.city || "").replace(/"/g, '""');
-        const state = (cust.state || o.state || "").replace(/"/g, '""');
-        const pincode = (cust.pincode || o.pincode || "").replace(/"/g, '""');
-        const itemsStr = Array.isArray(o.items) ? o.items.map(i => `${i.title || 'Item'} x${i.qty || 1}`).join('; ').replace(/"/g, '""') : 'Order Items';
-        const total = (o.total !== undefined && o.total !== null) ? o.total : (o.amount || 0);
-        const orderId = o.orderId || `SRR-${idx + 1}`;
-        const date = o.date || '';
-        const payMethod = (o.paymentMethod || 'UPI').replace(/"/g, '""');
-        const status = (o.status || 'Processing').replace(/"/g, '""');
-
-        csv += `"${orderId}","${date}","${name}","${phone}","${address}","${city}","${state}","${pincode}","${itemsStr}","${total}","${payMethod}","${status}"\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.setAttribute('href', url);
-      a.setAttribute('download', `SRR_Bazaar_Orders_${new Date().toISOString().slice(0, 10)}.csv`);
-      a.click();
-    }
-
-    function handleAddNewProduct(e) {
-      e.preventDefault();
-      const title = document.getElementById('newProdTitle').value.trim();
-      const price = parseFloat(document.getElementById('newProdPrice').value);
-      const mrp = parseFloat(document.getElementById('newProdMrp').value) || Math.round(price * 1.5);
-      const category = document.getElementById('newProdCategory').value;
-      const tag = document.getElementById('newProdTag').value.trim();
-      const image = document.getElementById('newProdImage').value.trim();
-      const desc = document.getElementById('newProdDesc').value.trim();
-
-      const newP = {
-        id: Date.now(),
-        title: title,
-        category: category,
-        price: price,
-        originalPrice: mrp,
-        tag: tag || "New Arrival",
-        image: image,
-        description: desc,
-        inStock: true,
-        rating: 5.0,
-        reviewsCount: 1
-      };
-
-      products.unshift(newP);
-      localStorage.setItem('srr_products', JSON.stringify(products));
-      renderProducts();
-      switchMerchantTab('orders');
-      alert(`✅ Product "${title}" has been successfully added to your store catalogue!`);
-      document.getElementById('newProductForm').reset();
-    }
-
-    function handleSavePaymentConfig(e) {
-      e.preventDefault();
-      const upiId = document.getElementById('configUpiId').value.trim();
-      const payeeName = document.getElementById('configPayeeName').value.trim();
-      const qrImage = document.getElementById('configQrImage').value.trim();
-      const waPhone = document.getElementById('configWaPhone').value.trim();
-      const pin = document.getElementById('configMerchantPin').value.trim();
-      const defaultQrMode = document.getElementById('configDefaultQrMode').value;
-
-      if (!upiId || !upiId.includes('@')) {
-        alert("Please enter a valid UPI ID format (e.g. yournumber@ybl or yourname@okaxis)");
-        return;
-      }
-
-      STORE_CONFIG.upiId = upiId;
-      STORE_CONFIG.name = payeeName || "SRR Bazaar";
-      STORE_CONFIG.merchantQrImage = qrImage;
-      STORE_CONFIG.whatsappNumber = waPhone || STORE_CONFIG.whatsappNumber;
-      if (pin) STORE_CONFIG.merchantPin = pin;
-      STORE_CONFIG.defaultQrMode = defaultQrMode;
-      const rzpHandleInput = document.getElementById('configRazorpayHandle');
-      if (rzpHandleInput) STORE_CONFIG.razorpayHandle = rzpHandleInput.value.trim().replace(/^@/, '');
-      const rzpInput = document.getElementById('configRazorpayKey');
-      if (rzpInput) STORE_CONFIG.razorpayKey = rzpInput.value.trim();
-
-      saveStoreConfig();
-      alert("✅ Payment & UPI Settings saved successfully! The storefront QR code and details are now active.");
-      switchMerchantTab('orders');
-    }
-  </script>
-
-  <!-- Floating Fresh Drop Pill Alert (Non-intrusive, 1-tap view) -->
-  <div id="freshDropToast"
-    class="fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-500 ease-out max-w-[340px] sm:max-w-sm pointer-events-none">
-    <div
-      class="bg-stone-900/95 backdrop-blur-md text-white p-3 rounded-2xl shadow-2xl border border-amber-400/40 flex items-center gap-3">
-      <div id="freshDropThumbContainer"
-        class="w-12 h-12 rounded-xl overflow-hidden bg-stone-800 flex-shrink-0 border border-amber-400/30">
-        <img id="freshDropThumb" src="" alt="New Drop" class="w-full h-full object-cover">
-      </div>
-      <div class="flex-1 min-w-0 cursor-pointer" onclick="scrollToLatestProduct()">
-        <div class="flex items-center gap-1.5 text-[10px] font-black text-amber-300 uppercase tracking-wider">
-          <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
-          <span>Just Added to Store</span>
-        </div>
-        <p id="freshDropToastTitle" class="text-xs font-bold truncate text-white hover:text-amber-200 transition"></p>
-        <p id="freshDropToastPrice" class="text-[11px] text-emerald-400 font-extrabold"></p>
-      </div>
-      <button onclick="dismissFreshDropToast(event)"
-        class="text-stone-400 hover:text-white p-1 rounded-full hover:bg-stone-800 transition cursor-pointer"
-        aria-label="Dismiss">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-
-  <!-- ========================================================================= -->
-  <!-- Telegram VIP QR Code Modal -->
-  <div id="telegramQRModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4" onclick="if(event.target === this) closeTelegramQRModal()">
-    <div class="relative w-full max-w-sm rounded-3xl bg-gradient-to-b from-stone-900 via-stone-900 to-black text-white p-6 shadow-2xl border border-sky-500/40 text-center animate-in fade-in zoom-in-95 duration-200">
-      <!-- Close button -->
-      <button onclick="closeTelegramQRModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 flex items-center justify-center transition" aria-label="Close">
-        ✕
-      </button>
-
-      <!-- Badge & Title -->
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/20 border border-sky-400/40 text-sky-300 text-xs font-bold mb-3">
-        <i data-lucide="send" class="w-3 h-3"></i> VIP Deals Channel
-      </div>
-      <h3 class="text-lg font-black text-white tracking-tight">Join @SRRBAZAARDEALS</h3>
-      <p class="text-xs text-stone-300 mt-1 max-w-xs mx-auto">
-        Scan this QR code with your phone camera or Telegram app for secret flash deals & ₹50 OFF coupon!
-      </p>
-
-      <!-- Clean QR Code Display -->
-      <div class="my-4 p-3 bg-white rounded-2xl shadow-xl inline-block border-2 border-sky-400/30">
-        <img src="images/telegram_qr.png" alt="SRR Bazaar Telegram QR Code @srrbazaardeals" class="w-56 h-auto max-w-full mx-auto rounded-xl">
-      </div>
-
-      <!-- Coupon Code Chip -->
-      <div class="mb-4 bg-sky-950/60 border border-sky-500/30 rounded-xl p-2.5 flex items-center justify-between text-left">
-        <div class="text-xs">
-          <span class="text-stone-400 block text-[10px] font-semibold uppercase">Coupon Code:</span>
-          <span class="font-mono font-bold text-amber-400 text-sm">TELE50</span>
-          <span class="text-stone-300 text-[11px] block">(₹50 OFF on ₹299+)</span>
-        </div>
-        <button id="copyTeleCouponBtn" onclick="copyTelegramCoupon(this)" class="px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-extrabold transition">
-          Copy
-        </button>
-      </div>
-
-      <!-- Action Button -->
-      <div class="flex flex-col gap-2">
-        <a href="https://t.me/srrbazaardeals" target="_blank" onclick="claimTelegramOffer(event)"
-          class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-sm shadow-lg shadow-sky-500/25 transition active:scale-98">
-          <i data-lucide="send" class="w-4 h-4"></i>
-          <span>Open in Telegram App</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-</body>
-
-</html>
+...[truncated for diff preview]

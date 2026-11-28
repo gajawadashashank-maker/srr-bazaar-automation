@@ -1,5 +1,19 @@
 [
   {
+    "id": 945625104,
+    "title": "combo",
+    "category": "necklace",
+    "price": 799,
+    "originalPrice": 1198,
+    "tag": "New Arrival",
+    "image": "images/catalog/9a82f724667c42cc85db7afcc281e450.jpg",
+    "video": "videos/reel_945625104.mp4",
+    "description": "Exclusive combo by SRR Bazaar. Premium artisanal finish, non-allergic skin-safe materials, express pan-India dispatch and Cash on Delivery available. Direct WhatsApp order assist: +91 8185012453.",
+    "inStock": true,
+    "rating": 5.0,
+    "reviewsCount": 1
+  },
+  {
     "id": 105580357,
     "title": "Vedaka California almonds 500g",
     "category": "dryfruits",
